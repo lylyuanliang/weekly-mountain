@@ -1,9 +1,5 @@
 # 成都周边每周一山 · 攻略站
 
-**线上地址：https://broken-surf-e858.lylyuanliang.workers.dev/**（Cloudflare Workers 静态资源托管）
-
-# 成都周边每周一山 · 攻略站
-
 单文件手机网页攻略：50 座成都周边可周爬的山，含深度攻略、真实坐标打卡点与可缩放地图、人均费用、未来 7 天天气、自定义排期与打卡统计。
 
 ## 本地打开
@@ -73,3 +69,15 @@ pwsh -File design/build/build.ps1
 cp 成都周边爬山攻略.html site/index.html
 cd site && git add . && git commit -m "update: 数据更新" && git push
 ```
+
+---
+
+## 线上地址与后台（部署记录）
+
+| 站点 | 预览地址 | 管理后台 |
+|---|---|---|
+| 成都周边每周一山（主站 · Cloudflare Workers） | https://broken-surf-e858.lylyuanliang.workers.dev/ | https://dash.cloudflare.com/?to=/:account/workers-and-pages （Worker：`broken-surf-e858`） |
+| 成都周边每周一山（镜像 · html2.link） | https://a3puoei5.html2.link/ | https://html2.link/dashboard |
+| GitHub 代码仓库 | https://github.com/lylyuanliang/weekly-mountain | — |
+
+> 更新方式：本地重新构建单文件 → 拖入 `weekly-mountain-site.zip`（或命令行 `npx wrangler pages deploy .`）→ 提交并推送仓库。
