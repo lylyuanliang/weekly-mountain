@@ -370,7 +370,7 @@ b.hl-date { color: #93c5fd; font-weight: 500; }
 .imap-mk.s { background: #4ade80; }
 .imap-mk.e { background: #60a5fa; }
 .imap-mk.u { background: transparent; border: 2px dashed var(--acc2); color: var(--acc2); }
-.imap-ctrl { position: absolute; right: 8px; bottom: 8px; display: flex; flex-direction: column; gap: 6px; z-index: 5; }
+.imap-ctrl { position: absolute; right: 8px; bottom: 40px; display: flex; flex-direction: column; gap: 6px; z-index: 5; }
 .imap-ctrl button { width: 34px; height: 34px; border-radius: 9px; background: rgba(12,17,24,.9); border: 1px solid var(--line2); color: var(--tx); font-size: 16px; line-height: 1; }
 .imap-ctrl button.on { border-color: var(--acc); color: var(--acc); }
 .imap-attrib { position: absolute; left: 6px; bottom: 4px; font-size: 10.5px; color: var(--tx3); background: rgba(8,12,17,.6); padding: 1px 5px; border-radius: 5px; z-index: 4; }
@@ -491,7 +491,7 @@ footer h3 { font-size: 14px; color: var(--tx2); margin-bottom: 8px; }
 <header class="topbar">
   <div class="brand">
     <span class="logo">⛰️</span>
-    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.0.0 · 2026-10-13</span></p></div>
+    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.0.1 · 2026-10-13</span></p></div>
     <button id="themeBtn" class="icon-btn" title="切换主题">🌗</button>
   </div>
   <div class="stats-strip" id="statsStrip"></div>
@@ -573,7 +573,7 @@ footer h3 { font-size: 14px; color: var(--tx2); margin-bottom: 8px; }
     <button id="resetBtn" class="btn small danger">🗑 清空数据</button>
   </div>
   <div class="footer-meta">
-    <span id="verLine">成都周边每周一山 · <b>v1.0.0 · 2026-10-13</b></span>
+    <span id="verLine">成都周边每周一山 · <b>v1.0.1 · 2026-10-13</b></span>
     <span>数据核验日期 2026-10-12 · 山单 50 座（批次 1+2）</span>
     <span>数据来源均为公开网页，仅供个人出行参考；票价与开放状态请以官方渠道为准。</span>
   </div>
@@ -22619,7 +22619,7 @@ const MOUNTAINS = [
   ]
  }
 ];
-const APP_VERSION = {"date":"2026-10-13","version":"1.0.0","name":"成都周边每周一山"};
+const APP_VERSION = {"version":"1.0.1","date":"2026-10-13","name":"成都周边每周一山"};
 /* ============ 成都周边每周一山 · 应用逻辑 v2（横滑卡片流 + 图文详情弹层） ============ */
 "use strict";
 
@@ -22780,20 +22780,37 @@ function hlNum(htmlSafe) {
     .replace(/(\d+(?:\.\d+)?\s*(?:元\/人|元|km|公里|米|m|小时|h))/g, '<b class="hl">$1</b>')
     .replace(/(\d{4}-\d{2}-\d{2})/g, '<b class="hl-date">$1</b>');
 }
-/* 长文本结构化：摘要 + 展开（展开后按句/分号分行，不再是一整段）；兼容对象/数组 */
+/* 长文本结构化：短文本直接全显；仅在确实很长时折叠，且
+   - 折叠内容必须是有意义的一段（≥20 字），否则全显
+   - 在句子/分号边界处切分，避免把词切断出现「科）」这类碎片
+   - 标签如实说明「展开其余 N 字」 */
 function longVal(v, headLen, miss) {
   if (Array.isArray(v)) v = v.filter(Boolean).join("；");
   else if (v && typeof v === "object") v = Object.keys(v).map((k) => k + "：" + v[k]).join("；");
   if (v === 0 || v) {
     const s = String(v);
-    const n = headLen || 46;
-    if (s.length <= n) return esc(s);
-    // 禁用 lookbehind：iOS Safari <16.4 解析到 (?<=) 会整体报错，导致页面无数据
-    const lines = s.slice(n).replace(/([。！])(?=[^\s])/g, "$1\u0001").split(/[；;\u0001]/).map((x) => x.trim()).filter((x) => x.length > 1);
+    const n = Math.max(headLen || 46, 46);
+    const FOLD_MIN = 60;       // 短于这个长度不折叠
+    const TAIL_MIN = 20;       // 折叠内容短于这个长度就不折叠（避免碎片）
+    if (s.length <= FOLD_MIN) return hlNum(esc(s));
+    // 找切点：优先句末/分号/逗号，且使前半段长度接近 n（在 n ± 40 内）
+    let cut = -1;
+    const cands = [];
+    const re = /[。；;，,！？!?]/g;
+    let mm;
+    while ((mm = re.exec(s)) !== null) cands.push(mm.index + 1);
+    const inRange = cands.filter((c) => c >= Math.max(FOLD_MIN, n - 40) && c <= n + 60);
+    if (inRange.length) cut = inRange[0];
+    else if (cands.length && cands[cands.length - 1] >= FOLD_MIN) cut = cands[cands.length - 1];
+    if (cut < 0 || s.length - cut < TAIL_MIN) return hlNum(esc(s)); // 切了也是碎片 → 全显
+    const head = s.slice(0, cut);
+    const tail = s.slice(cut);
+    // 折叠内容按句/分号再分行，便于阅读
+    const lines = tail.replace(/([。！？!?])(?=[^\s])/g, "$1\u0001").split(/[；;\u0001]/).map((x) => x.trim()).filter((x) => x.length > 1);
     const body = lines.length > 1
       ? '<ul class="txt-lines">' + lines.map((x) => "<li>" + hlNum(esc(x)) + "</li>").join("") + "</ul>"
-      : "<div>" + hlNum(esc(s.slice(n))) + "</div>";
-    return '<span class="v-head">' + hlNum(esc(s.slice(0, n))) + '…</span><details class="more"><summary>展开完整说明（' + s.length + " 字）</summary>" + body + "</details>";
+      : "<div>" + hlNum(esc(tail)) + "</div>";
+    return '<span class="v-head">' + hlNum(esc(head)) + '…</span><details class="more"><summary>展开其余 ' + tail.length + " 字</summary>" + body + "</details>";
   }
   return '<span class="fv-miss">⏳ ' + (miss || "待核验") + "</span>";
 }
