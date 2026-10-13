@@ -70,7 +70,7 @@ body.lock { overflow: hidden; }
 .brand .logo { font-size: 28px; filter: drop-shadow(0 2px 6px rgba(52,211,153,.35)); }
 .brand h1 { font-family: var(--font-display); font-size: 20px; letter-spacing: .5px; }
 .brand p { font-size: 11px; color: var(--tx3); margin-top: 1px; line-height: 1.4; }
-.icon-btn { margin-left: auto; font-size: 19px; width: 40px; height: 40px; border-radius: 12px; background: var(--chip); border: 1px solid var(--line); }
+.icon-btn { margin-left: auto; font-size: 19px; min-width: 40px; width: 40px; height: 40px; border-radius: 12px; background: var(--chip); border: 1px solid var(--line); flex: 0 0 auto; }
 .stats-strip { display: flex; gap: 8px; margin-top: 11px; overflow-x: auto; scrollbar-width: none; }
 .stats-strip::-webkit-scrollbar { display: none; }
 .stat-chip { flex: 0 0 auto; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 6px 12px; min-width: 84px; }
@@ -177,10 +177,15 @@ input[type="range"] { width: 100%; accent-color: var(--acc); }
   animation: slideup .28s ease;
 }
 @keyframes slideup { from { transform: translateY(40px); opacity: .4; } to { transform: none; opacity: 1; } }
-.sheet-close { position: sticky; top: 8px; z-index: 6; float: right; margin: 8px 12px 0 0; font-size: 13px; color: var(--tx); background: rgba(10,14,20,.92); border: 1px solid var(--line2); border-radius: 999px; padding: 8px 14px; min-height: 34px; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+/* 关闭按钮：放在零高度粘性容器里 —— 不占布局、不挤压 hero、长滚动时始终可见 */
+.sheet-card { position: relative; }
+.sheet-close-bar { position: sticky; top: 0; z-index: 8; height: 0; display: flex; justify-content: flex-end; pointer-events: none; }
+.sheet-close { pointer-events: auto; margin: 10px 12px 0 0; font-size: 13px; color: var(--tx); background: rgba(10,14,20,.85); border: 1px solid var(--line2); border-radius: 999px; padding: 8px 14px; min-height: 34px; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.sheet-hero { padding-right: 88px; }
 .sheet-nav { position: sticky; top: 0; z-index: 4; display: flex; gap: 6px; overflow-x: auto; padding: 8px 12px; background: color-mix(in srgb, var(--bg2) 94%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); scrollbar-width: none; }
 .sheet-nav::-webkit-scrollbar { display: none; }
 .sheet-nav a { flex: 0 0 auto; font-size: 11.5px; color: var(--tx2); background: var(--chip); border-radius: 999px; padding: 8px 12px; text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; min-height: 34px; }
+
 .sheet-hero {
   padding: 20px 16px 14px; background: var(--hero-grad); position: relative; overflow: hidden;
   border-radius: 24px 24px 0 0;
@@ -22940,7 +22945,7 @@ function sheetHTML(m) {
   const season = seasonNow();
   const dn = derivedNums(m);
   const inSeason = (m.season_best || []).join(" ").indexOf(season) >= 0;
-  let h = '<button id="sheetClose" class="sheet-close">✕ 关闭</button>';
+  let h = '<div class="sheet-close-bar"><button id="sheetClose" class="sheet-close">✕ 关闭</button></div>';
   // 英雄区
   h += '<div class="sheet-hero"><div class="sh-top"><span class="sh-ico">' + GROUP_META[m.group].icon + "</span><div><h2>" + esc(m.name) + "</h2><div class=\"sh-sub\">📍 " + esc(m.county || "") + "</div></div></div>";
   h += '<div class="sh-badges">' +
