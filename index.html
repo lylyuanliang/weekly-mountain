@@ -172,7 +172,7 @@ input[type="range"] { width: 100%; accent-color: var(--acc); }
 .sheet-card {
   width: 100%; max-width: 560px; max-height: 90vh;
   background: var(--bg2); border-radius: 24px 24px 0 0;
-  overflow-y: auto; position: relative; overscroll-behavior: contain;
+  overflow-y: auto; overflow-x: hidden; position: relative; overscroll-behavior: contain; min-width: 0;
   box-shadow: 0 -12px 40px rgba(0,0,0,.5);
   animation: slideup .28s ease;
 }
@@ -201,17 +201,18 @@ input[type="range"] { width: 100%; accent-color: var(--acc); }
 .tile { background: rgba(0,0,0,.28); border-radius: 12px; padding: 8px 4px; text-align: center; }
 .tile b { display: block; font-family: var(--font-display); font-size: 15px; color: #fff; line-height: 1.25; }
 .tile span { font-size: 10px; color: rgba(255,255,255,.75); }
-.sheet-body { padding: 14px 14px 100px; }
+.sheet-body { padding: 14px 14px 100px; min-width: 0; }
 .mod-card {
   background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg);
-  padding: 13px 14px; margin-bottom: 11px;
+  padding: 13px 14px; margin-bottom: 11px; min-width: 0; overflow-wrap: anywhere;
 }
 .mod-card h4 { font-family: var(--font-display); font-size: 14px; color: var(--acc); margin-bottom: 9px; display: flex; align-items: center; gap: 7px; }
 .mod-card h4::before { content: ""; width: 4px; height: 14px; border-radius: 2px; background: var(--acc); display: inline-block; }
-.kv { display: grid; grid-template-columns: 84px 1fr; gap: 6px 10px; font-size: 13px; }
+/* kv：值列必须可收缩（minmax(0,1fr)），否则长文本会把容器撑宽出横向滚动 */
+.kv { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 6px 10px; font-size: 13px; }
 .kv .k { color: var(--tx3); }
-.kv .v { color: var(--tx); }
-.route-card { background: var(--card2); border: 1px solid var(--line); border-radius: var(--r-md); padding: 11px 12px; margin-bottom: 9px; }
+.kv .v { color: var(--tx); min-width: 0; overflow-wrap: anywhere; }
+.route-card { background: var(--card2); border: 1px solid var(--line); border-radius: var(--r-md); padding: 11px 12px; margin-bottom: 9px; min-width: 0; overflow-wrap: anywhere; }
 .route-card:last-child { margin-bottom: 0; }
 .route-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
 .route-top b { font-size: 13.5px; }
@@ -219,8 +220,8 @@ input[type="range"] { width: 100%; accent-color: var(--acc); }
 .route-nums .badge { font-size: 11px; }
 .int-bar { height: 5px; background: var(--ring-bg); border-radius: 999px; overflow: hidden; margin: 2px 0 6px; }
 .int-bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--acc-dim), var(--acc)); }
-.route-desc { font-size: 12.5px; color: var(--tx2); line-height: 1.55; }
-.mini-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.route-desc { font-size: 12.5px; color: var(--tx2); line-height: 1.55; overflow-wrap: anywhere; min-width: 0; }
+.mini-table { width: 100%; border-collapse: collapse; font-size: 12.5px; table-layout: fixed; overflow-wrap: anywhere; }
 .mini-table td { padding: 5px 2px; border-bottom: 1px dashed var(--line); vertical-align: top; }
 .mini-table td:last-child { text-align: right; color: var(--tx2); }
 .mini-table tr:last-child td { border-bottom: none; }
@@ -233,22 +234,22 @@ input[type="range"] { width: 100%; accent-color: var(--acc); }
 .c-chip.ok { background: rgba(74,222,128,.1); color: #86efac; }
 .c-chip.info { background: rgba(147,197,253,.1); color: #bfdbfe; }
 .c-chip.acc { background: rgba(245,158,11,.12); color: #fcd34d; }
-.callout { border-radius: var(--r-md); padding: 10px 12px; font-size: 12.5px; margin-bottom: 9px; border: 1px solid; }
+.callout { border-radius: var(--r-md); padding: 10px 12px; font-size: 12.5px; margin-bottom: 9px; border: 1px solid; min-width: 0; overflow-wrap: anywhere; }
 .callout.warn { background: rgba(245,158,11,.08); border-color: rgba(245,158,11,.35); color: #fcd34d; }
 .callout.danger { background: rgba(248,113,113,.08); border-color: rgba(248,113,113,.35); color: #fca5a5; }
 .callout.info { background: rgba(147,197,253,.07); border-color: rgba(147,197,253,.3); color: #bfdbfe; }
 .callout.ok { background: rgba(74,222,128,.07); border-color: rgba(74,222,128,.3); color: #86efac; }
 .price-row { display: flex; align-items: center; gap: 10px; }
-.price-box { background: color-mix(in srgb, var(--acc2) 14%, transparent); border: 1px dashed color-mix(in srgb, var(--acc2) 45%, transparent); border-radius: 12px; padding: 10px 14px; flex: 1; }
+.price-box { background: rgba(245,158,11,.14); background: color-mix(in srgb, var(--acc2) 14%, transparent); border: 1px dashed rgba(245,158,11,.45); border-color: color-mix(in srgb, var(--acc2) 45%, transparent); border-radius: 12px; padding: 10px 14px; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
 .price-box b { font-family: var(--font-display); font-size: 19px; color: var(--acc2); }
 .price-box span { font-size: 11.5px; color: var(--tx2); display: block; }
-.gear-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-.gear-col { background: var(--card2); border-radius: var(--r-md); padding: 9px 10px; }
+.gear-cols { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 9px; }
+.gear-col { background: var(--card2); border-radius: var(--r-md); padding: 9px 10px; min-width: 0; overflow-wrap: anywhere; }
 .gear-col h5 { font-size: 12px; color: var(--acc2); margin-bottom: 4px; }
 .gear-col ul { list-style: none; font-size: 12px; color: var(--tx2); }
 .gear-col li { padding: 2.5px 0 2.5px 16px; position: relative; }
 .gear-col li::before { content: "✔"; position: absolute; left: 0; color: var(--acc2); font-size: 11px; }
-.food-stay { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.food-stay { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 9px; }
 .food-stay .gear-col h5 { color: var(--acc); }
 .fv-miss { color: var(--tx3); font-style: italic; }
 .src-item { font-size: 11.5px; color: var(--tx2); padding: 3px 0; word-break: break-all; line-height: 1.5; }
@@ -284,7 +285,7 @@ details.more > div { font-size: 12.5px; color: var(--tx2); line-height: 1.65; ma
 .season-rows { display: flex; flex-direction: column; gap: 5px; }
 .season-row { display: flex; gap: 7px; align-items: flex-start; }
 .season-row .s-ico { font-size: 13px; line-height: 1.5; flex: 0 0 auto; }
-.season-row .s-body { font-size: 12.5px; color: var(--tx2); line-height: 1.55; }
+.season-row .s-body { font-size: 12.5px; color: var(--tx2); line-height: 1.55; min-width: 0; overflow-wrap: anywhere; }
 .season-row .s-body b { color: var(--acc); margin-right: 3px; }
 
 /* ---------- 轨迹示意图 ---------- */
@@ -295,22 +296,31 @@ details.more > div { font-size: 12.5px; color: var(--tx2); line-height: 1.65; ma
 .track-links { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px; }
 .track-links .btn.small { text-decoration: none; display: inline-flex; align-items: center; }
 
-/* ---------- 深度详情条目 ---------- */
-.d-item { font-size: 12.5px; color: var(--tx); padding: 6px 0; border-bottom: 1px dashed var(--line); line-height: 1.6; display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
+/* ---------- 深度详情条目（块级：标题 / 备注 / 价格各占一行，避免图标或序号孤立成行） ---------- */
+.d-item { font-size: 12.5px; color: var(--tx); padding: 7px 0; border-bottom: 1px dashed var(--line); line-height: 1.6; min-width: 0; overflow-wrap: anywhere; }
 .d-item:last-child { border-bottom: none; }
-.d-item b { color: var(--acc2); font-weight: 600; }
-.d-price { color: var(--acc); font-size: 12px; margin-left: auto; white-space: nowrap; }
-.ds-grid { display: grid; grid-template-columns: 1fr; gap: 4px; margin-bottom: 8px; }
+.d-title { font-weight: 600; color: var(--tx); display: flex; gap: 5px; align-items: baseline; min-width: 0; }
+.d-title .d-ico { flex: 0 0 auto; font-size: 12px; }
+.d-note { color: var(--tx2); font-size: 12px; margin-top: 2px; }
+.d-main { color: var(--tx); }
+.d-price { color: var(--acc2); font-size: 12px; margin-top: 3px; text-align: right; overflow-wrap: anywhere; }
+.ds-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; margin-bottom: 8px; }
+.ds-col { min-width: 0; }
 .ds-col h5 { font-size: 12px; color: var(--acc); margin: 6px 0 2px; }
+/* 老驴经验：有序列表，序号与正文同行 */
+.tip-list { list-style: none; counter-reset: tip; }
+.tip-list li { position: relative; counter-increment: tip; padding: 6px 0 6px 23px; font-size: 12.5px; line-height: 1.65; border-bottom: 1px dashed var(--line); overflow-wrap: anywhere; }
+.tip-list li:last-child { border-bottom: none; }
+.tip-list li::before { content: counter(tip); position: absolute; left: 0; top: 7px; width: 16px; height: 16px; border-radius: 50%; background: rgba(245,158,11,.18); color: var(--acc2); font-size: 10px; line-height: 16px; text-align: center; font-weight: 700; }
 .photo-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 7px; }
-.photo-item { background: var(--card2); border-radius: var(--r-md); padding: 8px 10px; border-left: 3px solid var(--acc2); }
+.photo-item { background: var(--card2); border-radius: var(--r-md); padding: 8px 10px; border-left: 3px solid var(--acc2); min-width: 0; overflow-wrap: anywhere; }
 .photo-item b { font-size: 12.5px; display: block; margin-bottom: 3px; }
 .photo-item .badge { font-size: 10.5px; }
 .photo-item .p-tip { font-size: 12px; color: var(--tx2); line-height: 1.55; margin-top: 4px; }
 
 /* ---------- 分段列表（route_detail.segments） ---------- */
 .seg-list { display: flex; flex-direction: column; gap: 6px; }
-.seg-item { background: var(--card2); border-radius: var(--r-sm); padding: 7px 10px; border-left: 2px solid var(--acc); }
+.seg-item { background: var(--card2); border-radius: var(--r-sm); padding: 7px 10px; border-left: 2px solid var(--acc); min-width: 0; overflow-wrap: anywhere; }
 .seg-head { font-size: 12.5px; color: var(--tx); line-height: 1.5; }
 .seg-head b { color: var(--acc2); }
 .seg-meta { display: inline-block; margin-left: 6px; font-size: 11px; color: var(--acc); background: color-mix(in srgb, var(--acc) 12%, transparent); border-radius: 999px; padding: 1px 7px; }
@@ -330,7 +340,7 @@ details.more > div { font-size: 12.5px; color: var(--tx2); line-height: 1.65; ma
 .wp-card { background: var(--card2); border: 1px solid var(--line); border-radius: var(--r-md); padding: 10px 12px; margin-bottom: 9px; }
 .wp-head { font-size: 13px; font-weight: 600; margin-bottom: 7px; display: flex; align-items: center; gap: 7px; }
 .wp-list { list-style: none; counter-reset: wp; }
-.wp-list li { display: flex; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+.wp-list li { display: flex; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--line); min-width: 0; }
 .wp-list li:last-child { border-bottom: none; }
 .wp-tag { flex: 0 0 auto; font-size: 12px; }
 .wp-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -23829,15 +23839,17 @@ function roadDetailHTML(m) {
 function detailListHTML(list, keys, icon) {
   if (!Array.isArray(list) || !list.length) return "";
   return list.map((it) => {
-    if (typeof it === "string") return '<div class="d-item"><b>' + (icon || "·") + "</b> " + esc(it) + "</div>";
+    if (typeof it === "string") return '<div class="d-item"><div class="d-main">' + esc(it) + "</div></div>";
     const title = keys.map((k) => it[k]).filter(Boolean).join(" · ");
-    const price = it.price ? '<span class="d-price">' + esc(String(it.price)) + "</span>" : "";
-    return '<div class="d-item">' + (icon ? "<b>" + icon + "</b> " : "") + esc(title) + price + "</div>";
+    return '<div class="d-item">' +
+      '<div class="d-title">' + (icon ? '<span class="d-ico">' + icon + "</span>" : "") + esc(title) + "</div>" +
+      (it.note ? '<div class="d-note">' + esc(it.note) + "</div>" : "") +
+      (it.price ? '<div class="d-price">' + esc(String(it.price)) + "</div>" : "") + "</div>";
   }).join("");
 }
 function foodStayDetailHTML(m) {
   const f = detailListHTML(m.food_detail, ["name", "dish", "where"], "🍜");
-  const s = detailListHTML(m.stay_detail, ["name", "where", "note"], "🛏");
+  const s = detailListHTML(m.stay_detail, ["name", "where"], "🛏");
   if (!f && !s) return "";
   return '<div class="ds-grid">' +
     (f ? '<div class="ds-col"><h5>🍜 吃 · 具体推荐</h5>' + f + "</div>" : "") +
@@ -23853,7 +23865,7 @@ function tipsHTML(m) {
   const tips = Array.isArray(m.local_tips) ? m.local_tips : [];
   const gear = Array.isArray(m.gear_detail) ? m.gear_detail : [];
   let h = "";
-  if (tips.length) h += '<div class="mod-card"><h4>💡 老驴经验与避坑</h4>' + tips.map((t, i) => '<div class="d-item"><b>' + (i + 1) + ".</b> " + longVal(t, 70) + "</div>").join("") + "</div>";
+  if (tips.length) h += '<div class="mod-card"><h4>💡 老驴经验与避坑</h4><ol class="tip-list">' + tips.map((t) => "<li>" + longVal(t, 80) + "</li>").join("") + "</ol></div>";
   if (gear.length) h += '<div class="mod-card"><h4>🎒 针对这座山的装备</h4><div class="chip-row">' + gear.map((g) => '<span class="c-chip">' + esc(g) + "</span>").join("") + "</div></div>";
   return h;
 }
