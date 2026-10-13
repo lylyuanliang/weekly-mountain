@@ -23324,18 +23324,19 @@ function unverifiedText(keys) {
     return FIELD_LABELS[k] || String(k);
   }).join("；");
 }
-/* 最佳季节：拆成 春/夏/秋/冬 分行显示，超长折叠 */
+/* 最佳季节：按「；」拆成多条事实分行；识别季节前缀给图标（不折叠，最长条目仅百余字） */
 function seasonRows(list) {
   if (!Array.isArray(list) || !list.length) return '<span class="fv-miss">⏳ 待核验</span>';
   const ICON = { 春: "🌸", 夏: "☀️", 秋: "🍁", 冬: "❄️" };
-  return '<div class="season-rows">' + list.map((s) => {
-    const t = String(s).trim();
+  const items = [];
+  list.forEach((s) => {
+    String(s).split(/[；;]/).map((x) => x.trim()).filter(Boolean).forEach((x) => items.push(x));
+  });
+  return '<div class="season-rows">' + items.map((t) => {
     const key = t.slice(0, 1);
-    const body = t.replace(/^[春夏秋冬]\s*/, "");
-    const head = body.slice(0, 46);
-    const rest = body.slice(46);
-    return '<div class="season-row"><span class="s-ico">' + (ICON[key] || "·") + "</span><div class=\"s-body\"><b>" + esc(key) + "</b> " + esc(head) + (rest ? "…" : "") +
-      (rest ? '<details class="more"><summary>展开</summary><div>' + esc(rest) + "</div></details>" : "") + "</div></div>";
+    const hasSeason = ICON[key] ? true : false;
+    return '<div class="season-row"><span class="s-ico">' + (hasSeason ? ICON[key] : "·") + '</span><div class="s-body">' +
+      (hasSeason ? "<b>" + esc(key) + "</b>" + hlNum(esc(t.slice(1))) : hlNum(esc(t))) + "</div></div>";
   }).join("") + "</div>";
 }
 /* 待核验项渲染：字段名 + 括号内说明 */
@@ -23971,8 +23972,9 @@ const TILE_SRC = {
   osm: { url: (z, x, y) => "https://tile.openstreetmap.org/" + z + "/" + x + "/" + y + ".png", name: "OpenStreetMap", attrib: "© OpenStreetMap contributors" },
   amap: { url: (z, x, y) => "https://webrd0" + (1 + ((x + y) % 4)) + ".is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x=" + x + "&y=" + y + "&z=" + z, name: "高德地图", attrib: "© 高德地图" }
 };
-// 公开站点默认 OSM（授权清晰、需保留署名）；高德栅格瓦片未经授权，仅作个人自用切换
-let MAP_SRC = "osm";
+// 底图默认高德：实测国内直连可用（OSM 瓦片在国内被墙，加载不出底图）
+// 说明：高德栅格瓦片用于「个人/小范围分享」没问题；若要正式公开运营，请换带 Key 的地图服务
+let MAP_SRC = "amap";
 function lonToX(lon, z) { return (lon + 180) / 360 * Math.pow(2, z) * 256; }
 function latToY(lat, z) { const s = Math.sin(lat * Math.PI / 180); return (0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI)) * Math.pow(2, z) * 256; }
 function xToLon(x, z) { return x / (Math.pow(2, z) * 256) * 360 - 180; }
