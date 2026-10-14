@@ -503,7 +503,7 @@ footer details.src-fold > div { padding: 4px 0 0; background: none; border-left:
 <header class="topbar">
   <div class="brand">
     <span class="logo">⛰️</span>
-    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.2.1 · 2026-10-14</span></p></div>
+    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.2.2 · 2026-10-14</span></p></div>
     <button id="themeBtn" class="icon-btn" title="切换主题">🌗</button>
   </div>
   <div class="stats-strip" id="statsStrip"></div>
@@ -588,7 +588,7 @@ footer details.src-fold > div { padding: 4px 0 0; background: none; border-left:
     <button id="resetBtn" class="btn small danger">🗑 清空数据</button>
   </div>
   <div class="footer-meta">
-    <span id="verLine">成都周边每周一山 · <b>v1.2.1 · 2026-10-14</b></span>
+    <span id="verLine">成都周边每周一山 · <b>v1.2.2 · 2026-10-14</b></span>
     <span>数据核验日期 2026-10-12 · 山单 50 座（批次 1+2）</span>
     <span>数据来源均为公开网页，仅供个人出行参考；票价与开放状态请以官方渠道为准。</span>
   </div>
@@ -22734,7 +22734,7 @@ const MOUNTAINS = [
   "county_short": "小金县"
  }
 ];
-const APP_VERSION = {"name":"成都周边每周一山","version":"1.2.1","date":"2026-10-14"};
+const APP_VERSION = {"name":"成都周边每周一山","date":"2026-10-14","version":"1.2.2"};
 /* ============ 成都周边每周一山 · 应用逻辑 v2（横滑卡片流 + 图文详情弹层） ============ */
 "use strict";
 
@@ -23088,8 +23088,10 @@ function hCardHTML(m, season) {
 }
 
 /* ---------- 详情底部弹层（图文化） ---------- */
-function openSheet(id) {
+let SHEET_CTX = null; // { from: 'plan', weekIndex } —— 记录弹层从哪打开，底部操作栏随语境变化
+function openSheet(id, ctx) {
   const m = byId(id); if (!m) return;
+  SHEET_CTX = ctx || null;
   const sheet = $("#sheet");
   $("#sheetCard").innerHTML = sheetHTML(m);
   sheet.classList.add("show");
@@ -23213,8 +23215,13 @@ function sheetHTML(m) {
       miss.map(unvItemHTML).join("") + "</div></details>";
   }  h += "</div>";
   // 底部操作栏
+  // 底部操作栏：从「我的计划」打开时，加入计划无意义（该山已在计划里），
+  // 换成「从本周移除」，保持打卡按钮不变
+  const inPlan = SHEET_CTX && SHEET_CTX.from === "plan";
   h += '<div class="sheet-actions">' +
-    '<button class="btn" data-act="plan">📅 加入计划</button>' +
+    (inPlan
+      ? '<button class="btn" data-act="rmplan">➖ 从本周移除</button>'
+      : '<button class="btn" data-act="plan">📅 加入计划</button>') +
     (done ? '<button class="btn danger" data-act="undone">取消打卡</button>' : '<button class="btn primary" data-act="done">✅ 标记完成</button>') +
     "</div>";
   return h;
@@ -23732,6 +23739,14 @@ function sheetAction(act, id) {
   if (act === "done") openCheckin(id);
   else if (act === "undone") { if (confirm("确定取消这条打卡记录吗？")) { delete STATE.done[id]; saveState(); closeSheet(); rerenderAll(); toast("已取消打卡"); } }
   else if (act === "plan") openPlanPicker(id);
+  else if (act === "rmplan") {
+    const wi = SHEET_CTX ? SHEET_CTX.weekIndex : -1;
+    const w = STATE.plan.weeks[wi];
+    if (!w) { closeSheet(); return; }
+    STATE.plan.weeks[wi].items = w.items.filter((x) => x !== id);
+    saveState(); closeSheet(); renderPlan(); rerenderAll(false);
+    toast("已从 " + w.t + " 移除");
+  }
 }
 
 /* ---------- 打卡 ---------- */
@@ -23776,7 +23791,7 @@ function renderPlan() {
   h += weeks.map((w, i) => {
     const items = w.items.map((id) => { const m = byId(id); if (!m) return ""; const d = isDone(id);
       // 整个山片可点：直接打开详情弹层（查看详情/标记完成都在里面），不必回「山单」
-      return '<span class="w-item' + (d ? " done-it" : "") + '" data-open="' + esc(id) + '" title="点按查看详情 / 标记完成">' + (d ? '<span class="tick">✅</span>' : "") + '<span class="wname">' + esc(m.name) + '</span><span class="rm" data-rm="' + i + ":" + esc(id) + '">✕</span></span>'; }).join("");
+      return '<span class="w-item' + (d ? " done-it" : "") + '" data-open="' + esc(id) + '" data-wi="' + i + '" title="点按查看详情 / 标记完成">' + (d ? '<span class="tick">✅</span>' : "") + '<span class="wname">' + esc(m.name) + '</span><span class="rm" data-rm="' + i + ":" + esc(id) + '">✕</span></span>'; }).join("");
     // 下拉选项用「地市·县区简称」短口径（与卡片 h-county 一致）：county 是长描述，
     // 塞进 <option> 会把原生下拉撑得又宽又乱（2026-10-14 用户报障）
     const opts = MOUNTAINS.filter((mm) => !w.items.includes(mm.id)).map((mm) => {
@@ -23790,7 +23805,7 @@ function renderPlan() {
   }).join("");
   h += '<button class="btn wide ghost" id="addWeek">＋ 添加一周</button>';
   box.innerHTML = h;
-  $$("#planBox .w-item").forEach((el) => { el.onclick = (e) => { if (e.target.closest(".rm")) return; openSheet(el.getAttribute("data-open")); }; });
+  $$("#planBox .w-item").forEach((el) => { el.onclick = (e) => { if (e.target.closest(".rm")) return; openSheet(el.getAttribute("data-open"), { from: "plan", weekIndex: Number(el.getAttribute("data-wi")) }); }; });
   $$("#planBox [data-rm]").forEach((el) => { el.onclick = () => { const p = el.getAttribute("data-rm").split(":"); const wi = Number(p[0]); const id = p.slice(1).join(":"); STATE.plan.weeks[wi].items = STATE.plan.weeks[wi].items.filter((x) => x !== id); saveState(); renderPlan(); rerenderAll(false); }; });
   $$("#planBox [data-delw]").forEach((el) => { el.onclick = () => { if (confirm("删除这一周及其所有安排？")) { STATE.plan.weeks.splice(Number(el.getAttribute("data-delw")), 1); saveState(); renderPlan(); rerenderAll(false); } }; });
   $$("#planBox [data-addsel]").forEach((sel) => { sel.onchange = () => { if (sel.value) addToWeek(Number(sel.getAttribute("data-addsel")), sel.value); }; });
