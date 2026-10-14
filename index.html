@@ -420,8 +420,10 @@ b.hl-date { color: #93c5fd; font-weight: 500; }
 .week-head .wstat { font-size: 11.5px; color: var(--tx3); }
 .week-head .del { margin-left: auto; color: var(--tx3); font-size: 16px; padding: 4px 8px; }
 .week-items { display: flex; flex-wrap: wrap; gap: 7px; }
-.w-item { display: inline-flex; align-items: center; gap: 7px; background: var(--card2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 6px 5px 12px; font-size: 13px; }
-.w-item .rm { color: var(--tx3); font-size: 14px; padding: 2px 6px; border-radius: 999px; }
+/* 山片整体可点（点按打开详情弹层，标记完成在弹层内）：min-height 32px 保触控目标；✕ 为独立删除热区 */
+.w-item { display: inline-flex; align-items: center; gap: 7px; background: var(--card2); border: 1px solid var(--line); border-radius: 999px; padding: 5px 6px 5px 12px; font-size: 13px; min-height: 32px; box-sizing: border-box; cursor: pointer; }
+.w-item:active { background: var(--chip); }
+.w-item .rm { color: var(--tx3); font-size: 14px; padding: 4px 8px; border-radius: 999px; cursor: pointer; }
 .w-item.done-it { border-color: rgba(74,222,128,.4); }
 .w-item .tick { color: var(--ok); }
 .week-add { display: flex; gap: 8px; margin-top: 8px; }
@@ -496,7 +498,7 @@ footer h3 { font-size: 14px; color: var(--tx2); margin-bottom: 8px; }
 <header class="topbar">
   <div class="brand">
     <span class="logo">⛰️</span>
-    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.1.2 · 2026-10-14</span></p></div>
+    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.2.0 · 2026-10-14</span></p></div>
     <button id="themeBtn" class="icon-btn" title="切换主题">🌗</button>
   </div>
   <div class="stats-strip" id="statsStrip"></div>
@@ -579,7 +581,7 @@ footer h3 { font-size: 14px; color: var(--tx2); margin-bottom: 8px; }
     <button id="resetBtn" class="btn small danger">🗑 清空数据</button>
   </div>
   <div class="footer-meta">
-    <span id="verLine">成都周边每周一山 · <b>v1.1.2 · 2026-10-14</b></span>
+    <span id="verLine">成都周边每周一山 · <b>v1.2.0 · 2026-10-14</b></span>
     <span>数据核验日期 2026-10-12 · 山单 50 座（批次 1+2）</span>
     <span>数据来源均为公开网页，仅供个人出行参考；票价与开放状态请以官方渠道为准。</span>
   </div>
@@ -22725,7 +22727,7 @@ const MOUNTAINS = [
   "county_short": "小金县"
  }
 ];
-const APP_VERSION = {"name":"成都周边每周一山","version":"1.1.2","date":"2026-10-14"};
+const APP_VERSION = {"version":"1.2.0","date":"2026-10-14","name":"成都周边每周一山"};
 /* ============ 成都周边每周一山 · 应用逻辑 v2（横滑卡片流 + 图文详情弹层） ============ */
 "use strict";
 
@@ -23766,7 +23768,8 @@ function renderPlan() {
   let h = '<div class="callout ok" style="margin:0 14px 12px">📋 共 ' + weeks.length + " 周 · " + total + " 座山 · 已完成 " + doneN + " 座</div>";
   h += weeks.map((w, i) => {
     const items = w.items.map((id) => { const m = byId(id); if (!m) return ""; const d = isDone(id);
-      return '<span class="w-item' + (d ? " done-it" : "") + '">' + (d ? '<span class="tick">✅</span>' : "") + esc(m.name) + '<span class="rm" data-rm="' + i + ":" + esc(id) + '">✕</span></span>'; }).join("");
+      // 整个山片可点：直接打开详情弹层（查看详情/标记完成都在里面），不必回「山单」
+      return '<span class="w-item' + (d ? " done-it" : "") + '" data-open="' + esc(id) + '" title="点按查看详情 / 标记完成">' + (d ? '<span class="tick">✅</span>' : "") + '<span class="wname">' + esc(m.name) + '</span><span class="rm" data-rm="' + i + ":" + esc(id) + '">✕</span></span>'; }).join("");
     // 下拉选项用「地市·县区简称」短口径（与卡片 h-county 一致）：county 是长描述，
     // 塞进 <option> 会把原生下拉撑得又宽又乱（2026-10-14 用户报障）
     const opts = MOUNTAINS.filter((mm) => !w.items.includes(mm.id)).map((mm) => {
@@ -23780,6 +23783,7 @@ function renderPlan() {
   }).join("");
   h += '<button class="btn wide ghost" id="addWeek">＋ 添加一周</button>';
   box.innerHTML = h;
+  $$("#planBox .w-item").forEach((el) => { el.onclick = (e) => { if (e.target.closest(".rm")) return; openSheet(el.getAttribute("data-open")); }; });
   $$("#planBox [data-rm]").forEach((el) => { el.onclick = () => { const p = el.getAttribute("data-rm").split(":"); const wi = Number(p[0]); const id = p.slice(1).join(":"); STATE.plan.weeks[wi].items = STATE.plan.weeks[wi].items.filter((x) => x !== id); saveState(); renderPlan(); rerenderAll(false); }; });
   $$("#planBox [data-delw]").forEach((el) => { el.onclick = () => { if (confirm("删除这一周及其所有安排？")) { STATE.plan.weeks.splice(Number(el.getAttribute("data-delw")), 1); saveState(); renderPlan(); rerenderAll(false); } }; });
   $$("#planBox [data-addsel]").forEach((sel) => { sel.onchange = () => { if (sel.value) addToWeek(Number(sel.getAttribute("data-addsel")), sel.value); }; });
