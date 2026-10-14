@@ -425,9 +425,14 @@ b.hl-date { color: #93c5fd; font-weight: 500; }
 .w-item.done-it { border-color: rgba(74,222,128,.4); }
 .w-item .tick { color: var(--ok); }
 .week-add { display: flex; gap: 8px; margin-top: 8px; }
-.week-add select { flex: 1; background: var(--chip); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 13px; }
+/* min-width:0 必须保留：<select> 的 min-content 等于最长 option 宽度（可达 700px+），
+   在 flex 里默认 min-width:auto 会撑破 .week 卡片并造成整页横向滚动。 */
+.week-add select { flex: 1 1 0; min-width: 0; max-width: 100%; background: var(--chip); border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 13px; }
 .plan-empty { text-align: center; color: var(--tx3); padding: 40px 10px; font-size: 13.5px; }
 .plan-empty .big { font-size: 34px; display: block; margin-bottom: 8px; }
+/* #addWeek 同时带 .btn.wide（width:100%）和 14px 左右外边距，会向右溢出 28px（窄屏被 body 裁掉）。
+   <button> 的 width:auto 是收缩到内容，所以必须显式用 calc(100% − 28px) 撑满剩余宽度。 */
+#addWeek { display: block; width: calc(100% - 28px); }
 #addWeek, .in-margin { margin: 0 14px; }
 
 /* ---------- 推荐计划 ---------- */
@@ -491,7 +496,7 @@ footer h3 { font-size: 14px; color: var(--tx2); margin-bottom: 8px; }
 <header class="topbar">
   <div class="brand">
     <span class="logo">⛰️</span>
-    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.1.0 · 2026-10-14</span></p></div>
+    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.1.1 · 2026-10-14</span></p></div>
     <button id="themeBtn" class="icon-btn" title="切换主题">🌗</button>
   </div>
   <div class="stats-strip" id="statsStrip"></div>
@@ -574,7 +579,7 @@ footer h3 { font-size: 14px; color: var(--tx2); margin-bottom: 8px; }
     <button id="resetBtn" class="btn small danger">🗑 清空数据</button>
   </div>
   <div class="footer-meta">
-    <span id="verLine">成都周边每周一山 · <b>v1.1.0 · 2026-10-14</b></span>
+    <span id="verLine">成都周边每周一山 · <b>v1.1.1 · 2026-10-14</b></span>
     <span>数据核验日期 2026-10-12 · 山单 50 座（批次 1+2）</span>
     <span>数据来源均为公开网页，仅供个人出行参考；票价与开放状态请以官方渠道为准。</span>
   </div>
@@ -22720,7 +22725,7 @@ const MOUNTAINS = [
   "county_short": "小金县"
  }
 ];
-const APP_VERSION = {"version":"1.1.0","date":"2026-10-14","name":"成都周边每周一山"};
+const APP_VERSION = {"version":"1.1.1","date":"2026-10-14","name":"成都周边每周一山"};
 /* ============ 成都周边每周一山 · 应用逻辑 v2（横滑卡片流 + 图文详情弹层） ============ */
 "use strict";
 

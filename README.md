@@ -74,10 +74,11 @@ cd site && git add . && git commit -m "update: 数据更新" && git push
 
 ## 线上地址与后台（部署记录）
 
-| 站点 | 预览地址 | 管理后台 |
+| 站点 | 预览地址 | 管理后台（平台官网） |
 |---|---|---|
-| 成都周边每周一山（主站 · Cloudflare Workers） | https://broken-surf-e858.lylyuanliang.workers.dev/ | https://dash.cloudflare.com/?to=/:account/workers-and-pages （Worker：`broken-surf-e858`） |
-| 成都周边每周一山（镜像 · html2.link） | https://a3puoei5.html2.link/ | https://html2.link/dashboard |
-| GitHub 代码仓库 | https://github.com/lylyuanliang/weekly-mountain | — |
+| 成都周边每周一山（主站 · Cloudflare Workers） | https://broken-surf-e858.lylyuanliang.workers.dev/ | https://dash.cloudflare.com |
+| 成都周边每周一山（镜像 · html2.link） | https://a3puoei5.html2.link/ | https://html2.link |
+| GitHub 代码仓库 | https://github.com/lylyuanliang/weekly-mountain | https://github.com |
 
+> 此表只记「平台官网」，用于事后回查入口；不含带查询参数的控制台深链（深链会随平台改版失效）。
 > 更新方式：本地重新构建单文件 → 拖入 `weekly-mountain-site.zip`（或命令行 `npx wrangler pages deploy .`）→ 提交并推送仓库。
