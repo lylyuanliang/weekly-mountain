@@ -491,7 +491,7 @@ footer h3 { font-size: 14px; color: var(--tx2); margin-bottom: 8px; }
 <header class="topbar">
   <div class="brand">
     <span class="logo">⛰️</span>
-    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.0.1 · 2026-10-13</span></p></div>
+    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.1.0 · 2026-10-14</span></p></div>
     <button id="themeBtn" class="icon-btn" title="切换主题">🌗</button>
   </div>
   <div class="stats-strip" id="statsStrip"></div>
@@ -514,6 +514,7 @@ footer h3 { font-size: 14px; color: var(--tx2); margin-bottom: 8px; }
     </div>
     <div id="activeFilters" class="active-filters"></div>
     <div id="filterPanel" class="filter-panel hidden">
+      <div class="f-row"><div class="f-label"><span>📍 地区（按地市）</span><span style="color:var(--tx3)">点选可多选</span></div><div class="f-chips" id="fRegionChips"></div></div>
       <div class="f-row"><div class="f-label">难度</div><div class="f-chips">
         <button class="fchip" data-fdiff="L1">L1 轻松</button><button class="fchip" data-fdiff="L2">L2 休闲</button>
         <button class="fchip" data-fdiff="L3">L3 进阶</button><button class="fchip" data-fdiff="L4">L4 挑战</button>
@@ -573,7 +574,7 @@ footer h3 { font-size: 14px; color: var(--tx2); margin-bottom: 8px; }
     <button id="resetBtn" class="btn small danger">🗑 清空数据</button>
   </div>
   <div class="footer-meta">
-    <span id="verLine">成都周边每周一山 · <b>v1.0.1 · 2026-10-13</b></span>
+    <span id="verLine">成都周边每周一山 · <b>v1.1.0 · 2026-10-14</b></span>
     <span>数据核验日期 2026-10-12 · 山单 50 座（批次 1+2）</span>
     <span>数据来源均为公开网页，仅供个人出行参考；票价与开放状态请以官方渠道为准。</span>
   </div>
@@ -1000,7 +1001,9 @@ const MOUNTAINS = [
    "杜鹃长廊（经幡段）——无独立公开坐标，坐标待核",
    "硗碛藏族乡、嘎日村——坐标已由 OSM 确证，但海拔为区间估值待核"
   ],
-  "difficulty_note": "L2（常规玩法：观光车+云顶平台栈道；历史徒步长线约L3）"
+  "difficulty_note": "L2（常规玩法：观光车+云顶平台栈道；历史徒步长线约L3）",
+  "region": "雅安",
+  "county_short": "宝兴县"
  },
  {
   "id": "hongyanding",
@@ -1332,7 +1335,9 @@ const MOUNTAINS = [
    "月亮湾（延伸支线）——无独立公开坐标，坐标待核",
    "红岩顶海拔——公开资料有3437m与红岩塘观景平台3100m两种口径，已取3437m为主",
    "里程——公开资料有『约3公里』与『全程约4公里、上升300米』两种说法，存在出入"
-  ]
+  ],
+  "region": "甘孜",
+  "county_short": "泸定县"
  },
  {
   "id": "huajianshan",
@@ -1729,7 +1734,9 @@ const MOUNTAINS = [
    "第二观景平台——无独立公开坐标，坐标待核",
    "黑沟垭口——无独立公开坐标，坐标待核",
    "山顶观景台海拔——公开资料有3540m与3450m两种说法，已取3540m为主、3450m备查"
-  ]
+  ],
+  "region": "甘孜",
+  "county_short": "泸定县"
  },
  {
   "id": "jiaodingshan",
@@ -2196,7 +2203,9 @@ const MOUNTAINS = [
    "马烈乡海拔——坐标为 OSM 确证，海拔为区间估值待核",
    "里程——公开资料只给自驾时长（约2小时），徒步累计里程为估算，待用两步路轨迹校正"
   ],
-  "difficulty_note": "L1（轻户外：营地约3300米可自驾直达，徒步仅为营地至观景台10-60分钟缓坡；主要风险来自高海拔天气而非体力）"
+  "difficulty_note": "L1（轻户外：营地约3300米可自驾直达，徒步仅为营地至观景台10-60分钟缓坡；主要风险来自高海拔天气而非体力）",
+  "region": "雅安",
+  "county_short": "汉源县"
  },
  {
   "id": "niubeishan",
@@ -2728,7 +2737,9 @@ const MOUNTAINS = [
    "仙侠岭——OSM 无收录，坐标待核",
    "街心花园——OSM 无收录（『街心花园』在全国有多个同名公园，均与牛背山无关），坐标待核",
    "云海人家——OSM 无收录，坐标待核（该点仅见于景区规划文本，公开坐标未找到）"
-  ]
+  ],
+  "region": "雅安",
+  "county_short": "荥经县"
  },
  {
   "id": "sirentong",
@@ -3010,7 +3021,9 @@ const MOUNTAINS = [
    "高山草甸/箭竹林段——无独立公开坐标，坐标待核",
    "海拔——除主峰3510m外，其余各点海拔均为按爬升曲线估算，待核",
    "行政区划归属——公开资料有荥经县与泸定县两种表述，待核"
-  ]
+  ],
+  "region": "甘孜",
+  "county_short": "泸定县"
  },
  {
   "id": "balangshan",
@@ -3407,7 +3420,9 @@ const MOUNTAINS = [
    "林间溪流栈道(坐标估算)",
    "邓生沟保护站沟口(OSM仅有邓生村落与铁路站点,沟口位置估算)"
   ],
-  "difficulty_note": "车游观景L1；垭口线/云上花林高海拔徒步L2；巴穿邓长线与主峰攀登L3（原草案L1仅适用于车游观景）"
+  "difficulty_note": "车游观景L1；垭口线/云上花林高海拔徒步L2；巴穿邓长线与主峰攀登L3（原草案L1仅适用于车游观景）",
+  "region": "阿坝",
+  "county_short": "汶川县"
  },
  {
   "id": "jiajinshan",
@@ -3821,7 +3836,9 @@ const MOUNTAINS = [
    "五道拐(海拔3350m确证,坐标估算)",
    "夹金山隧道宝兴端入口(海拔2980m确证,坐标估算)"
   ],
-  "difficulty_note": "L1（垭口自驾观景+短步道为主；若走红军小道全程徒步为L2-L3高海拔路线）"
+  "difficulty_note": "L1（垭口自驾观景+短步道为主；若走红军小道全程徒步为L2-L3高海拔路线）",
+  "region": "雅安",
+  "county_short": "宝兴县"
  },
  {
   "id": "maobiliang",
@@ -4252,7 +4269,9 @@ const MOUNTAINS = [
   "wp_unverified": [
    "猫鼻梁观景台观景步道尽头(坐标估算)"
   ],
-  "difficulty_note": "L1（核心玩法为自驾观景台零徒步；周边轻徒步1-2小时；长坪沟全天徒步约L2）"
+  "difficulty_note": "L1（核心玩法为自驾观景台零徒步；周边轻徒步1-2小时；长坪沟全天徒步约L2）",
+  "region": "阿坝",
+  "county_short": "小金县"
  },
  {
   "id": "wanggangping",
@@ -4699,7 +4718,9 @@ const MOUNTAINS = [
    "怪树林栈道(坐标估算)",
    "贡嘎海子(坐标估算)"
   ],
-  "difficulty_note": "L1（索道直达观景平台+景区步道，多个来源称'最适合初阶户外爱好者''不用高反硬扛'，与草案一致）"
+  "difficulty_note": "L1（索道直达观景平台+景区步道，多个来源称'最适合初阶户外爱好者''不用高反硬扛'，与草案一致）",
+  "region": "雅安",
+  "county_short": "石棉县"
  },
  {
   "id": "xiling-xueshan",
@@ -5143,7 +5164,9 @@ const MOUNTAINS = [
    "山门海拔 1260m 取自景区公开海拔跨度下限，非该点实测值；阴阳界 3280m、日月坪 3250m 均为公开资料口径（区间 3210-3300m）",
    "累计里程 km 为按索道长度与栈道距离的估算值，误差约±1.5公里；阴阳界距日月坪官方口径「1.5公里木栈道」，本表按往返4公里口径折算"
   ],
-  "difficulty_note": "L1-L2"
+  "difficulty_note": "L1-L2",
+  "region": "成都",
+  "county_short": "大邑县"
  },
  {
   "altitude_m": 2800,
@@ -5513,7 +5536,9 @@ const MOUNTAINS = [
    "溪流栈道平台（第一休息点）（OSM 无独立节点，坐标为估算）",
    "松萝原始森林（核心林区）（OSM 无独立节点，坐标为估算）",
    "森林深处折返点（OSM 无独立节点，坐标为估算）"
-  ]
+  ],
+  "region": "阿坝",
+  "county_short": "汶川县"
  },
  {
   "altitude_m": 1000,
@@ -5893,7 +5918,9 @@ const MOUNTAINS = [
    "同心石阵（Nominatim 未命中本地结果，暂用虹口村节点近似）",
    "深溪沟地震遗址（无独立 OSM 节点，用高原大桥节点近似）",
    "高原村村委会点位（Nominatim 中国区未命中，用高原大桥/虹口村范围近似）"
-  ]
+  ],
+  "region": "成都",
+  "county_short": "都江堰市"
  },
  {
   "altitude_m": 1500,
@@ -6418,7 +6445,9 @@ const MOUNTAINS = [
    "山脊观景台、干五里高山草甸、冷杉林、溪流河谷（均无公开独立坐标，按环线里程外推，坐标待核）",
    "千年白果庙、琉璃堰塘、溪边浅滩草坪（无公开坐标，按浅线里程外推，坐标待核）",
    "鸡冠山主峰（3868m）未纳入徒步打卡序列，未采集其坐标"
-  ]
+  ],
+  "region": "成都",
+  "county_short": "崇州市"
  },
  {
   "altitude_m": 2100,
@@ -6867,7 +6896,9 @@ const MOUNTAINS = [
    "花溪流翠（OSM 无独立节点，坐标为估算）",
    "龙翔瀑布（OSM 无独立节点，坐标为估算）",
    "翡翠湖码头（OSM 无独立节点，坐标为估算）"
-  ]
+  ],
+  "region": "雅安",
+  "county_short": "荥经县"
  },
  {
   "altitude_m": 1000,
@@ -7292,7 +7323,9 @@ const MOUNTAINS = [
    "飞水峡瀑布群（无公开坐标，按里程外推，坐标待核）",
    "大飞水瀑布（无公开坐标，按里程外推，坐标待核）",
    "景区入口（无 OSM 景区节点，用小渔洞 locality 节点近似）"
-  ]
+  ],
+  "region": "成都",
+  "county_short": "彭州市"
  },
  {
   "ascent_m": 800,
@@ -7803,7 +7836,9 @@ const MOUNTAINS = [
   "wp_unverified": [
    "三潭雾泉（无独立公开坐标，按 2.8km 里程沿五龙沟估算，坐标待核）",
    "龙隐峡栈道（无独立公开坐标，复用五龙沟登山步道 OSM 节点，栈道全长约600m）"
-  ]
+  ],
+  "region": "成都",
+  "county_short": "都江堰市"
  },
  {
   "altitude_m": 1812,
@@ -8265,7 +8300,9 @@ const MOUNTAINS = [
    "响水滩瀑布（OSM 无独立节点，坐标为估算）",
    "祖师桥（OSM 无独立节点，坐标为估算）",
    "二天台（OSM 无独立节点，坐标为估算）"
-  ]
+  ],
+  "region": "成都",
+  "county_short": "邛崃市"
  },
  {
   "id": "aergou",
@@ -8709,7 +8746,9 @@ const MOUNTAINS = [
    "花海驿站（OSM 无节点，坐标为估算）",
    "雪山观景台（OSM 无节点，坐标为估算）",
    "龙池海子（OSM 无节点，坐标为估算）"
-  ]
+  ],
+  "region": "阿坝",
+  "county_short": "汶川县"
  },
  {
   "id": "bipenggou",
@@ -9243,7 +9282,9 @@ const MOUNTAINS = [
    "累计里程 km 为按官方分段里程累加的估算值（观光车26公里+电瓶车9公里口径），误差约±2公里",
    "毕棚沟实测地名中另有「牛肉棚子」「庄房村」等 OSM 节点，本表未采入主序列，仅作地标参考"
   ],
-  "difficulty_note": "L1-L2"
+  "difficulty_note": "L1-L2",
+  "region": "阿坝",
+  "county_short": "理县"
  },
  {
   "id": "jiufengshan",
@@ -9632,7 +9673,9 @@ const MOUNTAINS = [
    "观音崖（Nominatim 未命中，按公开攻略里程估算，坐标待核）",
    "九峰山金顶海拔有 3250m / 4000m 两种公开说法，此处取登顶轨迹实测值下限区间"
   ],
-  "difficulty_note": "L4（进阶强度线：单边约7km、爬升约1800m，多家攻略标注“小白慎徒”，被称为成都户外圈进阶试练场；祖师殿以下为石梯休闲段）"
+  "difficulty_note": "L4（进阶强度线：单边约7km、爬升约1800m，多家攻略标注“小白慎徒”，被称为成都户外圈进阶试练场；祖师殿以下为石梯休闲段）",
+  "region": "成都",
+  "county_short": "彭州市"
  },
  {
   "id": "kalonggou",
@@ -10085,7 +10128,9 @@ const MOUNTAINS = [
    "卡龙石林（坐标为估算，OSM 无命名节点）",
    "沟内各点海拔 3000-3900m 为按景区 2400-4100m 区间插值的估算值，无逐点实测",
    "里程 km 为沿沟线性的估算值（景区无公开分段里程），误差约 ±1 公里；景点顺序为按海拔自低到高排列，官方未公布导览站点编号"
-  ]
+  ],
+  "region": "阿坝",
+  "county_short": "黑水县"
  },
  {
   "id": "liangtaigou",
@@ -10483,7 +10528,9 @@ const MOUNTAINS = [
    "里程 km 为按沟全长 16 公里线性分配的估算值（景区无公开分段里程），误差约 ±1.5 公里；打卡点顺序为按沿沟自低到高排列，非官方导览编号",
    "凉台沟（粮台沟）为未开发原始生态景点，无观光车站点体系，无官方导览页可核"
   ],
-  "difficulty_note": "L3（沟内公路沿线休闲段约L2；公路尽头深入雪山脚下碎石坡为L3-L4）"
+  "difficulty_note": "L3（沟内公路沿线休闲段约L2；公路尽头深入雪山脚下碎石坡为L3-L4）",
+  "region": "阿坝",
+  "county_short": "理县"
  },
  {
   "id": "majiagou",
@@ -10919,7 +10966,9 @@ const MOUNTAINS = [
    "里程 km 为沿栈道累计估算值：官方仅给轻松线往返约7公里总量，各中途点分段里程误差约 ±0.5 公里",
    "海拔 3780/3800/3830/3860/3880 米为公开攻略给出的区间值内插，非逐点实测"
   ],
-  "difficulty_note": "L3（高海拔徒步为主，观光车可代步一段）"
+  "difficulty_note": "L3（高海拔徒步为主，观光车可代步一段）",
+  "region": "阿坝",
+  "county_short": "小金县"
  },
  {
   "id": "songpinggou",
@@ -11405,7 +11454,9 @@ const MOUNTAINS = [
    "五彩池/爱情海（坐标为估算，位于翠竹沟与长海之间）",
    "全部打卡点海拔均为估算：景区公开口径仅给整体区间 2000-3200m，未逐点公布海拔",
    "里程 km 为沿栈道累计估算值（官方仅给全程约 6.5 公里总量），分段里程误差约 ±0.5 公里"
-  ]
+  ],
+  "region": "阿坝",
+  "county_short": "茂县"
  },
  {
   "id": "gexianshan-bailu",
@@ -11937,7 +11988,9 @@ const MOUNTAINS = [
    "白鹿镇串联段（塘坝村、领报修院）：坐标为估算，距葛仙山景区约 7km，与葛仙山景区非连续徒步轨迹（两点坐标本身为 OSM 精确命中）",
    "葛仙山中段海拔：坐标为估算，公开资料仅确证最高点尖峰顶 1362m 与最低点 662m"
   ],
-  "difficulty_note": "L2"
+  "difficulty_note": "L2",
+  "region": "成都",
+  "county_short": "彭州市"
  },
  {
   "id": "hemingshan",
@@ -12428,7 +12481,9 @@ const MOUNTAINS = [
    "三丰古柏：坐标为估算，OSM 无节点（按道观中轴石阶 2.4km/1080m 推算）",
    "天谷洞：坐标为估算，OSM 无节点（按游览终点高处 2.6km/1180m 推算）",
    "鹤鸣山主峰：坐标为估算，公开说法主峰海拔 1331m，本线仅到道观群及天谷洞，未含主峰山脊"
-  ]
+  ],
+  "region": "成都",
+  "county_short": "大邑县"
  },
  {
   "id": "jiezi-fengqishan",
@@ -12878,7 +12933,9 @@ const MOUNTAINS = [
    "康道半山观景平台：坐标为估算，OSM 无节点（按实测海拔 757-772m 段推算）",
    "康道山顶（阶梯尽头）：坐标为估算，OSM 无节点（按实测最高海拔 900-905m 推算）",
    "西川圣境大牌坊（停车场）：坐标为估算，OSM 无节点（按光严禅院东北侧下山公路推算）"
-  ]
+  ],
+  "region": "成都",
+  "county_short": "崇州市"
  },
  {
   "id": "lingshanshan",
@@ -13361,7 +13418,9 @@ const MOUNTAINS = [
    "灵岩寺：坐标为估算，OSM 有节点（31.02842,103.61330）但寺庙目前暂未开放，千佛塔在寺内左侧",
    "灵岩山山顶观景处海拔：坐标为估算，公开资料只给出「约 762m」，本线 790m 为估算值"
   ],
-  "difficulty_note": "L2（山路平缓、步道完善，老人小孩皆可，登顶观景台强度低）"
+  "difficulty_note": "L2（山路平缓、步道完善，老人小孩皆可，登顶观景台强度低）",
+  "region": "成都",
+  "county_short": "都江堰市"
  },
  {
   "id": "longquanshan",
@@ -13869,7 +13928,9 @@ const MOUNTAINS = [
    "丹景台（城市之眼）：坐标为估算，丹景台与仰天窝直线距离约 25km，本线为概览线，实地需分段乘车，非连续徒步轨迹",
    "丹景台核心观景平台海拔：坐标为估算，公开海拔为 702m，本线列 693m 取公开徒步路线最高点实测值"
   ],
-  "difficulty_note": "L1（官方媒体描述各步道坡度平缓、难度不大，新手友好；金龙长城环线强度较大）"
+  "difficulty_note": "L1（官方媒体描述各步道坡度平缓、难度不大，新手友好；金龙长城环线强度较大）",
+  "region": "成都",
+  "county_short": "龙泉驿区"
  },
  {
   "id": "mengdingshan",
@@ -14311,7 +14372,9 @@ const MOUNTAINS = [
    "皇茶园：坐标为估算，OSM 无节点（位于天盖寺后山，按 2.2km/1320m 推算）",
    "阴阳石牌坊：坐标为估算，OSM 无节点（按皇茶园向上 2.5km/1330m 推算）",
    "天盖寺及各中间点海拔：坐标为估算，公开资料仅确证最高峰上清峰 1456m"
-  ]
+  ],
+  "region": "雅安",
+  "county_short": "名山区"
  },
  {
   "id": "shangli-guzhen",
@@ -14798,7 +14861,9 @@ const MOUNTAINS = [
    "白马泉海拔960m：海拔为估算（无公开实测高程，按「需上山、位于古镇东北沟谷」的相对高差推定）",
    "白马泉里程5.5km：为估算（公开口径在2-4公里间不一致，本文件按古镇→白马村约3公里道路里程叠加古镇内步行段折算，误差约 ±1.5 公里）",
    "双节孝牌坊 OSM display_name 标注为上里镇中里/碧峰峡镇，与上里古镇镇政府名录归属存在行政边界表述差异，坐标本身取自 OSM 独立命名节点"
-  ]
+  ],
+  "region": "雅安",
+  "county_short": "雨城区"
  },
  {
   "id": "yulei-songmao",
@@ -15263,7 +15328,9 @@ const MOUNTAINS = [
    "全线海拔均为估算：都江堰堰首官方海拔为726米可作基准，玉垒山广场730m、城隍庙760m、松茂古道800m、玉垒关840m、玉垒阁865m、宣威门780m、西街735m、南桥728m 均无逐点实测公开高程",
    "里程 km 为估算：公开游记仅给「全程约2-3小时」，无逐点里程，各中途点误差约 ±0.5 公里",
    "玉垒阁登阁需另付40元、步云廊扶梯单独收费，与免费玉垒山片区、都江堰水利景区门票口径不同，游览时需现场确认"
-  ]
+  ],
+  "region": "成都",
+  "county_short": "都江堰市"
  },
  {
   "id": "yudingshan",
@@ -15756,7 +15823,9 @@ const MOUNTAINS = [
    "里程 km 为估算（公开信息仅给「山脚至慈云寺约3-4公里」「环线全程2-3小时」，无逐点里程，各中途点误差约 ±0.8 公里）",
    "云顶石城「环线」在公开资料中存在环线与原路返回两种表述，本文件按原路下山折算全程7.5公里"
   ],
-  "difficulty_note": "L2（石阶步道为主、坡度平缓，环线爬升约300米，官方新媒体口径为亲子友好；仅赵淮旅游大道方向的登山道被徒步者描述为较陡，体力弱者可改石阶线）"
+  "difficulty_note": "L2（石阶步道为主、坡度平缓，环线爬升约300米，官方新媒体口径为亲子友好；仅赵淮旅游大道方向的登山道被徒步者描述为较陡，体力弱者可改石阶线）",
+  "region": "成都",
+  "county_short": "金堂县"
  },
  {
   "id": "jiudingshan",
@@ -16254,7 +16323,9 @@ const MOUNTAINS = [
    "白龙池（坐标为估算；海拔 3240m，另有 3200m 口径）",
    "里程 km 为按公开攻略给出的分段距离（5.5km + 1.5km + 约4km 下撤）串联的估算值，各中途点误差约 ±0.5 公里"
   ],
-  "difficulty_note": "L4（高海拔草甸徒步，单日环线约11-15公里/爬升约1050米；重装连登狮子王峰、太子城为高难度技术线）"
+  "difficulty_note": "L4（高海拔草甸徒步，单日环线约11-15公里/爬升约1050米；重装连登狮子王峰、太子城为高难度技术线）",
+  "region": "阿坝",
+  "county_short": "茂县"
  },
  {
   "id": "longchi-dujiangyan",
@@ -16752,7 +16823,9 @@ const MOUNTAINS = [
    "湖尾/龙王庙建筑群（坐标为估算，OSM 无命名节点）",
    "龙池镇起点海拔 750m 为估算（都江堰水利工程堰首官方海拔为726米，可作参照）",
    "里程 km 为按公开游记口径（单程约11公里+环湖2公里）串联的估算值，各中途点误差约 ±1 公里"
-  ]
+  ],
+  "region": "成都",
+  "county_short": "都江堰市"
  },
  {
   "id": "mengtunhexigu",
@@ -17209,7 +17282,9 @@ const MOUNTAINS = [
    "里程 km 为估算：公开资料未给出孟屯河谷逐点里程（仅知上孟乡至刮托寨约8公里、沟内往返约6-8小时），双沟串联全程按约15公里折算，误差约 ±2 公里",
    "老君沟仅取沟口一点：公开资料未给出老君沟沟内逐点里程与海拔，若需深入老君沟山湖秘境需另行补采"
   ],
-  "difficulty_note": "L3（以露营+轻徒步为主，沟内原始区域对装备与经验有要求）"
+  "difficulty_note": "L3（以露营+轻徒步为主，沟内原始区域对装备与经验有要求）",
+  "region": "阿坝",
+  "county_short": "理县"
  },
  {
   "id": "shenmulei",
@@ -17643,7 +17718,9 @@ const MOUNTAINS = [
    "神木垒高山草甸(海拔约2700m确证,坐标估算)",
    "帕格拉神山打卡点未单独采集(缺乏公开坐标与确切里程)"
   ],
-  "difficulty_note": "L1（木栈道+草甸缓坡轻徒步为主，徒步上山约1-1.5小时；冬季雪后步道湿滑需防滑）"
+  "difficulty_note": "L1（木栈道+草甸缓坡轻徒步为主，徒步上山约1-1.5小时；冬季雪后步道湿滑需防滑）",
+  "region": "雅安",
+  "county_short": "宝兴县"
  },
  {
   "id": "xiongmaoping",
@@ -18088,7 +18165,9 @@ const MOUNTAINS = [
    "耿达镇起点海拔1600m、徒步起点1800m、原始森林段2000m、观景平台2050m、神树坪基地1750m、邓生沟2200m：海拔均为估算（除熊猫坪「海拔2000余米」的公开口径外无逐点实测高程；另有「徒步熊猫坪海拔约2500m」的更高口径未采用，本文件循2000余米口径）",
    "里程 km 为估算：公开资料仅给「徒步全程约3-5公里」「耿达镇至熊猫坪车程约2小时」，本文件按徒步段+转场段折算约8公里，各中途点误差约 ±1.5 公里",
    "大熊猫博物馆(31.03293,103.18065) 在卧龙镇而非耿达镇，如仅走熊猫坪段可不纳入行程"
-  ]
+  ],
+  "region": "阿坝",
+  "county_short": "汶川县"
  },
  {
   "id": "tiantai-pengzhou",
@@ -18485,7 +18564,9 @@ const MOUNTAINS = [
    "木伞庵停车场（返程终点）：与 seq1 同点，坐标为估算",
    "全线路里程：公开资料有往返8km、往返9km、环线12km三种口径，本表取8km，待核"
   ],
-  "difficulty_note": "L4（入门进阶：以石阶古道为主，含碎石陡坡与涉水段；冬季结冰后难度上调）"
+  "difficulty_note": "L4（入门进阶：以石阶古道为主，含碎石陡坡与涉水段；冬季结冰后难度上调）",
+  "region": "成都",
+  "county_short": "彭州市"
  },
  {
   "id": "qianfoshan",
@@ -18812,7 +18893,9 @@ const MOUNTAINS = [
    "三千梯（陡石阶段）：地名有公开资料确证，但无公开坐标，坐标与海拔均为估算",
    "千佛山主峰（山顶千佛庙）：坐标为 OSM peak 直接收录点，但山顶海拔公开资料有2942.2m与3033m两说，待核",
    "全线路里程：20km 为公开攻略『从停车场到山顶约20公里』口径，非实测轨迹，待核"
-  ]
+  ],
+  "region": "绵阳",
+  "county_short": "安州区"
  },
  {
   "id": "tiewadian",
@@ -19197,7 +19280,9 @@ const MOUNTAINS = [
    "环线高点/折返点：非公开命名地标，为环线走向插值点，坐标与海拔均为估算",
    "中坝保护站（返程终点）：与 seq1 同点，坐标为估算",
    "全线路里程：公开资料有『5公里初级环线』与『全程9公里左右』两种口径，本表取5km，待核"
-  ]
+  ],
+  "region": "成都",
+  "county_short": "彭州市"
  },
  {
   "id": "wuzhongshan",
@@ -19598,7 +19683,9 @@ const MOUNTAINS = [
    "弥陀寺（OSM 无独立节点，坐标为估算）",
    "蓥华顶（OSM 无独立节点，坐标为估算；海拔记录1638m/1875m 两说）"
   ],
-  "difficulty_note": "L3（登顶段陡峭，冬季雪天实际难度更高）"
+  "difficulty_note": "L3（登顶段陡峭，冬季雪天实际难度更高）",
+  "region": "成都",
+  "county_short": "大邑县"
  },
  {
   "id": "yihuashan",
@@ -19945,7 +20032,9 @@ const MOUNTAINS = [
    "龙吟段入口牌坊（终点）：与 seq1 同点，坐标为估算",
    "全线路里程与爬升：10km/600m 取自公开导览帖，未与实测轨迹核对，待核",
    "区域受限状况：震后部分道路损毁与局部管控范围随年度调整，出行前须以什邡市/蓥华山景区最新公告为准，待核"
-  ]
+  ],
+  "region": "德阳",
+  "county_short": "什邡市"
  },
  {
   "id": "zhaogongshan",
@@ -20413,7 +20502,9 @@ const MOUNTAINS = [
    "赵公山登山口至庆云寺分段里程为攻略估算，非实测轨迹",
    "赵公庙与赵公山节点 OSM 坐标接近，山顶海拔 2434m 为公开资料值"
   ],
-  "difficulty_note": "L4（东线长陡险、野路需轨迹；西线约L3，木梯步）"
+  "difficulty_note": "L4（东线长陡险、野路需轨迹；西线约L3，木梯步）",
+  "region": "成都",
+  "county_short": "都江堰市"
  },
  {
   "id": "emeishan",
@@ -21009,7 +21100,9 @@ const MOUNTAINS = [
    "各点累计里程为按公开分段里程累加的估算值，非 GPS 实测轨迹，误差约±1.5公里",
    "万佛顶目前步道封闭、小火车停运，坐标仅作参考，不建议规划前往"
   ],
-  "difficulty_note": "L3-L4（车步组合+索道精华线约L3；全山两日徒步为长距离石阶，约L4）"
+  "difficulty_note": "L3-L4（车步组合+索道精华线约L3；全山两日徒步为长距离石阶，约L4）",
+  "region": "乐山",
+  "county_short": "峨眉山市"
  },
  {
   "id": "changpinggou",
@@ -21463,7 +21556,9 @@ const MOUNTAINS = [
    "喇嘛寺起点海拔 3400m（区间 3400-3440m）：OSM 无 ele 标注，取自公开攻略与官方海拔差的推算值",
    "头道坪、二道坪、虫虫脚瀑布、上干海子、两河口、水打坝海拔：OSM 无 ele 标注，按沟内线性爬升率（约每公里 30 米）由相邻实测点插值估算，仅供导航参考",
    "里程 km 为沿沟累计估算值（官网仅给单程总量 12 公里），各中途点分段里程误差约±1 公里"
-  ]
+  ],
+  "region": "阿坝",
+  "county_short": "小金县"
  },
  {
   "id": "dagubingchuan",
@@ -21821,7 +21916,9 @@ const MOUNTAINS = [
    "各站海拔除索道下站(3200m)、索道上站(4860m) 外，均为按沟内线性爬升的估算值（区间 2400-3250m），误差约±100米",
    "累计里程 km 为按观光车全程33公里线性分配的估算值，误差约±2公里；官方仅公布全程里程与行车时间",
    "游客中心海拔 2400m 为估算值（景区公开口径海拔范围3800-5100m 指向冰川区，沟口实际海拔显著更低）"
-  ]
+  ],
+  "region": "阿坝",
+  "county_short": "黑水县"
  },
  {
   "id": "sanaoxueshan",
@@ -22170,7 +22267,9 @@ const MOUNTAINS = [
    "6号打卡点(坐标估算)",
    "碎石坡雪脊观景处(坐标估算)",
    "奥太娜顶峰海拔存在官方5210m与实测约4780-4870m的差异,待核"
-  ]
+  ],
+  "region": "阿坝",
+  "county_short": "黑水县"
  },
  {
   "id": "shuangqiaogou",
@@ -22616,10 +22715,12 @@ const MOUNTAINS = [
    "阴阳谷海拔 3050m 为估算（区间 3000-3100m）",
    "各站累计里程 km 为按观光车道全程34公里线性分配的估算值，误差约±2公里；官方仅公布全程里程",
    "人参果坪/隆珠措/撵鱼坝以外各站海拔为公开攻略与官方区间值的插值，误差约±50米"
-  ]
+  ],
+  "region": "阿坝",
+  "county_short": "小金县"
  }
 ];
-const APP_VERSION = {"version":"1.0.1","date":"2026-10-13","name":"成都周边每周一山"};
+const APP_VERSION = {"version":"1.1.0","date":"2026-10-14","name":"成都周边每周一山"};
 /* ============ 成都周边每周一山 · 应用逻辑 v2（横滑卡片流 + 图文详情弹层） ============ */
 "use strict";
 
@@ -22669,6 +22770,13 @@ const $$ = (sel) => Array.from(document.querySelectorAll(sel));
 function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
 function byId(id) { return MOUNTAINS.find((m) => m.id === id); }
 function fv(v, miss) { if (v === 0 || v) return esc(v); return '<span class="fv-miss">⏳ ' + (miss || "待核验") + "</span>"; }
+/* 容错取文本：数组/字符串/对象都能安全转成字符串（防止 .join 报错导致整页失败） */
+function arrText(v) {
+  if (v == null) return "";
+  if (Array.isArray(v)) return v.map((x) => (x && typeof x === "object") ? Object.values(x).join(" ") : String(x)).join(" ");
+  if (typeof v === "object") return Object.values(v).join(" ");
+  return String(v);
+}
 function arrOr(list, miss) { if (Array.isArray(list) && list.length) return '<ul class="list-clean">' + list.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul>"; return '<span class="fv-miss">⏳ 待核验</span>'; }
 function chipsOf(list, cls) { if (Array.isArray(list) && list.length) return '<div class="chip-row">' + list.map((x) => '<span class="c-chip' + (cls ? " " + cls : "") + '">' + esc(x) + "</span>").join("") + "</div>"; return '<span class="fv-miss">⏳ 待核验</span>'; }
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2200); }
@@ -22861,28 +22969,50 @@ function renderStatsStrip() {
 }
 
 /* ---------- 筛选 ---------- */
-let FILTER = { q: "", diff: [], groups: [], maxDrive: 5, free: false, overnight: false, season: false, doneMode: "all" };
+let FILTER = { q: "", diff: [], groups: [], regions: [], maxDrive: 5, free: false, overnight: false, season: false, doneMode: "all" };
 function filterCount() {
-  let n = FILTER.diff.length + FILTER.groups.length;
+  let n = FILTER.diff.length + FILTER.groups.length + FILTER.regions.length;
   if (FILTER.free) n++; if (FILTER.overnight) n++; if (FILTER.season) n++;
   if (FILTER.doneMode !== "all") n++;
   if (FILTER.maxDrive < 5) n++;
   return n;
+}
+/* 地区列表（按数量降序）：供筛选 chips 与统计使用 */
+function regionList() {
+  const cnt = {};
+  MOUNTAINS.forEach((m) => { const r = m.region || "其他"; cnt[r] = (cnt[r] || 0) + 1; });
+  return Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]).map((r) => ({ region: r, count: cnt[r] }));
+}
+function renderRegionChips() {
+  const box = $("#fRegionChips");
+  if (!box) return;
+  box.innerHTML = regionList().map((x) =>
+    '<button class="fchip' + (FILTER.regions.includes(x.region) ? " on" : "") + '" data-fregion="' + esc(x.region) + '">' + esc(x.region) + ' <span style="color:var(--tx3)">' + x.count + "</span></button>"
+  ).join("");
+  Array.from(box.querySelectorAll("[data-fregion]")).forEach((el) => {
+    el.onclick = () => {
+      const r = el.getAttribute("data-fregion");
+      FILTER.regions = FILTER.regions.includes(r) ? FILTER.regions.filter((x) => x !== r) : FILTER.regions.concat(r);
+      el.classList.toggle("on");
+      refreshList();
+    };
+  });
 }
 function applyFilter(list) {
   const q = FILTER.q.trim().toLowerCase();
   const season = seasonNow();
   return list.filter((m) => {
     if (q) {
-      const hay = (m.name + " " + (m.county || "") + " " + (m.tags || []).join(" ") + " " + (GROUP_META[m.group] ? GROUP_META[m.group].label : "")).toLowerCase();
+      const hay = (m.name + " " + (m.county || "") + " " + (m.county_short || "") + " " + (m.region || "") + " " + (m.tags || []).join(" ") + " " + (GROUP_META[m.group] ? GROUP_META[m.group].label : "")).toLowerCase();
       if (hay.indexOf(q) < 0) return false;
     }
+    if (FILTER.regions.length && !FILTER.regions.includes(m.region || "其他")) return false;
     if (FILTER.diff.length && !FILTER.diff.includes(m.difficulty)) return false;
     if (FILTER.groups.length && !FILTER.groups.includes(m.group)) return false;
     if (FILTER.maxDrive < 5 && (m.drive_hours || 0) > FILTER.maxDrive) return false;
     if (FILTER.free && !m.free) return false;
     if (FILTER.overnight && !m.overnight) return false;
-    if (FILTER.season) { const sb = (m.season_best || []).join(" "); if (sb.indexOf(season) < 0) return false; }
+    if (FILTER.season) { const sb = arrText(m.season_best); if (sb.indexOf(season) < 0) return false; }
     if (FILTER.doneMode === "done" && !isDone(m.id)) return false;
     if (FILTER.doneMode === "undone" && isDone(m.id)) return false;
     return true;
@@ -22890,6 +23020,7 @@ function applyFilter(list) {
 }
 function renderActiveFilters() {
   const box = $("#activeFilters"); const chips = [];
+  FILTER.regions.forEach((r) => chips.push(["📍 " + r, () => { FILTER.regions = FILTER.regions.filter((x) => x !== r); renderRegionChips(); refreshList(); }]));
   FILTER.diff.forEach((d) => chips.push([d + " " + DIFF_LABEL[d], () => { FILTER.diff = FILTER.diff.filter((x) => x !== d); refreshList(); }]));
   FILTER.groups.forEach((g) => chips.push([GROUP_META[g] ? GROUP_META[g].label : g, () => { FILTER.groups = FILTER.groups.filter((x) => x !== g); refreshList(); }]));
   if (FILTER.maxDrive < 5) chips.push(["车程≤" + FILTER.maxDrive + "h", () => { FILTER.maxDrive = 5; refreshList(); }]);
@@ -22924,7 +23055,7 @@ function refreshList() {
 }
 function hCardHTML(m, season) {
   const done = isDone(m.id);
-  const inSeason = (m.season_best || []).join(" ").indexOf(season) >= 0;
+  const inSeason = arrText(m.season_best).indexOf(season) >= 0;
   const risky = statusAlert(m) ? true : false;
   return '<button class="h-card' + (done ? " done-it" : "") + (risky ? " risky" : "") + '" data-mid="' + esc(m.id) + '">' +
     '<div class="h-cover">' +
@@ -22933,7 +23064,7 @@ function hCardHTML(m, season) {
     '<span class="h-diff diff-' + esc(m.difficulty) + '" style="color:' + DIFF_COLOR[m.difficulty] + ';background:color-mix(in srgb,' + DIFF_COLOR[m.difficulty] + ' 20%, transparent)">' + esc(m.difficulty) + " " + DIFF_LABEL[m.difficulty] + "</span>" +
     "</div>" +
     '<div class="h-body"><div class="h-name">' + esc(m.name) + "</div>" +
-    '<div class="h-county">📍 ' + esc(m.county || "") + "</div>" +
+    '<div class="h-county">📍 ' + esc(m.region || "") + " · " + esc(m.county_short || m.county || "") + "</div>" +
     '<div class="h-meta">' +
     (m.drive_hours ? '<span class="badge">🚗 ' + esc(m.drive_hours) + "h</span>" : "") +
     (m.free ? '<span class="badge free">免费</span>' : "") +
@@ -22970,7 +23101,7 @@ function sheetHTML(m) {
   const done = isDone(m.id);
   const season = seasonNow();
   const dn = derivedNums(m);
-  const inSeason = (m.season_best || []).join(" ").indexOf(season) >= 0;
+  const inSeason = arrText(m.season_best).indexOf(season) >= 0;
   let h = '<div class="sheet-close-bar"><button id="sheetClose" class="sheet-close">✕ 关闭</button></div>';
   // 英雄区
   h += '<div class="sheet-hero"><div class="sh-top"><span class="sh-ico">' + GROUP_META[m.group].icon + "</span><div><h2>" + esc(m.name) + "</h2><div class=\"sh-sub\">📍 " + esc(m.county || "") + "</div></div></div>";
@@ -23756,6 +23887,7 @@ function init() {
   $$("#tabnav button").forEach((b) => { b.onclick = () => switchView(b.getAttribute("data-view")); });
   $("#searchBox").oninput = (e) => { FILTER.q = e.target.value; refreshList(); };
   $("#filterBtn").onclick = () => $("#filterPanel").classList.toggle("hidden");
+  renderRegionChips(); // 地区筛选 chips（带数量）
   $$("#filterPanel [data-fdiff]").forEach((el) => { el.onclick = () => { const d = el.getAttribute("data-fdiff"); FILTER.diff = FILTER.diff.includes(d) ? FILTER.diff.filter((x) => x !== d) : FILTER.diff.concat(d); el.classList.toggle("on"); refreshList(); }; });
   $$("#filterPanel [data-fgroup]").forEach((el) => { el.onclick = () => { const g = el.getAttribute("data-fgroup"); FILTER.groups = FILTER.groups.includes(g) ? FILTER.groups.filter((x) => x !== g) : FILTER.groups.concat(g); el.classList.toggle("on"); refreshList(); }; });
   $("#fDrive").oninput = (e) => { FILTER.maxDrive = Number(e.target.value); $("#fDriveVal").textContent = e.target.value + "h"; refreshList(); };
