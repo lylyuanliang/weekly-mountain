@@ -470,11 +470,12 @@ b.hl-date { color: #93c5fd; font-weight: 500; }
 /* ---------- 页脚 ---------- */
 footer { padding: 24px 16px 30px; border-top: 1px solid var(--line); margin-top: 20px; }
 footer h3 { font-size: 14px; color: var(--tx2); margin-bottom: 8px; }
-/* footer 信息来源默认折叠：summary 作为节标题占满一行；展开后列表不带弹层内的卡片底色 */
+/* 来源折叠（页脚全库来源 + 弹层内单山来源共用）：summary 当标题行，展开后的列表不带卡片底色 */
+details.src-fold > summary { min-height: 40px; box-sizing: border-box; align-items: center; }
+details.src-fold > div.src-list { background: none; border-left: 0; padding: 2px 0 0; margin-top: 0; font-size: 11.5px; line-height: 1.5; }
 footer details.src-fold { margin-top: 0; }
-footer details.src-fold > summary { display: flex; width: 100%; font-size: 14px; color: var(--tx2); padding: 10px 0; min-height: 44px; box-sizing: border-box; }
+footer details.src-fold > summary { display: flex; width: 100%; font-size: 14px; color: var(--tx2); padding: 10px 0; min-height: 44px; }
 footer details.src-fold > summary::before { font-size: 12px; }
-footer details.src-fold > div { padding: 4px 0 0; background: none; border-left: 0; margin-top: 0; }
 .disc { font-size: 12px; color: var(--tx3); line-height: 1.7; margin-bottom: 14px; }
 .backup-row { display: flex; gap: 8px; margin-top: 16px; }
 .backup-row .btn { flex: 1; }
@@ -503,7 +504,7 @@ footer details.src-fold > div { padding: 4px 0 0; background: none; border-left:
 <header class="topbar">
   <div class="brand">
     <span class="logo">⛰️</span>
-    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.2.2 · 2026-10-14</span></p></div>
+    <div><h1>成都周边每周一山</h1><p>山单 50 座 · 已全部上线（批次 1+2）· 数据核验 2026-10-12 · <span class="ver-tag">v1.2.3 · 2026-10-14</span></p></div>
     <button id="themeBtn" class="icon-btn" title="切换主题">🌗</button>
   </div>
   <div class="stats-strip" id="statsStrip"></div>
@@ -580,7 +581,7 @@ footer details.src-fold > div { padding: 4px 0 0; background: none; border-left:
   </div>
   <details class="more src-fold" id="sourcesFold">
     <summary>📚 信息来源（<span id="srcCount">0</span> 条）· 展开查看</summary>
-    <div id="sourcesList"></div>
+    <div id="sourcesList" class="src-list"></div>
   </details>
   <div class="backup-row">
     <button id="exportBtn" class="btn small">📤 导出备份</button>
@@ -588,7 +589,7 @@ footer details.src-fold > div { padding: 4px 0 0; background: none; border-left:
     <button id="resetBtn" class="btn small danger">🗑 清空数据</button>
   </div>
   <div class="footer-meta">
-    <span id="verLine">成都周边每周一山 · <b>v1.2.2 · 2026-10-14</b></span>
+    <span id="verLine">成都周边每周一山 · <b>v1.2.3 · 2026-10-14</b></span>
     <span>数据核验日期 2026-10-12 · 山单 50 座（批次 1+2）</span>
     <span>数据来源均为公开网页，仅供个人出行参考；票价与开放状态请以官方渠道为准。</span>
   </div>
@@ -22734,7 +22735,7 @@ const MOUNTAINS = [
   "county_short": "小金县"
  }
 ];
-const APP_VERSION = {"name":"成都周边每周一山","date":"2026-10-14","version":"1.2.2"};
+const APP_VERSION = {"version":"1.2.3","date":"2026-10-14","name":"成都周边每周一山"};
 /* ============ 成都周边每周一山 · 应用逻辑 v2（横滑卡片流 + 图文详情弹层） ============ */
 "use strict";
 
@@ -23204,11 +23205,16 @@ function sheetHTML(m) {
     '<div class="gear-col"><h5>🛏 住</h5><ul>' + (Array.isArray(m.stay) && m.stay.length ? m.stay.map((x) => "<li>" + esc(x) + "</li>").join("") : '<li style="color:var(--tx3)">待核验</li>') + "</ul></div></div></div>";
   // ⑨.5 老驴经验 + 专项装备
   h += tipsHTML(m);
-  // ⑩ 轨迹与来源
+  // ⑩ 轨迹与来源（来源默认折叠：单山最多十余条外链，展开会拉出很长一段）
+  const srcN = Array.isArray(m.sources) ? m.sources.length : 0;
   h += '<div class="mod-card" id="m-src"><h4>🗺️ 轨迹与来源</h4><h5 style="color:var(--tx2);font-size:12px;margin-bottom:5px">轨迹搜索词（两步路/六只脚）</h5>' + chipsOf(m.track_keywords, "info") +
     '<h5 style="color:var(--tx2);font-size:12px;margin:8px 0 4px">💬 近期口碑</h5><div class="callout ok" style="margin-bottom:8px">' + longVal(m.reputation, 64) + "</div>" +
-    '<h5 style="color:var(--tx2);font-size:12px;margin-bottom:4px">📚 来源（核验日 ' + VERIFIED_DATE + "）</h5>" +
-    (Array.isArray(m.sources) && m.sources.length ? m.sources.map((s) => '<div class="src-item">· <a style="color:var(--acc2)" href="' + esc(s.url) + '" target="_blank" rel="noopener noreferrer">' + esc(s.title) + "</a> <span class=\"d\">(" + esc((s.url || "").replace(/^https?:\/\//, "").split("/")[0]) + (s.date ? " · " + esc(s.date) : "") + ")</span></div>").join("") : '<span class="fv-miss">⏳ 待核验</span>') + "</div>";
+    (srcN
+      ? '<details class="more src-fold"><summary>📚 来源（' + srcN + " 条 · 核验日 " + VERIFIED_DATE + '）· 展开查看</summary><div class="src-list">' +
+        m.sources.map((s) => '<div class="src-item">· <a style="color:var(--acc2)" href="' + esc(s.url) + '" target="_blank" rel="noopener noreferrer">' + esc(s.title) + "</a> <span class=\"d\">(" + esc((s.url || "").replace(/^https?:\/\//, "").split("/")[0]) + (s.date ? " · " + esc(s.date) : "") + ")</span></div>").join("") +
+        "</div></details>"
+      : '<h5 style="color:var(--tx2);font-size:12px;margin-bottom:4px">📚 来源（核验日 ' + VERIFIED_DATE + '）</h5><div class="src-item"><span class="fv-miss">⏳ 待核验</span></div>') +
+    "</div>";
   // ⑪ 待核验清单（挪到末尾，默认折叠，避免文字墙）
   if (miss.length) {
     h += '<details class="mod-card unv"><summary>⏳ 待核验信息（' + miss.length + ' 项）· 出行前请自行确认</summary><div class="unv-body">' +
