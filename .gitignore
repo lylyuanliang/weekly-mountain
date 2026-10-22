@@ -1,7 +1,14 @@
 _*
 node_modules/
+dist/
 .DS_Store
 Thumbs.db
 *.log
 docs/
 .superpowers/
+*.zip
+scratch/*.png
+scratch/*.jpg
+scratch/*.jpeg
+scratch/*.txt
+scratch/__pycache__/
