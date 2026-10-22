@@ -1,0 +1,97 @@
+[
+  {
+    "id": "chengdu",
+    "name": "成都周边",
+    "shortName": "成都",
+    "province": "四川",
+    "title": "成都周边 51 座山",
+    "center": {
+      "lng": 104.066,
+      "lat": 30.657
+    },
+    "defaultZoom": 9,
+    "minZoom": 7,
+    "maxZoom": 14,
+    "driveCenter": "成都",
+    "mountainsCount": 51,
+    "status": "active",
+    "badge": "已收录 51 座",
+    "description": "川西前山与龙门山脉、龙泉山脉徒步精选，涵盖四姑娘山、西岭雪山、九顶山、赵公山等名峰。"
+  },
+  {
+    "id": "chongqing",
+    "name": "重庆周边",
+    "shortName": "重庆",
+    "province": "重庆",
+    "title": "重庆周边精选山峰",
+    "center": {
+      "lng": 106.55,
+      "lat": 29.56
+    },
+    "defaultZoom": 9,
+    "minZoom": 7,
+    "maxZoom": 14,
+    "driveCenter": "重庆",
+    "mountainsCount": 0,
+    "status": "planned",
+    "badge": "路线勘测中",
+    "description": "巴渝奇秀山地，涵盖金佛山、缙云山、铁山坪、南山等经典徒步胜地。"
+  },
+  {
+    "id": "xian",
+    "name": "西安 · 秦岭",
+    "shortName": "西安",
+    "province": "陕西",
+    "title": "秦岭终南名峰精选",
+    "center": {
+      "lng": 108.93,
+      "lat": 34.00
+    },
+    "defaultZoom": 9,
+    "minZoom": 7,
+    "maxZoom": 14,
+    "driveCenter": "西安",
+    "mountainsCount": 0,
+    "status": "planned",
+    "badge": "路线勘测中",
+    "description": "秦岭山系主峰，涵盖太白山、冰晶顶、终南山、圭峰山、翠华山等名山。"
+  },
+  {
+    "id": "kunming",
+    "name": "昆明 · 滇中",
+    "shortName": "昆明",
+    "province": "云南",
+    "title": "滇中山野徒步精选",
+    "center": {
+      "lng": 102.73,
+      "lat": 25.04
+    },
+    "defaultZoom": 9,
+    "minZoom": 7,
+    "maxZoom": 14,
+    "driveCenter": "昆明",
+    "mountainsCount": 0,
+    "status": "planned",
+    "badge": "路线勘测中",
+    "description": "彩云之南高原山野，涵盖轿子雪山、西山罗汉崖、梁王山等高海拔徒步线。"
+  },
+  {
+    "id": "beijing",
+    "name": "北京 · 京郊",
+    "shortName": "北京",
+    "province": "北京",
+    "title": "京郊名山野趣精选",
+    "center": {
+      "lng": 116.40,
+      "lat": 40.20
+    },
+    "defaultZoom": 9,
+    "minZoom": 7,
+    "maxZoom": 14,
+    "driveCenter": "北京",
+    "mountainsCount": 0,
+    "status": "planned",
+    "badge": "路线勘测中",
+    "description": "燕山太行山脉交汇处，涵盖海坨山、东灵山、百花山、京郊山野等徒步路线。"
+  }
+]

@@ -1,0 +1,4427 @@
+{
+  "dawagengzha": [
+    {
+      "seq": 1,
+      "name": "硗碛藏族乡（行程集散/住宿起点）",
+      "lat": 30.69005,
+      "lng": 102.71502,
+      "alt_m": 2400,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "硗碛乡嘎日村—云顶观景台 通天路徒步线"
+    },
+    {
+      "seq": 2,
+      "name": "嘎日村（景区大门/徒步起点）",
+      "lat": 30.71895,
+      "lng": 102.71978,
+      "alt_m": 2500,
+      "km": 8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "硗碛乡嘎日村—云顶观景台 通天路徒步线"
+    },
+    {
+      "seq": 3,
+      "name": "通天路（24公里盘山公路）",
+      "lat": 30.736,
+      "lng": 102.698,
+      "alt_m": 3000,
+      "km": 14,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "硗碛乡嘎日村—云顶观景台 通天路徒步线"
+    },
+    {
+      "seq": 4,
+      "name": "观光车停车场（徒步起点）",
+      "lat": 30.756,
+      "lng": 102.687,
+      "alt_m": 3600,
+      "km": 22,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "硗碛乡嘎日村—云顶观景台 通天路徒步线"
+    },
+    {
+      "seq": 5,
+      "name": "杜鹃长廊（经幡段）",
+      "lat": 30.76,
+      "lng": 102.682,
+      "alt_m": 3700,
+      "km": 23.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "硗碛乡嘎日村—云顶观景台 通天路徒步线"
+    },
+    {
+      "seq": 6,
+      "name": "云顶观景台（山顶）",
+      "lat": 30.7621,
+      "lng": 102.67717,
+      "alt_m": 3866,
+      "km": 24,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "硗碛乡嘎日村—云顶观景台 通天路徒步线"
+    }
+  ],
+  "hongyanding": [
+    {
+      "seq": 1,
+      "name": "干海子接待站（徒步起点）",
+      "lat": 29.77871,
+      "lng": 102.11725,
+      "alt_m": 2800,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "干海子接待站—红岩顶 主徒步线"
+    },
+    {
+      "seq": 2,
+      "name": "冷杉林段",
+      "lat": 29.783,
+      "lng": 102.123,
+      "alt_m": 2950,
+      "km": 1.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "干海子接待站—红岩顶 主徒步线"
+    },
+    {
+      "seq": 3,
+      "name": "高山草甸",
+      "lat": 29.788,
+      "lng": 102.129,
+      "alt_m": 3150,
+      "km": 2.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "干海子接待站—红岩顶 主徒步线"
+    },
+    {
+      "seq": 4,
+      "name": "红岩顶观景台（山顶）",
+      "lat": 29.86219,
+      "lng": 102.26454,
+      "alt_m": 3437,
+      "km": 3,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "干海子接待站—红岩顶 主徒步线"
+    },
+    {
+      "seq": 5,
+      "name": "月亮湾（延伸支线，需向导）",
+      "lat": 29.855,
+      "lng": 102.275,
+      "alt_m": 3300,
+      "km": 4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "干海子接待站—红岩顶 主徒步线"
+    }
+  ],
+  "huajianshan": [
+    {
+      "seq": 1,
+      "name": "海子坪（徒步起点/停车场）",
+      "lat": 29.80469,
+      "lng": 102.2898,
+      "alt_m": 2400,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "海子坪—山顶观景台 主徒步线"
+    },
+    {
+      "seq": 2,
+      "name": "黑沟村登山口",
+      "lat": 29.80373,
+      "lng": 102.28164,
+      "alt_m": 2500,
+      "km": 0.8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "海子坪—山顶观景台 主徒步线"
+    },
+    {
+      "seq": 3,
+      "name": "第一观景平台",
+      "lat": 29.812,
+      "lng": 102.301,
+      "alt_m": 2800,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "海子坪—山顶观景台 主徒步线"
+    },
+    {
+      "seq": 4,
+      "name": "第二观景平台",
+      "lat": 29.818,
+      "lng": 102.309,
+      "alt_m": 3100,
+      "km": 4.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "海子坪—山顶观景台 主徒步线"
+    },
+    {
+      "seq": 5,
+      "name": "黑沟垭口",
+      "lat": 29.8225,
+      "lng": 102.315,
+      "alt_m": 3300,
+      "km": 5.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "海子坪—山顶观景台 主徒步线"
+    },
+    {
+      "seq": 6,
+      "name": "山顶大本营/张哥客栈",
+      "lat": 29.8253,
+      "lng": 102.3201,
+      "alt_m": 3400,
+      "km": 6.6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "海子坪—山顶观景台 主徒步线"
+    },
+    {
+      "seq": 7,
+      "name": "山顶观景台（华尖山山顶）",
+      "lat": 29.79668,
+      "lng": 102.34443,
+      "alt_m": 3540,
+      "km": 7,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "海子坪—山顶观景台 主徒步线"
+    }
+  ],
+  "jiaodingshan": [
+    {
+      "seq": 1,
+      "name": "马烈乡（徒步起点/集散）",
+      "lat": 29.37095,
+      "lng": 102.80466,
+      "alt_m": 1400,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "马烈乡—轿顶山营地—大轿顶 主徒步线"
+    },
+    {
+      "seq": 2,
+      "name": "轿顶山游客服务中心/登山入口",
+      "lat": 29.39,
+      "lng": 102.85,
+      "alt_m": 2200,
+      "km": 4.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "马烈乡—轿顶山营地—大轿顶 主徒步线"
+    },
+    {
+      "seq": 3,
+      "name": "轿顶山荒野户外公园（太空舱民宿）",
+      "lat": 29.41523,
+      "lng": 102.86219,
+      "alt_m": 3000,
+      "km": 9.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "马烈乡—轿顶山营地—大轿顶 主徒步线"
+    },
+    {
+      "seq": 4,
+      "name": "三号营地（云海悬崖餐厅）",
+      "lat": 29.412,
+      "lng": 102.865,
+      "alt_m": 3200,
+      "km": 10.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "马烈乡—轿顶山营地—大轿顶 主徒步线"
+    },
+    {
+      "seq": 5,
+      "name": "小轿顶",
+      "lat": 29.403,
+      "lng": 102.8658,
+      "alt_m": 3422,
+      "km": 11.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "马烈乡—轿顶山营地—大轿顶 主徒步线"
+    },
+    {
+      "seq": 6,
+      "name": "大轿顶（主峰观景台）",
+      "lat": 29.39952,
+      "lng": 102.86637,
+      "alt_m": 3552,
+      "km": 12,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "马烈乡—轿顶山营地—大轿顶 主徒步线"
+    }
+  ],
+  "niubeishan": [
+    {
+      "seq": 1,
+      "name": "长海子（徒步起点/停车场）",
+      "lat": 29.7602,
+      "lng": 102.2865,
+      "alt_m": 2700,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "长海子—光明顶 主徒步线（景区徒步线1）"
+    },
+    {
+      "seq": 2,
+      "name": "悦山长廊",
+      "lat": 29.7645,
+      "lng": 102.296,
+      "alt_m": 2800,
+      "km": 1,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "长海子—光明顶 主徒步线（景区徒步线1）"
+    },
+    {
+      "seq": 3,
+      "name": "仙侠岭",
+      "lat": 29.769,
+      "lng": 102.312,
+      "alt_m": 2900,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "长海子—光明顶 主徒步线（景区徒步线1）"
+    },
+    {
+      "seq": 4,
+      "name": "街心花园",
+      "lat": 29.7705,
+      "lng": 102.326,
+      "alt_m": 3000,
+      "km": 5.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "长海子—光明顶 主徒步线（景区徒步线1）"
+    },
+    {
+      "seq": 5,
+      "name": "云海人家",
+      "lat": 29.7725,
+      "lng": 102.34,
+      "alt_m": 3150,
+      "km": 8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "长海子—光明顶 主徒步线（景区徒步线1）"
+    },
+    {
+      "seq": 6,
+      "name": "乾坤岭（中转车点）",
+      "lat": 29.77435,
+      "lng": 102.35683,
+      "alt_m": 3320,
+      "km": 10.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长海子—光明顶 主徒步线（景区徒步线1）"
+    },
+    {
+      "seq": 7,
+      "name": "青云道",
+      "lat": 29.77305,
+      "lng": 102.36178,
+      "alt_m": 3400,
+      "km": 12,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长海子—光明顶 主徒步线（景区徒步线1）"
+    },
+    {
+      "seq": 8,
+      "name": "光明顶（山顶观景台）",
+      "lat": 29.77529,
+      "lng": 102.37364,
+      "alt_m": 3666,
+      "km": 15,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长海子—光明顶 主徒步线（景区徒步线1）"
+    }
+  ],
+  "sirentong": [
+    {
+      "seq": 1,
+      "name": "长海子（徒步起点/停车点）",
+      "lat": 29.789,
+      "lng": 102.362,
+      "alt_m": 2300,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "长海子—养羊棚—四人同山顶 主徒步线"
+    },
+    {
+      "seq": 2,
+      "name": "机耕道爬升段",
+      "lat": 29.799,
+      "lng": 102.364,
+      "alt_m": 2600,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "长海子—养羊棚—四人同山顶 主徒步线"
+    },
+    {
+      "seq": 3,
+      "name": "养羊棚",
+      "lat": 29.809,
+      "lng": 102.366,
+      "alt_m": 2900,
+      "km": 5.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "长海子—养羊棚—四人同山顶 主徒步线"
+    },
+    {
+      "seq": 4,
+      "name": "高山草甸/箭竹林段",
+      "lat": 29.816,
+      "lng": 102.368,
+      "alt_m": 3200,
+      "km": 8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "长海子—养羊棚—四人同山顶 主徒步线"
+    },
+    {
+      "seq": 5,
+      "name": "四人同山顶（360°观景平台）",
+      "lat": 29.82589,
+      "lng": 102.36969,
+      "alt_m": 3510,
+      "km": 11.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长海子—养羊棚—四人同山顶 主徒步线"
+    }
+  ],
+  "balangshan": [
+    {
+      "seq": 1,
+      "name": "向杨坪（巴朗山隧道管理站停车点）",
+      "lat": 30.8975,
+      "lng": 102.9012,
+      "alt_m": 3850,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "巴朗山隧道口（向杨坪）→邓生沟穿越"
+    },
+    {
+      "seq": 2,
+      "name": "巴朗山高山花海草甸（穿越入口）",
+      "lat": 30.8991,
+      "lng": 102.9064,
+      "alt_m": 3800,
+      "km": 0.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "巴朗山隧道口（向杨坪）→邓生沟穿越"
+    },
+    {
+      "seq": 3,
+      "name": "山脊观景台（远眺云海雪山）",
+      "lat": 30.8913,
+      "lng": 102.9228,
+      "alt_m": 3750,
+      "km": 2.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "巴朗山隧道口（向杨坪）→邓生沟穿越"
+    },
+    {
+      "seq": 4,
+      "name": "巴朗山半山草甸（午餐点）",
+      "lat": 30.8842,
+      "lng": 102.9401,
+      "alt_m": 3450,
+      "km": 4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "巴朗山隧道口（向杨坪）→邓生沟穿越"
+    },
+    {
+      "seq": 5,
+      "name": "原始冷杉林入口",
+      "lat": 30.8789,
+      "lng": 102.9563,
+      "alt_m": 3150,
+      "km": 5.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "巴朗山隧道口（向杨坪）→邓生沟穿越"
+    },
+    {
+      "seq": 6,
+      "name": "林间溪流栈道（苔藓古树林）",
+      "lat": 30.8723,
+      "lng": 102.9708,
+      "alt_m": 2950,
+      "km": 7.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "巴朗山隧道口（向杨坪）→邓生沟穿越"
+    },
+    {
+      "seq": 7,
+      "name": "邓生沟保护站（沟口终点）",
+      "lat": 30.8672,
+      "lng": 102.9826,
+      "alt_m": 2800,
+      "km": 10,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "巴朗山隧道口（向杨坪）→邓生沟穿越"
+    }
+  ],
+  "jiajinshan": [
+    {
+      "seq": 1,
+      "name": "红军小道起点（硗碛夹金山南麓）",
+      "lat": 30.7826,
+      "lng": 102.7024,
+      "alt_m": 2200,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "硗碛夹金山村红军小道→夹金山王母寨垭口（垭口老路可走）"
+    },
+    {
+      "seq": 2,
+      "name": "牛棚子",
+      "lat": 30.7984,
+      "lng": 102.6971,
+      "alt_m": 2680,
+      "km": 4.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "硗碛夹金山村红军小道→夹金山王母寨垭口（垭口老路可走）"
+    },
+    {
+      "seq": 3,
+      "name": "筲箕窝",
+      "lat": 30.8142,
+      "lng": 102.6918,
+      "alt_m": 3050,
+      "km": 9,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "硗碛夹金山村红军小道→夹金山王母寨垭口（垭口老路可走）"
+    },
+    {
+      "seq": 4,
+      "name": "一支箭",
+      "lat": 30.8298,
+      "lng": 102.6873,
+      "alt_m": 3350,
+      "km": 13.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "硗碛夹金山村红军小道→夹金山王母寨垭口（垭口老路可走）"
+    },
+    {
+      "seq": 5,
+      "name": "五道拐（冲锋号浮雕）",
+      "lat": 30.8449,
+      "lng": 102.6847,
+      "alt_m": 3350,
+      "km": 18,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "硗碛夹金山村红军小道→夹金山王母寨垭口（垭口老路可走）"
+    },
+    {
+      "seq": 6,
+      "name": "夹金山垭口红军纪念景观（王母寨）",
+      "lat": 30.86044,
+      "lng": 102.68256,
+      "alt_m": 4114,
+      "km": 26,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "硗碛夹金山村红军小道→夹金山王母寨垭口（垭口老路可走）"
+    },
+    {
+      "seq": 7,
+      "name": "夹金山隧道宝兴端入口",
+      "lat": 30.8268,
+      "lng": 102.6642,
+      "alt_m": 2980,
+      "km": 30,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "硗碛夹金山村红军小道→夹金山王母寨垭口（垭口老路可走）"
+    }
+  ],
+  "maobiliang": [
+    {
+      "seq": 1,
+      "name": "四姑娘山镇（日隆镇）",
+      "lat": 30.9956,
+      "lng": 102.83085,
+      "alt_m": 3200,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "猫鼻梁观景台·四姑娘山全景打卡线"
+    },
+    {
+      "seq": 2,
+      "name": "猫鼻梁观景台一层停车场",
+      "lat": 30.98879,
+      "lng": 102.84226,
+      "alt_m": 3400,
+      "km": 4.6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "猫鼻梁观景台·四姑娘山全景打卡线"
+    },
+    {
+      "seq": 3,
+      "name": "猫鼻梁观景台二层(最佳机位)",
+      "lat": 30.989,
+      "lng": 102.84236,
+      "alt_m": 3478,
+      "km": 4.8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "猫鼻梁观景台·四姑娘山全景打卡线"
+    },
+    {
+      "seq": 4,
+      "name": "猫鼻梁观景台观景步道尽头",
+      "lat": 30.98941,
+      "lng": 102.84318,
+      "alt_m": 3490,
+      "km": 5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "猫鼻梁观景台·四姑娘山全景打卡线"
+    }
+  ],
+  "wanggangping": [
+    {
+      "seq": 1,
+      "name": "王岗坪景区游客中心（叶家沟索道下站）",
+      "lat": 29.4146,
+      "lng": 102.2538,
+      "alt_m": 1100,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "王岗坪景区云端索道→三坪观景环线"
+    },
+    {
+      "seq": 2,
+      "name": "索道上站（大坪）",
+      "lat": 29.4281,
+      "lng": 102.2427,
+      "alt_m": 2500,
+      "km": 3.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "王岗坪景区云端索道→三坪观景环线"
+    },
+    {
+      "seq": 3,
+      "name": "二坪（森林徒步区）",
+      "lat": 29.4324,
+      "lng": 102.2398,
+      "alt_m": 2800,
+      "km": 5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "王岗坪景区云端索道→三坪观景环线"
+    },
+    {
+      "seq": 4,
+      "name": "三坪（观景核心区）",
+      "lat": 29.4357,
+      "lng": 102.2374,
+      "alt_m": 3000,
+      "km": 6.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "王岗坪景区云端索道→三坪观景环线"
+    },
+    {
+      "seq": 5,
+      "name": "曜雪台（11号观景平台）",
+      "lat": 29.4366,
+      "lng": 102.2361,
+      "alt_m": 2980,
+      "km": 6.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "王岗坪景区云端索道→三坪观景环线"
+    },
+    {
+      "seq": 6,
+      "name": "牦牛古城遗址",
+      "lat": 29.4373,
+      "lng": 102.2352,
+      "alt_m": 2950,
+      "km": 6.9,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "王岗坪景区云端索道→三坪观景环线"
+    },
+    {
+      "seq": 7,
+      "name": "怪树林栈道",
+      "lat": 29.4382,
+      "lng": 102.2343,
+      "alt_m": 3050,
+      "km": 7,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "王岗坪景区云端索道→三坪观景环线"
+    },
+    {
+      "seq": 8,
+      "name": "贡嘎海子（高山海子）",
+      "lat": 29.4394,
+      "lng": 102.233,
+      "alt_m": 3100,
+      "km": 7,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "王岗坪景区云端索道→三坪观景环线"
+    }
+  ],
+  "xiling-xueshan": [
+    {
+      "seq": 1,
+      "name": "西岭雪山后山山门（游客中心/鸳鸯池索道下站）",
+      "lat": 30.70384,
+      "lng": 103.23153,
+      "alt_m": 1260,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "后山主线（山门→鸳鸯池→映雪广场→日月坪→阴阳界）"
+    },
+    {
+      "seq": 2,
+      "name": "鸳鸯池索道上站",
+      "lat": 30.70431,
+      "lng": 103.21116,
+      "alt_m": 2050,
+      "km": 2.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "后山主线（山门→鸳鸯池→映雪广场→日月坪→阴阳界）"
+    },
+    {
+      "seq": 3,
+      "name": "鸳鸯池（接待中心）",
+      "lat": 30.70117,
+      "lng": 103.19251,
+      "alt_m": 2155,
+      "km": 3.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "后山主线（山门→鸳鸯池→映雪广场→日月坪→阴阳界）"
+    },
+    {
+      "seq": 4,
+      "name": "映雪广场（滑雪场/映雪湖）",
+      "lat": 30.70111,
+      "lng": 103.18888,
+      "alt_m": 2250,
+      "km": 4.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "后山主线（山门→鸳鸯池→映雪广场→日月坪→阴阳界）"
+    },
+    {
+      "seq": 5,
+      "name": "日月坪索道（观景索道下站）",
+      "lat": 30.69943,
+      "lng": 103.19101,
+      "alt_m": 2300,
+      "km": 5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "后山主线（山门→鸳鸯池→映雪广场→日月坪→阴阳界）"
+    },
+    {
+      "seq": 6,
+      "name": "日月坪（索道上站/观景台）",
+      "lat": 30.6953,
+      "lng": 103.16268,
+      "alt_m": 3250,
+      "km": 8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "后山主线（山门→鸳鸯池→映雪广场→日月坪→阴阳界）"
+    },
+    {
+      "seq": 7,
+      "name": "白沙岗",
+      "lat": 30.69856,
+      "lng": 103.1617,
+      "alt_m": 3300,
+      "km": 9.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "后山主线（山门→鸳鸯池→映雪广场→日月坪→阴阳界）"
+    },
+    {
+      "seq": 8,
+      "name": "阴阳界（观景台）",
+      "lat": 30.70287,
+      "lng": 103.1604,
+      "alt_m": 3280,
+      "km": 11,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "后山主线（山门→鸳鸯池→映雪广场→日月坪→阴阳界）"
+    },
+    {
+      "seq": 9,
+      "name": "红石堡（前山会合点）",
+      "lat": 30.69395,
+      "lng": 103.15711,
+      "alt_m": 3200,
+      "km": 12,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "后山主线（山门→鸳鸯池→映雪广场→日月坪→阴阳界）"
+    }
+  ],
+  "dengshenggou": [
+    {
+      "seq": 1,
+      "name": "邓生沟停车区（起点）",
+      "lat": 30.85799,
+      "lng": 102.9735,
+      "alt_m": 2750,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "邓生沟沟口—原始森林栈道往返线"
+    },
+    {
+      "seq": 2,
+      "name": "邓生沟口（栈道入口）",
+      "lat": 30.859,
+      "lng": 102.973,
+      "alt_m": 2780,
+      "km": 0.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "邓生沟沟口—原始森林栈道往返线"
+    },
+    {
+      "seq": 3,
+      "name": "溪流栈道平台（第一休息点）",
+      "lat": 30.861,
+      "lng": 102.971,
+      "alt_m": 2830,
+      "km": 1.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "邓生沟沟口—原始森林栈道往返线"
+    },
+    {
+      "seq": 4,
+      "name": "松萝原始森林（核心林区）",
+      "lat": 30.864,
+      "lng": 102.968,
+      "alt_m": 2880,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "邓生沟沟口—原始森林栈道往返线"
+    },
+    {
+      "seq": 5,
+      "name": "森林深处折返点",
+      "lat": 30.866,
+      "lng": 102.966,
+      "alt_m": 2920,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "邓生沟沟口—原始森林栈道往返线"
+    }
+  ],
+  "hongkou-gaoyuan": [
+    {
+      "seq": 1,
+      "name": "虹口景区山门（游客中心）",
+      "lat": 31.11437,
+      "lng": 103.65367,
+      "alt_m": 950,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "虹口景区—高原村河谷徒步线"
+    },
+    {
+      "seq": 2,
+      "name": "虹口漂流接待中心（白沙河河道）",
+      "lat": 31.11437,
+      "lng": 103.65367,
+      "alt_m": 950,
+      "km": 1,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "虹口景区—高原村河谷徒步线"
+    },
+    {
+      "seq": 3,
+      "name": "庙坝观景台",
+      "lat": 31.10586,
+      "lng": 103.63872,
+      "alt_m": 1080,
+      "km": 3.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "虹口景区—高原村河谷徒步线"
+    },
+    {
+      "seq": 4,
+      "name": "深溪沟（地震遗址）",
+      "lat": 31.12593,
+      "lng": 103.67586,
+      "alt_m": 1150,
+      "km": 4.8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "虹口景区—高原村河谷徒步线"
+    },
+    {
+      "seq": 5,
+      "name": "同心石阵",
+      "lat": 31.14299,
+      "lng": 103.69358,
+      "alt_m": 1200,
+      "km": 6.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "虹口景区—高原村河谷徒步线"
+    },
+    {
+      "seq": 6,
+      "name": "高原村（高原河谷）",
+      "lat": 31.12593,
+      "lng": 103.67586,
+      "alt_m": 1300,
+      "km": 8.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "虹口景区—高原村河谷徒步线"
+    }
+  ],
+  "jiguanshan-liuliba": [
+    {
+      "seq": 1,
+      "name": "琉璃坝何家大院（停车场起点）",
+      "lat": 30.76092,
+      "lng": 103.35256,
+      "alt_m": 1200,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "琉璃坝标准徒步环线（逆时针，经山脊观景台）"
+    },
+    {
+      "seq": 2,
+      "name": "木梯石阶爬升段",
+      "lat": 30.764,
+      "lng": 103.354,
+      "alt_m": 1380,
+      "km": 1.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "琉璃坝标准徒步环线（逆时针，经山脊观景台）"
+    },
+    {
+      "seq": 3,
+      "name": "山脊观景台",
+      "lat": 30.77,
+      "lng": 103.358,
+      "alt_m": 1846,
+      "km": 2.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "琉璃坝标准徒步环线（逆时针，经山脊观景台）"
+    },
+    {
+      "seq": 4,
+      "name": "干五里高山草甸",
+      "lat": 30.772,
+      "lng": 103.356,
+      "alt_m": 1750,
+      "km": 3.8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "琉璃坝标准徒步环线（逆时针，经山脊观景台）"
+    },
+    {
+      "seq": 5,
+      "name": "原始冷杉暮光森林",
+      "lat": 30.768,
+      "lng": 103.352,
+      "alt_m": 1550,
+      "km": 5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "琉璃坝标准徒步环线（逆时针，经山脊观景台）"
+    },
+    {
+      "seq": 6,
+      "name": "溪流河谷",
+      "lat": 30.764,
+      "lng": 103.351,
+      "alt_m": 1300,
+      "km": 6.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "琉璃坝标准徒步环线（逆时针，经山脊观景台）"
+    },
+    {
+      "seq": 7,
+      "name": "琉璃坝何家大院（回到起点）",
+      "lat": 30.76092,
+      "lng": 103.35256,
+      "alt_m": 1200,
+      "km": 7.3,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "琉璃坝标准徒步环线（逆时针，经山脊观景台）"
+    },
+    {
+      "seq": 1,
+      "name": "何家大院停车场",
+      "lat": 30.76092,
+      "lng": 103.35256,
+      "alt_m": 1200,
+      "km": 0,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "琉璃坝亲子浅线（原路折返）"
+    },
+    {
+      "seq": 2,
+      "name": "溪边浅滩草坪",
+      "lat": 30.762,
+      "lng": 103.353,
+      "alt_m": 1220,
+      "km": 0.9,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "琉璃坝亲子浅线（原路折返）"
+    },
+    {
+      "seq": 3,
+      "name": "琉璃堰塘",
+      "lat": 30.763,
+      "lng": 103.354,
+      "alt_m": 1250,
+      "km": 1.8,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "琉璃坝亲子浅线（原路折返）"
+    },
+    {
+      "seq": 4,
+      "name": "千年白果庙",
+      "lat": 30.764,
+      "lng": 103.355,
+      "alt_m": 1280,
+      "km": 3,
+      "unc": true,
+      "route_index": 1,
+      "route_name": "琉璃坝亲子浅线（原路折返）"
+    }
+  ],
+  "longcanggou": [
+    {
+      "seq": 1,
+      "name": "叠翠溪景区入口 / 游客中心（起点）",
+      "lat": 29.62752,
+      "lng": 102.8871,
+      "alt_m": 1700,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "叠翠溪景区：珙桐山房—翡翠湖码头（官方打卡顺序）"
+    },
+    {
+      "seq": 2,
+      "name": "珙桐山房（观光车终点）",
+      "lat": 29.629,
+      "lng": 102.889,
+      "alt_m": 1900,
+      "km": 1.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠翠溪景区：珙桐山房—翡翠湖码头（官方打卡顺序）"
+    },
+    {
+      "seq": 3,
+      "name": "石来运转",
+      "lat": 29.63,
+      "lng": 102.89,
+      "alt_m": 1850,
+      "km": 2.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠翠溪景区：珙桐山房—翡翠湖码头（官方打卡顺序）"
+    },
+    {
+      "seq": 4,
+      "name": "雨花瀑布",
+      "lat": 29.631,
+      "lng": 102.891,
+      "alt_m": 1800,
+      "km": 3.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠翠溪景区：珙桐山房—翡翠湖码头（官方打卡顺序）"
+    },
+    {
+      "seq": 5,
+      "name": "杜鹃戏水",
+      "lat": 29.632,
+      "lng": 102.892,
+      "alt_m": 1750,
+      "km": 4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠翠溪景区：珙桐山房—翡翠湖码头（官方打卡顺序）"
+    },
+    {
+      "seq": 6,
+      "name": "花溪流翠",
+      "lat": 29.633,
+      "lng": 102.893,
+      "alt_m": 1700,
+      "km": 4.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠翠溪景区：珙桐山房—翡翠湖码头（官方打卡顺序）"
+    },
+    {
+      "seq": 7,
+      "name": "龙翔瀑布",
+      "lat": 29.634,
+      "lng": 102.894,
+      "alt_m": 1650,
+      "km": 5.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠翠溪景区：珙桐山房—翡翠湖码头（官方打卡顺序）"
+    },
+    {
+      "seq": 8,
+      "name": "翡翠湖码头（终点）",
+      "lat": 29.635,
+      "lng": 102.895,
+      "alt_m": 1620,
+      "km": 7,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠翠溪景区：珙桐山房—翡翠湖码头（官方打卡顺序）"
+    }
+  ],
+  "panlonggu": [
+    {
+      "seq": 1,
+      "name": "蟠龙谷景区入口（P3停车场）",
+      "lat": 31.20785,
+      "lng": 103.7631,
+      "alt_m": 900,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "蟠龙谷瀑布群溯溪环线（小龙潭—大飞水）"
+    },
+    {
+      "seq": 2,
+      "name": "小龙潭",
+      "lat": 31.2095,
+      "lng": 103.7645,
+      "alt_m": 930,
+      "km": 0.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蟠龙谷瀑布群溯溪环线（小龙潭—大飞水）"
+    },
+    {
+      "seq": 3,
+      "name": "龙抬头瀑布",
+      "lat": 31.212,
+      "lng": 103.766,
+      "alt_m": 1000,
+      "km": 1.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蟠龙谷瀑布群溯溪环线（小龙潭—大飞水）"
+    },
+    {
+      "seq": 4,
+      "name": "飞水峡瀑布群",
+      "lat": 31.215,
+      "lng": 103.768,
+      "alt_m": 1080,
+      "km": 2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蟠龙谷瀑布群溯溪环线（小龙潭—大飞水）"
+    },
+    {
+      "seq": 5,
+      "name": "大飞水瀑布",
+      "lat": 31.218,
+      "lng": 103.77,
+      "alt_m": 1170,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蟠龙谷瀑布群溯溪环线（小龙潭—大飞水）"
+    },
+    {
+      "seq": 6,
+      "name": "蟠龙谷景区入口（返回）",
+      "lat": 31.20785,
+      "lng": 103.7631,
+      "alt_m": 900,
+      "km": 3.6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "蟠龙谷瀑布群溯溪环线（小龙潭—大飞水）"
+    }
+  ],
+  "qingcheng-houshan": [
+    {
+      "seq": 1,
+      "name": "泰安古镇（山门/泰安寺）",
+      "lat": 30.92365,
+      "lng": 103.48779,
+      "alt_m": 850,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 2,
+      "name": "五龙沟登山口（五龙桥）",
+      "lat": 30.91895,
+      "lng": 103.47692,
+      "alt_m": 900,
+      "km": 1.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 3,
+      "name": "三潭雾泉（金娃娃沱）",
+      "lat": 30.926,
+      "lng": 103.4725,
+      "alt_m": 1050,
+      "km": 2.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 4,
+      "name": "龙隐峡栈道",
+      "lat": 30.93071,
+      "lng": 103.46961,
+      "alt_m": 1150,
+      "km": 3.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 5,
+      "name": "又一村",
+      "lat": 30.93669,
+      "lng": 103.47158,
+      "alt_m": 1296,
+      "km": 5.44,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 6,
+      "name": "卧佛洞",
+      "lat": 30.94626,
+      "lng": 103.47636,
+      "alt_m": 1535,
+      "km": 7.53,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 7,
+      "name": "白云寺",
+      "lat": 30.94891,
+      "lng": 103.47803,
+      "alt_m": 1670,
+      "km": 8.1,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 8,
+      "name": "白云古寨",
+      "lat": 30.9447,
+      "lng": 103.48214,
+      "alt_m": 1620,
+      "km": 9.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 9,
+      "name": "翠映湖",
+      "lat": 30.9395,
+      "lng": 103.48086,
+      "alt_m": 1380,
+      "km": 11.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 10,
+      "name": "飞泉沟",
+      "lat": 30.94401,
+      "lng": 103.48196,
+      "alt_m": 1150,
+      "km": 13.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 11,
+      "name": "泰安古镇（回到起点）",
+      "lat": 30.92365,
+      "lng": 103.48779,
+      "alt_m": 850,
+      "km": 16,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "青城后山大环线（五龙沟上山，飞泉沟下山）"
+    },
+    {
+      "seq": 1,
+      "name": "泰安古镇（山门）",
+      "lat": 30.92365,
+      "lng": 103.48779,
+      "alt_m": 850,
+      "km": 0,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "青城后山中环线（含白云索道）"
+    },
+    {
+      "seq": 2,
+      "name": "五龙沟登山口",
+      "lat": 30.91895,
+      "lng": 103.47692,
+      "alt_m": 900,
+      "km": 1.2,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "青城后山中环线（含白云索道）"
+    },
+    {
+      "seq": 3,
+      "name": "又一村",
+      "lat": 30.93669,
+      "lng": 103.47158,
+      "alt_m": 1296,
+      "km": 5.44,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "青城后山中环线（含白云索道）"
+    },
+    {
+      "seq": 4,
+      "name": "白云古寨",
+      "lat": 30.9447,
+      "lng": 103.48214,
+      "alt_m": 1620,
+      "km": 7,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "青城后山中环线（含白云索道）"
+    },
+    {
+      "seq": 5,
+      "name": "翠映湖",
+      "lat": 30.9395,
+      "lng": 103.48086,
+      "alt_m": 1380,
+      "km": 8.5,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "青城后山中环线（含白云索道）"
+    },
+    {
+      "seq": 6,
+      "name": "飞泉沟",
+      "lat": 30.94401,
+      "lng": 103.48196,
+      "alt_m": 1150,
+      "km": 10.5,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "青城后山中环线（含白云索道）"
+    },
+    {
+      "seq": 7,
+      "name": "泰安古镇（回到起点）",
+      "lat": 30.92365,
+      "lng": 103.48779,
+      "alt_m": 850,
+      "km": 12,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "青城后山中环线（含白云索道）"
+    }
+  ],
+  "tiantai-qionglai": [
+    {
+      "seq": 1,
+      "name": "天台山游客中心（起点）",
+      "lat": 30.26112,
+      "lng": 103.09599,
+      "alt_m": 800,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "天台山一日主线：游客中心—一天台—二天台—正天台"
+    },
+    {
+      "seq": 2,
+      "name": "一天台·肖家湾山门",
+      "lat": 30.265,
+      "lng": 103.101,
+      "alt_m": 850,
+      "km": 1.7,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "天台山一日主线：游客中心—一天台—二天台—正天台"
+    },
+    {
+      "seq": 3,
+      "name": "长虹瀑布",
+      "lat": 30.267,
+      "lng": 103.103,
+      "alt_m": 900,
+      "km": 2.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "天台山一日主线：游客中心—一天台—二天台—正天台"
+    },
+    {
+      "seq": 4,
+      "name": "神蜂窟（丹霞奇观）",
+      "lat": 30.269,
+      "lng": 103.105,
+      "alt_m": 950,
+      "km": 2.7,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "天台山一日主线：游客中心—一天台—二天台—正天台"
+    },
+    {
+      "seq": 5,
+      "name": "响水滩瀑布（川西第一瀑）",
+      "lat": 30.271,
+      "lng": 103.107,
+      "alt_m": 1000,
+      "km": 3.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "天台山一日主线：游客中心—一天台—二天台—正天台"
+    },
+    {
+      "seq": 6,
+      "name": "祖师桥",
+      "lat": 30.273,
+      "lng": 103.108,
+      "alt_m": 1050,
+      "km": 3.9,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "天台山一日主线：游客中心—一天台—二天台—正天台"
+    },
+    {
+      "seq": 7,
+      "name": "二天台（丝路驿站 / 地质微博物馆）",
+      "lat": 30.276,
+      "lng": 103.11,
+      "alt_m": 1250,
+      "km": 5.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "天台山一日主线：游客中心—一天台—二天台—正天台"
+    },
+    {
+      "seq": 8,
+      "name": "正天台（第三台地牌坊）",
+      "lat": 30.2816,
+      "lng": 103.11354,
+      "alt_m": 1400,
+      "km": 8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "天台山一日主线：游客中心—一天台—二天台—正天台"
+    }
+  ],
+  "aergou": [
+    {
+      "seq": 1,
+      "name": "阿尔沟景区入口 / 三角坝驿站（起点）",
+      "lat": 31.56671,
+      "lng": 103.53643,
+      "alt_m": 2250,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "阿尔沟（羌人谷）主线：三角坝驿站—花海驿站—龙池海子"
+    },
+    {
+      "seq": 2,
+      "name": "祈福树",
+      "lat": 31.562,
+      "lng": 103.53,
+      "alt_m": 2600,
+      "km": 1.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "阿尔沟（羌人谷）主线：三角坝驿站—花海驿站—龙池海子"
+    },
+    {
+      "seq": 3,
+      "name": "红杉林苔藓森林",
+      "lat": 31.556,
+      "lng": 103.524,
+      "alt_m": 2950,
+      "km": 2.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "阿尔沟（羌人谷）主线：三角坝驿站—花海驿站—龙池海子"
+    },
+    {
+      "seq": 4,
+      "name": "花海驿站（中途补给点）",
+      "lat": 31.548,
+      "lng": 103.516,
+      "alt_m": 3400,
+      "km": 4.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "阿尔沟（羌人谷）主线：三角坝驿站—花海驿站—龙池海子"
+    },
+    {
+      "seq": 5,
+      "name": "雪山观景台",
+      "lat": 31.543,
+      "lng": 103.511,
+      "alt_m": 3700,
+      "km": 5.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "阿尔沟（羌人谷）主线：三角坝驿站—花海驿站—龙池海子"
+    },
+    {
+      "seq": 6,
+      "name": "龙池海子（终点，核心打卡点）",
+      "lat": 31.536,
+      "lng": 103.504,
+      "alt_m": 3970,
+      "km": 7,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "阿尔沟（羌人谷）主线：三角坝驿站—花海驿站—龙池海子"
+    }
+  ],
+  "bipenggou": [
+    {
+      "seq": 1,
+      "name": "毕棚沟游客中心（景区大门）",
+      "lat": 31.30637,
+      "lng": 102.93678,
+      "alt_m": 2015,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "毕棚沟经典观光车+栈道线（游客中心→上海子→磐羊湖→燕子岩窝）"
+    },
+    {
+      "seq": 2,
+      "name": "龙王海（观景区）",
+      "lat": 31.3374,
+      "lng": 102.95974,
+      "alt_m": 2950,
+      "km": 11,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "毕棚沟经典观光车+栈道线（游客中心→上海子→磐羊湖→燕子岩窝）"
+    },
+    {
+      "seq": 3,
+      "name": "娜姆湖",
+      "lat": 31.32212,
+      "lng": 102.95061,
+      "alt_m": 3050,
+      "km": 14,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "毕棚沟经典观光车+栈道线（游客中心→上海子→磐羊湖→燕子岩窝）"
+    },
+    {
+      "seq": 4,
+      "name": "上海子（游人接待站，观光大巴终点）",
+      "lat": 31.25083,
+      "lng": 102.88899,
+      "alt_m": 3500,
+      "km": 20,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "毕棚沟经典观光车+栈道线（游客中心→上海子→磐羊湖→燕子岩窝）"
+    },
+    {
+      "seq": 5,
+      "name": "卓玛湖/卓玛滩",
+      "lat": 31.23997,
+      "lng": 102.87955,
+      "alt_m": 3560,
+      "km": 22,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "毕棚沟经典观光车+栈道线（游客中心→上海子→磐羊湖→燕子岩窝）"
+    },
+    {
+      "seq": 6,
+      "name": "月亮湾（服务站）",
+      "lat": 31.22955,
+      "lng": 102.87028,
+      "alt_m": 3600,
+      "km": 23.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "毕棚沟经典观光车+栈道线（游客中心→上海子→磐羊湖→燕子岩窝）"
+    },
+    {
+      "seq": 7,
+      "name": "磐羊湖（景区精华景点）",
+      "lat": 31.22811,
+      "lng": 102.86968,
+      "alt_m": 3600,
+      "km": 24.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "毕棚沟经典观光车+栈道线（游客中心→上海子→磐羊湖→燕子岩窝）"
+    },
+    {
+      "seq": 8,
+      "name": "三棵树营地",
+      "lat": 31.22116,
+      "lng": 102.85883,
+      "alt_m": 3650,
+      "km": 25.3,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "毕棚沟经典观光车+栈道线（游客中心→上海子→磐羊湖→燕子岩窝）"
+    },
+    {
+      "seq": 9,
+      "name": "红石坡/红石滩",
+      "lat": 31.227,
+      "lng": 102.85,
+      "alt_m": 3700,
+      "km": 26.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "毕棚沟经典观光车+栈道线（游客中心→上海子→磐羊湖→燕子岩窝）"
+    },
+    {
+      "seq": 10,
+      "name": "燕子岩窝（沟内最高点，观光终点）",
+      "lat": 31.219,
+      "lng": 102.838,
+      "alt_m": 3837,
+      "km": 29,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "毕棚沟经典观光车+栈道线（游客中心→上海子→磐羊湖→燕子岩窝）"
+    }
+  ],
+  "jiufengshan": [
+    {
+      "seq": 1,
+      "name": "九峰山红房子休闲山庄（登山口/停车场）",
+      "lat": 31.31003,
+      "lng": 103.85306,
+      "alt_m": 1466,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "九峰山红房子—金顶雷音寺登顶线"
+    },
+    {
+      "seq": 2,
+      "name": "报恩寺",
+      "lat": 31.31757,
+      "lng": 103.85291,
+      "alt_m": 1550,
+      "km": 1.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "九峰山红房子—金顶雷音寺登顶线"
+    },
+    {
+      "seq": 3,
+      "name": "铁索桥（铁桥）",
+      "lat": 31.3138,
+      "lng": 103.853,
+      "alt_m": 1700,
+      "km": 2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九峰山红房子—金顶雷音寺登顶线"
+    },
+    {
+      "seq": 4,
+      "name": "祖师殿",
+      "lat": 31.32,
+      "lng": 103.86,
+      "alt_m": 1987,
+      "km": 2.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九峰山红房子—金顶雷音寺登顶线"
+    },
+    {
+      "seq": 5,
+      "name": "观音崖",
+      "lat": 31.328,
+      "lng": 103.848,
+      "alt_m": 2820,
+      "km": 4.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九峰山红房子—金顶雷音寺登顶线"
+    },
+    {
+      "seq": 6,
+      "name": "金顶雷音寺",
+      "lat": 31.34186,
+      "lng": 103.84409,
+      "alt_m": 3250,
+      "km": 13,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "九峰山红房子—金顶雷音寺登顶线"
+    }
+  ],
+  "kalonggou": [
+    {
+      "seq": 1,
+      "name": "卡龙镇（镇区，进沟起点）",
+      "lat": 32.29475,
+      "lng": 103.27098,
+      "alt_m": 2400,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "卡龙沟景区主线（沟口山门→钙华彩池→高山石林，原路返回）"
+    },
+    {
+      "seq": 2,
+      "name": "卡龙沟景区山门（沟口/售票处）",
+      "lat": 32.305,
+      "lng": 103.29,
+      "alt_m": 2900,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "卡龙沟景区主线（沟口山门→钙华彩池→高山石林，原路返回）"
+    },
+    {
+      "seq": 3,
+      "name": "才盖村藏寨",
+      "lat": 32.312,
+      "lng": 103.298,
+      "alt_m": 3000,
+      "km": 1.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "卡龙沟景区主线（沟口山门→钙华彩池→高山石林，原路返回）"
+    },
+    {
+      "seq": 4,
+      "name": "钙华彩池群（仙女池一带）",
+      "lat": 32.325,
+      "lng": 103.31,
+      "alt_m": 3200,
+      "km": 3.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "卡龙沟景区主线（沟口山门→钙华彩池→高山石林，原路返回）"
+    },
+    {
+      "seq": 5,
+      "name": "泉华飞瀑（瀑布群）",
+      "lat": 32.332,
+      "lng": 103.318,
+      "alt_m": 3350,
+      "km": 5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "卡龙沟景区主线（沟口山门→钙华彩池→高山石林，原路返回）"
+    },
+    {
+      "seq": 6,
+      "name": "原始森林/树生树连理树区",
+      "lat": 32.34,
+      "lng": 103.325,
+      "alt_m": 3500,
+      "km": 6.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "卡龙沟景区主线（沟口山门→钙华彩池→高山石林，原路返回）"
+    },
+    {
+      "seq": 7,
+      "name": "翡翠金坡",
+      "lat": 32.348,
+      "lng": 103.332,
+      "alt_m": 3650,
+      "km": 8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "卡龙沟景区主线（沟口山门→钙华彩池→高山石林，原路返回）"
+    },
+    {
+      "seq": 8,
+      "name": "卡龙石林（高山石林）",
+      "lat": 32.358,
+      "lng": 103.34,
+      "alt_m": 3900,
+      "km": 10,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "卡龙沟景区主线（沟口山门→钙华彩池→高山石林，原路返回）"
+    }
+  ],
+  "liangtaigou": [
+    {
+      "seq": 1,
+      "name": "朴头镇（镇区，转入梭罗沟）",
+      "lat": 31.40062,
+      "lng": 103.09226,
+      "alt_m": 2000,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "凉台沟红石滩徒步线（沟口粮台→红石滩→雷神王瀑布，原路返回）"
+    },
+    {
+      "seq": 2,
+      "name": "梭罗村",
+      "lat": 31.36,
+      "lng": 103.04,
+      "alt_m": 2600,
+      "km": 7,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "凉台沟红石滩徒步线（沟口粮台→红石滩→雷神王瀑布，原路返回）"
+    },
+    {
+      "seq": 3,
+      "name": "凉台沟沟口（徒步起点/露营点）",
+      "lat": 31.34,
+      "lng": 103.01,
+      "alt_m": 2500,
+      "km": 12,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "凉台沟红石滩徒步线（沟口粮台→红石滩→雷神王瀑布，原路返回）"
+    },
+    {
+      "seq": 4,
+      "name": "红石滩（核心打卡点）",
+      "lat": 31.325,
+      "lng": 102.985,
+      "alt_m": 2900,
+      "km": 14,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "凉台沟红石滩徒步线（沟口粮台→红石滩→雷神王瀑布，原路返回）"
+    },
+    {
+      "seq": 5,
+      "name": "雷神王网红瀑布",
+      "lat": 31.318,
+      "lng": 102.975,
+      "alt_m": 2950,
+      "km": 15,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "凉台沟红石滩徒步线（沟口粮台→红石滩→雷神王瀑布，原路返回）"
+    },
+    {
+      "seq": 6,
+      "name": "沟尾草甸/雪山观景段",
+      "lat": 31.31,
+      "lng": 102.96,
+      "alt_m": 3200,
+      "km": 16,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "凉台沟红石滩徒步线（沟口粮台→红石滩→雷神王瀑布，原路返回）"
+    }
+  ],
+  "majiagou": [
+    {
+      "seq": 1,
+      "name": "玛嘉沟游客中心（山门/观光车起点）",
+      "lat": 31.50883,
+      "lng": 102.34497,
+      "alt_m": 3090,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "玛嘉沟轻松休闲线（游客中心→益昂曲措→曲美措，原路返回）"
+    },
+    {
+      "seq": 2,
+      "name": "观光车终点（徒步起点）",
+      "lat": 31.5045,
+      "lng": 102.3455,
+      "alt_m": 3780,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "玛嘉沟轻松休闲线（游客中心→益昂曲措→曲美措，原路返回）"
+    },
+    {
+      "seq": 3,
+      "name": "益昂曲措",
+      "lat": 31.502,
+      "lng": 102.346,
+      "alt_m": 3800,
+      "km": 1,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "玛嘉沟轻松休闲线（游客中心→益昂曲措→曲美措，原路返回）"
+    },
+    {
+      "seq": 4,
+      "name": "情侣梦幻林",
+      "lat": 31.5005,
+      "lng": 102.3462,
+      "alt_m": 3830,
+      "km": 2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "玛嘉沟轻松休闲线（游客中心→益昂曲措→曲美措，原路返回）"
+    },
+    {
+      "seq": 5,
+      "name": "玛嘉云措",
+      "lat": 31.4995,
+      "lng": 102.3465,
+      "alt_m": 3860,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "玛嘉沟轻松休闲线（游客中心→益昂曲措→曲美措，原路返回）"
+    },
+    {
+      "seq": 6,
+      "name": "琼若措姆垭口",
+      "lat": 31.4989,
+      "lng": 102.3466,
+      "alt_m": 3880,
+      "km": 4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "玛嘉沟轻松休闲线（游客中心→益昂曲措→曲美措，原路返回）"
+    },
+    {
+      "seq": 7,
+      "name": "曲美措（轻松线终点/折返点）",
+      "lat": 31.49833,
+      "lng": 102.34678,
+      "alt_m": 3900,
+      "km": 5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "玛嘉沟轻松休闲线（游客中心→益昂曲措→曲美措，原路返回）"
+    },
+    {
+      "seq": 8,
+      "name": "达瓦永措（月亮湖，进阶挑战线终点）",
+      "lat": 31.495,
+      "lng": 102.348,
+      "alt_m": 4300,
+      "km": 7,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "玛嘉沟轻松休闲线（游客中心→益昂曲措→曲美措，原路返回）"
+    }
+  ],
+  "songpinggou": [
+    {
+      "seq": 1,
+      "name": "景区山门/游客中心（沟口）",
+      "lat": 32.16373,
+      "lng": 103.55421,
+      "alt_m": 2000,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "叠溪松坪沟景区观光车主线（长海→白石海，自上而下，官方推荐顺序）"
+    },
+    {
+      "seq": 2,
+      "name": "下白蜡海",
+      "lat": 32.09051,
+      "lng": 103.63743,
+      "alt_m": 2180,
+      "km": 1.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "叠溪松坪沟景区观光车主线（长海→白石海，自上而下，官方推荐顺序）"
+    },
+    {
+      "seq": 3,
+      "name": "上白蜡海",
+      "lat": 32.09844,
+      "lng": 103.62605,
+      "alt_m": 2250,
+      "km": 2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "叠溪松坪沟景区观光车主线（长海→白石海，自上而下，官方推荐顺序）"
+    },
+    {
+      "seq": 4,
+      "name": "白石海（观光车终点/主入口）",
+      "lat": 32.105,
+      "lng": 103.628,
+      "alt_m": 2350,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠溪松坪沟景区观光车主线（长海→白石海，自上而下，官方推荐顺序）"
+    },
+    {
+      "seq": 5,
+      "name": "墨海",
+      "lat": 32.11605,
+      "lng": 103.62581,
+      "alt_m": 2450,
+      "km": 4,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "叠溪松坪沟景区观光车主线（长海→白石海，自上而下，官方推荐顺序）"
+    },
+    {
+      "seq": 6,
+      "name": "珍珠滩瀑布",
+      "lat": 32.1255,
+      "lng": 103.629,
+      "alt_m": 2550,
+      "km": 4.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠溪松坪沟景区观光车主线（长海→白石海，自上而下，官方推荐顺序）"
+    },
+    {
+      "seq": 7,
+      "name": "翠竹沟",
+      "lat": 32.133,
+      "lng": 103.632,
+      "alt_m": 2650,
+      "km": 5.3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠溪松坪沟景区观光车主线（长海→白石海，自上而下，官方推荐顺序）"
+    },
+    {
+      "seq": 8,
+      "name": "五彩池（爱情海）",
+      "lat": 32.137,
+      "lng": 103.6335,
+      "alt_m": 2750,
+      "km": 5.9,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "叠溪松坪沟景区观光车主线（长海→白石海，自上而下，官方推荐顺序）"
+    },
+    {
+      "seq": 9,
+      "name": "长海（景区最高海子，观光车最高点）",
+      "lat": 32.14031,
+      "lng": 103.63419,
+      "alt_m": 2900,
+      "km": 6.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "叠溪松坪沟景区观光车主线（长海→白石海，自上而下，官方推荐顺序）"
+    }
+  ],
+  "gexianshan-bailu": [
+    {
+      "seq": 1,
+      "name": "葛仙山风景区入口（停车场）",
+      "lat": 31.1713,
+      "lng": 103.95388,
+      "alt_m": 700,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "葛仙山风景区（尖峰顶方向）—白鹿镇—领报修院线"
+    },
+    {
+      "seq": 2,
+      "name": "葛仙山道观",
+      "lat": 31.1668,
+      "lng": 103.951,
+      "alt_m": 850,
+      "km": 1.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "葛仙山风景区（尖峰顶方向）—白鹿镇—领报修院线"
+    },
+    {
+      "seq": 3,
+      "name": "千年银杏树",
+      "lat": 31.1632,
+      "lng": 103.9488,
+      "alt_m": 950,
+      "km": 2.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "葛仙山风景区（尖峰顶方向）—白鹿镇—领报修院线"
+    },
+    {
+      "seq": 4,
+      "name": "冰川漂砾地质遗迹点",
+      "lat": 31.1596,
+      "lng": 103.9465,
+      "alt_m": 1050,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "葛仙山风景区（尖峰顶方向）—白鹿镇—领报修院线"
+    },
+    {
+      "seq": 5,
+      "name": "尖峰顶（主峰）",
+      "lat": 31.156,
+      "lng": 103.944,
+      "alt_m": 1362,
+      "km": 4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "葛仙山风景区（尖峰顶方向）—白鹿镇—领报修院线"
+    },
+    {
+      "seq": 6,
+      "name": "塘坝村（白鹿镇方向）",
+      "lat": 31.19176,
+      "lng": 103.92837,
+      "alt_m": 880,
+      "km": 5.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "葛仙山风景区（尖峰顶方向）—白鹿镇—领报修院线"
+    },
+    {
+      "seq": 7,
+      "name": "白鹿上书院（领报修院）",
+      "lat": 31.23048,
+      "lng": 103.91311,
+      "alt_m": 900,
+      "km": 6.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "葛仙山风景区（尖峰顶方向）—白鹿镇—领报修院线"
+    }
+  ],
+  "hemingshan": [
+    {
+      "seq": 1,
+      "name": "鹤鸣山道观山门（停车场）",
+      "lat": 30.63826,
+      "lng": 103.40164,
+      "alt_m": 620,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "鹤鸣山道观山门—迎仙阁—天谷洞登顶线"
+    },
+    {
+      "seq": 2,
+      "name": "迎仙阁",
+      "lat": 30.63794,
+      "lng": 103.40239,
+      "alt_m": 700,
+      "km": 0.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "鹤鸣山道观山门—迎仙阁—天谷洞登顶线"
+    },
+    {
+      "seq": 3,
+      "name": "延祥观",
+      "lat": 30.63745,
+      "lng": 103.40296,
+      "alt_m": 780,
+      "km": 1,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "鹤鸣山道观山门—迎仙阁—天谷洞登顶线"
+    },
+    {
+      "seq": 4,
+      "name": "斗姥殿",
+      "lat": 30.63696,
+      "lng": 103.40352,
+      "alt_m": 860,
+      "km": 1.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "鹤鸣山道观山门—迎仙阁—天谷洞登顶线"
+    },
+    {
+      "seq": 5,
+      "name": "三圣宫",
+      "lat": 30.63647,
+      "lng": 103.40409,
+      "alt_m": 940,
+      "km": 1.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "鹤鸣山道观山门—迎仙阁—天谷洞登顶线"
+    },
+    {
+      "seq": 6,
+      "name": "天师殿",
+      "lat": 30.63609,
+      "lng": 103.40453,
+      "alt_m": 1010,
+      "km": 2.1,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "鹤鸣山道观山门—迎仙阁—天谷洞登顶线"
+    },
+    {
+      "seq": 7,
+      "name": "三丰古柏",
+      "lat": 30.63557,
+      "lng": 103.40519,
+      "alt_m": 1080,
+      "km": 2.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "鹤鸣山道观山门—迎仙阁—天谷洞登顶线"
+    },
+    {
+      "seq": 8,
+      "name": "天谷洞",
+      "lat": 30.63503,
+      "lng": 103.40582,
+      "alt_m": 1180,
+      "km": 2.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "鹤鸣山道观山门—迎仙阁—天谷洞登顶线"
+    }
+  ],
+  "jiezi-fengqishan": [
+    {
+      "seq": 1,
+      "name": "康道登山口（停车场）",
+      "lat": 30.8238,
+      "lng": 103.5289,
+      "alt_m": 593,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "康道—凤栖山—光严禅院—西川圣境牌坊线"
+    },
+    {
+      "seq": 2,
+      "name": "康道石阶起点",
+      "lat": 30.8229,
+      "lng": 103.5279,
+      "alt_m": 599,
+      "km": 0.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "康道—凤栖山—光严禅院—西川圣境牌坊线"
+    },
+    {
+      "seq": 3,
+      "name": "康道半山观景平台",
+      "lat": 30.8207,
+      "lng": 103.526,
+      "alt_m": 760,
+      "km": 1.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "康道—凤栖山—光严禅院—西川圣境牌坊线"
+    },
+    {
+      "seq": 4,
+      "name": "康道山顶（阶梯尽头）",
+      "lat": 30.8186,
+      "lng": 103.5246,
+      "alt_m": 905,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "康道—凤栖山—光严禅院—西川圣境牌坊线"
+    },
+    {
+      "seq": 5,
+      "name": "光严禅院（古寺）",
+      "lat": 30.81715,
+      "lng": 103.52385,
+      "alt_m": 1100,
+      "km": 3.8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "康道—凤栖山—光严禅院—西川圣境牌坊线"
+    },
+    {
+      "seq": 6,
+      "name": "西川圣境大牌坊（停车场）",
+      "lat": 30.8158,
+      "lng": 103.5276,
+      "alt_m": 1010,
+      "km": 5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "康道—凤栖山—光严禅院—西川圣境牌坊线"
+    }
+  ],
+  "lingshanshan": [
+    {
+      "seq": 1,
+      "name": "灵岩古街入口（停车场）",
+      "lat": 31.02731,
+      "lng": 103.61322,
+      "alt_m": 700,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "灵岩古街—灵岩寺（千佛塔）—灵岩山环线"
+    },
+    {
+      "seq": 2,
+      "name": "灵岩古街中段茶馆",
+      "lat": 31.02632,
+      "lng": 103.61268,
+      "alt_m": 720,
+      "km": 0.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "灵岩古街—灵岩寺（千佛塔）—灵岩山环线"
+    },
+    {
+      "seq": 3,
+      "name": "四川农大灵岩山教学科研实习林场",
+      "lat": 31.02361,
+      "lng": 103.61446,
+      "alt_m": 745,
+      "km": 1.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "灵岩古街—灵岩寺（千佛塔）—灵岩山环线"
+    },
+    {
+      "seq": 4,
+      "name": "灵岩寺（七星岩下）",
+      "lat": 31.02842,
+      "lng": 103.6133,
+      "alt_m": 762,
+      "km": 2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "灵岩古街—灵岩寺（千佛塔）—灵岩山环线"
+    },
+    {
+      "seq": 5,
+      "name": "千佛塔",
+      "lat": 31.0287,
+      "lng": 103.61295,
+      "alt_m": 768,
+      "km": 2.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "灵岩古街—灵岩寺（千佛塔）—灵岩山环线"
+    },
+    {
+      "seq": 6,
+      "name": "灵岩山山顶观景处",
+      "lat": 31.0296,
+      "lng": 103.6121,
+      "alt_m": 790,
+      "km": 2.7,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "灵岩古街—灵岩寺（千佛塔）—灵岩山环线"
+    },
+    {
+      "seq": 7,
+      "name": "二王庙方向下山口",
+      "lat": 31.00831,
+      "lng": 103.60812,
+      "alt_m": 730,
+      "km": 3.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "灵岩古街—灵岩寺（千佛塔）—灵岩山环线"
+    }
+  ],
+  "longquanshan": [
+    {
+      "seq": 1,
+      "name": "仰天窝健身步道主入口",
+      "lat": 30.55503,
+      "lng": 104.27742,
+      "alt_m": 508,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "仰天窝健身步道—钟家山森林步道—丹景台观景线"
+    },
+    {
+      "seq": 2,
+      "name": "仰天窝半山观景平台",
+      "lat": 30.55546,
+      "lng": 104.2825,
+      "alt_m": 555,
+      "km": 0.9,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "仰天窝健身步道—钟家山森林步道—丹景台观景线"
+    },
+    {
+      "seq": 3,
+      "name": "仰天窝网红茶铺",
+      "lat": 30.5551,
+      "lng": 104.2862,
+      "alt_m": 545,
+      "km": 1.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "仰天窝健身步道—钟家山森林步道—丹景台观景线"
+    },
+    {
+      "seq": 4,
+      "name": "钟家山森林步道观景台",
+      "lat": 30.55497,
+      "lng": 104.29386,
+      "alt_m": 620,
+      "km": 2.6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "仰天窝健身步道—钟家山森林步道—丹景台观景线"
+    },
+    {
+      "seq": 5,
+      "name": "丹景台（城市之眼）",
+      "lat": 30.35373,
+      "lng": 104.25279,
+      "alt_m": 693,
+      "km": 4.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "仰天窝健身步道—钟家山森林步道—丹景台观景线"
+    },
+    {
+      "seq": 6,
+      "name": "丹景阁",
+      "lat": 30.35643,
+      "lng": 104.25111,
+      "alt_m": 700,
+      "km": 4.8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "仰天窝健身步道—钟家山森林步道—丹景台观景线"
+    }
+  ],
+  "mengdingshan": [
+    {
+      "seq": 1,
+      "name": "天梯古道起点（雷动坪）",
+      "lat": 30.0792,
+      "lng": 103.0441,
+      "alt_m": 1000,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蒙顶山天梯古道—天盖寺—皇茶园—上清峰线"
+    },
+    {
+      "seq": 2,
+      "name": "天梯古道·原古道段（433-560 级）",
+      "lat": 30.0801,
+      "lng": 103.0446,
+      "alt_m": 1080,
+      "km": 0.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蒙顶山天梯古道—天盖寺—皇茶园—上清峰线"
+    },
+    {
+      "seq": 3,
+      "name": "禹王宫",
+      "lat": 30.081,
+      "lng": 103.045,
+      "alt_m": 1180,
+      "km": 0.9,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蒙顶山天梯古道—天盖寺—皇茶园—上清峰线"
+    },
+    {
+      "seq": 4,
+      "name": "天盖寺",
+      "lat": 30.08179,
+      "lng": 103.04574,
+      "alt_m": 1280,
+      "km": 1.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蒙顶山天梯古道—天盖寺—皇茶园—上清峰线"
+    },
+    {
+      "seq": 5,
+      "name": "甘露井、甘露石室",
+      "lat": 30.0822,
+      "lng": 103.04595,
+      "alt_m": 1300,
+      "km": 1.9,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蒙顶山天梯古道—天盖寺—皇茶园—上清峰线"
+    },
+    {
+      "seq": 6,
+      "name": "皇茶园",
+      "lat": 30.0826,
+      "lng": 103.0462,
+      "alt_m": 1320,
+      "km": 2.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蒙顶山天梯古道—天盖寺—皇茶园—上清峰线"
+    },
+    {
+      "seq": 7,
+      "name": "阴阳石牌坊",
+      "lat": 30.0829,
+      "lng": 103.04645,
+      "alt_m": 1330,
+      "km": 2.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "蒙顶山天梯古道—天盖寺—皇茶园—上清峰线"
+    },
+    {
+      "seq": 8,
+      "name": "上清峰（最高峰）",
+      "lat": 30.08399,
+      "lng": 103.04597,
+      "alt_m": 1456,
+      "km": 3,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "蒙顶山天梯古道—天盖寺—皇茶园—上清峰线"
+    }
+  ],
+  "shangli-guzhen": [
+    {
+      "seq": 1,
+      "name": "磐安桥（古镇新街入口）",
+      "lat": 30.18314,
+      "lng": 103.07252,
+      "alt_m": 900,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "上里古镇人文环线（磐安桥→二仙桥→韩家大院→双节孝牌坊→红军石刻→白马泉）"
+    },
+    {
+      "seq": 2,
+      "name": "二仙桥",
+      "lat": 30.18457,
+      "lng": 103.0704,
+      "alt_m": 900,
+      "km": 0.4,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "上里古镇人文环线（磐安桥→二仙桥→韩家大院→双节孝牌坊→红军石刻→白马泉）"
+    },
+    {
+      "seq": 3,
+      "name": "韩家大院",
+      "lat": 30.18354,
+      "lng": 103.07298,
+      "alt_m": 901,
+      "km": 0.8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "上里古镇人文环线（磐安桥→二仙桥→韩家大院→双节孝牌坊→红军石刻→白马泉）"
+    },
+    {
+      "seq": 4,
+      "name": "双节孝石牌坊",
+      "lat": 30.17694,
+      "lng": 103.07429,
+      "alt_m": 910,
+      "km": 1.6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "上里古镇人文环线（磐安桥→二仙桥→韩家大院→双节孝牌坊→红军石刻→白马泉）"
+    },
+    {
+      "seq": 5,
+      "name": "文峰塔（字库塔）",
+      "lat": 30.17839,
+      "lng": 103.07511,
+      "alt_m": 912,
+      "km": 2.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "上里古镇人文环线（磐安桥→二仙桥→韩家大院→双节孝牌坊→红军石刻→白马泉）"
+    },
+    {
+      "seq": 6,
+      "name": "红军石刻标语群",
+      "lat": 30.1825,
+      "lng": 103.073,
+      "alt_m": 905,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "上里古镇人文环线（磐安桥→二仙桥→韩家大院→双节孝牌坊→红军石刻→白马泉）"
+    },
+    {
+      "seq": 7,
+      "name": "白马泉（龙渊）",
+      "lat": 30.1986,
+      "lng": 103.11089,
+      "alt_m": 960,
+      "km": 5.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "上里古镇人文环线（磐安桥→二仙桥→韩家大院→双节孝牌坊→红军石刻→白马泉）"
+    },
+    {
+      "seq": 8,
+      "name": "喷珠泉",
+      "lat": 30.1992,
+      "lng": 103.1102,
+      "alt_m": 962,
+      "km": 5.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "上里古镇人文环线（磐安桥→二仙桥→韩家大院→双节孝牌坊→红军石刻→白马泉）"
+    }
+  ],
+  "yulei-songmao": [
+    {
+      "seq": 1,
+      "name": "玉垒山广场（3号门，古城北侧进山起点）",
+      "lat": 31.006,
+      "lng": 103.61,
+      "alt_m": 730,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "玉垒山·松茂古道下坡线（玉垒山广场→城隍庙→松茂古道→玉垒关→玉垒阁→宣威门→西街→南桥）"
+    },
+    {
+      "seq": 2,
+      "name": "城隍庙·十殿",
+      "lat": 31.0048,
+      "lng": 103.6106,
+      "alt_m": 760,
+      "km": 0.3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "玉垒山·松茂古道下坡线（玉垒山广场→城隍庙→松茂古道→玉垒关→玉垒阁→宣威门→西街→南桥）"
+    },
+    {
+      "seq": 3,
+      "name": "松茂古道（古柏石板路段）",
+      "lat": 31.00706,
+      "lng": 103.60845,
+      "alt_m": 800,
+      "km": 0.8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "玉垒山·松茂古道下坡线（玉垒山广场→城隍庙→松茂古道→玉垒关→玉垒阁→宣威门→西街→南桥）"
+    },
+    {
+      "seq": 4,
+      "name": "玉垒关",
+      "lat": 31.00426,
+      "lng": 103.60952,
+      "alt_m": 840,
+      "km": 1.1,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "玉垒山·松茂古道下坡线（玉垒山广场→城隍庙→松茂古道→玉垒关→玉垒阁→宣威门→西街→南桥）"
+    },
+    {
+      "seq": 5,
+      "name": "玉垒阁（全区制高点）",
+      "lat": 31.0045,
+      "lng": 103.61239,
+      "alt_m": 865,
+      "km": 1.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "玉垒山·松茂古道下坡线（玉垒山广场→城隍庙→松茂古道→玉垒关→玉垒阁→宣威门→西街→南桥）"
+    },
+    {
+      "seq": 6,
+      "name": "宣威门（明代城门楼）",
+      "lat": 30.9998,
+      "lng": 103.613,
+      "alt_m": 780,
+      "km": 2.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "玉垒山·松茂古道下坡线（玉垒山广场→城隍庙→松茂古道→玉垒关→玉垒阁→宣威门→西街→南桥）"
+    },
+    {
+      "seq": 7,
+      "name": "西街（茶马古道起点段·灌县古城）",
+      "lat": 31.0007,
+      "lng": 103.61236,
+      "alt_m": 735,
+      "km": 3,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "玉垒山·松茂古道下坡线（玉垒山广场→城隍庙→松茂古道→玉垒关→玉垒阁→宣威门→西街→南桥）"
+    },
+    {
+      "seq": 8,
+      "name": "南桥（天府源廊桥）",
+      "lat": 30.9991,
+      "lng": 103.61396,
+      "alt_m": 728,
+      "km": 3.6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "玉垒山·松茂古道下坡线（玉垒山广场→城隍庙→松茂古道→玉垒关→玉垒阁→宣威门→西街→南桥）"
+    },
+    {
+      "seq": 9,
+      "name": "离堆公园/宝瓶口（水利景区延伸段，可选）",
+      "lat": 31.00113,
+      "lng": 103.61056,
+      "alt_m": 730,
+      "km": 4,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "玉垒山·松茂古道下坡线（玉垒山广场→城隍庙→松茂古道→玉垒关→玉垒阁→宣威门→西街→南桥）"
+    }
+  ],
+  "yudingshan": [
+    {
+      "seq": 1,
+      "name": "云顶石城山脚（徒步起点/冯姐饭店一带）",
+      "lat": 30.747,
+      "lng": 104.488,
+      "alt_m": 480,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "云顶石城南宋山城环线（小东门→南城门→云顶山遗址→慈云寺）"
+    },
+    {
+      "seq": 2,
+      "name": "小东门（南宋城门遗址）",
+      "lat": 30.7445,
+      "lng": 104.4856,
+      "alt_m": 620,
+      "km": 1.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "云顶石城南宋山城环线（小东门→南城门→云顶山遗址→慈云寺）"
+    },
+    {
+      "seq": 3,
+      "name": "云顶石城城墙·北城二门（长宁门）",
+      "lat": 30.745,
+      "lng": 104.4865,
+      "alt_m": 780,
+      "km": 2.6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "云顶石城南宋山城环线（小东门→南城门→云顶山遗址→慈云寺）"
+    },
+    {
+      "seq": 4,
+      "name": "南城门（环线核心节点）",
+      "lat": 30.743,
+      "lng": 104.4845,
+      "alt_m": 850,
+      "km": 3.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "云顶石城南宋山城环线（小东门→南城门→云顶山遗址→慈云寺）"
+    },
+    {
+      "seq": 5,
+      "name": "云顶山遗址（山顶核心区）",
+      "lat": 30.74363,
+      "lng": 104.48417,
+      "alt_m": 950,
+      "km": 5.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "云顶石城南宋山城环线（小东门→南城门→云顶山遗址→慈云寺）"
+    },
+    {
+      "seq": 6,
+      "name": "慈云寺",
+      "lat": 30.74054,
+      "lng": 104.48436,
+      "alt_m": 960,
+      "km": 6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "云顶石城南宋山城环线（小东门→南城门→云顶山遗址→慈云寺）"
+    },
+    {
+      "seq": 7,
+      "name": "云顶山顶（海拔最高点）",
+      "lat": 30.74,
+      "lng": 104.4835,
+      "alt_m": 982,
+      "km": 6.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "云顶石城南宋山城环线（小东门→南城门→云顶山遗址→慈云寺）"
+    },
+    {
+      "seq": 8,
+      "name": "环线回到山脚（原路下山）",
+      "lat": 30.747,
+      "lng": 104.488,
+      "alt_m": 480,
+      "km": 7.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "云顶石城南宋山城环线（小东门→南城门→云顶山遗址→慈云寺）"
+    }
+  ],
+  "jiudingshan": [
+    {
+      "seq": 1,
+      "name": "安乡（山脚换乘点）",
+      "lat": 31.545,
+      "lng": 103.8,
+      "alt_m": 2400,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九顶山经典徒步线（夫妻树→立立爬→鸡爪棚→黑龙池→白龙池停车场）"
+    },
+    {
+      "seq": 2,
+      "name": "夫妻树（徒步起点/停车场）",
+      "lat": 31.552,
+      "lng": 103.82,
+      "alt_m": 2900,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九顶山经典徒步线（夫妻树→立立爬→鸡爪棚→黑龙池→白龙池停车场）"
+    },
+    {
+      "seq": 3,
+      "name": "立立爬（驴驴爬）",
+      "lat": 31.5545,
+      "lng": 103.8255,
+      "alt_m": 3150,
+      "km": 1.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九顶山经典徒步线（夫妻树→立立爬→鸡爪棚→黑龙池→白龙池停车场）"
+    },
+    {
+      "seq": 4,
+      "name": "石门坎",
+      "lat": 31.556,
+      "lng": 103.83,
+      "alt_m": 3400,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九顶山经典徒步线（夫妻树→立立爬→鸡爪棚→黑龙池→白龙池停车场）"
+    },
+    {
+      "seq": 5,
+      "name": "鸡爪棚营地（中转点/露营地）",
+      "lat": 31.55891,
+      "lng": 103.84141,
+      "alt_m": 3600,
+      "km": 5.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九顶山经典徒步线（夫妻树→立立爬→鸡爪棚→黑龙池→白龙池停车场）"
+    },
+    {
+      "seq": 6,
+      "name": "黑龙池",
+      "lat": 31.562,
+      "lng": 103.846,
+      "alt_m": 3800,
+      "km": 7,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九顶山经典徒步线（夫妻树→立立爬→鸡爪棚→黑龙池→白龙池停车场）"
+    },
+    {
+      "seq": 7,
+      "name": "鸡公山垭口",
+      "lat": 31.566,
+      "lng": 103.85,
+      "alt_m": 3900,
+      "km": 8.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九顶山经典徒步线（夫妻树→立立爬→鸡爪棚→黑龙池→白龙池停车场）"
+    },
+    {
+      "seq": 8,
+      "name": "杜鹃林",
+      "lat": 31.562,
+      "lng": 103.855,
+      "alt_m": 3500,
+      "km": 10,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九顶山经典徒步线（夫妻树→立立爬→鸡爪棚→黑龙池→白龙池停车场）"
+    },
+    {
+      "seq": 9,
+      "name": "白龙池（停车场/终点）",
+      "lat": 31.557,
+      "lng": 103.86,
+      "alt_m": 3240,
+      "km": 11,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "九顶山经典徒步线（夫妻树→立立爬→鸡爪棚→黑龙池→白龙池停车场）"
+    }
+  ],
+  "longchi-dujiangyan": [
+    {
+      "seq": 1,
+      "name": "龙池镇（都江堰市区进山起点）",
+      "lat": 31.05576,
+      "lng": 103.55205,
+      "alt_m": 750,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "龙池国家森林公园主线（山门→龙池湖环湖，原路返回）"
+    },
+    {
+      "seq": 2,
+      "name": "龙池国家森林公园山门",
+      "lat": 31.083,
+      "lng": 103.6,
+      "alt_m": 1400,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "龙池国家森林公园主线（山门→龙池湖环湖，原路返回）"
+    },
+    {
+      "seq": 3,
+      "name": "亚高山马蹄型盆地（冰雪运动区）",
+      "lat": 31.095,
+      "lng": 103.63,
+      "alt_m": 1750,
+      "km": 6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "龙池国家森林公园主线（山门→龙池湖环湖，原路返回）"
+    },
+    {
+      "seq": 4,
+      "name": "徒步起点（车行终点）",
+      "lat": 31.102,
+      "lng": 103.645,
+      "alt_m": 1900,
+      "km": 9.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "龙池国家森林公园主线（山门→龙池湖环湖，原路返回）"
+    },
+    {
+      "seq": 5,
+      "name": "华西亚高山植物园",
+      "lat": 31.105,
+      "lng": 103.65,
+      "alt_m": 2000,
+      "km": 11.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "龙池国家森林公园主线（山门→龙池湖环湖，原路返回）"
+    },
+    {
+      "seq": 6,
+      "name": "龙池湖（终点）",
+      "lat": 31.108,
+      "lng": 103.655,
+      "alt_m": 2100,
+      "km": 13,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "龙池国家森林公园主线（山门→龙池湖环湖，原路返回）"
+    },
+    {
+      "seq": 7,
+      "name": "湖尾/龙王庙建筑群",
+      "lat": 31.11,
+      "lng": 103.658,
+      "alt_m": 2150,
+      "km": 14,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "龙池国家森林公园主线（山门→龙池湖环湖，原路返回）"
+    },
+    {
+      "seq": 8,
+      "name": "环湖一周回到龙池湖口",
+      "lat": 31.108,
+      "lng": 103.655,
+      "alt_m": 2100,
+      "km": 15,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "龙池国家森林公园主线（山门→龙池湖环湖，原路返回）"
+    }
+  ],
+  "mengtunhexigu": [
+    {
+      "seq": 1,
+      "name": "上孟乡（孟屯河谷景区入口集镇）",
+      "lat": 31.67403,
+      "lng": 103.13453,
+      "alt_m": 1950,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "孟屯河谷双沟线（上孟乡→木尼村→高桥沟→高桥沟海子→刮托寨→老君沟口）"
+    },
+    {
+      "seq": 2,
+      "name": "木尼村（河谷核心村落）",
+      "lat": 31.71213,
+      "lng": 103.11108,
+      "alt_m": 2000,
+      "km": 3,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "孟屯河谷双沟线（上孟乡→木尼村→高桥沟→高桥沟海子→刮托寨→老君沟口）"
+    },
+    {
+      "seq": 3,
+      "name": "高桥沟口（徒步起点·刮托寨方向）",
+      "lat": 31.76,
+      "lng": 103.075,
+      "alt_m": 2200,
+      "km": 8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "孟屯河谷双沟线（上孟乡→木尼村→高桥沟→高桥沟海子→刮托寨→老君沟口）"
+    },
+    {
+      "seq": 4,
+      "name": "千年绳索吊桥（横跨高桥峡谷）",
+      "lat": 31.78,
+      "lng": 103.065,
+      "alt_m": 2500,
+      "km": 9.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "孟屯河谷双沟线（上孟乡→木尼村→高桥沟→高桥沟海子→刮托寨→老君沟口）"
+    },
+    {
+      "seq": 5,
+      "name": "高桥沟海子（高桥沟终点·希尔基斯多神山方向）",
+      "lat": 31.80503,
+      "lng": 103.0547,
+      "alt_m": 3800,
+      "km": 12,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "孟屯河谷双沟线（上孟乡→木尼村→高桥沟→高桥沟海子→刮托寨→老君沟口）"
+    },
+    {
+      "seq": 6,
+      "name": "刮托寨（高桥沟汇入孟屯河口）",
+      "lat": 31.73,
+      "lng": 103.09,
+      "alt_m": 2100,
+      "km": 13,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "孟屯河谷双沟线（上孟乡→木尼村→高桥沟→高桥沟海子→刮托寨→老君沟口）"
+    },
+    {
+      "seq": 7,
+      "name": "老君沟口（第二沟起点）",
+      "lat": 31.725,
+      "lng": 103.085,
+      "alt_m": 2150,
+      "km": 15,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "孟屯河谷双沟线（上孟乡→木尼村→高桥沟→高桥沟海子→刮托寨→老君沟口）"
+    }
+  ],
+  "shenmulei": [
+    {
+      "seq": 1,
+      "name": "神木垒景区大门（游客中心）",
+      "lat": 30.7341,
+      "lng": 102.6837,
+      "alt_m": 2300,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "神木垒景区红杉林→高山草甸徒步线"
+    },
+    {
+      "seq": 2,
+      "name": "红杉林（红杉坪）",
+      "lat": 30.737,
+      "lng": 102.6814,
+      "alt_m": 2450,
+      "km": 0.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "神木垒景区红杉林→高山草甸徒步线"
+    },
+    {
+      "seq": 3,
+      "name": "森林木桥",
+      "lat": 30.7388,
+      "lng": 102.6799,
+      "alt_m": 2520,
+      "km": 1,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "神木垒景区红杉林→高山草甸徒步线"
+    },
+    {
+      "seq": 4,
+      "name": "神木亭",
+      "lat": 30.7402,
+      "lng": 102.6787,
+      "alt_m": 2600,
+      "km": 1.4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "神木垒景区红杉林→高山草甸徒步线"
+    },
+    {
+      "seq": 5,
+      "name": "天然根雕园",
+      "lat": 30.7418,
+      "lng": 102.6774,
+      "alt_m": 2650,
+      "km": 1.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "神木垒景区红杉林→高山草甸徒步线"
+    },
+    {
+      "seq": 6,
+      "name": "藏式经幡打卡点",
+      "lat": 30.7431,
+      "lng": 102.6763,
+      "alt_m": 2680,
+      "km": 2.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "神木垒景区红杉林→高山草甸徒步线"
+    },
+    {
+      "seq": 7,
+      "name": "草甸秋千",
+      "lat": 30.7442,
+      "lng": 102.6753,
+      "alt_m": 2690,
+      "km": 2.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "神木垒景区红杉林→高山草甸徒步线"
+    },
+    {
+      "seq": 8,
+      "name": "神木垒高山草甸（终点）",
+      "lat": 30.7454,
+      "lng": 102.6742,
+      "alt_m": 2700,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "神木垒景区红杉林→高山草甸徒步线"
+    }
+  ],
+  "xiongmaoping": [
+    {
+      "seq": 1,
+      "name": "耿达镇（集散起点）",
+      "lat": 31.09164,
+      "lng": 103.30904,
+      "alt_m": 1600,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "熊猫坪高山草甸线（耿达镇→徒步起点→原始森林→熊猫坪草甸→卧龙中华大熊猫苑神树坪基地）"
+    },
+    {
+      "seq": 2,
+      "name": "熊猫坪徒步起点（中转车下车点）",
+      "lat": 31.078,
+      "lng": 103.295,
+      "alt_m": 1800,
+      "km": 2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "熊猫坪高山草甸线（耿达镇→徒步起点→原始森林→熊猫坪草甸→卧龙中华大熊猫苑神树坪基地）"
+    },
+    {
+      "seq": 3,
+      "name": "原始森林穿越段",
+      "lat": 31.08,
+      "lng": 103.29,
+      "alt_m": 2000,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "熊猫坪高山草甸线（耿达镇→徒步起点→原始森林→熊猫坪草甸→卧龙中华大熊猫苑神树坪基地）"
+    },
+    {
+      "seq": 4,
+      "name": "熊猫坪高山草甸（山顶草坪·主打卡点）",
+      "lat": 31.073,
+      "lng": 103.285,
+      "alt_m": 2000,
+      "km": 4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "熊猫坪高山草甸线（耿达镇→徒步起点→原始森林→熊猫坪草甸→卧龙中华大熊猫苑神树坪基地）"
+    },
+    {
+      "seq": 5,
+      "name": "草甸观景平台（孤独秋千/跷跷板·网红打卡位）",
+      "lat": 31.074,
+      "lng": 103.284,
+      "alt_m": 2050,
+      "km": 4.3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "熊猫坪高山草甸线（耿达镇→徒步起点→原始森林→熊猫坪草甸→卧龙中华大熊猫苑神树坪基地）"
+    },
+    {
+      "seq": 6,
+      "name": "卧龙中华大熊猫苑神树坪基地",
+      "lat": 31.07,
+      "lng": 103.28,
+      "alt_m": 1750,
+      "km": 6.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "熊猫坪高山草甸线（耿达镇→徒步起点→原始森林→熊猫坪草甸→卧龙中华大熊猫苑神树坪基地）"
+    },
+    {
+      "seq": 7,
+      "name": "大熊猫博物馆（卧龙镇方向延伸点）",
+      "lat": 31.03293,
+      "lng": 103.18065,
+      "alt_m": 1900,
+      "km": 8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "熊猫坪高山草甸线（耿达镇→徒步起点→原始森林→熊猫坪草甸→卧龙中华大熊猫苑神树坪基地）"
+    },
+    {
+      "seq": 8,
+      "name": "邓生沟（森林溪流徒步延伸段，可选）",
+      "lat": 31.02,
+      "lng": 103.15,
+      "alt_m": 2200,
+      "km": 8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "熊猫坪高山草甸线（耿达镇→徒步起点→原始森林→熊猫坪草甸→卧龙中华大熊猫苑神树坪基地）"
+    }
+  ],
+  "tiantai-pengzhou": [
+    {
+      "seq": 1,
+      "name": "木伞庵停车场（徒步起点）",
+      "lat": 31.229,
+      "lng": 103.853,
+      "alt_m": 1450,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "彭州天台山 木伞庵停车场—白云寺—华光寺—金顶天台寺 主徒步线"
+    },
+    {
+      "seq": 2,
+      "name": "白云寺",
+      "lat": 31.233,
+      "lng": 103.856,
+      "alt_m": 1650,
+      "km": 1.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "彭州天台山 木伞庵停车场—白云寺—华光寺—金顶天台寺 主徒步线"
+    },
+    {
+      "seq": 3,
+      "name": "废弃楼房（正式登山口）",
+      "lat": 31.2345,
+      "lng": 103.858,
+      "alt_m": 1720,
+      "km": 1.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "彭州天台山 木伞庵停车场—白云寺—华光寺—金顶天台寺 主徒步线"
+    },
+    {
+      "seq": 4,
+      "name": "华光寺（半山寺庙）",
+      "lat": 31.23277,
+      "lng": 103.86189,
+      "alt_m": 2030,
+      "km": 4,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "彭州天台山 木伞庵停车场—白云寺—华光寺—金顶天台寺 主徒步线"
+    },
+    {
+      "seq": 5,
+      "name": "金顶天台寺（山顶）",
+      "lat": 31.23716,
+      "lng": 103.85288,
+      "alt_m": 2433,
+      "km": 6.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "彭州天台山 木伞庵停车场—白云寺—华光寺—金顶天台寺 主徒步线"
+    },
+    {
+      "seq": 6,
+      "name": "木伞庵停车场（返程终点）",
+      "lat": 31.229,
+      "lng": 103.853,
+      "alt_m": 1450,
+      "km": 8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "彭州天台山 木伞庵停车场—白云寺—华光寺—金顶天台寺 主徒步线"
+    }
+  ],
+  "qianfoshan": [
+    {
+      "seq": 1,
+      "name": "龙神堂停车场（自驾终点/起点）",
+      "lat": 31.68715,
+      "lng": 104.27935,
+      "alt_m": 900,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "绵阳安州千佛山 龙神堂停车场—徒步起点—三千梯—山顶千佛庙 主线"
+    },
+    {
+      "seq": 2,
+      "name": "小黄车终点（正式徒步起点）",
+      "lat": 31.707,
+      "lng": 104.25,
+      "alt_m": 1500,
+      "km": 12,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "绵阳安州千佛山 龙神堂停车场—徒步起点—三千梯—山顶千佛庙 主线"
+    },
+    {
+      "seq": 3,
+      "name": "箭竹林/原始林段休息点",
+      "lat": 31.72,
+      "lng": 104.235,
+      "alt_m": 2000,
+      "km": 15,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "绵阳安州千佛山 龙神堂停车场—徒步起点—三千梯—山顶千佛庙 主线"
+    },
+    {
+      "seq": 4,
+      "name": "三千梯（陡石阶段）",
+      "lat": 31.735,
+      "lng": 104.222,
+      "alt_m": 2500,
+      "km": 18,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "绵阳安州千佛山 龙神堂停车场—徒步起点—三千梯—山顶千佛庙 主线"
+    },
+    {
+      "seq": 5,
+      "name": "千佛山主峰（山顶千佛庙/千佛老祖庙）",
+      "lat": 31.7435,
+      "lng": 104.2126,
+      "alt_m": 2942,
+      "km": 20,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "绵阳安州千佛山 龙神堂停车场—徒步起点—三千梯—山顶千佛庙 主线"
+    }
+  ],
+  "tiewadian": [
+    {
+      "seq": 1,
+      "name": "中坝保护站（起点/导航终点）",
+      "lat": 31.215,
+      "lng": 103.785,
+      "alt_m": 1100,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "中坝森林公园休闲徒步线（暮光森林环线·柳杉林道）— 铁瓦殿原登山线禁入区之可走替代线"
+    },
+    {
+      "seq": 2,
+      "name": "柳杉林/暮光森林精华段（丁达尔光打卡点）",
+      "lat": 31.218,
+      "lng": 103.788,
+      "alt_m": 1200,
+      "km": 1.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "中坝森林公园休闲徒步线（暮光森林环线·柳杉林道）— 铁瓦殿原登山线禁入区之可走替代线"
+    },
+    {
+      "seq": 3,
+      "name": "中坝森林木栈道（步道段）",
+      "lat": 31.221,
+      "lng": 103.791,
+      "alt_m": 1280,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "中坝森林公园休闲徒步线（暮光森林环线·柳杉林道）— 铁瓦殿原登山线禁入区之可走替代线"
+    },
+    {
+      "seq": 4,
+      "name": "灵芝园（植物观察点）",
+      "lat": 31.223,
+      "lng": 103.794,
+      "alt_m": 1350,
+      "km": 3.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "中坝森林公园休闲徒步线（暮光森林环线·柳杉林道）— 铁瓦殿原登山线禁入区之可走替代线"
+    },
+    {
+      "seq": 5,
+      "name": "环线高点/折返点",
+      "lat": 31.225,
+      "lng": 103.796,
+      "alt_m": 1450,
+      "km": 4.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "中坝森林公园休闲徒步线（暮光森林环线·柳杉林道）— 铁瓦殿原登山线禁入区之可走替代线"
+    },
+    {
+      "seq": 6,
+      "name": "中坝保护站（返程终点）",
+      "lat": 31.215,
+      "lng": 103.785,
+      "alt_m": 1100,
+      "km": 5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "中坝森林公园休闲徒步线（暮光森林环线·柳杉林道）— 铁瓦殿原登山线禁入区之可走替代线"
+    }
+  ],
+  "wuzhongshan": [
+    {
+      "seq": 1,
+      "name": "接王寺（起点）",
+      "lat": 30.668,
+      "lng": 103.369,
+      "alt_m": 750,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "雾中山主线：接王寺—开化寺—玫瑰谷—明月寺—弥陀寺—蓥华顶"
+    },
+    {
+      "seq": 2,
+      "name": "开化寺（停车场 / 徒步起点）",
+      "lat": 30.69162,
+      "lng": 103.35716,
+      "alt_m": 900,
+      "km": 1,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "雾中山主线：接王寺—开化寺—玫瑰谷—明月寺—弥陀寺—蓥华顶"
+    },
+    {
+      "seq": 3,
+      "name": "玫瑰谷",
+      "lat": 30.693,
+      "lng": 103.355,
+      "alt_m": 950,
+      "km": 1.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "雾中山主线：接王寺—开化寺—玫瑰谷—明月寺—弥陀寺—蓥华顶"
+    },
+    {
+      "seq": 4,
+      "name": "明月寺",
+      "lat": 30.696,
+      "lng": 103.352,
+      "alt_m": 1150,
+      "km": 2.6,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "雾中山主线：接王寺—开化寺—玫瑰谷—明月寺—弥陀寺—蓥华顶"
+    },
+    {
+      "seq": 5,
+      "name": "弥陀寺",
+      "lat": 30.702,
+      "lng": 103.346,
+      "alt_m": 1580,
+      "km": 4.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "雾中山主线：接王寺—开化寺—玫瑰谷—明月寺—弥陀寺—蓥华顶"
+    },
+    {
+      "seq": 6,
+      "name": "蓥华顶（雾中山最高峰观景台，终点）",
+      "lat": 30.704,
+      "lng": 103.344,
+      "alt_m": 1638,
+      "km": 6.3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "雾中山主线：接王寺—开化寺—玫瑰谷—明月寺—弥陀寺—蓥华顶"
+    }
+  ],
+  "yihuashan": [
+    {
+      "seq": 1,
+      "name": "蓥华山森林步道·龙吟段入口牌坊（起点）",
+      "lat": 31.36,
+      "lng": 103.95,
+      "alt_m": 1200,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "什邡蓥华山 蓥华山森林步道·龙吟段（龙门之巅一号栈道）环线"
+    },
+    {
+      "seq": 2,
+      "name": "林海步道段（柳杉/松林遮荫段）",
+      "lat": 31.355,
+      "lng": 103.945,
+      "alt_m": 1350,
+      "km": 3,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "什邡蓥华山 蓥华山森林步道·龙吟段（龙门之巅一号栈道）环线"
+    },
+    {
+      "seq": 3,
+      "name": "半山休息点/观景台",
+      "lat": 31.35,
+      "lng": 103.94,
+      "alt_m": 1550,
+      "km": 5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "什邡蓥华山 蓥华山森林步道·龙吟段（龙门之巅一号栈道）环线"
+    },
+    {
+      "seq": 4,
+      "name": "步道山顶（360°观景平台）",
+      "lat": 31.345,
+      "lng": 103.935,
+      "alt_m": 1800,
+      "km": 6.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "什邡蓥华山 蓥华山森林步道·龙吟段（龙门之巅一号栈道）环线"
+    },
+    {
+      "seq": 5,
+      "name": "返程森林步道段",
+      "lat": 31.355,
+      "lng": 103.943,
+      "alt_m": 1450,
+      "km": 8.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "什邡蓥华山 蓥华山森林步道·龙吟段（龙门之巅一号栈道）环线"
+    },
+    {
+      "seq": 6,
+      "name": "龙吟段入口牌坊（终点）",
+      "lat": 31.36,
+      "lng": 103.95,
+      "alt_m": 1200,
+      "km": 10,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "什邡蓥华山 蓥华山森林步道·龙吟段（龙门之巅一号栈道）环线"
+    }
+  ],
+  "zhaogongshan": [
+    {
+      "seq": 1,
+      "name": "玉堂街道（都江堰市区起点）",
+      "lat": 30.97363,
+      "lng": 103.60657,
+      "alt_m": 730,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "赵公山东线（大坪村—庆云寺—赵公庙金顶）"
+    },
+    {
+      "seq": 2,
+      "name": "赵公山登山口（大坪村/龙凤村新区）",
+      "lat": 30.95711,
+      "lng": 103.54616,
+      "alt_m": 900,
+      "km": 2.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "赵公山东线（大坪村—庆云寺—赵公庙金顶）"
+    },
+    {
+      "seq": 3,
+      "name": "赵公祖庙·猫猫庙",
+      "lat": 30.95566,
+      "lng": 103.54374,
+      "alt_m": 1150,
+      "km": 4,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "赵公山东线（大坪村—庆云寺—赵公庙金顶）"
+    },
+    {
+      "seq": 4,
+      "name": "庆云寺（半山腰汇合点）",
+      "lat": 30.97141,
+      "lng": 103.52707,
+      "alt_m": 1530,
+      "km": 5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "赵公山东线（大坪村—庆云寺—赵公庙金顶）"
+    },
+    {
+      "seq": 5,
+      "name": "赵公山西环线岔口",
+      "lat": 30.97132,
+      "lng": 103.50821,
+      "alt_m": 1700,
+      "km": 6.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "赵公山东线（大坪村—庆云寺—赵公庙金顶）"
+    },
+    {
+      "seq": 6,
+      "name": "赵公山（山脊）",
+      "lat": 30.97662,
+      "lng": 103.51659,
+      "alt_m": 2200,
+      "km": 9,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "赵公山东线（大坪村—庆云寺—赵公庙金顶）"
+    },
+    {
+      "seq": 7,
+      "name": "赵公庙（金顶）",
+      "lat": 30.97382,
+      "lng": 103.51549,
+      "alt_m": 2434,
+      "km": 11,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "赵公山东线（大坪村—庆云寺—赵公庙金顶）"
+    }
+  ],
+  "emeishan": [
+    {
+      "seq": 1,
+      "name": "报国寺（低山区起点）",
+      "lat": 29.5705,
+      "lng": 103.44044,
+      "alt_m": 550,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 2,
+      "name": "伏虎寺",
+      "lat": 29.56325,
+      "lng": 103.43409,
+      "alt_m": 630,
+      "km": 1.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 3,
+      "name": "清音阁",
+      "lat": 29.57383,
+      "lng": 103.39206,
+      "alt_m": 710,
+      "km": 13,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 4,
+      "name": "万年寺",
+      "lat": 29.58196,
+      "lng": 103.3806,
+      "alt_m": 1010,
+      "km": 18,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 5,
+      "name": "息心所",
+      "lat": 29.57723,
+      "lng": 103.37084,
+      "alt_m": 1460,
+      "km": 21,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 6,
+      "name": "华严顶",
+      "lat": 29.56397,
+      "lng": 103.35674,
+      "alt_m": 1914,
+      "km": 24,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 7,
+      "name": "洗象池",
+      "lat": 29.55793,
+      "lng": 103.34403,
+      "alt_m": 2070,
+      "km": 28,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 8,
+      "name": "雷洞坪（高山区观光车终点）",
+      "lat": 29.54135,
+      "lng": 103.33143,
+      "alt_m": 2430,
+      "km": 35.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 9,
+      "name": "接引殿（金顶索道下站）",
+      "lat": 29.53517,
+      "lng": 103.33377,
+      "alt_m": 2550,
+      "km": 37,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 10,
+      "name": "太子坪",
+      "lat": 29.52967,
+      "lng": 103.32808,
+      "alt_m": 2780,
+      "km": 40.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 11,
+      "name": "金顶（十方普贤像/华藏寺）",
+      "lat": 29.52276,
+      "lng": 103.33713,
+      "alt_m": 3079,
+      "km": 43,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 12,
+      "name": "万佛顶（峨眉最高点，路线封闭）",
+      "lat": 29.51035,
+      "lng": 103.3322,
+      "alt_m": 3099,
+      "km": 46,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "全山经典徒步线（报国寺→清音阁→万年寺→华严顶→洗象池→雷洞坪→接引殿→金顶）"
+    },
+    {
+      "seq": 1,
+      "name": "五显岗车站（观光车换乘点）",
+      "lat": 29.57827,
+      "lng": 103.4055,
+      "alt_m": 660,
+      "km": 0,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "低山精华短程（五显岗→清音阁→一线天→生态猴区，可选万年寺索道下山）"
+    },
+    {
+      "seq": 2,
+      "name": "清音阁",
+      "lat": 29.57383,
+      "lng": 103.39206,
+      "alt_m": 710,
+      "km": 2,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "低山精华短程（五显岗→清音阁→一线天→生态猴区，可选万年寺索道下山）"
+    },
+    {
+      "seq": 3,
+      "name": "一线天",
+      "lat": 29.57416,
+      "lng": 103.39394,
+      "alt_m": 780,
+      "km": 3.5,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "低山精华短程（五显岗→清音阁→一线天→生态猴区，可选万年寺索道下山）"
+    },
+    {
+      "seq": 4,
+      "name": "生态猴区（自然生态猴区）",
+      "lat": 29.57515,
+      "lng": 103.39686,
+      "alt_m": 850,
+      "km": 5,
+      "unc": true,
+      "route_index": 1,
+      "route_name": "低山精华短程（五显岗→清音阁→一线天→生态猴区，可选万年寺索道下山）"
+    },
+    {
+      "seq": 5,
+      "name": "洪椿坪",
+      "lat": 29.55444,
+      "lng": 103.38391,
+      "alt_m": 1010,
+      "km": 6,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "低山精华短程（五显岗→清音阁→一线天→生态猴区，可选万年寺索道下山）"
+    },
+    {
+      "seq": 6,
+      "name": "万年寺",
+      "lat": 29.58196,
+      "lng": 103.3806,
+      "alt_m": 1010,
+      "km": 8,
+      "unc": false,
+      "route_index": 1,
+      "route_name": "低山精华短程（五显岗→清音阁→一线天→生态猴区，可选万年寺索道下山）"
+    }
+  ],
+  "changpinggou": [
+    {
+      "seq": 1,
+      "name": "长坪沟游人中心（售票处/观光车站）",
+      "lat": 31.00052,
+      "lng": 102.84357,
+      "alt_m": 3200,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 2,
+      "name": "喇嘛寺（斯古拉寺，徒步起点）",
+      "lat": 31.03371,
+      "lng": 102.87255,
+      "alt_m": 3400,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 3,
+      "name": "头道坪",
+      "lat": 31.04151,
+      "lng": 102.87583,
+      "alt_m": 3420,
+      "km": 1.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 4,
+      "name": "虫虫脚瀑布",
+      "lat": 31.04562,
+      "lng": 102.87065,
+      "alt_m": 3450,
+      "km": 2.6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 5,
+      "name": "二道坪",
+      "lat": 31.05514,
+      "lng": 102.87623,
+      "alt_m": 3480,
+      "km": 4,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 6,
+      "name": "枯树滩",
+      "lat": 31.06036,
+      "lng": 102.87751,
+      "alt_m": 3470,
+      "km": 5.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 7,
+      "name": "下干海子",
+      "lat": 31.0791,
+      "lng": 102.87359,
+      "alt_m": 3560,
+      "km": 7.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 8,
+      "name": "上干海子",
+      "lat": 31.08772,
+      "lng": 102.87112,
+      "alt_m": 3620,
+      "km": 8.6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 9,
+      "name": "两河口",
+      "lat": 31.09502,
+      "lng": 102.86849,
+      "alt_m": 3660,
+      "km": 9.6,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 10,
+      "name": "红石阵",
+      "lat": 31.1084,
+      "lng": 102.86644,
+      "alt_m": 3700,
+      "km": 10.8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 11,
+      "name": "木骡子（终点/营地）",
+      "lat": 31.11615,
+      "lng": 102.86604,
+      "alt_m": 3760,
+      "km": 12,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    },
+    {
+      "seq": 12,
+      "name": "水打坝",
+      "lat": 31.12351,
+      "lng": 102.86548,
+      "alt_m": 3800,
+      "km": 13.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "长坪沟沟内主线（喇嘛寺→木骡子，原路返回）"
+    }
+  ],
+  "dagubingchuan": [
+    {
+      "seq": 1,
+      "name": "达古冰川游客中心（景区大门/观光车候车处）",
+      "lat": 32.11575,
+      "lng": 102.9408,
+      "alt_m": 2400,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "达古冰川观光车线（游客中心→金猴海→红军湖→泽娜措→达古湖→索道下站→4860观景台）"
+    },
+    {
+      "seq": 2,
+      "name": "金猴海（金猴海站）",
+      "lat": 32.2524,
+      "lng": 102.87933,
+      "alt_m": 2800,
+      "km": 12,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "达古冰川观光车线（游客中心→金猴海→红军湖→泽娜措→达古湖→索道下站→4860观景台）"
+    },
+    {
+      "seq": 3,
+      "name": "红军湖",
+      "lat": 32.25052,
+      "lng": 102.87658,
+      "alt_m": 2900,
+      "km": 14.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "达古冰川观光车线（游客中心→金猴海→红军湖→泽娜措→达古湖→索道下站→4860观景台）"
+    },
+    {
+      "seq": 4,
+      "name": "泽娜措（泽娜湖及瀑布）",
+      "lat": 32.24943,
+      "lng": 102.78881,
+      "alt_m": 3000,
+      "km": 17,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "达古冰川观光车线（游客中心→金猴海→红军湖→泽娜措→达古湖→索道下站→4860观景台）"
+    },
+    {
+      "seq": 5,
+      "name": "红军桥（上达古村）",
+      "lat": 32.26941,
+      "lng": 102.88017,
+      "alt_m": 3100,
+      "km": 20,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "达古冰川观光车线（游客中心→金猴海→红军湖→泽娜措→达古湖→索道下站→4860观景台）"
+    },
+    {
+      "seq": 6,
+      "name": "鸿运坡（神牛湖）",
+      "lat": 32.26451,
+      "lng": 102.8165,
+      "alt_m": 3150,
+      "km": 23,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "达古冰川观光车线（游客中心→金猴海→红军湖→泽娜措→达古湖→索道下站→4860观景台）"
+    },
+    {
+      "seq": 7,
+      "name": "达古湖（情人滩）",
+      "lat": 32.25998,
+      "lng": 102.80417,
+      "alt_m": 3200,
+      "km": 26,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "达古冰川观光车线（游客中心→金猴海→红军湖→泽娜措→达古湖→索道下站→4860观景台）"
+    },
+    {
+      "seq": 8,
+      "name": "洛格斯神山（白塔/经幡）",
+      "lat": 32.23865,
+      "lng": 102.78396,
+      "alt_m": 3250,
+      "km": 29,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "达古冰川观光车线（游客中心→金猴海→红军湖→泽娜措→达古湖→索道下站→4860观景台）"
+    },
+    {
+      "seq": 9,
+      "name": "索道下站（迎宾湖/神泉）",
+      "lat": 32.23845,
+      "lng": 102.78402,
+      "alt_m": 3200,
+      "km": 33,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "达古冰川观光车线（游客中心→金猴海→红军湖→泽娜措→达古湖→索道下站→4860观景台）"
+    },
+    {
+      "seq": 10,
+      "name": "4860冰川观景台（索道上站）",
+      "lat": 32.22018,
+      "lng": 102.75825,
+      "alt_m": 4860,
+      "km": 36,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "达古冰川观光车线（游客中心→金猴海→红军湖→泽娜措→达古湖→索道下站→4860观景台）"
+    }
+  ],
+  "sanaoxueshan": [
+    {
+      "seq": 1,
+      "name": "三奥雪山景区游客中心（登山口）",
+      "lat": 31.9512,
+      "lng": 102.8621,
+      "alt_m": 3700,
+      "km": 0,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "三奥雪山奥太娜登山线（大本营→奥太娜顶峰）"
+    },
+    {
+      "seq": 2,
+      "name": "雪山大本营（小木屋住宿点）",
+      "lat": 31.9538,
+      "lng": 102.8669,
+      "alt_m": 3700,
+      "km": 0.5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "三奥雪山奥太娜登山线（大本营→奥太娜顶峰）"
+    },
+    {
+      "seq": 3,
+      "name": "达尔神游步道入口",
+      "lat": 31.9551,
+      "lng": 102.8694,
+      "alt_m": 3700,
+      "km": 1,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "三奥雪山奥太娜登山线（大本营→奥太娜顶峰）"
+    },
+    {
+      "seq": 4,
+      "name": "高山草甸观景平台",
+      "lat": 31.9568,
+      "lng": 102.8726,
+      "alt_m": 3800,
+      "km": 1.8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "三奥雪山奥太娜登山线（大本营→奥太娜顶峰）"
+    },
+    {
+      "seq": 5,
+      "name": "原始森林段（冷杉云杉林）",
+      "lat": 31.9589,
+      "lng": 102.8741,
+      "alt_m": 3350,
+      "km": 3.2,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "三奥雪山奥太娜登山线（大本营→奥太娜顶峰）"
+    },
+    {
+      "seq": 6,
+      "name": "6号打卡点（之字形上坡段末）",
+      "lat": 31.9613,
+      "lng": 102.8678,
+      "alt_m": 3900,
+      "km": 5,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "三奥雪山奥太娜登山线（大本营→奥太娜顶峰）"
+    },
+    {
+      "seq": 7,
+      "name": "碎石坡雪脊观景处",
+      "lat": 31.9658,
+      "lng": 102.8521,
+      "alt_m": 4500,
+      "km": 8,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "三奥雪山奥太娜登山线（大本营→奥太娜顶峰）"
+    },
+    {
+      "seq": 8,
+      "name": "奥太娜顶峰",
+      "lat": 31.96858,
+      "lng": 102.83441,
+      "alt_m": 5210,
+      "km": 11,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "三奥雪山奥太娜登山线（大本营→奥太娜顶峰）"
+    }
+  ],
+  "shuangqiaogou": [
+    {
+      "seq": 1,
+      "name": "双桥沟游人中心（沟口检票站）",
+      "lat": 30.98179,
+      "lng": 102.7681,
+      "alt_m": 2900,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "双桥沟观光车 8 站线（沟口→红杉林，返程逐站下车）"
+    },
+    {
+      "seq": 2,
+      "name": "阴阳谷",
+      "lat": 30.9873,
+      "lng": 102.7905,
+      "alt_m": 3050,
+      "km": 4,
+      "unc": true,
+      "route_index": 0,
+      "route_name": "双桥沟观光车 8 站线（沟口→红杉林，返程逐站下车）"
+    },
+    {
+      "seq": 3,
+      "name": "人参果坪",
+      "lat": 31.06122,
+      "lng": 102.7863,
+      "alt_m": 3360,
+      "km": 9.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "双桥沟观光车 8 站线（沟口→红杉林，返程逐站下车）"
+    },
+    {
+      "seq": 4,
+      "name": "隆珠措",
+      "lat": 31.12897,
+      "lng": 102.76868,
+      "alt_m": 3400,
+      "km": 14,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "双桥沟观光车 8 站线（沟口→红杉林，返程逐站下车）"
+    },
+    {
+      "seq": 5,
+      "name": "撵鱼坝",
+      "lat": 31.14866,
+      "lng": 102.77031,
+      "alt_m": 3500,
+      "km": 18,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "双桥沟观光车 8 站线（沟口→红杉林，返程逐站下车）"
+    },
+    {
+      "seq": 6,
+      "name": "四姑娜措",
+      "lat": 31.18452,
+      "lng": 102.75584,
+      "alt_m": 3600,
+      "km": 22,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "双桥沟观光车 8 站线（沟口→红杉林，返程逐站下车）"
+    },
+    {
+      "seq": 7,
+      "name": "布达拉峰",
+      "lat": 31.20629,
+      "lng": 102.764,
+      "alt_m": 3700,
+      "km": 26,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "双桥沟观光车 8 站线（沟口→红杉林，返程逐站下车）"
+    },
+    {
+      "seq": 8,
+      "name": "珠噶纳措",
+      "lat": 31.21586,
+      "lng": 102.76942,
+      "alt_m": 3750,
+      "km": 29,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "双桥沟观光车 8 站线（沟口→红杉林，返程逐站下车）"
+    },
+    {
+      "seq": 9,
+      "name": "红杉林（观光车终点站，沟尾）",
+      "lat": 31.24462,
+      "lng": 102.78227,
+      "alt_m": 3800,
+      "km": 34,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "双桥沟观光车 8 站线（沟口→红杉林，返程逐站下车）"
+    }
+  ],
+  "guangwushan": [
+    {
+      "seq": 1,
+      "name": "铁炉坝游客中心",
+      "lat": 32.69845,
+      "lng": 106.83122,
+      "alt_m": 850,
+      "km": 0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "燕子岭红叶环线"
+    },
+    {
+      "seq": 2,
+      "name": "索道下站",
+      "lat": 32.70112,
+      "lng": 106.83645,
+      "alt_m": 1120,
+      "km": 2.2,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "燕子岭红叶环线"
+    },
+    {
+      "seq": 3,
+      "name": "燕子岩观景台",
+      "lat": 32.70425,
+      "lng": 106.84018,
+      "alt_m": 1850,
+      "km": 4.8,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "燕子岭红叶环线"
+    },
+    {
+      "seq": 4,
+      "name": "云天飞燕栈道",
+      "lat": 32.70588,
+      "lng": 106.84155,
+      "alt_m": 2180,
+      "km": 6.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "燕子岭红叶环线"
+    },
+    {
+      "seq": 5,
+      "name": "燕子岭顶峰",
+      "lat": 32.70715,
+      "lng": 106.84362,
+      "alt_m": 2507,
+      "km": 8.0,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "燕子岭红叶环线"
+    },
+    {
+      "seq": 6,
+      "name": "樱桃峡出口",
+      "lat": 32.70288,
+      "lng": 106.83515,
+      "alt_m": 1600,
+      "km": 9.5,
+      "unc": false,
+      "route_index": 0,
+      "route_name": "燕子岭红叶环线"
+    }
+  ]
+}
