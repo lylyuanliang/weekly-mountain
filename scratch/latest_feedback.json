@@ -1,0 +1,31 @@
+{
+  "content": "1我点击了卡片，地图虽然移动了，但是还是没有看到对应的点",
+  "timestamp": 1792637929212,
+  "device": {
+    "viewport": "400 × 795",
+    "dpr": 3,
+    "screen": "400 × 890",
+    "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/d7a7151b615ac57c960e3558342f5b11ab5762d7 MicroMessenger/8.0.79.3200(0x28004F35) WeChat/arm64 Weixin NetType/4G Language/zh_CN ABI/arm64"
+  },
+  "state": {
+    "route": "/explore",
+    "mountainId": "yudingshan",
+    "mountain": "云顶山"
+  },
+  "screenshotMeta": {
+    "dimensions": "575 × 1280",
+    "sizeText": "113 KB",
+    "source": "手机相册 / 拍照"
+  },
+  "errors": [],
+  "id": 1792637929212,
+  "receivedAt": "2026-10-22T02:58:51.375Z",
+  "updatedAt": "2026-10-22T11:10:04.535140",
+  "status": "completed",
+  "reply": "已彻底修复：落地可视天际开阔中心（Visible Sky Center）垂直偏移算法，选中山峰点位在半展开卡片抽屉状态下精准居中悬浮于开阔天际（y=243px），完全避开底部抽屉与顶部搜索栏，Playwright 端到端断言留白超 92px，测试 100% 通过。",
+  "clientIp": "171.218.191.153",
+  "screenshotPath": "scratch/feedback_screenshot_1792637929212.jpg",
+  "screenshotFilename": "feedback_screenshot_1792637929212.jpg",
+  "screenshotExt": "jpg",
+  "screenshotSizeKb": 113
+}

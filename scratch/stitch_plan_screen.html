@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>每周一山 · 周计划与成就统计</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS Play CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed": "#6ffbbe",
+            "tertiary-fixed": "#ffddb8",
+            "primary": "#4edea3",
+            "on-secondary": "#003640",
+            "surface": "#0f131c",
+            "on-surface-variant": "#bbcabf",
+            "on-primary": "#003824",
+            "surface-container-low": "#181b25",
+            "on-primary-fixed-variant": "#005236",
+            "on-primary-fixed": "#002113",
+            "on-primary-container": "#00422b",
+            "primary-container": "#10b981",
+            "on-background": "#dfe2ef",
+            "surface-dim": "#0f131c",
+            "tertiary-fixed-dim": "#ffb95f",
+            "tertiary": "#ffb95f",
+            "on-secondary-fixed-variant": "#004e5c",
+            "inverse-primary": "#006c49",
+            "secondary": "#4cd7f6",
+            "secondary-container": "#03b5d3",
+            "surface-tint": "#4edea3",
+            "on-secondary-fixed": "#001f26",
+            "surface-bright": "#353943",
+            "on-surface": "#dfe2ef",
+            "on-error-container": "#ffdad6",
+            "surface-variant": "#31353f",
+            "on-tertiary-fixed": "#2a1700",
+            "inverse-surface": "#dfe2ef",
+            "inverse-on-surface": "#2c303a",
+            "surface-container": "#1c1f29",
+            "on-secondary-container": "#00424e",
+            "secondary-fixed-dim": "#4cd7f6",
+            "primary-fixed-dim": "#4edea3",
+            "outline-variant": "#3c4a42",
+            "outline": "#86948a",
+            "error": "#ffb4ab",
+            "tertiary-container": "#e29100",
+            "error-container": "#93000a",
+            "background": "#0f131c",
+            "on-error": "#690005",
+            "on-tertiary-container": "#523200",
+            "on-tertiary-fixed-variant": "#653e00",
+            "surface-container-highest": "#31353f",
+            "on-tertiary": "#472a00",
+            "surface-container-lowest": "#0a0e17",
+            "secondary-fixed": "#acedff",
+            "surface-container-high": "#262a34"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1.25rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "margin-tablet": "2rem",
+            "space-xl": "2rem",
+            "space-md": "0.875rem",
+            "space-lg": "1.25rem",
+            "gutter-tablet": "1.5rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-xl": ["Plus Jakarta Sans"],
+            "label-data-sm": ["JetBrains Mono"],
+            "label-data-lg": ["JetBrains Mono"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "caption": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "label-data-md": ["JetBrains Mono"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "label-data-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "label-data-lg": ["22px", { "lineHeight": "26px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "caption": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.025em", "fontWeight": "800" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-data-md": ["14px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+            "headline-lg": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1;
+    }
+    /* Subtle alpine glow effects */
+    .glow-primary {
+      box-shadow: 0 0 24px -4px rgba(16, 185, 129, 0.28);
+    }
+    .glow-secondary {
+      box-shadow: 0 0 24px -4px rgba(6, 182, 212, 0.25);
+    }
+    .glow-tertiary {
+      box-shadow: 0 0 20px -4px rgba(255, 185, 95, 0.25);
+    }
+    /* Hide scrollbars for crisp native feel */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest text-on-surface antialiased min-h-screen flex justify-center selection:bg-primary-container selection:text-on-primary">
+<!-- Mobile Device Viewport Container (390px max-width) -->
+<div class="w-full max-w-[390px] min-h-screen bg-background relative flex flex-col pb-28 border-x border-white/5 shadow-2xl overflow-x-hidden">
+<!-- Top App Bar (Shared Component Reference Style) -->
+<header class="sticky top-0 z-40 w-full bg-surface-container-low/80 backdrop-blur-md border-b border-outline-variant/30">
+<div class="flex justify-between items-center w-full px-space-lg py-space-sm">
+<div class="flex items-center gap-space-sm">
+<button aria-label="返回" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<span class="font-headline-md text-[16px] leading-[22px] font-bold tracking-tight text-on-surface">周计划与成就 · 成都</span>
+<span class="font-label-data-sm text-[10px] text-primary tracking-wider uppercase">Weekly Mountain 2025</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary active:scale-95 transition-colors" title="数据同步">
+<span class="material-symbols-outlined text-[19px]" data-icon="cloud_sync">cloud_sync</span>
+</button>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary active:scale-95 transition-colors" title="分享">
+<span class="material-symbols-outlined text-[19px]" data-icon="share">share</span>
+</button>
+</div>
+</div>
+<!-- Segmented Top Pill Switcher -->
+<div class="px-space-lg pb-space-sm">
+<div class="grid grid-cols-3 p-1 bg-surface-container-lowest/80 rounded-full border border-white/5 backdrop-blur-md">
+<button class="py-1.5 px-2 text-center rounded-full bg-primary/15 border border-primary/30 text-primary font-body-md text-[12px] font-bold shadow-sm transition-all flex items-center justify-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+            周计划
+          </button>
+<button class="py-1.5 px-2 text-center rounded-full text-on-surface-variant hover:text-on-surface font-body-md text-[12px] transition-colors flex items-center justify-center">
+            路线精选
+          </button>
+<button class="py-1.5 px-2 text-center rounded-full text-on-surface-variant hover:text-on-surface font-body-md text-[12px] transition-colors flex items-center justify-center">
+            成就统计
+          </button>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Canvas Content -->
+<main class="flex-1 px-space-lg pt-space-md space-y-space-xl">
+<!-- SECTION 1: 2025 赛季计划概览 Banner (Bento Glass Card) -->
+<section class="relative rounded-3xl bg-surface-container/70 border border-white/10 p-space-lg backdrop-blur-xl overflow-hidden glow-primary">
+<!-- Ambient radial background glow -->
+<div class="absolute -top-12 -right-12 w-44 h-44 bg-primary/15 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-10 -left-10 w-36 h-36 bg-secondary/15 rounded-full blur-2xl pointer-events-none"></div>
+<div class="relative z-10 space-y-4">
+<!-- Top Badge & Season Title -->
+<div class="flex items-start justify-between">
+<div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-primary font-label-data-sm text-[10px] mb-1.5">
+<span class="material-symbols-outlined text-[13px] fill" data-icon="stars">stars</span>
+                2025 成都山岳远征季
+              </div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface tracking-tight">
+                年度已完成 <span class="text-primary font-label-data-lg text-[28px] font-bold">3</span><span class="text-on-surface-variant text-[16px]">/50 座</span>
+</h2>
+</div>
+<!-- Circular Progress Mini Widget -->
+<div class="relative w-14 h-14 flex items-center justify-center">
+<svg class="w-14 h-14 transform -rotate-90" viewbox="0 0 48 48">
+<circle cx="24" cy="24" fill="none" r="19" stroke="rgba(255,255,255,0.08)" stroke-width="3.5"></circle>
+<circle class="drop-shadow-[0_0_6px_rgba(16,185,129,0.7)]" cx="24" cy="24" fill="none" r="19" stroke="#10b981" stroke-dasharray="120" stroke-dashoffset="112" stroke-linecap="round" stroke-width="3.5"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="font-label-data-sm text-[11px] font-bold text-primary">6%</span>
+</div>
+</div>
+</div>
+<!-- Progress Bars / Metric Strip -->
+<div class="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-surface-container-lowest/60 border border-white/5 backdrop-blur-md">
+<div class="flex flex-col">
+<span class="font-label-data-sm text-[10px] text-on-surface-variant flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px] text-primary" data-icon="altitude">altitude</span> 累计爬升
+              </span>
+<span class="font-label-data-lg text-[17px] font-bold text-on-surface mt-0.5">+2,400<span class="text-[10px] text-on-surface-variant ml-0.5 font-normal">m</span></span>
+</div>
+<div class="flex flex-col border-x border-white/5 px-2">
+<span class="font-label-data-sm text-[10px] text-on-surface-variant flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px] text-secondary" data-icon="distance">distance</span> 徒步里程
+              </span>
+<span class="font-label-data-lg text-[17px] font-bold text-on-surface mt-0.5">48.6<span class="text-[10px] text-on-surface-variant ml-0.5 font-normal">km</span></span>
+</div>
+<div class="flex flex-col pl-1">
+<span class="font-label-data-sm text-[10px] text-on-surface-variant flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px] text-tertiary" data-icon="pace">pace</span> 平均配速
+              </span>
+<span class="font-label-data-lg text-[17px] font-bold text-on-surface mt-0.5">18<span class="text-[10px] text-on-surface-variant ml-0.5 font-normal">m/k</span></span>
+</div>
+</div>
+<!-- Quick Action Buttons -->
+<div class="grid grid-cols-2 gap-2 pt-1">
+<button class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-gradient-to-r from-primary-container to-secondary text-surface-container-lowest font-body-md text-[13px] font-bold active:scale-95 transition-all shadow-[0_0_18px_rgba(16,185,129,0.35)]">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+              新建周计划
+            </button>
+<button class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-surface-container-high/60 border border-white/10 text-on-surface font-body-md text-[13px] font-medium hover:border-primary/40 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[17px] text-secondary" data-icon="auto_awesome">auto_awesome</span>
+              套用官方精选
+            </button>
+</div>
+</div>
+</section>
+<!-- SECTION 2: 周计划时间轴卡片 (Weekly Timeline) -->
+<section class="space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-4 rounded-full bg-primary"></span>
+<h3 class="font-headline-md text-[18px] font-bold text-on-surface">3月排期时间轴</h3>
+</div>
+<span class="font-label-data-sm text-[11px] text-primary flex items-center gap-0.5">
+            连续打卡第 2 周 <span class="material-symbols-outlined text-[14px]" data-icon="local_fire_department">local_fire_department</span>
+</span>
+</div>
+<!-- Timeline Container -->
+<div class="relative pl-3 space-y-space-lg before:content-[''] before:absolute before:left-[11px] before:top-3 before:bottom-3 before:w-[1.5px] before:bg-gradient-to-b before:from-primary before:via-secondary before:to-outline-variant/40">
+<!-- Card 1: 已完成 (W1 - 赵公山) -->
+<div class="relative pl-6">
+<!-- Timeline Node Indicator -->
+<div class="absolute -left-[5px] top-4 w-5 h-5 rounded-full bg-surface-container-lowest border-2 border-primary flex items-center justify-center shadow-[0_0_8px_rgba(16,185,129,0.8)] z-10">
+<span class="material-symbols-outlined text-[12px] text-primary font-bold" data-icon="check">check</span>
+</div>
+<!-- Card Body -->
+<div class="rounded-2xl bg-surface-container/60 border border-white/10 p-3.5 backdrop-blur-xl space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-label-data-sm text-[11px] font-semibold text-on-surface-variant">第 1 周 · 川西初探</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/25 text-primary font-label-data-sm text-[10px]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span> 已完成 · 03.02
+                </span>
+</div>
+<!-- Main Mountain Row -->
+<div class="flex gap-3 items-center">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 relative border border-white/10">
+<img class="w-full h-full object-cover" data-alt="A lush emerald green pine mountain ridge cloaked in morning mist in western Sichuan, with dramatic moss-covered stone trekking trails winding through the deep dense alpine forest under soft dramatic moody lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBand9sHfNMx_fTymi7V8Qe-VAraqDuqOv-BpfDmIUi4h59aWAPJY1ZblkfqXBrxGun6IAfVriPd9thFcbABqlwmH2IAl8f4vdIOP0pysPo9V-MZup2jhBbwEKpsk3dBghSZwKAwSjUH7rWvVSIFquNzE2iztP__eNOH48aq5og8ucKp_G5ygCcwqzMPU-aFQl4gbsf1cVWS0ZJoRb364vhDGKRAunlkEKTkbwL5hhO1qlPDPyPoDoETJQLXNIn961GeYY75aOHiwk"/>
+<div class="absolute bottom-0 inset-x-0 bg-surface-container-lowest/80 text-center font-label-data-sm text-[9px] text-on-surface py-0.5">2434m</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-md text-[15px] font-bold text-on-surface truncate">赵公山 · 西线森林穿越</h4>
+<span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-label-data-sm text-[10px] shrink-0">L1 森林氧吧</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant truncate mt-0.5">青城山最高峰 · 幽静古道石板路</p>
+<div class="flex items-center gap-2 mt-1.5 text-on-surface-variant font-label-data-sm text-[10px]">
+<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px] text-primary" data-icon="trending_up">trending_up</span>+950m</span>
+<span>·</span>
+<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px] text-secondary" data-icon="directions_car">directions_car</span>1.5h</span>
+<span>·</span>
+<span>11.4km</span>
+</div>
+</div>
+</div>
+<!-- Completed Summary Footer -->
+<div class="pt-2 border-t border-white/5 flex items-center justify-between text-on-surface-variant font-label-data-sm text-[10px]">
+<span class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[13px] fill" data-icon="verified">verified</span> 轨迹审核通过
+                </span>
+<span>用时 5.2h · 消耗 1,420 kcal</span>
+</div>
+</div>
+</div>
+<!-- Card 2: 进行中 (W2 - 牛背山 · 本周) -->
+<div class="relative pl-6">
+<!-- Timeline Node Indicator Active Cyan -->
+<div class="absolute -left-[5px] top-4 w-5 h-5 rounded-full bg-secondary-container border-2 border-secondary flex items-center justify-center glow-secondary z-10 animate-pulse">
+<span class="w-2 h-2 rounded-full bg-on-secondary"></span>
+</div>
+<!-- Card Body with Glacial Cyan Edge -->
+<div class="rounded-2xl bg-surface-container/85 border border-secondary/30 p-3.5 backdrop-blur-xl space-y-3 relative glow-secondary">
+<!-- Top Live Status -->
+<div class="flex items-center justify-between">
+<span class="font-label-data-sm text-[11px] font-bold text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span> 第 2 周 · 绝美云海 (本周)
+                </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary/15 border border-secondary/30 text-secondary font-label-data-sm text-[10px]">
+                  待出征 · 03.08 周六
+                </span>
+</div>
+<!-- Main Mountain Row -->
+<div class="flex gap-3 items-center">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 relative border border-secondary/30">
+<img class="w-full h-full object-cover" data-alt="A breathtaking panoramic sea of clouds rolling beneath a jagged high-altitude mountain peak in western Sichuan during early sunrise. Warm golden alpine light catches frosted rocks and cold cyan glacial shadows, creating deep atmospheric wilderness depth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFMiNFJq6rPpc8Ie0mkKRI67MOzTCAFaAfgcmZvd-tGEQAZoySiP4uymdlM_ughWT6TUH51i7Ws6gqg19dBqWRowvkio_S0dXxXXnhD8Pt4mBna_rBY1XeF_GFHnfR9Wp9s1hDaj7LXszxMIGHiLwKMvLzmyHXfyxMatWMo5E5KBp2wUibMiRNrzn9S6JZ5yVtH0JFvvQHoB3kPdHnhQCetbG2YydlJ_up8lAh3NbAbpWn7fQyI8ywbs-CaO8UBFCNt5SaYx3PY2U"/>
+<div class="absolute bottom-0 inset-x-0 bg-surface-container-lowest/80 text-center font-label-data-sm text-[9px] text-secondary py-0.5">3666m</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-md text-[15px] font-bold text-on-surface truncate">牛背山 · 360° 云海绝景</h4>
+<span class="px-1.5 py-0.5 rounded bg-secondary/10 text-secondary font-label-data-sm text-[10px] shrink-0">L2 进阶观景</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant truncate mt-0.5">川西亚洲最大 360 度观景平台</p>
+<div class="flex items-center gap-2 mt-1.5 text-on-surface-variant font-label-data-sm text-[10px]">
+<span class="flex items-center gap-0.5 text-primary"><span class="material-symbols-outlined text-[12px]" data-icon="trending_up">trending_up</span>+1000m</span>
+<span>·</span>
+<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px]" data-icon="directions_car">directions_car</span>4.5h</span>
+<span>·</span>
+<span class="text-tertiary">天气晴好 -2°C</span>
+</div>
+</div>
+</div>
+<!-- Live Logistics Chips Grid -->
+<div class="grid grid-cols-2 gap-1.5 pt-1">
+<div class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-surface-container-lowest/70 border border-white/5 text-[11px] text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-secondary" data-icon="download_for_offline">download_for_offline</span>
+<span class="truncate">离线 GPX 轨迹已备好</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-surface-container-lowest/70 border border-white/5 text-[11px] text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="group">group</span>
+<span class="truncate">同伴 3 人已组队</span>
+</div>
+</div>
+<!-- Interactive Action Buttons -->
+<div class="flex items-center gap-2 pt-1 border-t border-white/5">
+<button class="flex-1 py-1.5 rounded-xl bg-secondary/20 hover:bg-secondary/30 text-secondary border border-secondary/40 font-body-md text-[12px] font-semibold active:scale-95 transition-all text-center">
+                  查看路书
+                </button>
+<button class="flex-1 py-1.5 rounded-xl bg-primary text-on-primary font-body-md text-[12px] font-bold active:scale-95 transition-all text-center shadow-[0_0_12px_rgba(16,185,129,0.4)]">
+                  打卡确认
+                </button>
+<button class="p-1.5 rounded-xl bg-surface-container-high/60 border border-white/10 text-on-surface-variant hover:text-on-surface active:scale-95 transition-all" title="更换路线">
+<span class="material-symbols-outlined text-[16px]" data-icon="swap_horiz">swap_horiz</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3: 规划中 (W3 - 四姑娘山大峰) -->
+<div class="relative pl-6">
+<!-- Timeline Node Indicator Amber -->
+<div class="absolute -left-[5px] top-4 w-5 h-5 rounded-full bg-surface-container-lowest border-2 border-tertiary flex items-center justify-center glow-tertiary z-10">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+</div>
+<!-- Card Body -->
+<div class="rounded-2xl bg-surface-container/60 border border-white/10 p-3.5 backdrop-blur-xl space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-label-data-sm text-[11px] font-semibold text-on-surface-variant">第 3 周 · 高原巅峰挑战</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary/10 border border-tertiary/25 text-tertiary font-label-data-sm text-[10px]">
+                  预定 03.15 · 极高山
+                </span>
+</div>
+<!-- Main Mountain Row -->
+<div class="flex gap-3 items-center">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 relative border border-white/10">
+<img class="w-full h-full object-cover" data-alt="A stark magnificent snow-draped jagged peak of Mount Siguniang summit piercing an obsidian dark blue sky. Extreme high-altitude alpine terrain with wind-sculpted snow ridges and crisp alpine ice reflections under dramatic high-contrast light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAutE0MRB4c1gfvH14usRp6lSQz0R09KzovE6AadwYIwrIWYuYzGZQradZjYToySvP-N7w-MPqncsCBs9pJGT7MrG4SmZnG_qyrfnov3KqyI_OrQ-CP5cLTCs9ur_hqe7n2-vAZnuCCSS4mN2xspdlozQr3ejp-8vKd4J_N8qbzDZDWt5mTj0YKW9fnTrE8uRNBcVMN7G5ze_k0xCMN1xzAP-euT2DvbV-ohFf4HV4HSc5WRgv0qtjThg9YyGYEjKPzbLq4lZ1Vy0"/>
+<div class="absolute bottom-0 inset-x-0 bg-surface-container-lowest/80 text-center font-label-data-sm text-[9px] text-tertiary py-0.5">5025m</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="font-headline-md text-[15px] font-bold text-on-surface truncate">四姑娘山 · 大峰冲顶</h4>
+<span class="px-1.5 py-0.5 rounded bg-tertiary/10 text-tertiary font-label-data-sm text-[10px] shrink-0">L3 高原挑战</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant truncate mt-0.5">人生第一座 5000 米级雪山冲顶</p>
+<div class="flex items-center gap-2 mt-1.5 text-on-surface-variant font-label-data-sm text-[10px]">
+<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px] text-primary" data-icon="trending_up">trending_up</span>+1200m</span>
+<span>·</span>
+<span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px] text-secondary" data-icon="directions_car">directions_car</span>4.2h</span>
+<span>·</span>
+<span class="text-tertiary">需冰爪与雪套</span>
+</div>
+</div>
+</div>
+<!-- Action Pills -->
+<div class="pt-2 border-t border-white/5 flex items-center gap-2">
+<button class="flex-1 py-1.5 rounded-xl bg-surface-container-high/70 border border-white/10 text-on-surface font-body-md text-[11px] font-medium flex items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="checklist">checklist</span>
+                  一键装备清单
+                </button>
+<button class="flex-1 py-1.5 rounded-xl bg-surface-container-high/70 border border-white/10 text-on-surface font-body-md text-[11px] font-medium flex items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[14px] text-secondary" data-icon="event">event</span>
+                  加入日历提醒
+                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: 官方精选推荐路线 (Official Presets Carousel Cards) -->
+<section class="space-y-space-md">
+<div class="flex items-center justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-4 rounded-full bg-secondary"></span>
+<h3 class="font-headline-md text-[18px] font-bold text-on-surface">官方推荐周计划</h3>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">资深领队调优难度梯度，循序渐进</p>
+</div>
+<button class="font-label-data-sm text-[11px] text-primary flex items-center gap-0.5 hover:underline">
+            全部方案 <span class="material-symbols-outlined text-[13px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Presets Horizontal Carousel / Stack -->
+<div class="space-y-3">
+<!-- Preset 1 -->
+<div class="p-3.5 rounded-2xl bg-surface-container/60 border border-white/10 backdrop-blur-xl flex items-center justify-between gap-3 hover:border-primary/30 transition-all">
+<div class="space-y-1.5 flex-1 min-w-0">
+<div class="flex items-center gap-2">
+<h4 class="font-headline-md text-[14px] font-bold text-on-surface truncate">新手休闲 4 周入门</h4>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-primary font-label-data-sm text-[9px] shrink-0">轻松轻徒步</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant truncate">4周 · 4座峰 · 平均爬升500m · 适合全家初体验</p>
+<div class="flex items-center gap-1 text-[10px] font-label-data-sm text-outline">
+<span>包含: 赵公山西线 / 葛仙山 / 丹景台 / 白石寺</span>
+</div>
+</div>
+<button class="shrink-0 px-3 py-1.5 rounded-xl bg-primary text-on-primary font-body-md text-[12px] font-bold active:scale-95 transition-all shadow-sm">
+              套用
+            </button>
+</div>
+<!-- Preset 2 -->
+<div class="p-3.5 rounded-2xl bg-surface-container/60 border border-white/10 backdrop-blur-xl flex items-center justify-between gap-3 hover:border-secondary/30 transition-all">
+<div class="space-y-1.5 flex-1 min-w-0">
+<div class="flex items-center gap-2">
+<h4 class="font-headline-md text-[14px] font-bold text-on-surface truncate">川西云海日出专项</h4>
+<span class="px-2 py-0.5 rounded-full bg-secondary/10 border border-secondary/20 text-secondary font-label-data-sm text-[9px] shrink-0">云海概率85%+</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant truncate">3周 · 牛背山 / 达瓦更扎 / 雷洞坪 · 360°摄影</p>
+<div class="flex items-center gap-1 text-[10px] font-label-data-sm text-outline">
+<span>包含: 营地星空 / 贡嘎群峰日照金山</span>
+</div>
+</div>
+<button class="shrink-0 px-3 py-1.5 rounded-xl bg-secondary/20 border border-secondary/30 text-secondary font-body-md text-[12px] font-bold active:scale-95 transition-all">
+              套用
+            </button>
+</div>
+<!-- Preset 3 -->
+<div class="p-3.5 rounded-2xl bg-surface-container/60 border border-white/10 backdrop-blur-xl flex items-center justify-between gap-3 hover:border-tertiary/30 transition-all">
+<div class="space-y-1.5 flex-1 min-w-0">
+<div class="flex items-center gap-2">
+<h4 class="font-headline-md text-[14px] font-bold text-on-surface truncate">5000米极高山冲顶进阶</h4>
+<span class="px-2 py-0.5 rounded-full bg-tertiary/10 border border-tertiary/20 text-tertiary font-label-data-sm text-[9px] shrink-0">高阶体能拉练</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant truncate">6周递进式体能爬升 · 终极四姑娘山大峰登顶</p>
+<div class="flex items-center gap-1 text-[10px] font-label-data-sm text-outline">
+<span>包含: 海拔渐进适应 + 冰雪装备行进训练</span>
+</div>
+</div>
+<button class="shrink-0 px-3 py-1.5 rounded-xl bg-surface-container-high/80 border border-white/10 text-on-surface font-body-md text-[12px] font-medium active:scale-95 transition-all">
+              套用
+            </button>
+</div>
+</div>
+</section>
+<!-- SECTION 4: 成就与分类雷达统计 (Telemetry & Grid) -->
+<section class="space-y-space-md">
+<div class="flex items-center justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-4 rounded-full bg-tertiary"></span>
+<h3 class="font-headline-md text-[18px] font-bold text-on-surface">成就统计与分类收集</h3>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">50座成都周边峰线分类打卡进度</p>
+</div>
+<span class="font-label-data-sm text-[11px] text-primary">总完成 24%</span>
+</div>
+<!-- Telemetry Bento Grid -->
+<div class="grid grid-cols-2 gap-3">
+<!-- Total Progress Circular Widget -->
+<div class="p-3.5 rounded-2xl bg-surface-container/70 border border-white/10 backdrop-blur-xl flex flex-col items-center justify-center text-center space-y-2">
+<div class="relative w-20 h-20 flex items-center justify-center">
+<svg class="w-20 h-20 transform -rotate-90" viewbox="0 0 64 64">
+<circle cx="32" cy="32" fill="none" r="26" stroke="rgba(255,255,255,0.08)" stroke-width="5"></circle>
+<circle class="drop-shadow-[0_0_8px_rgba(78,222,163,0.6)]" cx="32" cy="32" fill="none" r="26" stroke="#4edea3" stroke-dasharray="163" stroke-dashoffset="124" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="font-label-data-lg text-[18px] font-bold text-primary">12</span>
+<span class="font-label-data-sm text-[9px] text-on-surface-variant -mt-1">/ 50 座</span>
+</div>
+</div>
+<div>
+<div class="font-headline-md text-[13px] font-bold text-on-surface">峰线探索总进度</div>
+<div class="font-label-data-sm text-[10px] text-primary mt-0.5">解锁黄金徽章 · 3 枚</div>
+</div>
+</div>
+<!-- Difficulty Breakdown Pills -->
+<div class="p-3.5 rounded-2xl bg-surface-container/70 border border-white/10 backdrop-blur-xl flex flex-col justify-between space-y-2">
+<div class="font-label-data-sm text-[11px] text-on-surface-variant flex items-center justify-between">
+<span>难度梯队分布</span>
+<span class="text-primary">4 级</span>
+</div>
+<div class="space-y-1.5 font-label-data-sm text-[10px]">
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1 text-primary"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span>L1 休闲</span>
+<span class="font-semibold text-on-surface">5 / 15</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1 text-secondary"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>L2 进阶</span>
+<span class="font-semibold text-on-surface">4 / 18</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1 text-tertiary"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>L3 挑战</span>
+<span class="font-semibold text-on-surface">2 / 12</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1 text-error"><span class="w-1.5 h-1.5 rounded-full bg-error"></span>L4 极限</span>
+<span class="font-semibold text-on-surface">1 / 5</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Landscape Category Progress Strips -->
+<div class="p-4 rounded-2xl bg-surface-container/70 border border-white/10 backdrop-blur-xl space-y-3">
+<div class="font-label-data-sm text-[11px] font-semibold text-on-surface flex items-center justify-between">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-secondary" data-icon="category">category</span>
+              地貌景观分类勋章
+            </span>
+<span class="text-on-surface-variant text-[10px]">已达成 3 类</span>
+</div>
+<div class="space-y-2.5">
+<!-- Category 1 -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-data-sm text-[11px]">
+<span class="text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-secondary" data-icon="cloud">cloud</span> 云海日出
+                </span>
+<span class="text-secondary font-semibold">6 / 12 <span class="text-on-surface-variant font-normal">(50%)</span></span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 50%;"></div>
+</div>
+</div>
+<!-- Category 2 -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-data-sm text-[11px]">
+<span class="text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-primary" data-icon="ac_unit">ac_unit</span> 雪山远眺
+                </span>
+<span class="text-primary font-semibold">3 / 10 <span class="text-on-surface-variant font-normal">(30%)</span></span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 30%;"></div>
+</div>
+</div>
+<!-- Category 3 -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-data-sm text-[11px]">
+<span class="text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-primary-fixed" data-icon="forest">forest</span> 森林瀑布
+                </span>
+<span class="text-primary-fixed font-semibold">5 / 8 <span class="text-on-surface-variant font-normal">(62%)</span></span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-primary-fixed rounded-full" style="width: 62%;"></div>
+</div>
+</div>
+<!-- Category 4 -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-data-sm text-[11px]">
+<span class="text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-tertiary" data-icon="park">park</span> 红叶彩林
+                </span>
+<span class="text-tertiary font-semibold">2 / 7 <span class="text-on-surface-variant font-normal">(28%)</span></span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 28%;"></div>
+</div>
+</div>
+<!-- Category 5 -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-data-sm text-[11px]">
+<span class="text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-on-surface-variant" data-icon="temple_buddhist">temple_buddhist</span> 古道人文
+                </span>
+<span class="text-on-surface-variant font-semibold">4 / 9 <span class="font-normal">(44%)</span></span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-outline rounded-full" style="width: 44%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Data Action Bar -->
+<div class="p-3 rounded-2xl bg-surface-container-low/70 border border-white/5 flex items-center justify-between gap-2">
+<button class="flex-1 py-2 px-2 rounded-xl bg-surface-container-high/60 border border-white/10 hover:border-primary/40 font-body-sm text-[11px] text-on-surface flex items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="backup">backup</span>
+            云端备份
+          </button>
+<button class="flex-1 py-2 px-2 rounded-xl bg-surface-container-high/60 border border-white/10 hover:border-secondary/40 font-body-sm text-[11px] text-on-surface flex items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[14px] text-secondary" data-icon="file_download">file_download</span>
+            导出综合 GPX
+          </button>
+<button class="flex-1 py-2 px-2 rounded-xl bg-surface-container-high/60 border border-white/10 hover:border-tertiary/40 font-body-sm text-[11px] text-on-surface flex items-center justify-center gap-1 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[14px] text-tertiary" data-icon="ios_share">ios_share</span>
+            分享长图
+          </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Shared Component Strict Compliance) -->
+<!-- JSON Blueprint: destinations: ["山单", "周计划", "推荐", "成就"], icons: ["terrain", "calendar_today", "kid_star", "military_tech"] -->
+<!-- Active Destination Determined: "周计划" (Index 1) -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto w-full z-50 flex justify-around items-center px-space-md py-space-xs pb-space-md bg-surface-container-high/90 dark:bg-surface-container-high/90 backdrop-blur-xl rounded-t-xl shadow-lg border-t border-outline-variant/30">
+<!-- Tab 1: 山单 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant py-1 px-3 hover:text-primary dark:hover:text-primary transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="terrain">terrain</span>
+<span class="font-label-data-sm text-[11px] mt-0.5">山单</span>
+</a>
+<!-- Tab 2: 周计划 (ACTIVE -> matches current page intent) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary font-bold py-1 px-3 rounded-full bg-primary/10 active:scale-95 transition-transform duration-150 shadow-[0_0_12px_rgba(16,185,129,0.25)]" href="#">
+<span class="material-symbols-outlined text-[20px] fill" data-icon="calendar_today" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="font-label-data-sm text-[11px] mt-0.5">周计划</span>
+</a>
+<!-- Tab 3: 推荐 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant py-1 px-3 hover:text-primary dark:hover:text-primary transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="kid_star">kid_star</span>
+<span class="font-label-data-sm text-[11px] mt-0.5">推荐</span>
+</a>
+<!-- Tab 4: 成就 (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant py-1 px-3 hover:text-primary dark:hover:text-primary transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="military_tech">military_tech</span>
+<span class="font-label-data-sm text-[11px] mt-0.5">成就</span>
+</a>
+</nav>
+</div>
+</body></html>

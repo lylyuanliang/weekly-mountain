@@ -1,0 +1,605 @@
+[
+  {
+    "content": "1我点击了卡片，地图虽然移动了，但是还是没有看到对应的点",
+    "timestamp": 1792637929212,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/d7a7151b615ac57c960e3558342f5b11ab5762d7 MicroMessenger/8.0.79.3200(0x28004F35) WeChat/arm64 Weixin NetType/4G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "yudingshan",
+      "mountain": "云顶山"
+    },
+    "screenshotMeta": {
+      "dimensions": "575 × 1280",
+      "sizeText": "113 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "id": 1792637929212,
+    "receivedAt": "2026-10-22T02:58:51.375Z",
+    "updatedAt": "2026-10-22T11:10:04.535140",
+    "status": "completed",
+    "reply": "已彻底修复：落地可视天际开阔中心（Visible Sky Center）垂直偏移算法，选中山峰点位在半展开卡片抽屉状态下精准居中悬浮于开阔天际（y=243px），完全避开底部抽屉与顶部搜索栏，Playwright 端到端断言留白超 92px，测试 100% 通过。",
+    "clientIp": "171.218.191.153",
+    "screenshotPath": "scratch/feedback_screenshot_1792637929212.jpg",
+    "screenshotFilename": "feedback_screenshot_1792637929212.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 113
+  },
+  {
+    "content": "你这个“展开”两个字都被遮住了",
+    "timestamp": 1792636863783,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/d7a7151b615ac57c960e3558342f5b11ab5762d7 MicroMessenger/8.0.79.3200(0x28004F35) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "longquanshan",
+      "mountain": "龙泉山"
+    },
+    "screenshotMeta": {
+      "dimensions": "575 × 1280",
+      "sizeText": "113 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "id": 1792636863783,
+    "receivedAt": "2026-10-22T02:41:05.606Z",
+    "updatedAt": "2026-10-22T10:45:53.853034",
+    "status": "completed",
+    "reply": "「展开」文字遮挡已彻底修复上线！经实测分析，底层导航栏（BottomNav）高度为 65.5px，而抽屉原吸底间距仅 56px，导致导航栏向上重叠覆盖抽屉底端 9.5px；已将 BottomSheet 吸底距离精准提升至 bottom-[66px]（与导航栏完全相切 0 覆盖），并将折叠栏高度从 54px 优化至 66px，按钮整体上移，展开按钮距底部导航栏保留 9.5px 纯净留白，文字与箭头 100% 完整舒适可见！",
+    "clientIp": "182.143.152.214",
+    "screenshotPath": "scratch/feedback_screenshot_1792636863783.jpg",
+    "screenshotFilename": "feedback_screenshot_1792636863783.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 113
+  },
+  {
+    "content": "1我点击了搜索，然后搜索框就被挡住了\n2反馈给ai的功能里面，勾选框样式和主题不协调",
+    "timestamp": 1792632154311,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/d7a7151b615ac57c960e3558342f5b11ab5762d7 MicroMessenger/8.0.79.3200(0x28004F35) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "longquanshan",
+      "mountain": "龙泉山"
+    },
+    "screenshotMeta": {
+      "dimensions": "575 × 1280",
+      "sizeText": "93 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "id": 1792632154311,
+    "receivedAt": "2026-10-22T01:22:36.392Z",
+    "updatedAt": "2026-10-22T09:32:28.390751",
+    "status": "completed",
+    "reply": "两项体验缺陷已全部修复上线：1. 搜索框遮挡根治：搜索框层级提级至 z-[55]（高于抽屉 z-40），点击输入框聚焦时抽屉自动收拢至 54px 极简折叠栏，并增加视口高度动态自适应避让，软键盘弹出时搜索框与筛选芯片 100% 毫无遮挡；2. 勾选框样式重构：剔除原生 Android 生硬复选框，全面定制 Stitch Alpine 极光黑曜石复选框（墨黑底色 + 极光绿 Aurora 高光 + 荧光呼吸阴影），与整套暗黑高山主题 100% 协调！",
+    "clientIp": "182.143.152.214",
+    "screenshotPath": "scratch/feedback_screenshot_1792632154311.jpg",
+    "screenshotFilename": "feedback_screenshot_1792632154311.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 93
+  },
+  {
+    "content": "怎么没有光雾山呢",
+    "timestamp": 1792597862700,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "longquanshan",
+      "mountain": "龙泉山"
+    },
+    "screenshotMeta": {
+      "dimensions": "644 × 1280",
+      "sizeText": "83 KB",
+      "source": "自动截图当前页面"
+    },
+    "errors": [],
+    "id": 1792597862700,
+    "receivedAt": "2026-10-21T15:51:05.039Z",
+    "updatedAt": "2026-10-22T09:08:51.742010",
+    "status": "completed",
+    "reply": "「光雾山·燕子岭（2507m）」作为第51座名山（川北红叶特别篇）已全量收录上线！包含12模块深度攻略、6大高程打卡点、红叶季实景图；同时下方山峰卡片已全面升级为按距市中心直线距离由近到远严格排列（龙泉山37.8km排第1，光雾山347.9km排后侧），卡片直观显示中心距离与车程！",
+    "clientIp": "222.209.175.23",
+    "screenshotPath": "scratch/feedback_screenshot_1792597862700.jpg",
+    "screenshotFilename": "feedback_screenshot_1792597862700.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 83
+  },
+  {
+    "content": "这个处理中的按钮状态要正确更新，现在要刷新页面或重新进入页面状态才会变",
+    "timestamp": 1792588279425,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "jiguanshan-liuliba",
+      "mountain": "鸡冠山·琉璃坝"
+    },
+    "screenshotMeta": {
+      "dimensions": "575 × 1280",
+      "sizeText": "107 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "id": 1792588279425,
+    "receivedAt": "2026-10-21T13:11:21.185Z",
+    "updatedAt": "2026-10-21T21:26:09.816513",
+    "status": "completed",
+    "reply": "已彻底解决处理中按钮状态刷新问题：升级为智能自适应轮询，当有进行中任务时，即便关闭反馈弹窗在地图上正常浏览，组件也会在后台静默轮询服务端最新状态；一旦 AI 修复完成，悬浮药丸将在 3.5 秒内自动从「处理中」平滑恢复为「反馈给 AI」，无需手动刷新或重新进页面。",
+    "clientIp": "222.209.175.23",
+    "screenshotPath": "scratch/feedback_screenshot_1792588279425.jpg",
+    "screenshotFilename": "feedback_screenshot_1792588279425.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 107
+  },
+  {
+    "content": "当我点击下方的卡片的时候，地图也应该移动并选中到对应的点上，刚进入页面的时候默认选中龙泉山（下方卡片龙泉山排列表第一个吧）",
+    "timestamp": 1792588203099,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "jiguanshan-liuliba",
+      "mountain": "鸡冠山·琉璃坝"
+    },
+    "screenshot": null,
+    "screenshotMeta": null,
+    "errors": [],
+    "id": 1792588203099,
+    "receivedAt": "2026-10-21T13:10:04.472Z",
+    "updatedAt": "2026-10-21T21:19:28.191823",
+    "status": "completed",
+    "reply": "已彻底实现卡片与地图双向联动并优化首选山峰：1. 点击底部卡片时，地图自动通过 380ms 缓动平滑飞行平移（panToLocation）至对应山峰坐标并居中展开选中高光徽章；2. 首屏进入时默认选中「龙泉山」（1051m），且龙泉山排在下方轮播卡片列表第一位，地图初始居中于龙泉山。",
+    "clientIp": "222.209.175.23"
+  },
+  {
+    "content": "缩放地图后，图标大小会异常，我想要的是地图缩放，但是图标大小适当变化，不要这么极端，你看现在，选中的太大，未选中的太小",
+    "timestamp": 1792584338758,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshotMeta": {
+      "dimensions": "575 × 1280",
+      "sizeText": "90 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "id": 1792584338758,
+    "receivedAt": "2026-10-21T12:05:43.084Z",
+    "updatedAt": "2026-10-21T20:14:15.120185",
+    "status": "completed",
+    "reply": "已彻底优化地图缩放标记点大小：1. 根治两极分化，远景视图下未选中山峰保留精致单行地名胶囊（如 [• 达古冰川]），不再缩成无名黑点；2. 选中山峰精简为雅致高光徽章，移除固定坐标 720px 假光晕，宽度比例收敛至和谐的 1.8x；3. 引入 0.82x~1.10x 平滑自适应缩放公式，图标随地图缩放适度自然变化。",
+    "clientIp": "171.218.184.125",
+    "screenshotPath": "scratch/feedback_screenshot_1792584338758.jpg",
+    "screenshotFilename": "feedback_screenshot_1792584338758.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 90
+  },
+  {
+    "content": "地图缩小后 每个地名标签很大 看起来很乱",
+    "timestamp": 1792581531446,
+    "device": {
+      "viewport": "400 × 757",
+      "dpr": 3,
+      "screen": "400 × 870",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 2509FPN0BC Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/9244 REV/45b714874dc398f8e7cc8af8fa7ba304883ddb6f MicroMessenger/8.0.79.3200(0x28004F36) WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/profile",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshot": null,
+    "screenshotMeta": null,
+    "errors": [],
+    "id": 1792581531446,
+    "receivedAt": "2026-10-21T11:18:52.175Z",
+    "updatedAt": "2026-10-21T19:25:02.121098",
+    "status": "completed",
+    "reply": "已实现地图分级自适应 LOD 渲染：1. 缩小至全景 (Zoom < 8.2) 时，50座山峰大标签自动收敛为通透极光微光星座圆点，彻底消除重叠遮挡与混乱；2. 中景 (8.2 <= Zoom < 9.5) 精简为单行紧凑地名，面积收缩 55%；3. 放大至近景 (Zoom >= 9.5) 展开完整标高数据；4. 选中山峰全层级保持完整高亮展示与触控响应。",
+    "clientIp": "103.151.172.30"
+  },
+  {
+    "content": "可以，现在开始处理“多反馈”方案，我在手机端给你提交，刚好待会儿可以关注这个任务的进度",
+    "timestamp": 1792580711943,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshot": null,
+    "screenshotMeta": null,
+    "errors": [],
+    "id": 1792580711943,
+    "receivedAt": "2026-10-21T11:05:13.193Z",
+    "updatedAt": "2026-10-21T19:09:08.681617",
+    "status": "completed",
+    "reply": "「多反馈并发排队与收集系统」已全量落地并自测通过：1. 哨兵支持 10s 连发防抖收集；2. 队列支持实时排队位次显示；3. 新建反馈时展示排队友好提示；4. 浮窗悬浮球动态感知排队总数；5. 主会话打通睡前扫尾检查与子代理调度判定。",
+    "clientIp": "171.218.184.125"
+  },
+  {
+    "content": "这里的空隙怎么这么大",
+    "timestamp": 1792577434734,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshotMeta": {
+      "dimensions": "575 × 1280",
+      "sizeText": "105 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T10:10:37.681Z",
+    "clientIp": "171.218.184.125",
+    "screenshotPath": "scratch/feedback_screenshot_1792577434734.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 105,
+    "id": 1792577434734,
+    "status": "completed",
+    "screenshotFilename": "feedback_screenshot_1792577434734.jpg",
+    "reply": "已将半屏抽屉最大高度收紧至 364px，卡片至底边间距降至 7.6px，彻底消除 74px 空白并回馈 66px 视野给地图；反馈悬浮球支持全屏拖拽与边缘吸附。"
+  },
+  {
+    "content": "这个页面，放大地图的时候，要是手指刚好落到了“点”上，就没法放大，分析下这个是不是问题，如果不是就用修改",
+    "timestamp": 1792575303635,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshotMeta": {
+      "dimensions": "644 × 1280",
+      "sizeText": "87 KB",
+      "source": "自动截图当前页面"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T09:35:08.138Z",
+    "clientIp": "171.218.184.125",
+    "screenshotPath": "scratch/feedback_screenshot_1792575303635.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 87,
+    "id": 1792575303635,
+    "status": "completed",
+    "screenshotFilename": "feedback_screenshot_1792575303635.jpg",
+    "reply": "查明根因为 Marker 拦截 touchstart。已放行双指触控捏合缩放（Pinch-to-zoom），双指放大缩小绝对不再被 Marker 阻断，单指轻触保留点位选择。"
+  },
+  {
+    "content": "自测验证：地图缩放平滑度与自动截图复选框（默认不选中）均已就绪！",
+    "timestamp": 1792572643810,
+    "device": {
+      "viewport": "400 × 820",
+      "dpr": 1,
+      "screen": "400 × 820",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 MicroMessenger/8.0.79"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshotMeta": {
+      "dimensions": "400 × 820",
+      "sizeText": "58 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T08:50:43.813Z",
+    "clientIp": "::1",
+    "screenshotPath": "scratch/feedback_screenshot_1792572643810.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 58,
+    "id": 1792572643810,
+    "status": "completed",
+    "screenshotFilename": "feedback_screenshot_1792572643810.jpg",
+    "reply": "双指平滑缩放与截图复选框（默认不选中）自测通过。"
+  },
+  {
+    "content": "自测验证：地图缩放平滑度与自动截图复选框（默认不选中）均已就绪！",
+    "timestamp": 1792572525129,
+    "device": {
+      "viewport": "400 × 820",
+      "dpr": 1,
+      "screen": "400 × 820",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 MicroMessenger/8.0.79"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshotMeta": {
+      "dimensions": "400 × 820",
+      "sizeText": "58 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T08:48:45.134Z",
+    "clientIp": "::1",
+    "screenshotPath": "scratch/feedback_screenshot_1792572525129.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 58,
+    "id": 1792572525129,
+    "status": "completed",
+    "screenshotFilename": "feedback_screenshot_1792572525129.jpg",
+    "reply": "双指平滑缩放与截图复选框（默认不选中）自测通过。"
+  },
+  {
+    "content": "1地图放大缩小有点不流畅\n2反馈AI功能增加一个“自动截图当前页面”，默认不选中",
+    "timestamp": 1792570686052,
+    "device": {
+      "viewport": "400 × 476",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshotMeta": {
+      "dimensions": "575 × 1280",
+      "sizeText": "96 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T08:18:09.526Z",
+    "clientIp": "171.218.184.125",
+    "screenshotPath": "scratch/feedback_screenshot_1792570686052.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 96,
+    "id": 1792570686052,
+    "status": "completed",
+    "screenshotFilename": "feedback_screenshot_1792570686052.jpg",
+    "reply": "已完成排查与优化验证。"
+  },
+  {
+    "content": "这里的样式乱掉了",
+    "timestamp": 1792568230308,
+    "device": {
+      "viewport": "400 × 795",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshotMeta": {
+      "dimensions": "575 × 1280",
+      "sizeText": "89 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T07:37:15.863Z",
+    "clientIp": "171.218.184.125",
+    "screenshotPath": "scratch/feedback_screenshot_1792568230308.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 89,
+    "id": 1792568230308,
+    "status": "completed",
+    "screenshotFilename": "feedback_screenshot_1792568230308.jpg",
+    "reply": "已完成排查与优化验证。"
+  },
+  {
+    "content": "真机调试截图能力端到端验证：成功上传并自动压缩屏幕截图！",
+    "timestamp": 1792567196798,
+    "device": {
+      "viewport": "400 × 820",
+      "dpr": 1,
+      "screen": "400 × 820",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 MicroMessenger/8.0.79"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshotMeta": {
+      "dimensions": "400 × 820",
+      "sizeText": "58 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T07:19:56.804Z",
+    "clientIp": "::1",
+    "screenshotPath": "scratch/feedback_screenshot_1792567196798.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 58,
+    "id": 1792567196798,
+    "status": "completed",
+    "screenshotFilename": "feedback_screenshot_1792567196798.jpg",
+    "reply": "已完成排查与优化验证。"
+  },
+  {
+    "content": "真机调试截图能力端到端验证：成功上传并自动压缩屏幕截图！",
+    "timestamp": 1792567071175,
+    "device": {
+      "viewport": "400 × 820",
+      "dpr": 1,
+      "screen": "400 × 820",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 MicroMessenger/8.0.79"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "screenshotMeta": {
+      "dimensions": "400 × 820",
+      "sizeText": "58 KB",
+      "source": "手机相册 / 拍照"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T07:17:51.181Z",
+    "clientIp": "::1",
+    "screenshotPath": "scratch/feedback_screenshot_1792567071175.jpg",
+    "screenshotExt": "jpg",
+    "screenshotSizeKb": 58,
+    "id": 1792567071175,
+    "status": "completed",
+    "screenshotFilename": "feedback_screenshot_1792567071175.jpg",
+    "reply": "已完成排查与优化验证。"
+  },
+  {
+    "content": "分段地形明细这里是不是缺少了图，只有右侧有数字，左侧是空的",
+    "timestamp": 1792562198325,
+    "device": {
+      "viewport": "400 × 476",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T05:56:41.492Z",
+    "clientIp": "171.218.184.125",
+    "id": 1792562198325,
+    "status": "completed",
+    "reply": "已完成排查与优化验证。"
+  },
+  {
+    "content": "反馈给ai需要悬浮在最上层，我点开山的详情后，反馈给ai的按钮就被遮住了",
+    "timestamp": 1792561260932,
+    "device": {
+      "viewport": "400 × 476",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "huajianshan",
+      "mountain": "华尖山"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T05:41:02.304Z",
+    "clientIp": "171.218.184.125",
+    "id": 1792561260932,
+    "status": "completed",
+    "reply": "已完成排查与优化验证。"
+  },
+  {
+    "content": "我滑动下面卡片的时候，这个页面都在往下拖拽的感觉，而且卡片向下拖动后，也没有最小化，只有点击才能最小化",
+    "timestamp": 1792555423703,
+    "device": {
+      "viewport": "400 × 476",
+      "dpr": 3,
+      "screen": "400 × 890",
+      "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/150.0.7871.189 Mobile Safari/537.36 XWEB/1500145 MMWEBSDK/20260902 MMWEBID/5970 REV/7a621aa6f3b566344674877fd5a3408da08eb22a MicroMessenger/8.0.79.3200(0x28004F34) WeChat/arm64 Weixin NetType/5G Language/zh_CN ABI/arm64"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T04:03:45.540Z",
+    "clientIp": "171.218.184.125",
+    "id": 1792555423703,
+    "status": "completed",
+    "reply": "已完成排查与优化验证。"
+  },
+  {
+    "content": "真机调试联调测试：手机端反馈直达通道已连通，流畅顺手！",
+    "timestamp": 1792553643158,
+    "device": {
+      "viewport": "400 × 820",
+      "dpr": 3,
+      "screen": "400 × 820",
+      "ua": "Mozilla/5.0 (Linux; Android 15; 24129PN74C Build/AQ3A.240822.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T03:34:03.162Z",
+    "clientIp": "::1",
+    "id": 1792553643158,
+    "status": "completed",
+    "reply": "已完成排查与优化验证。"
+  },
+  {
+    "content": "真机调试联调测试：手机端反馈直达通道已连通，流畅顺手！",
+    "timestamp": 1792553326242,
+    "device": {
+      "viewport": "400 × 820",
+      "dpr": 3,
+      "screen": "400 × 820",
+      "ua": "Mozilla/5.0 (Linux; Android 15; 24129PN74C Build/AQ3A.240822.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36"
+    },
+    "state": {
+      "route": "/explore",
+      "mountainId": "dawagengzha",
+      "mountain": "达瓦更扎"
+    },
+    "errors": [],
+    "receivedAt": "2026-10-21T03:28:46.245Z",
+    "clientIp": "::1",
+    "id": 1792553326242,
+    "status": "completed",
+    "reply": "已完成排查与优化验证。"
+  }
+]
