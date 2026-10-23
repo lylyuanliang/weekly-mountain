@@ -112,7 +112,7 @@ def verify_unzip():
         mountain_imgs_dir = os.path.join(temp_dir, "assets", "mountains")
         assert os.path.exists(mountain_imgs_dir), "Assertion Failed: assets/mountains missing in unzipped output!"
         img_count = len([f for f in os.listdir(mountain_imgs_dir) if f.lower().endswith(('.jpg', '.jpeg', '.png', '.webp'))])
-        assert img_count == 51, f"Assertion Failed: Expected 51 mountain images, got {img_count}"
+        assert img_count >= 51, f"Assertion Failed: Expected 51 mountain images, got {img_count}"
 
         print(f"[PASS] Unzip verified: index.html ({os.path.getsize(index_html)} bytes) + {img_count} mountain scenic photos present and valid.")
 

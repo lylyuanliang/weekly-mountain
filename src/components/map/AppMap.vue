@@ -80,8 +80,11 @@
               <div
                 class="relative flex items-center gap-1.5 px-2 py-0.5 rounded-full frost-glass-highlight glow-primary border border-primary/70 shadow-xl transition-all duration-200 active:scale-95 select-none"
               >
-                <span class="w-2 h-2 rounded-full bg-primary animate-ping absolute -left-0.5"></span>
-                <span class="w-2 h-2 rounded-full bg-primary flex-shrink-0"></span>
+                <!-- Concentric Pulsing Aurora Dot (100% Coaxial Center, 0 Offset) -->
+                <span class="relative flex items-center justify-center flex-shrink-0 w-2 h-2">
+                  <span class="animate-ping absolute inset-0 rounded-full bg-primary opacity-75"></span>
+                  <span class="relative w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#4edea3]"></span>
+                </span>
                 <span class="text-[10.5px] font-bold text-on-surface tracking-tight whitespace-nowrap">{{ m.name }}</span>
                 <span class="text-[9px] font-label-data-sm text-primary tracking-tight whitespace-nowrap">{{ m.alt }}m</span>
               </div>
@@ -90,32 +93,35 @@
               <div class="w-0.5 h-2 bg-gradient-to-b from-primary/90 to-transparent mx-auto"></div>
             </template>
 
-            <!-- Detailed Close-up View (lodMode === 'detailed', Z >= 9.8): Expanded Prominent Card -->
+            <!-- Detailed Close-up View (lodMode === 'detailed', Z >= 9.8): Compact Elegant Card (Capped) -->
             <template v-else>
-              <!-- Pulsing Beacon Outer Ring -->
-              <div class="absolute -inset-2 rounded-full bg-primary/25 beacon-ring pointer-events-none"></div>
+              <!-- Subtle Beacon Outer Ring (Gentle Aurora Glow, No Drift Ping) -->
+              <div class="absolute -inset-1.5 rounded-full bg-primary/20 beacon-ring pointer-events-none"></div>
 
-              <!-- Interactive Pin Card -->
+              <!-- Interactive Pin Card (Capped Max Width, Refined Typography) -->
               <div
-                class="relative flex items-center gap-1.5 px-3 py-1.5 rounded-full frost-glass-highlight glow-primary border border-primary/70 shadow-2xl transition-all duration-300 group-hover:scale-105 active:scale-95 select-none"
+                class="relative flex items-center gap-1.5 px-2.5 py-1 rounded-full frost-glass-highlight glow-primary border border-primary/70 shadow-xl transition-all duration-200 select-none max-w-[145px]"
               >
-                <span class="w-2.5 h-2.5 rounded-full bg-primary animate-ping absolute -left-1"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-primary flex-shrink-0"></span>
-                <div class="flex flex-col">
-                  <div class="flex items-center gap-1">
-                    <span class="text-body-sm font-bold text-on-surface tracking-tight">{{ m.name }}</span>
-                    <span class="px-1 py-0.2 text-[9px] font-label-data-sm bg-primary/20 text-primary rounded font-semibold">
+                <!-- Concentric Pulsing Aurora Dot (100% Coaxial Center, 0 Offset) -->
+                <span class="relative flex items-center justify-center flex-shrink-0 w-2 h-2">
+                  <span class="animate-ping absolute inset-0 rounded-full bg-primary opacity-75"></span>
+                  <span class="relative w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#4edea3]"></span>
+                </span>
+                <div class="flex flex-col min-w-0">
+                  <div class="flex items-center gap-1 min-w-0">
+                    <span class="text-[12px] font-bold text-on-surface tracking-tight truncate leading-tight">{{ m.name }}</span>
+                    <span class="px-1 py-0.2 text-[8.5px] font-label-data-sm bg-primary/20 text-primary rounded font-semibold flex-shrink-0">
                       {{ m.difficulty || 'L2' }}
                     </span>
                   </div>
-                  <span class="text-label-data-sm font-label-data-sm text-primary tracking-wider leading-none">
+                  <span class="text-[9.5px] font-label-data-sm text-primary tracking-wider leading-none mt-0.5">
                     {{ m.alt }}m
                   </span>
                 </div>
               </div>
 
               <!-- Drop Line to Ground Topo Anchor -->
-              <div class="w-0.5 h-4 bg-gradient-to-b from-primary/90 to-transparent mx-auto"></div>
+              <div class="w-0.5 h-2.5 bg-gradient-to-b from-primary/90 to-transparent mx-auto"></div>
             </template>
           </template>
 
@@ -231,7 +237,7 @@
       <!-- 3D Topo Toggle Button -->
       <button
         @click="toggle3D"
-        class="w-11 h-11 rounded-full frost-glass flex flex-col items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30 group"
+        class="w-9.5 h-9.5 rounded-full frost-glass flex flex-col items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30 group"
         :class="is3D ? 'border-secondary glow-secondary text-secondary' : ''"
         title="切换 3D 拓扑视角"
       >
@@ -242,7 +248,7 @@
       <!-- Layer Switcher Button -->
       <button
         @click="cycleLayer"
-        class="w-11 h-11 rounded-full frost-glass flex items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30"
+        class="w-9.5 h-9.5 rounded-full frost-glass flex items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30"
         :title="`切换底图: ${currentLayerMeta.name}`"
       >
         <span class="material-symbols-outlined text-[22px] text-primary">{{ currentLayerMeta.icon }}</span>
@@ -251,7 +257,7 @@
       <!-- Zoom In (+) -->
       <button
         @click="zoomIn"
-        class="w-11 h-11 rounded-full frost-glass flex items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30"
+        class="w-9.5 h-9.5 rounded-full frost-glass flex items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30"
         title="放大地图"
       >
         <span class="material-symbols-outlined text-[20px]">add</span>
@@ -260,7 +266,7 @@
       <!-- Zoom Out (-) -->
       <button
         @click="zoomOut"
-        class="w-11 h-11 rounded-full frost-glass flex items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30"
+        class="w-9.5 h-9.5 rounded-full frost-glass flex items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30"
         title="缩小地图"
       >
         <span class="material-symbols-outlined text-[20px]">remove</span>
@@ -280,7 +286,7 @@
       <!-- GPS Recenter Button -->
       <button
         @click="recenterLocation"
-        class="w-11 h-11 rounded-full frost-glass flex items-center justify-center text-primary active:scale-95 shadow-xl transition-all border border-primary/30 glow-primary"
+        class="w-9.5 h-9.5 rounded-full frost-glass flex items-center justify-center text-primary active:scale-95 shadow-xl transition-all border border-primary/30 glow-primary"
         title="重置视角 / 定位中心"
       >
         <span class="material-symbols-outlined text-[20px]">my_location</span>
@@ -362,18 +368,19 @@ const lodMode = computed(() => {
   return 'compact';
 });
 
-// markerScale: 平滑自适应适度缩放系数，随 mapZoom 缓慢优雅变化
-// 在 Z6.0 保持 0.82x，在 Z9.0 保持 0.94x，在 Z12+ 保持 1.08x
+// markerScale: 平滑自适应适度缩放系数，严格设置放大上限，防止地图放大时标记点无节制膨胀
+// 在 Z6.0 保持 0.80x，在 Z9.0 保持 0.90x，最高严格封顶在 0.95x
 const markerScale = computed(() => {
   const z = mapZoom.value;
   const clampedZ = Math.max(6.0, Math.min(12.0, z));
-  const s = 0.82 + (clampedZ - 6.0) * ((1.08 - 0.82) / (12.0 - 6.0));
-  return Math.round(s * 100) / 100;
+  const s = 0.80 + (clampedZ - 6.0) * ((0.95 - 0.80) / (12.0 - 6.0));
+  return Math.min(0.95, Math.round(s * 100) / 100);
 });
 
 function getMarkerStyle(m) {
   const isSelected = m.id === mountainStore.selectedMountainId;
-  const currentScale = isSelected ? Math.min(1.15, Math.round(markerScale.value * 1.05 * 100) / 100) : markerScale.value;
+  // 严格上限死锁：选中状态最高封顶在 1.0x（绝不无限膨胀！），未选中状态最高 0.95x
+  const currentScale = isSelected ? Math.min(1.0, markerScale.value) : markerScale.value;
   return {
     left: `${m.x}px`,
     top: `${m.y}px`,

@@ -513,7 +513,24 @@
       "秋（9-11月）：秋高气爽看彩林、彩虹步道粉黛乱子草与通透城市夜景，适合徒步",
       "冬（12-2月）：晴天可从仰天窝等观景台远眺雪山，白昼短、日落早，安排18点前下山"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/longquanshan.jpg",
+        "title": "龙泉山标志风光",
+        "desc": "海拔1051m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/longquanshan-2.jpg",
+        "title": "丹景台·城市之眼",
+        "desc": "螺旋上升的太阳神鸟造型观景台，俯瞰三岔湖与天府机场"
+      },
+      {
+        "src": "assets/mountains/longquanshan-3.jpg",
+        "title": "钟家山森林步道",
+        "desc": "连绵起伏的山脊步道，晴日远眺成都天际线与雪山"
+      }
+    ]
   },
   {
     "id": "dawagengzha",
@@ -933,7 +950,24 @@
       "秋（9-11月）：传统观景旺季，大晴天多，日出云海与日照金山出现率较高（攻略口径，具体概率未核实）",
       "冬（12-2月）：雪景、雾凇壮观且冬季云海概率高，但海拔高常因大雪封路，暴雪天观光车停运、景区临时闭园，需防滑链"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/dawagengzha.jpg",
+        "title": "达瓦更扎标志风光",
+        "desc": "海拔3866m 雅安川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/dawagengzha-2.jpg",
+        "title": "云顶360°观景台",
+        "desc": "拂晓时分的壮丽云海，金光浸染四姑娘山与贡嘎群峰"
+      },
+      {
+        "src": "assets/mountains/dawagengzha-3.jpg",
+        "title": "云上通天路",
+        "desc": "蜿蜒在云海与高山草甸间的盘山天路，气势恢宏"
+      }
+    ]
   },
   {
     "id": "hongyanding",
@@ -1270,7 +1304,24 @@
     "best_season": [
       "日照贡嘎金山11月-2月；赏杜鹃4月-6月；避暑6月-9月；云海日出10月-1月（360百科）"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/hongyanding.jpg",
+        "title": "红岩顶标志风光",
+        "desc": "海拔3500m 甘孜川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/hongyanding-2.jpg",
+        "title": "贡嘎群峰绝景",
+        "desc": "正对蜀山之王贡嘎雪山，晚霞映衬下的终年冰川"
+      },
+      {
+        "src": "assets/mountains/hongyanding-3.jpg",
+        "title": "高山杜鹃与浩瀚星河",
+        "desc": "初夏怒放的高山杜鹃花海与毫无光污染的璀璨银河"
+      }
+    ]
   },
   {
     "id": "huajianshan",
@@ -1672,7 +1723,24 @@
     "best_season": [
       "全年可去；雪后初晴云海与日照金山概率高；7-8月为云海银河季；冬季有雪景"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/huajianshan.jpg",
+        "title": "华尖山标志风光",
+        "desc": "海拔3540m 甘孜川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/huajianshan-2.jpg",
+        "title": "贡嘎主峰日照金山",
+        "desc": "晨曦初照，金色的朝霞洒在贡嘎雪峰之巅"
+      },
+      {
+        "src": "assets/mountains/huajianshan-3.jpg",
+        "title": "高山草甸与云瀑",
+        "desc": "漫过山脊的波澜壮阔云瀑与辽阔的高山牧场"
+      }
+    ]
   },
   {
     "id": "jiaodingshan",
@@ -2148,7 +2216,24 @@
       "秋（11月）：进入云海高发期开端，星空通透、昼夜温差大",
       "冬（12-2月）：云海/日出/星空最佳且天气相对稳定，冰雪路面需防滑链"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/jiaodingshan.jpg",
+        "title": "轿顶山标志风光",
+        "desc": "海拔3450m 雅安川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/jiaodingshan-2.jpg",
+        "title": "一号营地云海晨曦",
+        "desc": "直面贡嘎与峨眉群山，云海翻涌如梦似幻"
+      },
+      {
+        "src": "assets/mountains/jiaodingshan-3.jpg",
+        "title": "大渡河悬崖天险",
+        "desc": "千米垂直绝壁俯瞰大渡河大峡谷的雄浑地质奇观"
+      }
+    ]
   },
   {
     "id": "niubeishan",
@@ -2688,7 +2773,24 @@
       "春季3-5月：青云道高山杜鹃与山花季，4月春假有四川师生免票活动",
       "夏季6-8月：雨季云雾多变，观景与徒步成功率低，有公开的雨季徒步体验差游记"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/niubeishan.jpg",
+        "title": "牛背山标志风光",
+        "desc": "海拔3666m 雅安川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/niubeishan-2.jpg",
+        "title": "光明顶日照金山",
+        "desc": "日出时分贡嘎群峰披上耀眼金甲的震撼时刻"
+      },
+      {
+        "src": "assets/mountains/niubeishan-3.jpg",
+        "title": "星辰营地与流云瀑布",
+        "desc": "宿于云端帐篷，脚踏万丈云海，头顶高原星河"
+      }
+    ]
   },
   {
     "id": "sirentong",
@@ -2976,7 +3078,24 @@
     "best_season": [
       "草案：冬季雪原云海为最佳出片季；区域冬季（11月-2月）贡嘎日照金山与云海概率高（据牛背山区域同类报道推断，待核验）"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/sirentong.jpg",
+        "title": "四人同标志风光",
+        "desc": "海拔3510m 甘孜川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/sirentong-2.jpg",
+        "title": "大帽嘴垭口晨光",
+        "desc": "纯净雪原与贡嘎神峰相映的极致日出体验"
+      },
+      {
+        "src": "assets/mountains/sirentong-3.jpg",
+        "title": "林海雪原与晶莹雾凇",
+        "desc": "冬春交替时冰雪晶莹的冷杉树挂与深蓝苍穹"
+      }
+    ]
   },
   {
     "id": "balangshan",
@@ -3381,7 +3500,24 @@
       "秋（9-10月）：能见度最高、彩林层染，巴穿邓下沟看彩林最佳",
       "冬（11-3月）：雪山云海星空出片，但G350高海拔段常结冰，防滑链必备，不建议徒步"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/balangshan.jpg",
+        "title": "巴朗山标志风光",
+        "desc": "海拔5040m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/balangshan-2.jpg",
+        "title": "贝母坪壮美云海",
+        "desc": "云雾在深邃峡谷中沉浮，远山如黛如水墨画卷"
+      },
+      {
+        "src": "assets/mountains/balangshan-3.jpg",
+        "title": "高山草甸花海",
+        "desc": "盛夏季节开满山坡的高原野花与皑皑雪峰辉映"
+      }
+    ]
   },
   {
     "id": "jiajinshan",
@@ -3803,7 +3939,24 @@
       "秋（9-11月）：彩林+雪山+云海组合最佳，10月垭口可见初雪（2026-10-07垭口已被白雪覆盖）",
       "冬（12-2月）：雪景壮观，但国道351夹金山段实行约3个月冬季交通管制，白天限行慢行、夜间通常禁止通行，普通自驾不建议"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/jiajinshan.jpg",
+        "title": "夹金山标志风光",
+        "desc": "海拔4114m 雅安川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/jiajinshan-2.jpg",
+        "title": "夹金山雪山垭口",
+        "desc": "海拔4114m的雪山垭口，经幡猎猎，雪峰耸峙"
+      },
+      {
+        "src": "assets/mountains/jiajinshan-3.jpg",
+        "title": "夹金海子秋色",
+        "desc": "高原明珠海子倒映金色落叶松彩林与蓝天"
+      }
+    ]
   },
   {
     "id": "maobiliang",
@@ -4243,7 +4396,24 @@
       "春：5月-6月，高山花期开始，雪峰积雪未消适合拍照",
       "夏：7月-9月，盛花期与避暑窗口，但为雨季云量大，日照金山需早起碰运气（攻略口径：暑期日出约6:30前到位）"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/maobiliang.jpg",
+        "title": "猫鼻梁·四姑娘山标志风光",
+        "desc": "海拔4480m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/maobiliang-2.jpg",
+        "title": "蜀山之后日照金山",
+        "desc": "落日余晖中幺妹峰峭壁染成瑰丽赤金色的绝景"
+      },
+      {
+        "src": "assets/mountains/maobiliang-3.jpg",
+        "title": "四姑娘四峰同框",
+        "desc": "大峰、二峰、三峰与幺妹峰如屏风般一字排开"
+      }
+    ]
   },
   {
     "id": "wanggangping",
@@ -4698,7 +4868,24 @@
       "秋（9-11月）：贡嘎山下彩林+日照金山高概率通透窗口，国庆后人流回落",
       "冬（12-2月）：冰雪文化旅游季（近年12月下旬开幕）、雾凇怪树林、贡嘎滑雪场与580m长S型雪圈道；路面冰雪需防滑链预案"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/wanggangping.jpg",
+        "title": "王岗坪标志风光",
+        "desc": "海拔2600m 雅安川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/wanggangping-2.jpg",
+        "title": "直面贡嘎主峰金山",
+        "desc": "超大开角无死角仰望贡嘎冰川与日照金山奇观"
+      },
+      {
+        "src": "assets/mountains/wanggangping-3.jpg",
+        "title": "高山云上牧场",
+        "desc": "云杉林与原始针叶林掩映下的高山绿茵牧场"
+      }
+    ]
   },
   {
     "id": "xiling-xueshan",
@@ -5150,7 +5337,24 @@
       "夏：6-8月避暑，平均气温20-23℃，滑雪场变滑草场并新增牧场/湿地等场景",
       "秋：10月下旬-11月彩林红叶最佳观赏期，最佳观赏点为映雪广场、鸽子花广场"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/xiling-xueshan.jpg",
+        "title": "西岭雪山标志风光",
+        "desc": "海拔3250m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/xiling-xueshan-2.jpg",
+        "title": "日月坪观景台",
+        "desc": "海拔3250m的木栈道，穿行于茫茫云海仙境之中"
+      },
+      {
+        "src": "assets/mountains/xiling-xueshan-3.jpg",
+        "title": "神秘阴阳界",
+        "desc": "一山分两气，一面晴空万里，一面浓雾蔽日的奇观"
+      }
+    ]
   },
   {
     "altitude_m": 2800,
@@ -5527,7 +5731,24 @@
       "夏(7-8月,河谷森林避暑)",
       "秋(10-11月,川西彩林季常见推荐,未单独核实)"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/dengshenggou.jpg",
+        "title": "邓生沟标志风光",
+        "desc": "海拔2800m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/dengshenggou-2.jpg",
+        "title": "绿野仙踪清溪",
+        "desc": "古木参天，青苔漫步，清澈见底的高山融雪溪流"
+      },
+      {
+        "src": "assets/mountains/dengshenggou-3.jpg",
+        "title": "原始针叶林与草甸",
+        "desc": "漫步于冷杉松萝秘境，感受川西原生态的静谧"
+      }
+    ]
   },
   {
     "altitude_m": 1000,
@@ -5915,7 +6136,24 @@
       "秋(9-10月)猕猴桃采摘与河谷休闲；2026年起漂流9月11日提前停业",
       "冬(11-2月)漂流停业仅村居休闲，高山路段可能结冰"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/hongkou-gaoyuan.jpg",
+        "title": "虹口·高原村标志风光",
+        "desc": "海拔1000m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/hongkou-gaoyuan-2.jpg",
+        "title": "白沙河清冽峡谷",
+        "desc": "湍急清凉的河水穿过青山峡谷，避暑戏水胜地"
+      },
+      {
+        "src": "assets/mountains/hongkou-gaoyuan-3.jpg",
+        "title": "高原村森林绿道",
+        "desc": "漫步清幽山野竹海，远眺苍翠群山连绵"
+      }
+    ]
   },
   {
     "altitude_m": 1500,
@@ -6448,7 +6686,24 @@
       "秋(10-11月 彩林红叶，俱乐部活动旺季)",
       "冬(12-2月 雪景雾凇云海)"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/jiguanshan-liuliba.jpg",
+        "title": "鸡冠山·琉璃坝标志风光",
+        "desc": "海拔1500m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/jiguanshan-liuliba-2.jpg",
+        "title": "琉璃坝高山田园",
+        "desc": "高山深处的世外村落，青山环抱炊烟袅袅"
+      },
+      {
+        "src": "assets/mountains/jiguanshan-liuliba-3.jpg",
+        "title": "鸡冠山密林清泉",
+        "desc": "未过度开发的原始山林，瀑布流泉飞泻而出"
+      }
+    ]
   },
   {
     "altitude_m": 2100,
@@ -6905,7 +7160,24 @@
       "秋(9-11月)",
       "冬(12-2月)"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/longcanggou.jpg",
+        "title": "龙苍沟标志风光",
+        "desc": "海拔2100m 雅安川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/longcanggou-2.jpg",
+        "title": "翡翠叠翠溪瀑布",
+        "desc": "层叠流瀑击打黑石，碧潭幽深宛如绿宝石"
+      },
+      {
+        "src": "assets/mountains/longcanggou-3.jpg",
+        "title": "万亩珙桐林海",
+        "desc": "珍稀植物鸽子花漫山飞舞，春季森林纯美如画"
+      }
+    ]
   },
   {
     "altitude_m": 1000,
@@ -7337,7 +7609,24 @@
       "春(3-5月)高山杜鹃陆续开花（花期3-7月）",
       "冬(12-2月)雪景冰瀑，注意道路结冰"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/panlonggu.jpg",
+        "title": "蟠龙谷标志风光",
+        "desc": "海拔1000m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/panlonggu-2.jpg",
+        "title": "蟠龙谷飞瀑流泉",
+        "desc": "数道数十米高瀑自悬崖倾泻而下，水雾升腾"
+      },
+      {
+        "src": "assets/mountains/panlonggu-3.jpg",
+        "title": "清凉幽深峡谷",
+        "desc": "茂密植被覆盖下的幽静山谷，夏季徒步绝佳"
+      }
+    ]
   },
   {
     "ascent_m": 800,
@@ -7857,7 +8146,24 @@
       "秋(10-11月)秋韵清爽、山幽人少",
       "冬(12-2月)清静人少、偶有冰雪路面需防滑"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/qingcheng-houshan.jpg",
+        "title": "青城后山标志风光",
+        "desc": "海拔1700m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/qingcheng-houshan-2.jpg",
+        "title": "五龙沟金岩叠瀑",
+        "desc": "悬崖栈道傍水而建，清幽碧潭与翠竹相映成趣"
+      },
+      {
+        "src": "assets/mountains/qingcheng-houshan-3.jpg",
+        "title": "白云古刹与山脊",
+        "desc": "山腰又一村与白云道观，云雾缭绕宛如人间仙境"
+      }
+    ]
   },
   {
     "altitude_m": 1812,
@@ -8327,7 +8633,24 @@
       "秋(9-10月)：萤火虫秋季高峰+森林徒步清静，11月还有一波赏萤高峰",
       "冬(12-2月)：淡季徒步，攻略口径票价或更省，森林栈道人少清静"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/tiantai-qionglai.jpg",
+        "title": "天台山（邛崃）标志风光",
+        "desc": "海拔1812m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/tiantai-qionglai-2.jpg",
+        "title": "响水滩飞瀑",
+        "desc": "落差数十米的大瀑布，声如奔雷，水汽弥漫"
+      },
+      {
+        "src": "assets/mountains/tiantai-qionglai-3.jpg",
+        "title": "天台山夜幻萤海",
+        "desc": "夏夜林间数以万计的荧光精灵点亮森林幽径"
+      }
+    ]
   },
   {
     "id": "aergou",
@@ -8779,7 +9102,24 @@
       "秋：10月中旬-11月上旬，彩林+高山海子最佳观赏期（2021年10月底即达最佳观赏期，2025年国庆徒步热度高）",
       "冬：12-2月，冰雪海子可赏，但历年冬季有封山管控（2025-12封山、2026-03-27龙池线路恢复开放），雪季需防滑链并先确认开放状态"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/aergou.jpg",
+        "title": "阿尔沟标志风光",
+        "desc": "海拔4348m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/aergou-2.jpg",
+        "title": "阿尔沟高山暖泉",
+        "desc": "高山溪畔流淌的天然热泉，群峰环抱野趣十足"
+      },
+      {
+        "src": "assets/mountains/aergou-3.jpg",
+        "title": "金秋阿尔沟峡谷",
+        "desc": "深秋时节峡谷两岸层林尽染，红叶落叶松绚烂"
+      }
+    ]
   },
   {
     "id": "bipenggou",
@@ -9321,7 +9661,24 @@
       "秋：9月下旬起高海拔彩林初染，10月中旬-11月上旬为全年颜值巅峰（雪山彩林海子同框）",
       "冬：12月-次年2月蓝冰、冰瀑、雾凇+滑雪+娜姆湖/古尔沟温泉，需冰爪与防滑链"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/bipenggou.jpg",
+        "title": "毕棚沟标志风光",
+        "desc": "海拔3837m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/bipenggou-2.jpg",
+        "title": "磐羊湖高原倒影",
+        "desc": "澄澈如镜的高原圣湖，完美倒映雪峰与金黄彩林"
+      },
+      {
+        "src": "assets/mountains/bipenggou-3.jpg",
+        "title": "燕子岩窝红石奇观",
+        "desc": "神奇的天然高山红石滩，与圣洁雪峰形成鲜明对比"
+      }
+    ]
   },
   {
     "id": "jiufengshan",
@@ -9718,7 +10075,24 @@
       "秋（9-11月）：晴天多、云海与日出概率全年最高，昼夜温差大，是综合体验最佳窗口",
       "冬（12-2月）：雪景、冰挂与云海最佳且最危险，路面结冰需冰爪防滑链，雪大时封山管控可能只放到祖师殿"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/jiufengshan.jpg",
+        "title": "九峰山标志风光",
+        "desc": "海拔3250m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/jiufengshan-2.jpg",
+        "title": "祖师殿晨曦云海",
+        "desc": "历经千辛登顶祖师殿，俯瞰波澜壮阔的云海晨曦"
+      },
+      {
+        "src": "assets/mountains/jiufengshan-3.jpg",
+        "title": "九峰冬雪与群峰",
+        "desc": "冬季银装素裹的奇峭峰林，苍茫雄奇令人屏息"
+      }
+    ]
   },
   {
     "id": "kalonggou",
@@ -10179,7 +10553,24 @@
       "秋（10月中旬-11月初）：官方与媒体一致的彩林最佳观赏期，沟口至知木林40-60里彩林+沟内钙华彩池为全年颜值顶点",
       "冬（12-2月）：冬季照常售票（8:30-16:00），人最少、清冷原始；需防冰雪路面与低温，注意官方汛期/地灾公告的冬春延续风险"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/kalonggou.jpg",
+        "title": "卡龙沟标志风光",
+        "desc": "海拔2900m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/kalonggou-2.jpg",
+        "title": "金色钙华千层彩池",
+        "desc": "金色钙华滩流伴随清流层叠而下，堪比黄龙"
+      },
+      {
+        "src": "assets/mountains/kalonggou-3.jpg",
+        "title": "原始苔藓彩林海",
+        "desc": "密林深处幽静的苔藓地毯与秋季五彩斑斓林海"
+      }
+    ]
   },
   {
     "id": "liangtaigou",
@@ -10586,7 +10977,24 @@
       "春：4-6月高山野花渐次开放（理小路五六月花海模式）",
       "夏：7-8月满眼苍翠、河谷清凉（雨后碎石路泥泞慎行）"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/liangtaigou.jpg",
+        "title": "凉台沟标志风光",
+        "desc": "海拔3500m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/liangtaigou-2.jpg",
+        "title": "十里高山红石峡谷",
+        "desc": "连绵成片的艳丽红石沿清冽雪溪延伸，直抵雪山脚下"
+      },
+      {
+        "src": "assets/mountains/liangtaigou-3.jpg",
+        "title": "金色峡谷与落叶松",
+        "desc": "金秋暖阳倾洒在密林峡谷，雪山与彩林相辉映"
+      }
+    ]
   },
   {
     "id": "majiagou",
@@ -11030,7 +11438,24 @@
       "冬（12-2月）：雪景与冰封海子，实测阴处气温可达零下5-8℃，需厚保暖",
       "春（4-5月）：残雪返青期，人气最低"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/majiagou.jpg",
+        "title": "玛嘉沟标志风光",
+        "desc": "海拔4250m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/majiagou-2.jpg",
+        "title": "五色海幽蓝倒影",
+        "desc": "如蓝宝石般的高山海子，静谧倒映万千秋色彩林"
+      },
+      {
+        "src": "assets/mountains/majiagou-3.jpg",
+        "title": "月亮湖与高山草甸",
+        "desc": "雪峰环抱下的弯月形天然海子，宛若世外桃源"
+      }
+    ]
   },
   {
     "id": "songpinggou",
@@ -11525,7 +11950,24 @@
       "冬：12月-次年2月冰雪季，可徒步玩雪，近年有免门票+徒步奖牌活动，注意观光车可能停运",
       "春：4-5月山花初开、游客少；5月1日起恢复旺季票价"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/songpinggou.jpg",
+        "title": "松坪沟标志风光",
+        "desc": "海拔2900m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/songpinggou-2.jpg",
+        "title": "白石海高山明珠",
+        "desc": "碧蓝幽深的高山大湖，平静如镜倒映两岸翠峦"
+      },
+      {
+        "src": "assets/mountains/songpinggou-3.jpg",
+        "title": "墨海幽深翠绿",
+        "desc": "湖水因深邃而呈现深墨绿色，周围群山环翠"
+      }
+    ]
   },
   {
     "id": "gexianshan-bailu",
@@ -12065,7 +12507,24 @@
       "秋季徒步旺季、千年银杏叶将黄（头条2025-10标题级、美篇2024）：秋：10-11月",
       "初冬银杏金黄落叶季、晴天暖阳徒步可行（百度知道2026-04营销号级）；山区冬季道路冰雪路况未查到公开信息：冬：12-2月"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/gexianshan-bailu.jpg",
+        "title": "葛仙山·白鹿镇标志风光",
+        "desc": "海拔1362m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/gexianshan-bailu-2.jpg",
+        "title": "葛仙山千年古银杏",
+        "desc": "深秋万树尽带黄金甲，金黄银杏叶铺就金色地毯"
+      },
+      {
+        "src": "assets/mountains/gexianshan-bailu-3.jpg",
+        "title": "白鹿小镇领报修院",
+        "desc": "法式风情百年教堂遗址，异域建筑与青山相伴"
+      }
+    ]
   },
   {
     "id": "hemingshan",
@@ -12564,7 +13023,24 @@
       "秋（10月下旬-11月中旬，红叶配古观银杏，多篇游记推荐的最佳窗口）",
       "冬（12-1月，人少清净，1月下旬起梅林渐入花期）"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/hemingshan.jpg",
+        "title": "鹤鸣山标志风光",
+        "desc": "海拔1000m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/hemingshan-2.jpg",
+        "title": "迎仙阁与千年古观",
+        "desc": "巍峨道观矗立于翠微之间，晨钟暮鼓道韵悠长"
+      },
+      {
+        "src": "assets/mountains/hemingshan-3.jpg",
+        "title": "鹤鸣仙山古松林",
+        "desc": "古松参天，山谷幽深，登山拾级而上心旷神怡"
+      }
+    ]
   },
   {
     "id": "jiezi-fengqishan",
@@ -13022,7 +13498,24 @@
       "秋：10-11月降水少、天气稳定，适合大环线徒步与露营，营地秋季氛围佳",
       "冬：12-2月游客最少、古镇最清静；山区低温干燥为森林防火期，注意禁火与保暖"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/jiezi-fengqishan.jpg",
+        "title": "街子·凤栖山标志风光",
+        "desc": "海拔1100m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/jiezi-fengqishan-2.jpg",
+        "title": "古寺清幽光严禅院",
+        "desc": "川西古刹掩映在千年古楠与银杏丛中，禅意深远"
+      },
+      {
+        "src": "assets/mountains/jiezi-fengqishan-3.jpg",
+        "title": "味江夕照与古镇风貌",
+        "desc": "古老廊桥横跨味江，遥望凤栖山秀丽峰峦"
+      }
+    ]
   },
   {
     "id": "lingshanshan",
@@ -13513,7 +14006,24 @@
       "春：新枝抽芽、漫山翠绿、山花缀满林间",
       "冬：山雾漫锁峰峦，古寺若隐若现，灵岩古街雪景出片"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/lingshanshan.jpg",
+        "title": "灵岩山标志风光",
+        "desc": "海拔1400m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/lingshanshan-2.jpg",
+        "title": "灵岩古寺银杏深处",
+        "desc": "山林古刹清幽雅致，深秋金黄银杏随风飘落"
+      },
+      {
+        "src": "assets/mountains/lingshanshan-3.jpg",
+        "title": "灵岩绝顶俯瞰都江堰",
+        "desc": "登高远眺岷江出山口与都江堰水利工程雄姿"
+      }
+    ]
   },
   {
     "id": "mengdingshan",
@@ -13963,7 +14473,24 @@
       "秋 10-11月：天盖寺周边千年古银杏转黄，秋茶季人少景美",
       "冬 12-2月：偶有雪景雾凇与冬季赏雪主题活动，需防道路结冰和台阶湿滑"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/mengdingshan.jpg",
+        "title": "蒙顶山标志风光",
+        "desc": "海拔1456m 雅安川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/mengdingshan-2.jpg",
+        "title": "天盖寺古银杏与茶台",
+        "desc": "十二株千年古银杏掩映天盖寺，品茗听风雅致非凡"
+      },
+      {
+        "src": "assets/mountains/mengdingshan-3.jpg",
+        "title": "高山阶梯生态茶海",
+        "desc": "波浪般起伏的翠绿茶园梯田，晨雾缭绕宛若水墨"
+      }
+    ]
   },
   {
     "id": "shangli-guzhen",
@@ -14458,7 +14985,24 @@
       "秋（9-11月）：雨雾“水墨古镇”氛围浓、游客相对少，仍需防雨防滑",
       "冬（12-2月）：人文向慢游（红军石刻/双节孝牌坊/韩家大院），海拔约900米无高寒压力，部分店铺营业情况需现场确认"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/shangli-guzhen.jpg",
+        "title": "上里古镇标志风光",
+        "desc": "海拔938m 雅安川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/shangli-guzhen-2.jpg",
+        "title": "二仙桥石拱飞虹",
+        "desc": "清代单孔石拱桥跨越碧波，古树参天倒影如诗"
+      },
+      {
+        "src": "assets/mountains/shangli-guzhen-3.jpg",
+        "title": "水乡吊脚楼与古街",
+        "desc": "木质吊脚楼依水而建，尽显川西旧时田园安宁"
+      }
+    ]
   },
   {
     "id": "yulei-songmao",
@@ -14931,7 +15475,24 @@
       "秋（9-11月）：晴日玉垒阁远眺成都平原甚至雪山能见度最佳，堰功道古银杏可观，为最推荐窗口",
       "冬（12-2月）：官方口径1月1日-2月28日开放时间为8:00-17:00（17:00起停售当日票），12月仍按3月1日-12月31日口径8:00-18:00（17:30停售当日票）；游客较少；晴天偶见都江堰雪山远景，注意石阶晨霜湿滑"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/yulei-songmao.jpg",
+        "title": "玉垒山·松茂古道标志风光",
+        "desc": "海拔865m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/yulei-songmao-2.jpg",
+        "title": "玉垒阁俯瞰全景",
+        "desc": "登临玉垒最高楼，俯瞰宝瓶口与岷江分流壮举"
+      },
+      {
+        "src": "assets/mountains/yulei-songmao-3.jpg",
+        "title": "千年松茂茶马古道",
+        "desc": "青石铺就的历史古驿道，见证川西北商贸传奇"
+      }
+    ]
   },
   {
     "id": "yudingshan",
@@ -15433,7 +15994,24 @@
       "秋（10月-12月初）：慈云寺千年银杏'夫妻树'为成都地区最早变黄的银杏，2025年11月2日已进入观赏期（川观新闻航拍报道），11月上中旬为最佳",
       "冬（12-2月）：淡季清静可看沱江峡谷雾景；金堂高海拔山头偶有降雪（金堂发布2026年1月2日报道云顶山迎2026年第一场雪），雪后注意路面湿滑"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/yudingshan.jpg",
+        "title": "云顶山标志风光",
+        "desc": "海拔982m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/yudingshan-2.jpg",
+        "title": "慈云寺千年银杏",
+        "desc": "始建于南朝的千年古刹，深秋两株巨型银杏金黄灿烂"
+      },
+      {
+        "src": "assets/mountains/yudingshan-3.jpg",
+        "title": "云顶石城与沱江峡谷",
+        "desc": "南宋抗元石垒城垣，俯瞰奔腾沱江大峡谷险隘"
+      }
+    ]
   },
   {
     "id": "jiudingshan",
@@ -15941,7 +16519,24 @@
       "冬·12月底至3月初：太子岭滑雪季（携程口径雪季约2025-12-25至2026-03-09），徒步线积雪需防滑链",
       "春·5月：高山杜鹃渐次初开，进山开放状态需另行核实"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/jiudingshan.jpg",
+        "title": "九顶山标志风光",
+        "desc": "海拔3860m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/jiudingshan-2.jpg",
+        "title": "黑龙池高山花海",
+        "desc": "海拔3800m的高山海子，四周盛开五彩斑斓的野生杜鹃"
+      },
+      {
+        "src": "assets/mountains/jiudingshan-3.jpg",
+        "title": "白龙池高山草甸",
+        "desc": "平缓开阔的高山牧场，夜晚扎营观漫天繁星银河"
+      }
+    ]
   },
   {
     "id": "longchi-dujiangyan",
@@ -16447,7 +17042,24 @@
       "秋（9-11月）：晴好天气窗口与彩林，雨雾天多，行前查降水",
       "冬（12月-次年2月）：雪原冰湖耍雪（2026年1月仍有游客实拍积雪），大降温后积雪最好，须备防滑链"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/longchi-dujiangyan.jpg",
+        "title": "龙池标志风光",
+        "desc": "海拔1850m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/longchi-dujiangyan-2.jpg",
+        "title": "龙池高山碧潭",
+        "desc": "高山深处的静谧湖泊，群峰倒映，宛如翠绿翡翠"
+      },
+      {
+        "src": "assets/mountains/longchi-dujiangyan-3.jpg",
+        "title": "原始杜鹃林海",
+        "desc": "野生古杜鹃树高大密布，花开时节如锦似缎"
+      }
+    ]
   },
   {
     "id": "mengtunhexigu",
@@ -16912,7 +17524,24 @@
       "春（4-5月）：草甸返青，露营人少",
       "冬（12-2月）：河谷雪景与冰面，露营冷（需注意路面结冰，携程问答有'现在去路上冰多吗'之问）"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/mengtunhexigu.jpg",
+        "title": "孟屯河谷标志风光",
+        "desc": "海拔2500m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/mengtunhexigu-2.jpg",
+        "title": "高桥沟原始峡谷",
+        "desc": "奔腾的雪山融水穿过峡谷乱石，雪杉倒挂"
+      },
+      {
+        "src": "assets/mountains/mengtunhexigu-3.jpg",
+        "title": "老君沟雪山草甸",
+        "desc": "未经开发的纯净高山牧场，远处雪峰冷峻肃穆"
+      }
+    ]
   },
   {
     "id": "shenmulei",
@@ -17354,7 +17983,24 @@
       "秋（9-11月）：彩林+红杉层林尽染，9-10月为最佳拍摄期，10月下旬至12月初红杉色彩延续",
       "冬（12-2月）：雪映红杉、雾凇，景区滑雪场与嬉雪区运营（夹金山冰雪旅游季）；道路可能积雪结冰需防滑链，官方提示勿自驾翻越夹金山垭口"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/shenmulei.jpg",
+        "title": "神木垒标志风光",
+        "desc": "海拔3000m 雅安川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/shenmulei-2.jpg",
+        "title": "红杉林与高山草甸",
+        "desc": "藏语神仙玩耍的地方，参天红杉与悠闲牦牛群"
+      },
+      {
+        "src": "assets/mountains/shenmulei-3.jpg",
+        "title": "原始神木奇观",
+        "desc": "岁月雕刻的高山枯木与漫漫木栈道，野趣盎然"
+      }
+    ]
   },
   {
     "id": "xiongmaoping",
@@ -17807,7 +18453,24 @@
       "秋：9-11月（雪山+沟谷彩林，云海概率较高，国庆人多）",
       "冬：12-2月（雾凇雪景玩雪热门，需防滑防寒并严守防火管制）"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/xiongmaoping.jpg",
+        "title": "熊猫坪标志风光",
+        "desc": "海拔2400m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/xiongmaoping-2.jpg",
+        "title": "熊猫坪云端牧场",
+        "desc": "海拔2200m的高山大草甸，云卷云舒牛羊成群"
+      },
+      {
+        "src": "assets/mountains/xiongmaoping-3.jpg",
+        "title": "俯瞰岷江峡谷群峰",
+        "desc": "伫立高山之巅，俯瞰深邃雄浑的岷江峡谷两岸"
+      }
+    ]
   },
   {
     "id": "tiantai-pengzhou",
@@ -18212,7 +18875,24 @@
       "秋（10-11月）：天气窗口多、云海出现率稳定，最适合新手拉练与观景",
       "冬（12-1月）：雾凇与林海雪原最佳观赏期（约12月中旬至1月底），石阶结冰需冰爪"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/tiantai-pengzhou.jpg",
+        "title": "彭州天台山标志风光",
+        "desc": "海拔2441m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/tiantai-pengzhou-2.jpg",
+        "title": "彭州天台丹霞孤峰",
+        "desc": "平地拔起的丹霞绝壁红岩，翠竹掩映古寺钟声"
+      },
+      {
+        "src": "assets/mountains/tiantai-pengzhou-3.jpg",
+        "title": "登顶远眺川西平原",
+        "desc": "登临天台绝顶，俯瞰湔江两岸沃野千里的平原壮景"
+      }
+    ]
   },
   {
     "id": "qianfoshan",
@@ -18545,7 +19225,24 @@
     "best_season": [
       "5-6月高山杜鹃花海（'高山花海是千佛山的最佳景色'）；'春看杜鹃、夏望瀑布、秋赏枫叶、冬观冰雪'（百科）"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/qianfoshan.jpg",
+        "title": "千佛山标志风光",
+        "desc": "海拔3033m 绵阳川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/qianfoshan-2.jpg",
+        "title": "千佛山万丈云海",
+        "desc": "登顶海拔3033m主峰，领略浩瀚无际的云海日出"
+      },
+      {
+        "src": "assets/mountains/qianfoshan-3.jpg",
+        "title": "高山杜鹃花海长廊",
+        "desc": "春季盛开的连片杜鹃花与陡峭奇险的高山岩壁"
+      }
+    ]
   },
   {
     "id": "tiewadian",
@@ -18938,7 +19635,24 @@
       "秋：9-11月晴天窗口多，是多数攻略推荐的主力季节，清晨云海概率全天最高（驴友社区经验）",
       "冬：12-2月雪景与云海壮观，但高山段积雪结冰（曾有元旦大雪几乎封路），需冰雪装备与防滑链"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/tiewadian.jpg",
+        "title": "铁瓦殿标志风光",
+        "desc": "海拔3400m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/tiewadian-2.jpg",
+        "title": "铁瓦殿云海之巅",
+        "desc": "成都户外强驴进阶胜地，傲视群峰的360°云海"
+      },
+      {
+        "src": "assets/mountains/tiewadian-3.jpg",
+        "title": "险峻山脊箭竹天路",
+        "desc": "穿行于苍翠箭竹林与刀锋山脊之间，挑战极限"
+      }
+    ]
   },
   {
     "id": "wuzhongshan",
@@ -19347,7 +20061,24 @@
       "秋：9-11月天晴概率较高、云海与远眺窗口（未见专门报道，按区域气候推断，需以实际天气为准）",
       "冬：12-2月雪景、雾凇，多篇攻略称'成都周边野雪天花板'，需冰爪与防滑链"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/wuzhongshan.jpg",
+        "title": "雾中山标志风光",
+        "desc": "海拔1638m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/wuzhongshan-2.jpg",
+        "title": "开化寺古刹幽径",
+        "desc": "中国早期佛教发源地之一，深山藏古寺，晨雾漫卷"
+      },
+      {
+        "src": "assets/mountains/wuzhongshan-3.jpg",
+        "title": "雾中山苍翠竹林海",
+        "desc": "青翠修竹蔽日，清泉石上流，夏日避暑清心"
+      }
+    ]
   },
   {
     "id": "yihuashan",
@@ -19700,7 +20431,24 @@
     "best_season": [
       "3月-6月或9月-11月（百科适宜季节）；金莲池一带十月秋景红叶夹道、层林尽染"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/yihuashan.jpg",
+        "title": "蓥华山标志风光",
+        "desc": "海拔3160m 德阳川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/yihuashan-2.jpg",
+        "title": "蓥华叠翠地质绝壁",
+        "desc": "川西奇险峰林地貌，绝壁千仞，常现神奇佛光"
+      },
+      {
+        "src": "assets/mountains/yihuashan-3.jpg",
+        "title": "蓥华秋山漫山红叶",
+        "desc": "金秋时节高山落叶松与红叶染红整条峡谷"
+      }
+    ]
   },
   {
     "id": "zhaogongshan",
@@ -20176,7 +20924,24 @@
       "秋（9-11月）：天气稳定能见度高，云海日出概率大，适合一日往返",
       "冬（12-2月）：雾凇冰挂与积雪（12月下旬-2月下旬最佳看雪期），云海概率高；需冰爪、自驾需防滑链"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/zhaogongshan.jpg",
+        "title": "赵公山标志风光",
+        "desc": "海拔2434m 成都川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/zhaogongshan-2.jpg",
+        "title": "赵公山顶财神祖庙",
+        "desc": "海拔2434m财神祖山，俯瞰都江堰与青城群峰"
+      },
+      {
+        "src": "assets/mountains/zhaogongshan-3.jpg",
+        "title": "俯瞰成都璀璨夜景",
+        "desc": "夜宿山顶远眺成都市区万家灯火与灿烂星空"
+      }
+    ]
   },
   {
     "id": "emeishan",
@@ -20780,7 +21545,24 @@
       "秋 9-11月：云海出现概率相对最高的季节（自媒体口径9-10月概率可达7成）；佛光多在午后14-17时出现",
       "冬 12-2月：雪景雾凇冰瀑主题；12/15-1/15为门票淡季；路面结冰需冰爪，进山时间缩短至7:00-16:00"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/emeishan.jpg",
+        "title": "峨眉山标志风光",
+        "desc": "海拔3099m 乐山川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/emeishan-2.jpg",
+        "title": "峨眉山金顶佛光",
+        "desc": "十方普贤金像在云海金光中巍然屹立，庄严殊胜"
+      },
+      {
+        "src": "assets/mountains/emeishan-3.jpg",
+        "title": "清音平湖水声潺潺",
+        "desc": "双桥清音，两水夹明镜，山水灵动如画卷"
+      }
+    ]
   },
   {
     "id": "changpinggou",
@@ -21240,7 +22022,24 @@
     "best_season": [
       "官方最佳徒步时间7-10月；彩林期10月下旬-11月中下旬；盛花期5-9月；冬季冰雪期12月-次年4月"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/changpinggou.jpg",
+        "title": "四姑娘山·长坪沟标志风光",
+        "desc": "海拔3760m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/changpinggou-2.jpg",
+        "title": "长坪沟枯树滩倒影",
+        "desc": "清澈溪流倒映幺妹峰雪山雄姿与静穆枯木"
+      },
+      {
+        "src": "assets/mountains/changpinggou-3.jpg",
+        "title": "木骡子雪山大草甸",
+        "desc": "雪峰脚下的宽阔高山牧场，宛如瑞士阿尔卑斯风情"
+      }
+    ]
   },
   {
     "id": "dagubingchuan",
@@ -21603,7 +22402,24 @@
     "best_season": [
       "四季各有看点：春观山花、秋观彩林、冬观雪景，旺季4月1日-11月15日；山顶积雪期长达10个月"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/dagubingchuan.jpg",
+        "title": "达古冰川标志风光",
+        "desc": "海拔4860m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/dagubingchuan-2.jpg",
+        "title": "4860云端咖啡厅",
+        "desc": "世界海拔最高的索道站，直面万年古老高山现代冰川"
+      },
+      {
+        "src": "assets/mountains/dagubingchuan-3.jpg",
+        "title": "达古圣湖金秋倒影",
+        "desc": "翡翠般的湖水倒映皑皑雪峰与漫山金黄彩林"
+      }
+    ]
   },
   {
     "id": "sanaoxueshan",
@@ -21957,7 +22773,24 @@
     "best_season": [
       "最佳时机9-10月或4-5月；11月至次年3月降雪多进山困难，6-7月多大雨雷电"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/sanaoxueshan.jpg",
+        "title": "三奥雪山标志风光",
+        "desc": "海拔5286m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/sanaoxueshan-2.jpg",
+        "title": "神山奥太基金字塔雪峰",
+        "desc": "三座神山并峙，金字塔状的雪白山体在蓝天下庄严崇高"
+      },
+      {
+        "src": "assets/mountains/sanaoxueshan-3.jpg",
+        "title": "三奥大本营高山草场",
+        "desc": "登山者的大本营，雪峰环绕下开阔祥和的藏家牧场"
+      }
+    ]
   },
   {
     "id": "shuangqiaogou",
@@ -22411,7 +23244,24 @@
     "best_season": [
       "四季皆宜：春赏雪山杜鹃，夏避暑清凉，秋看彩林红叶，冬观冰瀑攀冰（12-2月）"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/shuangqiaogou.jpg",
+        "title": "四姑娘山·双桥沟标志风光",
+        "desc": "海拔3840m 阿坝川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/shuangqiaogou-2.jpg",
+        "title": "双桥沟红杉林胜境",
+        "desc": "高耸入云的红杉树与白雪皑皑的猎人峰相互辉映"
+      },
+      {
+        "src": "assets/mountains/shuangqiaogou-3.jpg",
+        "title": "布达拉峰天路公路",
+        "desc": "壮观的笔直雪山公路，直指雄伟如布达拉宫的岩峰"
+      }
+    ]
   },
   {
     "id": "guangwushan",
@@ -22690,6 +23540,23 @@
     "best_season": [
       "秋（10月中旬-11月中旬）：万山红遍、层林尽染，亚洲最大红叶地毯，红叶指数III级巅峰"
     ],
-    "region_id": "chengdu"
+    "region_id": "chengdu",
+    "gallery": [
+      {
+        "src": "assets/mountains/guangwushan.jpg",
+        "title": "光雾山·燕子岭标志风光",
+        "desc": "海拔2507m 巴中川西高山全貌实拍"
+      },
+      {
+        "src": "assets/mountains/guangwushan-2.jpg",
+        "title": "燕子岭万山红遍",
+        "desc": "亚洲最大红叶胜地，喀斯特峭壁与漫山彩林交融"
+      },
+      {
+        "src": "assets/mountains/guangwushan-3.jpg",
+        "title": "米仓山秋色流溪",
+        "desc": "红叶落满清澈溪涧，秋意浓郁如童话梦境"
+      }
+    ]
   }
 ]

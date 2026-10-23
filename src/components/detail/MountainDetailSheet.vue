@@ -37,8 +37,17 @@
           </div>
 
           <div class="flex items-center gap-2.5 flex-shrink-0">
-            <span class="px-2.5 py-1 rounded-full bg-surface-container-high/90 text-label-data-sm font-mono text-primary border border-primary/30">
+            <span
+              v-if="galleryList.length > 1"
+              class="px-2.5 py-1 rounded-full bg-surface-container-high/90 text-label-data-sm font-mono text-primary border border-primary/30"
+            >
               {{ lightboxIndex + 1 }} / {{ galleryList.length }}
+            </span>
+            <span
+              v-else
+              class="px-2.5 py-1 rounded-full bg-surface-container-high/90 text-label-data-sm font-mono text-primary border border-primary/30"
+            >
+              高清实景
             </span>
             <button
               type="button"
@@ -58,6 +67,7 @@
         >
           <!-- Prev Image Button -->
           <button
+            v-if="galleryList.length > 1"
             type="button"
             @click.stop="prevLightboxImage"
             class="absolute left-2 sm:left-4 z-20 w-11 h-11 rounded-full frost-glass border border-outline-variant/40 flex items-center justify-center text-white hover:text-primary active:scale-90 transition-all shadow-2xl"
@@ -76,6 +86,7 @@
 
           <!-- Next Image Button -->
           <button
+            v-if="galleryList.length > 1"
             type="button"
             @click.stop="nextLightboxImage"
             class="absolute right-2 sm:right-4 z-20 w-11 h-11 rounded-full frost-glass border border-outline-variant/40 flex items-center justify-center text-white hover:text-primary active:scale-90 transition-all shadow-2xl"
@@ -88,7 +99,7 @@
         <!-- Bottom Controls & Dots -->
         <div class="flex flex-col items-center gap-2 py-2 max-w-md mx-auto w-full z-20">
           <!-- Indicator Dots -->
-          <div class="flex items-center gap-2">
+          <div v-if="galleryList.length > 1" class="flex items-center gap-2">
             <button
               v-for="(img, idx) in galleryList"
               :key="'lb-dot-' + idx"
@@ -100,9 +111,116 @@
             ></button>
           </div>
           <span class="text-caption text-on-surface-variant/80 text-[11px] font-mono">
-            左右轻扫或按方向键切换 · 点击背景或按 ESC 退出
+            {{ galleryList.length > 1 ? '左右轻扫或按方向键切换 · 点击背景或按 ESC 退出' : '点击背景或按 ESC 退出' }}
           </span>
         </div>
+      </div>
+    </Transition>
+  </Teleport>
+
+  <!-- Navigation App Action Sheet / Modal -->
+  <Teleport to="body">
+    <Transition name="fade">
+      <div
+        v-if="isNavModalOpen && mountain"
+        class="nav-picker-backdrop fixed inset-0 z-[110] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 select-none"
+        @click.self="closeNavigationPicker"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div
+          class="nav-picker-panel w-full sm:max-w-md bg-surface-container rounded-t-3xl sm:rounded-3xl border border-outline-variant/30 shadow-[0_-12px_40px_rgba(0,0,0,0.8)] p-5 space-y-4 max-h-[85vh] overflow-y-auto"
+        >
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-2 border-b border-outline-variant/20">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[18px]">navigation</span>
+              </span>
+              <div>
+                <h3 class="text-body-md font-bold text-on-surface">选择手机导航 App</h3>
+                <p class="text-[11px] font-mono text-on-surface-variant truncate max-w-[240px]">
+                  目的地: {{ currentDestinationName }}
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              @click="closeNavigationPicker"
+              class="w-7 h-7 rounded-full bg-surface-container-high hover:bg-surface-bright text-on-surface-variant flex items-center justify-center transition-colors"
+            >
+              <span class="material-symbols-outlined text-[16px]">close</span>
+            </button>
+          </div>
+
+          <!-- Destination Info Card -->
+          <div class="p-3 rounded-2xl bg-surface-container-low border border-outline-variant/25 text-body-sm space-y-1.5">
+            <div class="flex items-center justify-between text-caption font-mono text-on-surface-variant">
+              <span>GPS 坐标: {{ destinationCoord.lat.toFixed(4) }}°N, {{ destinationCoord.lng.toFixed(4) }}°E</span>
+              <span class="text-primary font-bold">标高 {{ mountain.altitude_m }}m</span>
+            </div>
+            <p class="text-[12px] text-on-surface leading-snug">
+              {{ mountain.nav_point || `${mountain.name} 推荐登山起点` }}
+            </p>
+          </div>
+
+          <!-- Apps List -->
+          <div class="space-y-2">
+            <div
+              v-for="app in availableNavApps"
+              :key="app.id"
+              @click="handleSelectNavApp(app)"
+              class="nav-app-item group flex items-center justify-between p-3.5 rounded-2xl bg-surface-container-high/60 hover:bg-surface-container-high border border-outline-variant/25 hover:border-primary/40 cursor-pointer active:scale-[0.98] transition-all"
+            >
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0"
+                  :style="{ backgroundColor: app.color + '20', color: app.color }"
+                >
+                  <span class="material-symbols-outlined text-[22px]">{{ app.icon }}</span>
+                </div>
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-body-md font-bold text-on-surface">{{ app.name }}</span>
+                    <span
+                      class="px-1.5 py-0.2 rounded text-[10px] font-bold font-mono"
+                      :style="{ backgroundColor: app.color + '25', color: app.color }"
+                    >
+                      {{ app.badge }}
+                    </span>
+                  </div>
+                  <p class="text-[11px] text-on-surface-variant mt-0.5">{{ app.desc }}</p>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-[18px] text-on-surface-variant group-hover:text-primary transition-colors">
+                chevron_right
+              </span>
+            </div>
+          </div>
+
+          <!-- Copy Destination Button -->
+          <button
+            type="button"
+            @click="copyDestinationText"
+            class="w-full py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-bright border border-outline-variant/30 text-[12px] font-mono text-on-surface flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+          >
+            <span class="material-symbols-outlined text-[15px]">content_copy</span>
+            <span>复制终点信息（供其他车机或应用粘贴）</span>
+          </button>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
+
+  <!-- In-Sheet Toast Notification -->
+  <Teleport to="body">
+    <Transition name="fade">
+      <div
+        v-if="localToastMsg"
+        class="fixed top-14 left-1/2 -translate-x-1/2 z-[140] px-4 py-2.5 rounded-2xl bg-surface-container-lowest/95 backdrop-blur-xl border border-primary/50 shadow-[0_8px_30px_rgba(78,222,163,0.35)] text-primary text-body-sm font-bold flex items-center gap-2 pointer-events-none"
+      >
+        <span class="material-symbols-outlined text-[18px]">check_circle</span>
+        <span>{{ localToastMsg }}</span>
       </div>
     </Transition>
   </Teleport>
@@ -111,10 +229,12 @@
   <Transition name="slide-up">
     <aside
       v-if="modelValue && mountain"
+      ref="sheetAsideRef"
       class="mountain-detail-sheet fixed inset-x-0 bottom-0 z-[70] max-w-md mx-auto h-[92vh] max-h-[92vh] flex flex-col rounded-t-3xl bg-surface-container/95 backdrop-blur-2xl border-t border-outline-variant/30 shadow-[0_-16px_48px_rgba(0,0,0,0.85)] select-none text-on-surface overflow-hidden"
       role="dialog"
       aria-modal="true"
       :aria-label="`${mountain.name} 详情`"
+      @scroll.passive="preventAsideScroll"
     >
       <!-- Top Drag Handle -->
       <div
@@ -154,11 +274,11 @@
       <!-- Scrollable Main Content Container -->
       <div
         ref="scrollContainerRef"
-        class="flex-1 overflow-y-auto no-scrollbar scroll-smooth p-4 space-y-4 pb-6"
+        class="flex-1 overflow-y-auto no-scrollbar scroll-smooth px-4 pb-6 space-y-4"
       >
         <!-- Hero Scenic Image Gallery Carousel Banner -->
         <div
-          class="hero-gallery-banner relative w-full h-52 rounded-2xl overflow-hidden bg-surface-container-lowest border border-outline-variant/30 shadow-lg group select-none cursor-pointer"
+          class="hero-gallery-banner relative w-full h-52 rounded-2xl overflow-hidden bg-surface-container-lowest border border-outline-variant/30 shadow-lg group select-none cursor-pointer mt-3"
           @touchstart.passive="onHeroTouchStart"
           @touchmove.passive="onHeroTouchMove"
           @touchend="onHeroTouchEnd"
@@ -191,7 +311,7 @@
                 title="轻触全屏放大画廊"
               >
                 <span class="material-symbols-outlined text-[13px]">photo_library</span>
-                {{ currentImageIndex + 1 }}/{{ galleryList.length }}
+                {{ galleryList.length > 1 ? `${currentImageIndex + 1}/${galleryList.length}` : '实景全貌' }}
               </button>
 
               <!-- Weather Chip -->
@@ -204,6 +324,7 @@
 
           <!-- Prev / Next Arrow Navigation Controls (Subtle Hover/Touch Arrows) -->
           <button
+            v-if="galleryList.length > 1"
             type="button"
             @click.stop="prevImage"
             aria-label="查看上一张图片"
@@ -212,6 +333,7 @@
             <span class="material-symbols-outlined text-[18px]">chevron_left</span>
           </button>
           <button
+            v-if="galleryList.length > 1"
             type="button"
             @click.stop="nextImage"
             aria-label="查看下一张图片"
@@ -221,7 +343,10 @@
           </button>
 
           <!-- Micro Indicator Dots -->
-          <div class="gallery-dots absolute bottom-14 left-0 right-0 z-20 flex items-center justify-center gap-1.5 pointer-events-auto">
+          <div
+            v-if="galleryList.length > 1"
+            class="gallery-dots absolute bottom-14 left-0 right-0 z-20 flex items-center justify-center gap-1.5 pointer-events-auto"
+          >
             <button
               v-for="(img, idx) in galleryList"
               :key="'dot-' + idx"
@@ -251,8 +376,8 @@
           </div>
         </div>
 
-        <!-- Quick Anchor Navigation Pills (Horizontal Scroller) -->
-        <nav class="sticky top-0 z-10 -mx-4 px-4 py-2 bg-[#1c1f29] border-y border-outline-variant/30 shadow-md flex gap-1.5 overflow-x-auto no-scrollbar">
+        <!-- Quick Anchor Navigation Pills (Horizontal Scroller with Solid Obsidian Backing) -->
+        <nav class="sticky top-0 z-20 -mx-4 px-4 py-2 bg-[#161d2d] border-b border-outline-variant/30 shadow-md flex gap-1.5 overflow-x-auto no-scrollbar">
           <button
             v-for="tab in anchorTabs"
             :key="tab.id"
@@ -477,22 +602,63 @@
             </div>
           </div>
 
-          <!-- Track Keywords (GPX search) -->
-          <div v-if="mountain.track_keywords && mountain.track_keywords.length" class="pt-2 border-t border-outline-variant/20">
-            <div class="text-caption font-semibold text-on-surface-variant mb-1.5 flex items-center gap-1">
-              <span class="material-symbols-outlined text-[15px] text-primary">download</span>
-              <span>两步路 / 六只脚 GPX 轨迹搜索词:</span>
+          <!-- Track Keywords (GPX search & App Deep Link) -->
+          <div v-if="mountain.track_keywords && mountain.track_keywords.length" class="pt-3 border-t border-outline-variant/20 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="text-caption font-semibold text-on-surface flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[17px] text-primary">download</span>
+                <span class="font-bold">两步路 / 六只脚 GPX 户外轨迹</span>
+              </div>
+              <span class="text-[11px] font-mono text-primary/80">点击自动调起 App</span>
             </div>
-            <div class="flex flex-wrap gap-1.5">
-              <span
+
+            <!-- Quick Action: Launch 2bulu / Foottouch -->
+            <div class="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                @click="handleLaunchTwoBulu(mountain.name)"
+                class="btn-launch-twobulu flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 text-emerald-300 text-[12px] font-bold active:scale-95 transition-all shadow-sm"
+              >
+                <span class="material-symbols-outlined text-[17px]">hiking</span>
+                <span>打开两步路 App</span>
+              </button>
+              <button
+                type="button"
+                @click="handleLaunchFootTouch(mountain.name)"
+                class="btn-launch-foottouch flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/35 text-blue-300 text-[12px] font-bold active:scale-95 transition-all shadow-sm"
+              >
+                <span class="material-symbols-outlined text-[17px]">map</span>
+                <span>打开六只脚 App</span>
+              </button>
+            </div>
+
+            <!-- Track Keywords List with App Trigger -->
+            <div class="space-y-1.5">
+              <div
                 v-for="(kw, kwi) in mountain.track_keywords"
                 :key="`kw-${kwi}`"
-                class="px-2 py-0.5 rounded-md bg-surface-container text-caption font-mono text-primary border border-primary/25 cursor-pointer hover:bg-primary/10 transition-colors"
-                @click="copyText(kw)"
-                :title="`点击复制 ${kw}`"
+                @click="handleLaunchTwoBulu(kw)"
+                class="track-keyword-card group flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low/90 hover:bg-surface-container border border-primary/20 hover:border-primary/45 cursor-pointer active:scale-[0.99] transition-all"
               >
-                {{ kw }}
-              </span>
+                <div class="flex items-center gap-2 min-w-0 pr-2">
+                  <span class="material-symbols-outlined text-primary text-[16px] flex-shrink-0 group-hover:scale-110 transition-transform">route</span>
+                  <span class="text-[12px] font-mono text-on-surface truncate">{{ kw }}</span>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                  <span class="px-2 py-0.5 rounded-md bg-primary/15 group-hover:bg-primary/25 text-primary text-[10px] font-bold font-mono border border-primary/30 flex items-center gap-0.5">
+                    <span>搜两步路</span>
+                    <span class="material-symbols-outlined text-[11px]">open_in_new</span>
+                  </span>
+                  <button
+                    type="button"
+                    @click.stop="copyKeywordOnly(kw)"
+                    class="p-1 rounded-md bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border border-outline-variant/30 transition-colors"
+                    title="仅复制关键词"
+                  >
+                    <span class="material-symbols-outlined text-[13px]">content_copy</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -600,24 +766,39 @@
             <span class="text-caption text-secondary font-mono font-semibold">NAVIGATION</span>
           </div>
 
-          <!-- Nav Target Point -->
-          <div v-if="mountain.nav_point" class="p-3 rounded-xl bg-surface-container-low/80 border border-secondary/30 space-y-1">
+          <!-- Nav Target Point & Map App Launcher -->
+          <div v-if="mountain.nav_point" class="p-3.5 rounded-2xl bg-surface-container-low/90 border border-secondary/35 space-y-2.5">
             <div class="flex items-center justify-between">
-              <span class="text-caption font-bold text-secondary flex items-center gap-1">
-                <span class="material-symbols-outlined text-[16px]">navigation</span>
-                <span>导航终点设定</span>
+              <span class="text-caption font-bold text-secondary flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[17px]">navigation</span>
+                <span>自驾与徒步导航终点</span>
               </span>
-              <button
-                type="button"
-                @click="copyText(mountain.nav_point)"
-                class="px-2 py-0.5 rounded bg-secondary/10 hover:bg-secondary/20 text-secondary text-[11px] font-mono border border-secondary/30 transition-colors"
-              >
-                复制目的地
-              </button>
+              <span class="px-2 py-0.5 rounded-full bg-secondary/15 text-secondary text-[10px] font-mono font-bold">
+                一键调起地图
+              </span>
             </div>
             <p class="text-body-sm text-on-surface leading-snug font-medium">
               {{ mountain.nav_point }}
             </p>
+            <div class="flex items-center gap-2 pt-1">
+              <button
+                type="button"
+                @click="openNavigationPicker"
+                class="btn-open-nav-app flex-1 py-2 px-3 rounded-xl bg-primary hover:bg-primary-hover text-on-primary text-[12px] font-bold shadow-[0_4px_16px_rgba(78,222,163,0.3)] flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+              >
+                <span class="material-symbols-outlined text-[17px]">explore</span>
+                <span>打开手机地图 App 导航</span>
+              </button>
+              <button
+                type="button"
+                @click="copyDestinationText"
+                class="py-2 px-3 rounded-xl bg-surface-container-high hover:bg-surface-bright text-on-surface text-[12px] font-mono border border-outline-variant/30 flex items-center justify-center gap-1 active:scale-95 transition-transform"
+                title="复制终点文本"
+              >
+                <span class="material-symbols-outlined text-[14px]">content_copy</span>
+                <span>复制</span>
+              </button>
+            </div>
           </div>
 
           <!-- Road Difficulty & Conditions -->
@@ -1117,32 +1298,43 @@
       </div>
 
       <!-- Sticky Bottom Action Bar -->
-      <footer class="flex-shrink-0 p-3.5 bg-surface-container/95 backdrop-blur-2xl border-t border-outline-variant/30 flex items-center gap-3 z-30 shadow-[0_-8px_24px_rgba(0,0,0,0.6)]">
+      <footer class="flex-shrink-0 p-3.5 bg-surface-container/95 backdrop-blur-2xl border-t border-outline-variant/30 flex items-center gap-2.5 z-30 shadow-[0_-8px_24px_rgba(0,0,0,0.6)]">
+        <!-- Direct Navigation Button -->
+        <button
+          type="button"
+          @click="openNavigationPicker"
+          class="btn-bottom-nav py-3 px-3.5 rounded-2xl bg-secondary/15 hover:bg-secondary/25 border border-secondary/40 text-secondary text-body-sm font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+          title="打开手机地图导航"
+        >
+          <span class="material-symbols-outlined text-[19px]">navigation</span>
+          <span class="whitespace-nowrap">导航</span>
+        </button>
+
         <!-- Add to Plan Button -->
         <button
           type="button"
           @click="handleAddToPlan"
-          class="flex-1 py-3 px-3 rounded-2xl frost-glass border border-secondary/40 text-secondary text-body-sm font-bold flex items-center justify-center gap-1.5 active:scale-95 hover:border-secondary transition-all"
+          class="flex-1 py-3 px-2 rounded-2xl frost-glass border border-secondary/40 text-secondary text-body-sm font-bold flex items-center justify-center gap-1.5 active:scale-95 hover:border-secondary transition-all"
         >
-          <span class="material-symbols-outlined text-[20px]">
+          <span class="material-symbols-outlined text-[19px]">
             {{ isInPlan ? 'event_available' : 'add_circle' }}
           </span>
-          <span>{{ isInPlan ? '已在计划中' : '加入本周计划' }}</span>
+          <span class="truncate">{{ isInPlan ? '已在计划' : '加入计划' }}</span>
         </button>
 
         <!-- Primary Summit Checkin Toggle Button -->
         <button
           type="button"
           @click="handleToggleCheckin"
-          class="btn-checkin-toggle flex-1 py-3 px-3 rounded-2xl font-bold text-body-sm flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-lg"
+          class="btn-checkin-toggle flex-1 py-3 px-2 rounded-2xl font-bold text-body-sm flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-lg"
           :class="isChecked
             ? 'bg-primary/20 text-primary border border-primary/60 glow-primary'
             : 'bg-primary text-on-primary hover:bg-primary-hover glow-primary'"
         >
-          <span class="material-symbols-outlined text-[20px]">
+          <span class="material-symbols-outlined text-[19px]">
             {{ isChecked ? 'check_circle' : 'flag' }}
           </span>
-          <span>{{ isChecked ? '✓ 已登顶打卡' : '🏔️ 一键登顶打卡' }}</span>
+          <span class="truncate">{{ isChecked ? '✓ 已打卡' : '🏔️ 登顶打卡' }}</span>
         </button>
       </footer>
     </aside>
@@ -1150,12 +1342,22 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, reactive, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, reactive, nextTick, onMounted, onUnmounted } from 'vue';
 import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { usePlanStore } from '@/stores/planStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
 import RouteElevationChart from '@/components/detail/RouteElevationChart.vue';
 import MountainWeatherCard from '@/components/weather/MountainWeatherCard.vue';
+import {
+  isIos,
+  launchTwoBulu,
+  launchFootTouch,
+  launchNavigation,
+  NAVIGATION_APPS,
+  cleanTrackKeyword,
+  copyToClipboard
+} from '@/utils/appLauncher.js';
+import { getMountainCoordinate } from '@/stores/mountainStore.js';
 
 const props = defineProps({
   mountain: {
@@ -1173,7 +1375,8 @@ const emit = defineEmits([
   'checkin',
   'add-plan',
   'probe-waypoint',
-  'clear-probe'
+  'clear-probe',
+  'toast'
 ]);
 
 const checkinStore = useCheckinStore();
@@ -1181,6 +1384,13 @@ const planStore = usePlanStore();
 const regionStore = useRegionStore();
 
 const scrollContainerRef = ref(null);
+const sheetAsideRef = ref(null);
+
+function preventAsideScroll(e) {
+  if (e.target && e.target.scrollTop !== 0) {
+    e.target.scrollTop = 0;
+  }
+}
 const activeAnchor = ref('overview');
 const gearCheckedMap = reactive({});
 
@@ -1291,59 +1501,35 @@ const checkedGearCount = computed(() => {
   return Object.values(gearCheckedMap).filter(Boolean).length;
 });
 
-// ================= 高山暗黑黑曜石与极光绿矢量插图生成器 =================
+// ================= 高山暗黑黑曜石与极光绿图片加载兜底 =================
 function heroFallbackSvg(name) {
   const title = encodeURIComponent(name || 'Alpine Peak');
-  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23181b25"/><stop offset="50%" stop-color="%23262a34"/><stop offset="100%" stop-color="%230f131c"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/><path d="M-20 300 L180 90 L320 240 L450 120 L620 300 Z" fill="%234edea3" opacity="0.15"/><path d="M90 300 L300 150 L480 300 Z" fill="%234cd7f6" opacity="0.2"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="%2386948a" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="bold">${title}</text><text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="%234edea3" font-family="JetBrains Mono, monospace" font-size="14">ALPINE TOPO · 成都周边50座山</text></svg>`;
+  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23181b25"/><stop offset="50%" stop-color="%23262a34"/><stop offset="100%" stop-color="%230f131c"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="%2386948a" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="bold">${title}</text><text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="%234edea3" font-family="JetBrains Mono, monospace" font-size="14">ALPINE TOPO · 成都周边50座山</text></svg>`;
 }
 
-function createSunriseSceneSvg(mountain, alt) {
-  const name = mountain?.name || 'Alpine Peak';
-  const altitude = alt || mountain?.altitude_m || 3000;
-  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450"><defs><linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="%230b0e17"/><stop offset="45%" stop-color="%231a2238"/><stop offset="85%" stop-color="%23ff9e42" stop-opacity="0.8"/><stop offset="100%" stop-color="%23ffb95f"/></linearGradient></defs><rect width="800" height="450" fill="url(%23sky)"/><circle cx="420" cy="300" r="160" fill="%23ffb95f" opacity="0.28"/><path d="M0 450 L120 280 L280 360 L450 190 L620 340 L800 230 L800 450 Z" fill="%23111520" opacity="0.95"/><path d="M450 190 L620 340 L800 230 L800 450 L320 450 Z" fill="%23171c2a"/><path d="M0 450 L200 260 L380 340 L520 150 L680 300 L800 200 L800 450 Z" fill="none" stroke="%23ffb95f" stroke-width="2.5" opacity="0.85"/><path d="M200 260 L520 150" stroke="%234edea3" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.75"/><rect x="40" y="40" width="320" height="68" rx="14" fill="%230b0f19" fill-opacity="0.8" stroke="%23ffb95f" stroke-opacity="0.4" stroke-width="1"/><text x="60" y="66" fill="%23ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="bold">${encodeURIComponent(name)} · 晨曦金山</text><text x="60" y="90" fill="%234edea3" font-family="monospace" font-size="12">海拔 ${altitude}m · 晨昏日出与云海机位</text></svg>`;
-}
-
-function createTopoContourSvg(mountain, alt, asc, dist) {
-  const name = mountain?.name || 'Alpine Peak';
-  const altitude = alt || mountain?.altitude_m || 3000;
-  const ascent = asc || mountain?.ascent_m || 800;
-  const distance = dist || mountain?.distance_km || 10;
-  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450"><defs><linearGradient id="topoBg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%230a0d16"/><stop offset="50%" stop-color="%23111726"/><stop offset="100%" stop-color="%23080b12"/></linearGradient></defs><rect width="800" height="450" fill="url(%23topoBg)"/><g stroke="%234edea3" stroke-opacity="0.16" stroke-width="1" fill="none"><ellipse cx="400" cy="225" rx="360" ry="190"/><ellipse cx="400" cy="225" rx="300" ry="155"/><ellipse cx="400" cy="225" rx="240" ry="120"/><ellipse cx="400" cy="225" rx="180" ry="90"/><ellipse cx="400" cy="225" rx="120" ry="60"/><ellipse cx="400" cy="225" rx="60" ry="30"/></g><path d="M100 350 Q 250 280, 400 225 T 700 120" fill="none" stroke="%234edea3" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="350" r="6" fill="%234cd7f6"/><circle cx="400" cy="225" r="7" fill="%234edea3"/><circle cx="700" cy="120" r="8" fill="%23ffb95f"/><rect x="40" y="40" width="340" height="68" rx="14" fill="%230b0f19" fill-opacity="0.8" stroke="%234edea3" stroke-opacity="0.4" stroke-width="1"/><text x="60" y="66" fill="%23ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="bold">${encodeURIComponent(name)} · GPS 地貌拓扑</text><text x="60" y="90" fill="%234cd7f6" font-family="monospace" font-size="12">标高 ${altitude}m · 爬升 +${ascent}m · 里程 ${distance}km</text></svg>`;
-}
-
-// ================= 画廊列表计算 =================
+// ================= 画廊列表计算（严格仅限真实实拍风景照，绝不塞入折线示意图） =================
 const galleryList = computed(() => {
   const m = props.mountain;
   if (!m) return [];
 
+  // 若数据中配置了多张真实实拍风景照
   if (Array.isArray(m.gallery) && m.gallery.length > 0) {
-    return m.gallery.map((url, i) => ({
-      src: url,
-      title: `实拍机位 0${i + 1}`,
-      desc: `${m.name} 真实高山全景画廊`
-    }));
+    return m.gallery.map((item, i) => {
+      const isObj = typeof item === 'object' && item !== null;
+      return {
+        src: isObj ? item.src : item,
+        title: isObj ? item.title : `实景风光 0${i + 1}`,
+        desc: isObj ? item.desc : `${m.name} · 真实高山全景实拍`
+      };
+    });
   }
 
-  // 默认三图高山相册画廊（主峰全貌实拍 + 晨曦金山观景 + GPS 拓扑剖面）
-  const mainPhoto = `assets/mountains/${m.id}.jpg`;
-  const sunrisePhoto = createSunriseSceneSvg(m, nums.value.alt);
-  const topoPhoto = createTopoContourSvg(m, nums.value.alt, nums.value.asc, nums.value.dist);
-
+  // 默认仅呈现 1 张真实的高清实拍风光照片，后续收录更多实景照后再动态扩展
   return [
     {
-      src: mainPhoto,
+      src: `assets/mountains/${m.id}.jpg`,
       title: '主峰全貌实景',
-      desc: `${m.name} · 标高 ${nums.value.alt}m 四川川西高山全貌`
-    },
-    {
-      src: sunrisePhoto,
-      title: '晨曦金山与云海',
-      desc: `${m.name} · 日照金山与晨昏逆温层黄金窗口`
-    },
-    {
-      src: topoPhoto,
-      title: '路线拓扑与地貌',
-      desc: `${m.name} · 累计爬升 +${nums.value.asc}m · 往返 ${nums.value.dist}km`
+      desc: `${m.name} · 标高 ${nums.value.alt}m 四川川西高山全貌实拍`
     }
   ];
 });
@@ -1493,6 +1679,12 @@ watch(
       closeLightbox();
       emit('clear-probe');
       Object.keys(gearCheckedMap).forEach((k) => delete gearCheckedMap[k]);
+    } else {
+      nextTick(() => {
+        if (sheetAsideRef.value) {
+          sheetAsideRef.value.scrollTop = 0;
+        }
+      });
     }
   }
 );
@@ -1505,9 +1697,25 @@ function closeSheet() {
 
 function scrollToAnchor(id) {
   activeAnchor.value = id;
+  const container = scrollContainerRef.value;
+  if (!container) return;
+
+  if (id === 'overview') {
+    container.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
   const target = document.getElementById(`mod-${id}`);
-  if (target && scrollContainerRef.value) {
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (target) {
+    const containerRect = container.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    // 导航栏高度约 46px，加上顶部微距共保留 52px 吸顶缓冲
+    const navStickyOffset = 52;
+    const targetScrollTop = container.scrollTop + (targetRect.top - containerRect.top) - navStickyOffset;
+    container.scrollTo({
+      top: Math.max(0, targetScrollTop),
+      behavior: 'smooth'
+    });
   }
 }
 
@@ -1523,10 +1731,90 @@ function handleAddToPlan() {
   emit('add-plan', props.mountain.id);
 }
 
-function copyText(str) {
+// ================= 手机原生导航与两步路户外 App 联动 =================
+const isNavModalOpen = ref(false);
+const localToastMsg = ref('');
+let localToastTimer = null;
+
+function showSheetToast(msg) {
+  localToastMsg.value = msg;
+  emit('toast', msg);
+  if (localToastTimer) clearTimeout(localToastTimer);
+  localToastTimer = setTimeout(() => {
+    localToastMsg.value = '';
+  }, 2600);
+}
+
+const destinationCoord = computed(() => {
+  if (!props.mountain) return { lat: 30.65, lng: 104.06 };
+  return getMountainCoordinate(props.mountain);
+});
+
+const currentDestinationName = computed(() => {
+  if (!props.mountain) return '';
+  return props.mountain.name + (props.mountain.nav_point ? ` · ${props.mountain.nav_point.split(/[,，;；]/)[0]}` : '');
+});
+
+const availableNavApps = computed(() => {
+  const isAppleDevice = isIos();
+  return NAVIGATION_APPS.filter((app) => {
+    if (app.showOnlyIos && !isAppleDevice) return false;
+    return true;
+  });
+});
+
+function openNavigationPicker() {
+  isNavModalOpen.value = true;
+}
+
+function closeNavigationPicker() {
+  isNavModalOpen.value = false;
+}
+
+function handleSelectNavApp(app) {
+  const dest = {
+    lat: destinationCoord.value.lat,
+    lng: destinationCoord.value.lng,
+    name: currentDestinationName.value
+  };
+  launchNavigation(app.id, dest);
+  showSheetToast(`正在为你打开 ${app.name}...`);
+  setTimeout(() => {
+    isNavModalOpen.value = false;
+  }, 400);
+}
+
+async function copyDestinationText() {
+  const text = `${currentDestinationName.value} (GPS: ${destinationCoord.value.lat.toFixed(4)}, ${destinationCoord.value.lng.toFixed(4)})`;
+  const ok = await copyToClipboard(text);
+  if (ok) {
+    showSheetToast('已复制目的地与 GPS 坐标！');
+  }
+}
+
+async function handleLaunchTwoBulu(rawKw) {
+  const res = await launchTwoBulu(rawKw);
+  showSheetToast(`已复制「${res.keyword}」，正在调起两步路 App...`);
+}
+
+async function handleLaunchFootTouch(rawKw) {
+  const res = await launchFootTouch(rawKw);
+  showSheetToast(`已复制「${res.keyword}」，正在调起六只脚 App...`);
+}
+
+async function copyKeywordOnly(rawKw) {
+  const clean = cleanTrackKeyword(rawKw);
+  const ok = await copyToClipboard(clean);
+  if (ok) {
+    showSheetToast(`已复制搜索词：「${clean}」`);
+  }
+}
+
+async function copyText(str) {
   if (!str) return;
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(str).catch(() => {});
+  const ok = await copyToClipboard(str);
+  if (ok) {
+    showSheetToast(`已复制到剪贴板！`);
   }
 }
 </script>

@@ -4,13 +4,14 @@
     <!-- Floating Trigger Pill on Mobile Screen (Draggable, default above bottom sheet) -->
     <button
       v-if="!isOpen"
+      ref="triggerBtnRef"
       type="button"
       @click="handleBtnClick"
       @touchstart.passive="onBtnTouchStart"
       @touchmove.passive="onBtnTouchMove"
       @touchend="onBtnTouchEnd"
       :style="btnPos.x !== null ? { left: `${btnPos.x}px`, top: `${btnPos.y}px`, right: 'auto', bottom: 'auto' } : {}"
-      class="btn-feedback-trigger fixed right-3 bottom-[432px] z-[999] flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/95 text-primary border border-primary/50 shadow-2xl backdrop-blur-md active:scale-95 transition-transform group select-none cursor-grab"
+      class="btn-feedback-trigger fixed right-3 bottom-[432px] z-[999] flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/95 text-primary border border-primary/50 shadow-2xl backdrop-blur-md active:scale-95 transition-transform group select-none cursor-grab whitespace-nowrap flex-nowrap shrink-0 max-w-fit"
       :title="hasActiveFeedback ? '有正在处理中的反馈，点击查看进度' : '真机调试反馈给 AI (支持拖拽移动)'"
       aria-label="真机调试反馈给 AI"
     >
@@ -19,17 +20,17 @@
         :class="hasActiveFeedback ? 'bg-amber-400 animate-ping' : 'bg-primary glow-primary animate-pulse'"
       ></span>
       <span
-        class="material-symbols-outlined text-[17px]"
+        class="material-symbols-outlined text-[17px] flex-shrink-0"
         :class="hasActiveFeedback ? 'text-amber-400' : 'text-primary'"
       >
         {{ hasActiveFeedback ? 'hourglass_top' : 'chat_bubble' }}
       </span>
-      <span class="text-caption font-bold tracking-tight text-on-surface">
+      <span class="text-caption font-bold tracking-tight text-on-surface whitespace-nowrap flex-shrink-0">
         {{ hasActiveFeedback ? (activeCount > 1 ? `处理中 (${activeCount}排队)` : '处理中...') : '反馈给 AI' }}
       </span>
       <span
         v-if="feedbackHistory.length > 0 && !hasActiveFeedback"
-        class="px-1.5 py-0.2 rounded-full bg-surface-container-lowest text-primary text-[10px] font-mono border border-primary/30"
+        class="px-1.5 py-0.2 rounded-full bg-surface-container-lowest text-primary text-[10px] font-mono border border-primary/30 flex-shrink-0"
       >
         {{ feedbackHistory.length }}
       </span>
@@ -519,12 +520,15 @@ const submitStatus = ref({ success: false, message: '' });
 const consoleErrors = ref([]);
 
 // Floating pill draggable position
+const triggerBtnRef = ref(null);
 const btnPos = ref({ x: null, y: null });
 let isBtnDragging = false;
 let btnTouchStartX = 0;
 let btnTouchStartY = 0;
 let btnInitialX = 0;
 let btnInitialY = 0;
+let btnWidth = 145;
+let btnHeight = 36;
 let hasBtnMoved = false;
 
 function onBtnTouchStart(e) {
@@ -536,6 +540,8 @@ function onBtnTouchStart(e) {
   const rect = e.currentTarget.getBoundingClientRect();
   btnInitialX = rect.left;
   btnInitialY = rect.top;
+  btnWidth = rect.width || 145;
+  btnHeight = rect.height || 36;
 }
 
 function onBtnTouchMove(e) {
@@ -548,8 +554,10 @@ function onBtnTouchMove(e) {
   }
   const screenW = typeof window !== 'undefined' ? window.innerWidth : 390;
   const screenH = typeof window !== 'undefined' ? window.innerHeight : 844;
-  const newX = Math.max(8, Math.min(screenW - 110, btnInitialX + dx));
-  const newY = Math.max(60, Math.min(screenH - 80, btnInitialY + dy));
+  const maxX = Math.max(10, screenW - btnWidth - 12);
+  const maxY = Math.max(60, screenH - btnHeight - 80);
+  const newX = Math.max(10, Math.min(maxX, btnInitialX + dx));
+  const newY = Math.max(60, Math.min(maxY, btnInitialY + dy));
   btnPos.value = { x: newX, y: newY };
 }
 
@@ -557,8 +565,9 @@ function onBtnTouchEnd() {
   isBtnDragging = false;
   if (hasBtnMoved && btnPos.value.x !== null) {
     const screenW = typeof window !== 'undefined' ? window.innerWidth : 390;
-    // Snap to left or right margin
-    btnPos.value.x = btnPos.value.x > screenW / 2 ? screenW - 110 : 10;
+    // 自动吸附左侧或右侧安全留白 (12px)，严格以自身真实宽度计算，杜绝文字挤压折行
+    const snapRightX = Math.max(10, screenW - btnWidth - 12);
+    btnPos.value.x = (btnPos.value.x + btnWidth / 2) > screenW / 2 ? snapRightX : 10;
   }
 }
 

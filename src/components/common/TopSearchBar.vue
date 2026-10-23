@@ -1,15 +1,15 @@
 <template>
   <div class="top-search-bar fixed top-[72px] inset-x-0 z-[55] px-margin flex flex-col gap-2.5 max-w-md mx-auto pointer-events-auto">
-    <!-- Search Bar -->
-    <div class="w-full h-12 rounded-xl frost-glass flex items-center px-3.5 gap-2.5 shadow-2xl border border-outline-variant/40 focus-within:border-primary/70 focus-within:glow-primary transition-all">
-      <span class="material-symbols-outlined text-primary text-[22px] flex-shrink-0">search</span>
+    <!-- Compact Elegant Search Bar (Stitch Precision) -->
+    <div class="w-full h-10 rounded-xl frost-glass flex items-center px-3 gap-2 shadow-xl border border-outline-variant/40 focus-within:border-primary/70 focus-within:glow-primary transition-all">
+      <span class="material-symbols-outlined text-primary text-[19px] flex-shrink-0">search</span>
       <input
         ref="searchInputRef"
         :value="mountainStore.searchQuery"
         @input="onSearchInput"
         @focus="onFocus"
         @blur="onBlur"
-        class="w-full bg-transparent border-0 p-0 text-on-surface placeholder:text-outline text-body-md focus:ring-0 focus:outline-none"
+        class="w-full bg-transparent border-0 p-0 text-on-surface placeholder:text-outline/80 text-[13px] focus:ring-0 focus:outline-none"
         :placeholder="`搜索${regionStore.currentRegion.shortName}周边山峰、路线、县域、标签...`"
         type="text"
       />
@@ -19,14 +19,14 @@
         aria-label="Clear Search"
         class="p-1 rounded-lg text-on-surface-variant hover:text-primary active:scale-95 transition-transform"
       >
-        <span class="material-symbols-outlined text-[18px]">close</span>
+        <span class="material-symbols-outlined text-[17px]">close</span>
       </button>
       <button
         v-else
         aria-label="Voice Search"
-        class="p-1.5 rounded-lg text-on-surface-variant hover:text-primary active:scale-95 transition-transform"
+        class="p-1 rounded-lg text-on-surface-variant hover:text-primary active:scale-95 transition-transform"
       >
-        <span class="material-symbols-outlined text-[20px]">mic</span>
+        <span class="material-symbols-outlined text-[18px]">mic</span>
       </button>
     </div>
 
@@ -35,7 +35,7 @@
       <!-- Active / All Peaks Filter -->
       <button
         @click="selectAll"
-        class="filter-chip flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-body-sm transition-all active:scale-95"
+        class="filter-chip flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium transition-all active:scale-95"
         :class="isAllActive
           ? 'bg-surface-container-high border border-primary text-primary glow-primary font-semibold'
           : 'frost-glass border border-outline-variant/30 text-on-surface-variant hover:text-on-surface'"
@@ -47,7 +47,7 @@
       <!-- L1 Leisure -->
       <button
         @click="toggleDifficulty('L1')"
-        class="filter-chip flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-body-sm transition-all active:scale-95"
+        class="filter-chip flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium transition-all active:scale-95"
         :class="mountainStore.activeFilters.difficulty === 'L1'
           ? 'bg-surface-container-high border border-primary text-primary glow-primary font-semibold'
           : 'frost-glass border border-outline-variant/30 text-on-surface-variant hover:text-on-surface'"
@@ -59,7 +59,7 @@
       <!-- L2 Intermediate -->
       <button
         @click="toggleDifficulty('L2')"
-        class="filter-chip flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-body-sm transition-all active:scale-95"
+        class="filter-chip flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium transition-all active:scale-95"
         :class="mountainStore.activeFilters.difficulty === 'L2'
           ? 'bg-surface-container-high border border-secondary text-secondary glow-secondary font-semibold'
           : 'frost-glass border border-outline-variant/30 text-on-surface-variant hover:text-on-surface'"
@@ -71,7 +71,7 @@
       <!-- L3 Summit Challenge -->
       <button
         @click="toggleDifficulty('L3')"
-        class="filter-chip flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-body-sm transition-all active:scale-95"
+        class="filter-chip flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium transition-all active:scale-95"
         :class="mountainStore.activeFilters.difficulty === 'L3'
           ? 'bg-surface-container-high border border-tertiary text-tertiary glow-gold font-semibold'
           : 'frost-glass border border-outline-variant/30 text-on-surface-variant hover:text-on-surface'"
@@ -83,7 +83,7 @@
       <!-- L4/L5 Hardcore -->
       <button
         @click="toggleDifficulty('L4')"
-        class="filter-chip flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full font-body-sm transition-all active:scale-95"
+        class="filter-chip flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium transition-all active:scale-95"
         :class="mountainStore.activeFilters.difficulty === 'L4'
           ? 'bg-surface-container-high border border-error text-error font-semibold'
           : 'frost-glass border border-outline-variant/30 text-on-surface-variant hover:text-on-surface'"
@@ -95,24 +95,24 @@
       <!-- Drive 2-4h -->
       <button
         @click="toggleDriveHours(4)"
-        class="filter-chip flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm transition-all active:scale-95"
+        class="filter-chip flex-shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-full text-[12px] font-medium transition-all active:scale-95"
         :class="mountainStore.activeFilters.maxDrive === 4
           ? 'bg-surface-container-high border border-primary text-primary glow-primary font-semibold'
           : 'frost-glass border border-outline-variant/30 text-on-surface-variant hover:text-on-surface'"
       >
-        <span class="material-symbols-outlined text-[16px]">directions_car</span>
+        <span class="material-symbols-outlined text-[14px]">directions_car</span>
         <span>车程 2-4h</span>
       </button>
 
       <!-- Sea of Clouds -->
       <button
         @click="toggleScenario('云海')"
-        class="filter-chip flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-full font-body-sm transition-all active:scale-95"
+        class="filter-chip flex-shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-full text-[12px] font-medium transition-all active:scale-95"
         :class="isScenarioActive('云海')
           ? 'bg-surface-container-high border border-secondary text-secondary glow-secondary font-semibold'
           : 'frost-glass border border-outline-variant/30 text-on-surface-variant hover:text-on-surface'"
       >
-        <span class="material-symbols-outlined text-[16px] text-secondary">cloud</span>
+        <span class="material-symbols-outlined text-[14px] text-secondary">cloud</span>
         <span>日出云海</span>
       </button>
     </div>
