@@ -481,6 +481,71 @@
             </div>
             <p>{{ mountain.reputation }}</p>
           </div>
+
+          <!-- 登顶打卡纪实卡片 (打卡状态与实景相册入口) -->
+          <div
+            v-if="isChecked"
+            class="p-3.5 rounded-2xl bg-surface-container-low/80 border border-primary/30 space-y-2.5 shadow-sm"
+          >
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-primary/20 text-primary flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[16px]">verified</span>
+                </span>
+                <div>
+                  <div class="text-[13px] font-bold text-white flex items-center gap-1.5">
+                    <span>我的登顶纪实</span>
+                    <span class="text-[9px] text-primary font-mono px-1.5 py-0.2 rounded bg-primary/10 border border-primary/20">已打卡</span>
+                  </div>
+                  <div class="text-[10px] text-on-surface-variant font-mono">
+                    {{ formatCheckinDate(currentCheckinRecord?.checkedAt) || '已完成登顶记录' }}
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                @click="isCheckinModalOpen = true"
+                class="px-2.5 py-1 rounded-full bg-primary/15 border border-primary/30 text-primary hover:bg-primary/25 text-[11px] font-medium flex items-center gap-1 active:scale-95 transition-all"
+              >
+                <span class="material-symbols-outlined text-[13px]">edit</span>
+                <span>编辑照片/随笔</span>
+              </button>
+            </div>
+
+            <!-- 照片横向画廊 (若有照片) -->
+            <div v-if="currentCheckinPhotos.length > 0" class="flex gap-2 overflow-x-auto py-1 scrollbar-none">
+              <div
+                v-for="(photo, idx) in currentCheckinPhotos"
+                :key="idx"
+                class="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-white/10 bg-black/40 cursor-pointer active:scale-95 transition-transform relative group"
+                @click="isCheckinModalOpen = true"
+              >
+                <img :src="photo" :alt="`实景 ${idx + 1}`" class="w-full h-full object-cover" />
+                <span
+                  v-if="idx === 0"
+                  class="absolute top-1 left-1 px-1 py-0.2 rounded bg-primary/90 text-surface text-[7px] font-bold font-mono"
+                >
+                  封面
+                </span>
+              </div>
+            </div>
+            <div
+              v-else
+              @click="isCheckinModalOpen = true"
+              class="text-[11px] text-on-surface-variant flex items-center justify-between bg-surface-container-lowest/60 p-2.5 rounded-xl border border-dashed border-white/10 hover:border-primary/40 cursor-pointer transition-colors"
+            >
+              <span class="flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px] text-primary">add_a_photo</span>
+                <span>尚未上传实景照片，点击添加实景</span>
+              </span>
+              <span class="text-primary text-[10px] font-mono">拍照 / 相册 &gt;</span>
+            </div>
+
+            <!-- 心得随笔内容 -->
+            <p v-if="currentCheckinRecord?.note" class="text-[11px] text-on-surface-variant italic border-l-2 border-primary/50 pl-2 py-0.5 line-clamp-2">
+              “{{ currentCheckinRecord.note }}”
+            </p>
+          </div>
         </section>
 
         <!-- ================= MODULE 2: 路线 (Routes) ================= -->
@@ -1355,11 +1420,18 @@
           <span class="material-symbols-outlined text-[19px]">
             {{ isChecked ? 'check_circle' : 'flag' }}
           </span>
-          <span class="truncate">{{ isChecked ? '✓ 已打卡' : '🏔️ 登顶打卡' }}</span>
+          <span class="truncate">{{ isChecked ? '✓ 已打卡 · 纪实' : '🏔️ 登顶打卡' }}</span>
         </button>
       </footer>
     </aside>
   </Transition>
+
+    <!-- Checkin Detail Modal (Photo upload, notes & management) -->
+    <CheckinDetailModal
+      v-model="isCheckinModalOpen"
+      :mountain="mountain"
+      @toast="showSheetToast"
+    />
 </template>
 
 <script setup>
@@ -1369,6 +1441,7 @@ import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { usePlanStore } from '@/stores/planStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
 import RouteElevationChart from '@/components/detail/RouteElevationChart.vue';
+import CheckinDetailModal from '@/components/checkin/CheckinDetailModal.vue';
 import MountainWeatherCard from '@/components/weather/MountainWeatherCard.vue';
 import {
   isIos,
@@ -1899,10 +1972,44 @@ function scrollToAnchor(id) {
   }
 }
 
+const isCheckinModalOpen = ref(false);
+
+const currentCheckinRecord = computed(() => {
+  if (!props.mountain?.id) return null;
+  return checkinStore.getCheckinRecord(props.mountain.id);
+});
+
+const currentCheckinPhotos = computed(() => {
+  const rec = currentCheckinRecord.value;
+  if (!rec) return [];
+  if (Array.isArray(rec.photos) && rec.photos.length > 0) {
+    return rec.photos;
+  }
+  return rec.photoUrl ? [rec.photoUrl] : [];
+});
+
+function formatCheckinDate(isoStr) {
+  if (!isoStr) return '';
+  try {
+    const d = new Date(isoStr);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}.${m}.${day} 登顶`;
+  } catch (e) {
+    return '';
+  }
+}
+
 function handleToggleCheckin() {
   if (!props.mountain?.id) return;
-  checkinStore.toggleCheckin(props.mountain.id);
-  emit('checkin', props.mountain.id);
+  const wasChecked = checkinStore.isDone(props.mountain.id);
+  if (!wasChecked) {
+    checkinStore.toggleCheckin(props.mountain.id);
+    emit('checkin', props.mountain.id);
+    showSheetToast('🎉 登顶打卡成功！可上传实拍照片与心得');
+  }
+  isCheckinModalOpen.value = true;
 }
 
 function handleAddToPlan() {

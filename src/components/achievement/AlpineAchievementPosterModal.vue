@@ -7,10 +7,10 @@
         @click.self="handleClose"
       >
         <!-- 弹窗顶栏控制区 -->
-        <div class="w-full max-w-md flex items-center justify-between pb-3 px-1 text-on-surface">
+        <div class="w-full max-w-[390px] flex items-center justify-between pb-3 px-1 text-on-surface">
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-            <span class="font-headline-md text-[16px] font-bold tracking-tight">Alpine Explorer 成就长图</span>
+            <span class="font-headline-md text-[16px] font-bold tracking-tight text-white">Alpine Explorer 成就长图</span>
           </div>
           <button
             @click="handleClose"
@@ -21,6 +21,94 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+        </div>
+
+        <!-- 海报生成与导出定制控制卡片 -->
+        <div class="w-full max-w-[390px] mb-3 p-3.5 rounded-2xl bg-surface-container/90 border border-white/10 space-y-3 select-none shadow-xl">
+          <div class="flex items-center justify-between border-b border-white/10 pb-2">
+            <span class="text-[12px] font-bold text-white flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+              </svg>
+              <span>海报导出参数定制</span>
+            </span>
+            <span class="text-[10px] text-gray-400 font-mono">实时渲染 · 灵活勾选</span>
+          </div>
+
+          <!-- 选项 1: 是否包含打卡照片 (开关) -->
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-[12px] font-medium text-white flex items-center gap-1.5">
+                <span>包含登顶实拍照片</span>
+                <span
+                  class="text-[9px] px-1.5 py-0.2 rounded font-mono"
+                  :class="includePhotos ? 'bg-emerald-400/20 text-emerald-300' : 'bg-white/10 text-gray-400'"
+                >
+                  {{ includePhotos ? '开启实拍海报' : '纯净拓扑勋章' }}
+                </span>
+              </span>
+              <span class="text-[10px] text-gray-400">关闭后仅呈现等高线名山徽章，节省画幅更纯粹</span>
+            </div>
+            <button
+              type="button"
+              @click="includePhotos = !includePhotos"
+              class="w-11 h-6 rounded-full transition-colors relative flex items-center p-0.5"
+              :class="includePhotos ? 'bg-emerald-500' : 'bg-surface-container-high border border-white/20'"
+              role="switch"
+              :aria-checked="includePhotos"
+              aria-label="切换海报是否包含照片"
+            >
+              <div
+                class="w-5 h-5 rounded-full bg-white transition-transform shadow-md"
+                :class="includePhotos ? 'translate-x-5' : 'translate-x-0'"
+              ></div>
+            </button>
+          </div>
+
+          <!-- 选项 2: 勾选特定打卡山峰导出 -->
+          <div v-if="allCheckedMountains.length > 0" class="space-y-1.5 pt-2 border-t border-white/5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-gray-300 font-medium">
+                勾选展示名山 ({{ selectedMountainIds.length }}/{{ allCheckedMountains.length }})
+              </span>
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  @click="selectAllMountains"
+                  class="text-[10px] text-emerald-400 hover:underline active:scale-95 transition-transform"
+                >
+                  全选
+                </button>
+                <span class="text-white/20">|</span>
+                <button
+                  type="button"
+                  @click="clearAllMountains"
+                  class="text-[10px] text-gray-400 hover:text-white active:scale-95 transition-transform"
+                >
+                  清空
+                </button>
+              </div>
+            </div>
+
+            <!-- 可水平滚动/折行的名山胶囊选择器 -->
+            <div class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
+              <button
+                v-for="m in allCheckedMountains"
+                :key="m.id"
+                type="button"
+                @click="toggleMountainSelection(m.id)"
+                class="px-2 py-1 rounded-lg text-[10px] font-medium border transition-all flex items-center gap-1 active:scale-95"
+                :class="selectedMountainIds.includes(m.id)
+                  ? 'bg-emerald-500/20 border-emerald-400/50 text-emerald-300'
+                  : 'bg-surface-container-high/60 border-white/10 text-gray-400 hover:text-gray-200'"
+              >
+                <span class="w-1.5 h-1.5 rounded-full" :class="selectedMountainIds.includes(m.id) ? 'bg-emerald-400' : 'bg-gray-600'"></span>
+                <span>{{ m.name }}</span>
+                <span v-if="m.photos?.length > 0" class="text-[9px] text-emerald-400/80">📷</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- 海报渲染容器 (用于 html2canvas 精准抓取) -->
@@ -170,13 +258,13 @@
                   </svg>
                   SUMMIT ARCHIVES · 峰线足迹
                 </span>
-                <span class="text-gray-400 text-[10px]">{{ featuredMountains.length }} 座纪实</span>
+                <span class="text-gray-400 text-[10px]">{{ featuredMountains.length }} 座选定纪实</span>
               </div>
 
-              <!-- 4.1 用户有打卡且有上传照片的卡片 (优先突出高质感实景) -->
-              <div v-if="mountainsWithPhotos.length > 0" class="space-y-3">
+              <!-- 4.1 用户有打卡且开启照片显示时的实景卡片 -->
+              <div v-if="displayMountainsWithPhotos.length > 0" class="space-y-3">
                 <div
-                  v-for="item in mountainsWithPhotos.slice(0, 2)"
+                  v-for="item in displayMountainsWithPhotos.slice(0, 3)"
                   :key="item.id"
                   class="rounded-2xl border border-white/12 p-3 space-y-2 overflow-hidden shadow-lg"
                   style="background: rgba(28, 31, 41, 0.85);"
@@ -237,17 +325,21 @@
                 </div>
               </div>
 
-              <!-- 4.2 若有打卡但无照片，或者补充展示其他打卡名山列表网格 -->
-              <div v-if="mountainsWithoutPhotos.length > 0" class="grid grid-cols-2 gap-2">
+              <!-- 4.2 若关闭了照片，或者部分名山无照片，展示精细拓扑勋章网格 -->
+              <div v-if="displayMountainsWithoutPhotos.length > 0" class="grid grid-cols-2 gap-2">
                 <div
-                  v-for="item in mountainsWithoutPhotos.slice(0, 4)"
+                  v-for="item in displayMountainsWithoutPhotos.slice(0, 8)"
                   :key="item.id"
-                  class="p-2.5 rounded-xl border border-white/10 flex items-center justify-between space-x-2"
+                  class="p-2.5 rounded-xl border border-white/10 flex items-center justify-between space-x-2 shadow-sm"
                   style="background: rgba(28, 31, 41, 0.65);"
                 >
                   <div class="truncate">
                     <div class="text-[12px] font-semibold text-white truncate">{{ item.name }}</div>
-                    <div class="text-[9px] text-gray-400 font-mono">海拔 {{ item.altitude_m || item.alt }}m</div>
+                    <div class="text-[9px] text-gray-400 font-mono flex items-center gap-1">
+                      <span>{{ item.altitude_m || item.alt }}m</span>
+                      <span class="text-emerald-400/60">·</span>
+                      <span>{{ item.difficulty || 'L1' }}</span>
+                    </div>
                   </div>
                   <span class="w-5 h-5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-400 flex items-center justify-center shrink-0">
                     <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -257,9 +349,9 @@
                 </div>
               </div>
 
-              <!-- 4.3 零打卡兜底：探索者启程手记 -->
+              <!-- 4.3 零打卡或未选择任何名山时的探索启程手记 -->
               <div
-                v-if="checkinStore.stats.doneCount === 0"
+                v-if="featuredMountains.length === 0"
                 class="p-4 rounded-2xl border border-white/10 text-center space-y-2"
                 style="background: rgba(28, 31, 41, 0.65);"
               >
@@ -319,16 +411,16 @@
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <span>{{ isGenerating ? '正在渲染视网膜高清海报...' : '📥 导出海报 / 保存到相册' }}</span>
+            <span>{{ isGenerating ? '正在渲染视网膜高清海报...' : '📥 一键生成并保存海报到相册' }}</span>
           </button>
 
           <!-- 提示文本 -->
           <p class="text-center text-[11px] text-gray-400">
-            支持一键调起系统分享 / 长按相册保存 · 包含防伪认证编码
+            支持一键直接存入系统相册 · 包含防伪认证编码 · 自动适配所选峰线
           </p>
         </div>
 
-        <!-- 生成成功后的图片长按保存引导条 -->
+        <!-- 生成成功后的图片就绪快捷入口条 -->
         <div
           v-if="generatedImageUrl"
           class="w-full max-w-[390px] mt-2 p-3 rounded-2xl border border-emerald-400/30 bg-surface-container/90 text-center space-y-2 cursor-pointer active:scale-98 transition-transform"
@@ -338,12 +430,12 @@
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            <span>海报已就绪！点击展开全屏查看并长按存图</span>
+            <span>海报已就绪！点击展开全屏查看并管理</span>
           </div>
           <div class="h-28 overflow-hidden rounded-xl border border-white/10 relative">
             <img :src="generatedImageUrl" alt="成就海报缩略图" class="w-full h-full object-cover object-top" />
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-1 text-[10px] text-gray-300">
-              点击全屏放大长按保存
+              点击全屏放大查看
             </div>
           </div>
         </div>
@@ -374,7 +466,7 @@
           </button>
         </div>
 
-        <!-- 核心图片展示区 (适合长按保存) -->
+        <!-- 核心图片展示区 -->
         <div class="relative flex-1 flex flex-col items-center justify-center min-h-0 py-1 overflow-y-auto">
           <div class="max-w-[360px] w-full rounded-2xl overflow-hidden border border-emerald-400/30 shadow-[0_0_30px_rgba(78,222,163,0.25)] bg-black/50">
             <img
@@ -384,35 +476,47 @@
             />
           </div>
 
-          <!-- 手机端长按核心提示气泡 -->
-          <div class="mt-2.5 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 shadow-sm">
+          <!-- 保存状态反馈气泡 -->
+          <div
+            v-if="isNativeApp"
+            class="mt-2.5 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 shadow-sm"
+          >
+            <svg class="w-3.5 h-3.5 shrink-0 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <span>海报已直存手机系统相册！亦可点击下方按钮重复保存或分享</span>
+          </div>
+          <div
+            v-else
+            class="mt-2.5 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 shadow-sm"
+          >
             <svg class="w-3.5 h-3.5 shrink-0 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
             </svg>
-            <span>长按上方海报图片，即可【保存到手机相册】或发送给好友</span>
+            <span>点击下方按钮即可一键保存图片到本地相册或下载</span>
           </div>
         </div>
 
-        <!-- 底部快捷动作栏 -->
+        <!-- 底部快捷动作栏 (物理按钮一键操作，无需长按) -->
         <div class="w-full max-w-md mx-auto pt-2 space-y-2">
           <div class="grid grid-cols-2 gap-2">
             <button
-              @click="handleSystemShare"
-              class="py-3 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-[12px] flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-md"
+              @click="saveToGalleryDirectly()"
+              class="py-3 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-[13px] flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-md"
             >
               <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              <span>系统分享 / 存相册</span>
-            </button>
-            <button
-              @click="handleDirectDownload"
-              class="py-3 px-3 rounded-xl bg-surface-container-high/90 hover:bg-surface-container-highest border border-white/10 text-on-surface font-medium text-[12px] flex items-center justify-center gap-1.5 active:scale-95 transition-all"
-            >
-              <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              <span>浏览器下载文件</span>
+              <span>💾 一键保存到相册</span>
+            </button>
+            <button
+              @click="handleSystemShare"
+              class="py-3 px-3 rounded-xl bg-surface-container-high/90 hover:bg-surface-container-highest border border-white/10 text-white font-medium text-[12px] flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+            >
+              <svg class="w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              <span>📤 系统分享 / 另存</span>
             </button>
           </div>
           <button
@@ -428,7 +532,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { useMountainStore } from '@/stores/mountainStore.js';
 
@@ -466,30 +570,23 @@ const generatedImageUrl = ref('');
 const generatedBlob = ref(null);
 const isPosterReadyModalOpen = ref(false);
 
+// 定制选项 1：是否包含照片
+const includePhotos = ref(true);
+
+// 定制选项 2：勾选导出的山峰 ID 列表
+const selectedMountainIds = ref([]);
+
+// 判断是否运行在 Android 原生 Native 环境
+const isNativeApp = computed(() => {
+  return typeof window !== 'undefined' && Boolean(window.AlpineNative && typeof window.AlpineNative.saveImageToGallery === 'function');
+});
+
 const totalMountainsCount = computed(() => {
   return mountainStore.mountains?.length || 50;
 });
 
-// 解锁勋章数量
-const unlockedBadgesCount = computed(() => {
-  let count = 0;
-  if (checkinStore.stats.doneCount >= 1) count++;
-  const hasHighAlt = checkinStore.checkedIds.some((id) => {
-    const m = mountainStore.getMountainById(id);
-    return m && m.altitude_m >= 4000;
-  });
-  if (hasHighAlt) count++;
-  const hasCloud = checkinStore.checkedIds.some((id) => {
-    const m = mountainStore.getMountainById(id);
-    return m && (m.group === 'A' || m.highlights?.some((h) => h.includes('云海')));
-  });
-  if (hasCloud) count++;
-  if (checkinStore.stats.doneCount >= 5) count++;
-  return count;
-});
-
-// 打卡名山与记录列表
-const featuredMountains = computed(() => {
+// 所有打卡名山列表
+const allCheckedMountains = computed(() => {
   const ids = checkinStore.checkedIds || [];
   return ids
     .map((id) => {
@@ -511,13 +608,74 @@ const featuredMountains = computed(() => {
     .filter(Boolean);
 });
 
-// 筛选出有照片与无照片的名山
-const mountainsWithPhotos = computed(() => {
-  return featuredMountains.value.filter((item) => item.photos.length > 0 || Boolean(item.record?.photoUrl));
+// 当弹窗打开时，若尚未初始化所选山峰，默认全选所有打卡山峰
+watch(
+  () => visible.value,
+  (isOpen) => {
+    if (isOpen) {
+      if (selectedMountainIds.value.length === 0 && checkinStore.checkedIds.length > 0) {
+        selectedMountainIds.value = [...checkinStore.checkedIds];
+      }
+    }
+  },
+  { immediate: true }
+);
+
+function selectAllMountains() {
+  selectedMountainIds.value = allCheckedMountains.value.map((m) => m.id);
+}
+
+function clearAllMountains() {
+  selectedMountainIds.value = [];
+}
+
+function toggleMountainSelection(id) {
+  const idx = selectedMountainIds.value.indexOf(id);
+  if (idx >= 0) {
+    selectedMountainIds.value.splice(idx, 1);
+  } else {
+    selectedMountainIds.value.push(id);
+  }
+}
+
+// 解锁勋章数量
+const unlockedBadgesCount = computed(() => {
+  let count = 0;
+  if (checkinStore.stats.doneCount >= 1) count++;
+  const hasHighAlt = checkinStore.checkedIds.some((id) => {
+    const m = mountainStore.getMountainById(id);
+    return m && m.altitude_m >= 4000;
+  });
+  if (hasHighAlt) count++;
+  const hasCloud = checkinStore.checkedIds.some((id) => {
+    const m = mountainStore.getMountainById(id);
+    return m && (m.group === 'A' || m.highlights?.some((h) => h.includes('云海')));
+  });
+  if (hasCloud) count++;
+  if (checkinStore.stats.doneCount >= 5) count++;
+  return count;
 });
 
-const mountainsWithoutPhotos = computed(() => {
-  return featuredMountains.value.filter((item) => item.photos.length === 0 && !item.record?.photoUrl);
+// 用户选定的打卡名山列表（若未选则按全部已打卡）
+const featuredMountains = computed(() => {
+  const activeIds = selectedMountainIds.value.length > 0
+    ? selectedMountainIds.value
+    : checkinStore.checkedIds;
+  return allCheckedMountains.value.filter((item) => activeIds.includes(item.id));
+});
+
+// 根据 includePhotos 和是否有照片筛选
+const displayMountainsWithPhotos = computed(() => {
+  if (!includePhotos.value) return [];
+  return featuredMountains.value.filter((item) => (item.photos && item.photos.length > 0) || Boolean(item.record?.photoUrl));
+});
+
+const displayMountainsWithoutPhotos = computed(() => {
+  if (!includePhotos.value) {
+    // 关闭照片模式时，选中的山峰全部以拓扑勋章卡片展示
+    return featuredMountains.value;
+  }
+  return featuredMountains.value.filter((item) => (!item.photos || item.photos.length === 0) && !item.record?.photoUrl);
 });
 
 // 当前日期
@@ -553,6 +711,32 @@ function formatCheckinDate(isoStr) {
 
 function handleClose() {
   visible.value = false;
+}
+
+/**
+ * 核心保存方法：直接保存到手机系统相册 (如果是在 Android Native App 内)，否则降级到下载
+ */
+async function saveToGalleryDirectly(dataUrlToSave = null) {
+  const dataUrl = dataUrlToSave || generatedImageUrl.value;
+  if (!dataUrl) return false;
+
+  const filename = `Alpine-Explorer-Achievement-${new Date().toISOString().slice(0, 10)}.png`;
+
+  // 1. Android Native Bridge 优先：直接调用 MediaStore 写入相册
+  if (typeof window !== 'undefined' && window.AlpineNative && typeof window.AlpineNative.saveImageToGallery === 'function') {
+    try {
+      const ok = window.AlpineNative.saveImageToGallery(dataUrl, filename);
+      if (ok) {
+        return true;
+      }
+    } catch (err) {
+      console.warn('Native gallery save error:', err);
+    }
+  }
+
+  // 2. 浏览器环境：调用 handleDirectDownload 触发下载
+  handleDirectDownload();
+  return true;
 }
 
 /**
@@ -603,12 +787,13 @@ async function handleSystemShare() {
       console.log('Share dismissed:', e);
     }
   } else {
-    alert('当前环境未开放直接调起分享，请长按海报大图保存至系统相册');
+    // 降级使用相册直存
+    saveToGalleryDirectly();
   }
 }
 
 /**
- * 渲染海报并触发下载/系统分享
+ * 渲染海报并直接触发保存到系统相册
  */
 async function handleSavePoster() {
   if (isGenerating.value) return;
@@ -634,27 +819,11 @@ async function handleSavePoster() {
     const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
     generatedBlob.value = blob;
 
-    // 弹出专属全屏查看与长按保存弹窗
+    // 弹出专属全屏查看与相册保存弹窗
     isPosterReadyModalOpen.value = true;
 
-    // 如果设备支持 Web Share API，直接调起系统级分享面板保存相册
-    const filename = `Alpine-Explorer-Achievement-${new Date().toISOString().slice(0, 10)}.png`;
-    const file = new File([blob], filename, { type: 'image/png' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      try {
-        await navigator.share({
-          title: '成都周边50座名山巡礼 · 成就海报',
-          text: `我在 Alpine Explorer 已征服 ${checkinStore.stats.doneCount} 座名山！`,
-          files: [file]
-        });
-      } catch (shareErr) {
-        // 用户取消分享，弹窗仍打开供长按存图
-        console.log('Share dismissed or cancelled:', shareErr);
-      }
-    } else {
-      // 降级尝试常规浏览器下载
-      handleDirectDownload();
-    }
+    // 直接调用保存到系统相册
+    await saveToGalleryDirectly(dataUrl);
   } catch (err) {
     console.error('Failed to generate poster:', err);
     alert('海报生成失败，请稍后重试');

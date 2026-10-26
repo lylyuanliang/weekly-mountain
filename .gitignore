@@ -6,6 +6,9 @@ Thumbs.db
 *.log
 docs/*
 !docs/DEPLOYMENT.md
+!docs/handoffs/
+!docs/handoffs/**
+.vite/
 .superpowers/
 *.zip
 scratch/*
