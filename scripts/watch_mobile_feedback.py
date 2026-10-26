@@ -111,7 +111,9 @@ def main():
                     for idx, fb in enumerate(reversed(new_pending), 1):
                         print(f"  [{idx}] 时间: {fb.get('receivedAt', '')} | 页面: {fb.get('state', {}).get('route', '')}")
                         print(f"      内容: \"{fb.get('content', '')}\"")
-                        if fb.get('screenshotPath'):
+                        if fb.get('screenshots') and len(fb.get('screenshots')) > 1:
+                            print(f"      截图: 共 {len(fb.get('screenshots'))} 张凭证 (首图: {fb.get('screenshotPath')})")
+                        elif fb.get('screenshotPath'):
                             print(f"      截图: {fb.get('screenshotPath')} ({fb.get('screenshotSizeKb', 0)} KB)")
                     print("===========================================================\n")
                     sys.stdout.flush()

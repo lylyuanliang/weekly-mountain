@@ -105,40 +105,91 @@ function viteFeedbackPlugin() {
               data.reply = '已送达本地 AI 哨兵，正在排队等待分析修复中...'
               data.clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress
 
-              // 处理附带的截图文件
-              if (data.screenshot && typeof data.screenshot === 'string' && data.screenshot.startsWith('data:image/')) {
+              // 处理附带的截图文件 (支持多图与单图)
+              const saveImageBuffer = (base64Str, fileName) => {
                 try {
-                  const matches = data.screenshot.match(/^data:image\/([a-zA-Z0-9]+);base64,(.+)$/)
-                  if (matches) {
-                    const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1]
-                    const buffer = Buffer.from(matches[2], 'base64')
-                    const fileName = `feedback_screenshot_${timeStamp}.${ext}`
-                    const targetPath = path.join(scratchDir, fileName)
-                    fs.writeFileSync(targetPath, buffer)
+                  const matches = base64Str.match(/^data:image\/([a-zA-Z0-9]+);base64,(.+)$/)
+                  if (!matches) return null
+                  const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1]
+                  const buffer = Buffer.from(matches[2], 'base64')
+                  const fullFileName = fileName.endsWith(`.${ext}`) ? fileName : `${fileName}.${ext}`
+                  const targetPath = path.join(scratchDir, fullFileName)
+                  fs.writeFileSync(targetPath, buffer)
 
-                    // 保存一份 latest 副本便于快速访问
-                    const latestPath = path.join(scratchDir, `latest_feedback_screenshot.${ext}`)
-                    fs.writeFileSync(latestPath, buffer)
+                  // 同步一份到脑部 Artifact 目录
+                  const brainDir = path.resolve('C:\\Users\\lylyu\\.gemini\\antigravity\\brain\\94773e75-cfd8-4fb7-87e3-d08b195b9520')
+                  if (fs.existsSync(brainDir)) {
+                    try {
+                      fs.writeFileSync(path.join(brainDir, fullFileName), buffer)
+                    } catch {}
+                  }
 
-                    // 同步一份到脑部 Artifact 目录
+                  return {
+                    path: `scratch/${fullFileName}`,
+                    filename: fullFileName,
+                    ext,
+                    sizeKb: Math.round(buffer.length / 1024)
+                  }
+                } catch (err) {
+                  console.error('Failed to save screenshot image:', err)
+                  return null
+                }
+              }
+
+              if (Array.isArray(data.screenshots) && data.screenshots.length > 0) {
+                const savedList = []
+                data.screenshots.forEach((item, idx) => {
+                  const base64Str = typeof item === 'string' ? item : item?.data
+                  if (base64Str && base64Str.startsWith('data:image/')) {
+                    const saved = saveImageBuffer(base64Str, `feedback_screenshot_${timeStamp}_${idx + 1}`)
+                    if (saved) {
+                      savedList.push({
+                        ...saved,
+                        meta: item.meta || {}
+                      })
+                    }
+                  }
+                })
+
+                if (savedList.length > 0) {
+                  data.screenshots = savedList
+                  data.screenshotPath = savedList[0].path
+                  data.screenshotFilename = savedList[0].filename
+                  data.screenshotExt = savedList[0].ext
+                  data.screenshotSizeKb = savedList[0].sizeKb
+
+                  try {
+                    const firstBuf = fs.readFileSync(path.join(scratchDir, savedList[0].filename))
+                    fs.writeFileSync(path.join(scratchDir, `latest_feedback_screenshot.${savedList[0].ext}`), firstBuf)
                     const brainDir = path.resolve('C:\\Users\\lylyu\\.gemini\\antigravity\\brain\\94773e75-cfd8-4fb7-87e3-d08b195b9520')
                     if (fs.existsSync(brainDir)) {
-                      try {
-                        fs.writeFileSync(path.join(brainDir, fileName), buffer)
-                        fs.writeFileSync(path.join(brainDir, `latest_feedback_screenshot.${ext}`), buffer)
-                      } catch {}
+                      fs.writeFileSync(path.join(brainDir, `latest_feedback_screenshot.${savedList[0].ext}`), firstBuf)
                     }
-
-                    data.screenshotPath = `scratch/${fileName}`
-                    data.screenshotFilename = fileName
-                    data.screenshotExt = ext
-                    data.screenshotSizeKb = Math.round(buffer.length / 1024)
-                    // 移除超长 base64 避免 json 膨胀
-                    delete data.screenshot
-                  }
-                } catch (imgErr) {
-                  console.error('Failed to save screenshot image:', imgErr)
+                  } catch {}
                 }
+                delete data.screenshot
+              } else if (data.screenshot && typeof data.screenshot === 'string' && data.screenshot.startsWith('data:image/')) {
+                const saved = saveImageBuffer(data.screenshot, `feedback_screenshot_${timeStamp}`)
+                if (saved) {
+                  data.screenshotPath = saved.path
+                  data.screenshotFilename = saved.filename
+                  data.screenshotExt = saved.ext
+                  data.screenshotSizeKb = saved.sizeKb
+                  data.screenshots = [{
+                    ...saved,
+                    meta: data.screenshotMeta || {}
+                  }]
+
+                  try {
+                    const firstBuf = fs.readFileSync(path.join(scratchDir, saved.filename))
+                    fs.writeFileSync(path.join(scratchDir, `latest_feedback_screenshot.${saved.ext}`), firstBuf)
+                    const brainDir = path.resolve('C:\\Users\\lylyu\\.gemini\\antigravity\\brain\\94773e75-cfd8-4fb7-87e3-d08b195b9520')
+                    if (fs.existsSync(brainDir)) {
+                      fs.writeFileSync(path.join(brainDir, `latest_feedback_screenshot.${saved.ext}`), firstBuf)
+                    }
+                  } catch {}
+                }
+                delete data.screenshot
               }
 
               let history = []

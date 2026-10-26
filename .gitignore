@@ -7,8 +7,17 @@ Thumbs.db
 docs/
 .superpowers/
 *.zip
-scratch/*.png
-scratch/*.jpg
-scratch/*.jpeg
-scratch/*.txt
-scratch/__pycache__/
+scratch/*
+!scratch/mobile_feedback.json
+!scratch/latest_feedback.json
+
+# Android Build & Local Paths
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+android/*.iml
+android/app/*.iml
+*.apk
+releases/

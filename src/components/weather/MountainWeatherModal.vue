@@ -14,7 +14,7 @@
       <div class="flex items-start justify-between">
         <div>
           <div class="flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-primary glow-primary animate-pulse"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-primary glow-primary shadow-[0_0_6px_#4edea3]"></span>
             <h3 class="text-headline-md font-bold text-on-surface">
               {{ mountain.name }} · 实时天气
             </h3>

@@ -21,7 +21,7 @@
       <div class="absolute top-2 left-2 flex items-center gap-1.5 z-10">
         <!-- Altitude Badge -->
         <span class="px-2 py-0.5 rounded-full bg-[#0a0e17]/90 text-label-data-sm font-label-data-sm text-primary border border-primary/30 flex items-center gap-1">
-          <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_4px_#4edea3]"></span>
           {{ nums.alt }}m
         </span>
 

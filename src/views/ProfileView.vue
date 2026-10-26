@@ -467,8 +467,8 @@
     <!-- ================= SECTION 5: 版本信息与数据核验公示 ================= -->
     <footer class="pt-2 pb-6 text-center space-y-1.5 text-on-surface-variant">
       <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-label-data-sm text-[10px] text-primary">
-        <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-        <span>每周一山 · v2.0.0-rc1</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_4px_#4edea3]"></span>
+        <span>每周一山 · {{ VERSION_LABEL }}</span>
       </div>
       <p class="font-label-data-sm text-[10px] text-outline">
         {{ regionStore.currentRegion.title }}遥测与 GPS 轨迹核验数据已通过多源实地复核 (2025 深度核验)
@@ -505,6 +505,7 @@ import { useThemeStore } from '@/stores/themeStore.js';
 import { useMountainStore } from '@/stores/mountainStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
 import AlpineAchievementPosterModal from '@/components/achievement/AlpineAchievementPosterModal.vue';
+import { VERSION_LABEL } from '@/config/version.js';
 
 const checkinStore = useCheckinStore();
 const themeStore = useThemeStore();

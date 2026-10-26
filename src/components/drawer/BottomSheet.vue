@@ -31,7 +31,7 @@
         class="flex items-center justify-between text-body-sm font-semibold text-on-surface py-0.5 px-0.5 cursor-pointer flex-1"
       >
         <div class="flex items-center gap-2 overflow-hidden">
-          <span class="w-2.5 h-2.5 rounded-full bg-primary glow-primary animate-pulse flex-shrink-0"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-primary glow-primary shadow-[0_0_6px_#4edea3] flex-shrink-0"></span>
           <div class="flex items-baseline gap-1.5 overflow-hidden">
             <span class="text-on-surface text-body-sm font-bold truncate">
               {{ activeMountainName || `全景探索 ${mountainStore.filteredMountains.length} 座山峰` }}

@@ -10,7 +10,7 @@
             @click="isRegionSheetOpen = true"
             class="flex items-center gap-1.5 px-3 py-1.5 rounded-full frost-glass border border-outline-variant/40 hover:border-primary/60 active:scale-95 transition-all text-on-surface"
           >
-            <span class="w-2 h-2 rounded-full bg-primary glow-primary animate-pulse flex-shrink-0"></span>
+            <span class="w-2 h-2 rounded-full bg-primary glow-primary shadow-[0_0_6px_#4edea3] flex-shrink-0"></span>
             <span class="text-body-md font-bold tracking-tight text-primary">
               {{ regionStore.currentRegion.name }}
             </span>
@@ -18,6 +18,16 @@
           </button>
         </div>
         <div class="flex items-center gap-2">
+          <!-- 醒目版本号标签：手机端始终可见，点击可提示完整构建时间 -->
+          <button
+            type="button"
+            @click="showVersionToast"
+            class="px-2.5 py-0.5 rounded-full bg-primary/20 border border-primary/50 text-[11px] font-mono font-bold text-primary active:scale-95 transition-all shadow-sm flex items-center gap-1 cursor-pointer"
+            title="点击查看构建版本"
+          >
+            <span class="w-1.5 h-1.5 rounded-full bg-primary glow-primary"></span>
+            v{{ APP_VERSION }}
+          </button>
           <span class="hidden sm:inline-block px-2 py-0.5 rounded-full bg-surface-container-high text-label-data-sm font-label-data-sm text-primary">
             GPS ACTIVE
           </span>
@@ -96,6 +106,7 @@ import TopSearchBar from '@/components/common/TopSearchBar.vue';
 import AppMap from '@/components/map/AppMap.vue';
 import BottomSheet from '@/components/drawer/BottomSheet.vue';
 import MountainDetailSheet from '@/components/detail/MountainDetailSheet.vue';
+import { APP_VERSION, VERSION_LABEL } from '@/config/version.js';
 import RegionPickerSheet from '@/components/common/RegionPickerSheet.vue';
 import MountainWeatherModal from '@/components/weather/MountainWeatherModal.vue';
 
@@ -111,6 +122,10 @@ const isDetailOpen = ref(false);
 const selectedDetailMountain = ref(null);
 const isWeatherModalOpen = ref(false);
 const selectedWeatherMountain = ref(null);
+
+function showVersionToast() {
+  showToast(`当前运行版本：${VERSION_LABEL}`);
+}
 
 function showToast(msg) {
   toastMessage.value = msg;

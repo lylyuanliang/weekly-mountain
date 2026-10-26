@@ -11,13 +11,14 @@
       @touchmove.passive="onBtnTouchMove"
       @touchend="onBtnTouchEnd"
       :style="btnPos.x !== null ? { left: `${btnPos.x}px`, top: `${btnPos.y}px`, right: 'auto', bottom: 'auto' } : {}"
-      class="btn-feedback-trigger fixed right-3 bottom-[432px] z-[999] flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high/95 text-primary border border-primary/50 shadow-2xl backdrop-blur-md active:scale-95 transition-transform group select-none cursor-grab whitespace-nowrap flex-nowrap shrink-0 max-w-fit"
+      :class="{ 'opacity-0 pointer-events-none scale-75': isSuppressedBySheet }"
+      class="btn-feedback-trigger fixed right-3 bottom-[432px] z-[999] flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#262a34] text-primary border border-primary/50 shadow-2xl active:scale-95 transition-all duration-300 group select-none cursor-grab whitespace-nowrap flex-nowrap shrink-0 max-w-fit"
       :title="hasActiveFeedback ? '有正在处理中的反馈，点击查看进度' : '真机调试反馈给 AI (支持拖拽移动)'"
       aria-label="真机调试反馈给 AI"
     >
       <span
         class="w-2 h-2 rounded-full flex-shrink-0"
-        :class="hasActiveFeedback ? 'bg-amber-400 animate-ping' : 'bg-primary glow-primary animate-pulse'"
+        :class="hasActiveFeedback ? 'bg-amber-400 shadow-[0_0_8px_#f59e0b]' : 'bg-primary shadow-[0_0_8px_#4edea3]'"
       ></span>
       <span
         class="material-symbols-outlined text-[17px] flex-shrink-0"
@@ -36,78 +37,86 @@
       </span>
     </button>
 
-    <!-- Feedback Modal / Bottom Sheet (Top-level z-[1000]) -->
-    <div
-      v-if="isOpen"
-      v-show="!isModalHiddenForCapture"
-      class="mobile-feedback-modal fixed inset-0 z-[1000] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/75 backdrop-blur-sm animate-fade-in select-none"
-      @click.self="closeModal"
-    >
+    <!-- Feedback Modal / Bottom Sheet (Teleported to body to avoid clipping by app container) -->
+    <Teleport to="body">
       <div
-        class="w-full max-w-md bg-[#1c1f29] rounded-t-3xl sm:rounded-2xl border-t sm:border border-outline-variant/40 shadow-2xl p-4 sm:p-5 space-y-3.5 max-h-[90vh] overflow-y-auto"
-        role="dialog"
-        aria-modal="true"
-        aria-label="真机调试即时反馈"
+        v-if="isOpen"
+        v-show="!isModalHiddenForCapture"
+        class="mobile-feedback-modal fixed inset-0 z-[1000] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in select-none"
+        @click.self="closeModal"
       >
-        <!-- Modal Header -->
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-[22px]">devices</span>
-            <div>
-              <h3 class="text-headline-md font-bold text-on-surface text-[16px]">
-                手机真机调试反馈
-              </h3>
-              <p class="text-[11px] text-on-surface-variant font-mono">
-                直连本地 AI · 进度实时追踪 · 截图多模态分析
-              </p>
+        <div
+          class="w-full max-w-md bg-[#1c1f29] rounded-t-3xl sm:rounded-2xl border-t sm:border border-outline-variant/40 shadow-2xl flex flex-col h-[80vh] max-h-[88dvh] min-h-[440px] overflow-hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="真机调试即时反馈"
+        >
+          <!-- Fixed Top Header & Tab Switcher (flex-shrink-0, 保证在任何视口下永不被压缩或截断) -->
+          <div class="p-4 sm:p-5 pb-3 flex-shrink-0 space-y-3 border-b border-outline-variant/20 bg-[#1c1f29]">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[22px]">devices</span>
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <h3 class="text-headline-md font-bold text-on-surface text-[16px]">
+                      手机端即时反馈
+                    </h3>
+                    <span class="px-1.5 py-0.2 rounded bg-primary/20 text-primary font-mono text-[10px] font-bold border border-primary/40">v{{ APP_VERSION }}</span>
+                  </div>
+                  <p class="text-[11px] text-on-surface-variant font-mono">
+                    直连 AI 哨兵 · 实时追踪 · 多截图与模态支持
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                @click="closeModal"
+                class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface border border-outline-variant/30 active:scale-95 transition-all"
+                aria-label="关闭反馈窗口"
+              >
+                <span class="material-symbols-outlined text-[18px]">close</span>
+              </button>
+            </div>
+
+            <!-- Segmented Tab Switcher: [ ✍️ 提新反馈 ] | [ 📋 进度与历史 (N) ] -->
+            <div class="flex items-center p-1 rounded-xl bg-surface-container-low border border-outline-variant/30 gap-1 select-none">
+              <button
+                type="button"
+                data-tab="create"
+                @click="activeTab = 'create'"
+                class="flex-1 py-1.5 px-3 rounded-lg text-caption font-semibold flex items-center justify-center gap-1.5 transition-all"
+                :class="activeTab === 'create' ? 'bg-surface-container-high text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'"
+              >
+                <span class="material-symbols-outlined text-[16px]">edit_note</span>
+                <span>提新反馈</span>
+              </button>
+              <button
+                type="button"
+                data-tab="history"
+                @click="switchTab('history')"
+                class="flex-1 py-1.5 px-3 rounded-lg text-caption font-semibold flex items-center justify-center gap-1.5 transition-all relative"
+                :class="activeTab === 'history' ? 'bg-surface-container-high text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'"
+              >
+                <span class="material-symbols-outlined text-[16px]">history</span>
+                <span>进度与历史</span>
+                <span
+                  v-if="hasActiveFeedback"
+                  class="w-2 h-2 rounded-full bg-amber-400 animate-pulse ml-0.5"
+                  title="有处理中的反馈"
+                ></span>
+                <span
+                  v-else-if="feedbackHistory.length > 0"
+                  class="px-1.5 py-0.2 rounded-full bg-primary/20 text-primary text-[10px] font-mono"
+                >
+                  {{ feedbackHistory.length }}
+                </span>
+              </button>
             </div>
           </div>
-          <button
-            type="button"
-            @click="closeModal"
-            class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-on-surface border border-outline-variant/30 active:scale-95 transition-all"
-            aria-label="关闭反馈窗口"
-          >
-            <span class="material-symbols-outlined text-[18px]">close</span>
-          </button>
-        </div>
 
-        <!-- Segmented Tab Switcher: [ ✍️ 提新反馈 ] | [ 📋 进度与历史 (N) ] -->
-        <div class="flex items-center p-1 rounded-xl bg-surface-container-low border border-outline-variant/30 gap-1 select-none">
-          <button
-            type="button"
-            data-tab="create"
-            @click="activeTab = 'create'"
-            class="flex-1 py-1.5 px-3 rounded-lg text-caption font-semibold flex items-center justify-center gap-1.5 transition-all"
-            :class="activeTab === 'create' ? 'bg-surface-container-high text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'"
-          >
-            <span class="material-symbols-outlined text-[16px]">edit_note</span>
-            <span>提新反馈</span>
-          </button>
-          <button
-            type="button"
-            data-tab="history"
-            @click="switchTab('history')"
-            class="flex-1 py-1.5 px-3 rounded-lg text-caption font-semibold flex items-center justify-center gap-1.5 transition-all relative"
-            :class="activeTab === 'history' ? 'bg-surface-container-high text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'"
-          >
-            <span class="material-symbols-outlined text-[16px]">history</span>
-            <span>进度与历史</span>
-            <span
-              v-if="hasActiveFeedback"
-              class="w-2 h-2 rounded-full bg-amber-400 animate-pulse ml-0.5"
-              title="有处理中的反馈"
-            ></span>
-            <span
-              v-else-if="feedbackHistory.length > 0"
-              class="px-1.5 py-0.2 rounded-full bg-primary/20 text-primary text-[10px] font-mono"
-            >
-              {{ feedbackHistory.length }}
-            </span>
-          </button>
-        </div>
-
-        <!-- TAB 1: CREATE NEW FEEDBACK -->
+          <!-- Dedicated Scrollable Body (flex-1 overflow-y-auto overscroll-contain) -->
+          <div class="flex-1 overflow-y-auto px-4 sm:px-5 py-3.5 space-y-3.5 no-scrollbar overscroll-contain">
+            <!-- TAB 1: CREATE NEW FEEDBACK -->
         <div v-if="activeTab === 'create'" class="space-y-3.5 animate-fade-in">
           <!-- Active Feedback Notice -->
           <div
@@ -208,74 +217,99 @@
               </span>
             </div>
 
-            <!-- Invisible Native File Input for Album / Camera -->
+            <!-- Invisible Native File Input for Album / Camera (支持多图选择) -->
             <input
               ref="fileInputRef"
               type="file"
               accept="image/*"
+              multiple
               class="hidden"
               @change="handleFileChange"
             />
 
-            <!-- Album Upload Alternative Link / Action -->
-            <div v-if="!screenshotData" class="flex items-center justify-between px-1">
-              <button
-                type="button"
-                @click="triggerFileInput"
-                class="text-[11px] text-primary hover:text-primary-fixed flex items-center gap-1 active:scale-95 transition-all"
-              >
-                <span class="material-symbols-outlined text-[15px]">add_photo_alternate</span>
-                <span>或从手机相册选取截屏/拍照</span>
-              </button>
-              <span class="text-[10px] text-on-surface-variant font-mono opacity-70">支持直接粘贴</span>
-            </div>
+            <!-- Screenshots Section (多截图管理与相册选择) -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between px-1">
+                <button
+                  v-if="screenshotList.length < MAX_SCREENSHOTS"
+                  type="button"
+                  @click="triggerFileInput"
+                  class="text-[11px] text-primary hover:text-primary-fixed flex items-center gap-1 active:scale-95 transition-all font-mono"
+                >
+                  <span class="material-symbols-outlined text-[15px]">add_photo_alternate</span>
+                  <span>{{ screenshotList.length === 0 ? '从手机相册选取截屏/拍照 (可多选)' : `继续添加 (${screenshotList.length}/${MAX_SCREENSHOTS})` }}</span>
+                </button>
+                <span v-else class="text-[10px] text-on-surface-variant font-mono">已满 5 张截图</span>
 
-            <!-- Screenshot Attached Preview Card -->
-            <div
-              v-else
-              class="relative p-2 rounded-xl bg-surface-container-low/90 border border-primary/30 flex items-center gap-3 animate-fade-in"
-            >
-              <!-- Image Thumbnail -->
+                <div class="flex items-center gap-2">
+                  <span v-if="screenshotList.length === 0" class="text-[10px] text-on-surface-variant font-mono opacity-70">支持直接粘贴</span>
+                  <button
+                    v-else
+                    type="button"
+                    @click="clearAllScreenshots"
+                    class="text-[10px] text-error/80 hover:text-error active:scale-95 transition-all font-mono"
+                  >
+                    清空全部
+                  </button>
+                </div>
+              </div>
+
+              <!-- Multi-Screenshot Preview Grid -->
               <div
-                class="relative w-14 h-14 rounded-lg overflow-hidden bg-black/40 border border-outline-variant/30 flex-shrink-0 cursor-pointer group"
-                @click="openLightbox(screenshotData, '当前附加截图预览')"
-                title="点击查看大图"
+                v-if="screenshotList.length > 0"
+                class="p-2.5 rounded-xl bg-surface-container-low/90 border border-primary/30 space-y-2 animate-fade-in"
               >
-                <img
-                  :src="screenshotData"
-                  alt="调试截图预览"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                />
-                <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span class="material-symbols-outlined text-[16px] text-white">zoom_in</span>
+                <div class="flex items-center justify-between text-[11px] font-mono text-on-surface-variant px-0.5">
+                  <span class="text-primary font-bold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]">photo_library</span>
+                    已附带 {{ screenshotList.length }} 张截图凭证
+                  </span>
+                  <span class="text-[10px] opacity-75">点击缩略图查看大图</span>
+                </div>
+
+                <div class="flex items-center gap-2.5 overflow-x-auto no-scrollbar py-1">
+                  <!-- Thumbnail Items -->
+                  <div
+                    v-for="(item, idx) in screenshotList"
+                    :key="item.id || idx"
+                    class="relative w-16 h-16 rounded-lg overflow-hidden bg-black/40 border border-outline-variant/40 flex-shrink-0 cursor-pointer group shadow"
+                  >
+                    <img
+                      :src="item.data"
+                      :alt="'截图 ' + (idx + 1)"
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      @click="openLightbox(item.data, `${item.source} (${idx + 1}/${screenshotList.length})`)"
+                      title="点击全屏查看"
+                    />
+                    <!-- Overlay Remove Button -->
+                    <button
+                      type="button"
+                      @click.stop="removeScreenshotItem(idx)"
+                      class="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-black/80 hover:bg-error text-white flex items-center justify-center text-[10px] transition-colors"
+                      title="移除此图"
+                      aria-label="移除截图"
+                    >
+                      ✕
+                    </button>
+                    <!-- Bottom Source Chip -->
+                    <div class="absolute inset-x-0 bottom-0 bg-black/75 text-[8px] font-mono text-center text-on-surface-variant truncate px-0.5 py-0.2">
+                      {{ item.source === '自动截图当前页面' ? '当前页' : '相册' }}
+                    </div>
+                  </div>
+
+                  <!-- Add More Tile (if < MAX_SCREENSHOTS) -->
+                  <button
+                    v-if="screenshotList.length < MAX_SCREENSHOTS"
+                    type="button"
+                    @click="triggerFileInput"
+                    class="w-16 h-16 rounded-lg border border-dashed border-outline-variant/60 hover:border-primary flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-95 transition-all flex-shrink-0 bg-surface-container/20 group"
+                    title="添加更多截图"
+                  >
+                    <span class="material-symbols-outlined text-[20px] group-hover:scale-110 transition-transform">add</span>
+                    <span class="text-[9px] font-mono">添加</span>
+                  </button>
                 </div>
               </div>
-
-              <!-- Details -->
-              <div class="flex-1 min-w-0 text-caption font-mono space-y-0.5">
-                <div class="flex items-center gap-1.5">
-                  <span class="px-1.5 py-0.2 rounded bg-primary/20 text-primary text-[10px] font-bold">
-                    {{ screenshotMeta.source || '截屏已附加' }}
-                  </span>
-                  <span class="text-[11px] text-on-surface truncate">
-                    {{ screenshotMeta.dimensions }}
-                  </span>
-                </div>
-                <p class="text-[10px] text-on-surface-variant truncate">
-                  已自动压缩优化 · 体积约 {{ screenshotMeta.sizeText }}
-                </p>
-              </div>
-
-              <!-- Remove Button -->
-              <button
-                type="button"
-                @click="removeScreenshot"
-                class="p-1.5 rounded-lg bg-surface-container-high hover:bg-error/20 text-on-surface-variant hover:text-error border border-outline-variant/30 active:scale-95 transition-all flex-shrink-0"
-                title="移除该截图"
-                aria-label="移除截图"
-              >
-                <span class="material-symbols-outlined text-[16px]">delete</span>
-              </button>
             </div>
           </div>
 
@@ -305,7 +339,7 @@
               >
                 {{ isSubmitting ? 'progress_activity' : 'send' }}
               </span>
-              <span>{{ isSubmitting ? '正在传输...' : (screenshotData ? '🚀 携带截图发送给 AI' : '🚀 发送给 AI 助手') }}</span>
+              <span>{{ isSubmitting ? '正在传输...' : (screenshotList.length > 0 ? `🚀 携带 ${screenshotList.length} 张截图发送给 AI` : '🚀 发送给 AI 助手') }}</span>
             </button>
 
             <button
@@ -419,9 +453,33 @@
                 {{ item.content }}
               </p>
 
-              <!-- Attached Screenshot Thumbnail (if present) -->
+              <!-- Attached Screenshots Thumbnails (支持多图与历史单图平滑兼容) -->
+              <div v-if="item.screenshots && item.screenshots.length > 0" class="space-y-1.5">
+                <span class="text-[10px] font-mono text-on-surface-variant flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[13px] text-primary">photo_library</span>
+                  附带 {{ item.screenshots.length }} 张截图凭证：
+                </span>
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+                  <div
+                    v-for="(sShot, sIdx) in item.screenshots"
+                    :key="sShot.filename || sIdx"
+                    class="relative w-12 h-12 rounded-lg overflow-hidden bg-black/40 border border-outline-variant/30 flex-shrink-0 cursor-pointer group hover:border-primary transition-all"
+                    @click="openLightbox('/api/feedback/screenshot/' + sShot.filename, `${item.content} (图 ${sIdx + 1})`)"
+                  >
+                    <img
+                      :src="'/api/feedback/screenshot/' + sShot.filename"
+                      alt="反馈截图缩略图"
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      loading="lazy"
+                    />
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                      <span class="material-symbols-outlined text-[14px] text-white">zoom_in</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div
-                v-if="item.screenshotFilename"
+                v-else-if="item.screenshotFilename"
                 class="flex items-center gap-2.5 p-2 rounded-xl bg-surface-container-high/60 border border-outline-variant/30 cursor-pointer hover:border-primary/50 active:scale-[0.98] transition-all"
                 @click="openLightbox('/api/feedback/screenshot/' + item.screenshotFilename, item.content || '反馈截图')"
               >
@@ -461,39 +519,59 @@
             </div>
           </div>
         </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </Teleport>
 
-    <!-- Full-screen Lightbox Preview for Screenshot -->
-    <div
-      v-if="lightboxOpen && lightboxSrc"
-      class="fixed inset-0 z-[1010] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 select-none animate-fade-in"
-      @click.self="lightboxOpen = false"
-    >
-      <div class="w-full max-w-md flex items-center justify-between pb-3 text-white">
-        <span class="text-caption font-mono truncate max-w-[280px]">{{ lightboxTitle || '截图放大预览' }}</span>
-        <button
-          type="button"
-          @click="lightboxOpen = false"
-          class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white"
-        >
-          <span class="material-symbols-outlined text-[20px]">close</span>
-        </button>
+    <!-- Full-screen Lightbox Preview for Screenshot (Teleported to body) -->
+    <Teleport to="body">
+      <div
+        v-if="lightboxOpen && lightboxSrc"
+        class="fixed inset-0 z-[1010] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 select-none animate-fade-in"
+        @click.self="lightboxOpen = false"
+      >
+        <div class="w-full max-w-md flex items-center justify-between pb-3 text-white">
+          <span class="text-caption font-mono truncate max-w-[280px]">{{ lightboxTitle || '截图放大预览' }}</span>
+          <button
+            type="button"
+            @click="lightboxOpen = false"
+            class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white"
+          >
+            <span class="material-symbols-outlined text-[20px]">close</span>
+          </button>
+        </div>
+        <div class="max-w-full max-h-[80vh] overflow-auto rounded-xl border border-white/20">
+          <img :src="lightboxSrc" alt="截图放大预览" class="max-w-full max-h-[75vh] object-contain rounded-lg" />
+        </div>
       </div>
-      <div class="max-w-full max-h-[80vh] overflow-auto rounded-xl border border-white/20">
-        <img :src="lightboxSrc" alt="截图放大预览" class="max-w-full max-h-[75vh] object-contain rounded-lg" />
-      </div>
-    </div>
+    </Teleport>
   </aside>
 </template>
 
 <script setup>
+import { APP_VERSION } from '@/config/version.js';
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useMountainStore } from '@/stores/mountainStore.js';
 
 const route = useRoute();
 const mountainStore = useMountainStore();
+
+
+// 自动避让山峰详情页与全屏画廊，避免悬浮在右上角遮挡
+const isSuppressedBySheet = ref(false);
+let sheetObserver = null;
+
+function setupSheetAutoSuppress() {
+  const check = () => {
+    const hasSheet = !!document.querySelector('.mountain-detail-sheet') || !!document.querySelector('.lightbox-overlay');
+    isSuppressedBySheet.value = hasSheet;
+  };
+  sheetObserver = new MutationObserver(check);
+  sheetObserver.observe(document.body, { childList: true, subtree: true });
+  check();
+}
 
 const isEnabled = computed(() => {
   if (typeof window === 'undefined') return false;
@@ -582,8 +660,14 @@ function handleBtnClick() {
 // Screenshot states
 const fileInputRef = ref(null);
 const autoCaptureCurrentPage = ref(false); // 默认不选中
-const screenshotData = ref(null);
-const screenshotMeta = ref({ dimensions: '', sizeText: '', source: '' });
+const MAX_SCREENSHOTS = 5;
+const screenshotList = ref([]); // 支持多张截图 [{ id, data, width, height, sizeText, source, name }]
+const screenshotData = computed(() => screenshotList.value[0]?.data || null);
+const screenshotMeta = computed(() => screenshotList.value[0] ? {
+  dimensions: `${screenshotList.value[0].width} × ${screenshotList.value[0].height}`,
+  sizeText: screenshotList.value[0].sizeText,
+  source: screenshotList.value[0].source
+} : { dimensions: '', sizeText: '', source: '' });
 const isCapturing = ref(false);
 
 // Full-screen Lightbox
@@ -683,6 +767,7 @@ async function fetchHistory(silent = false) {
       feedbackHistory.value = data.history;
     }
   } catch (err) {
+    consecutivePollErrors++;
     console.warn('Failed to fetch feedback history:', err);
   } finally {
     if (!silent) isFetchingHistory.value = false;
@@ -696,27 +781,39 @@ function switchTab(tab) {
   }
 }
 
-// Smart Adaptive Polling (即便关闭弹窗，处理中时也会自动轮询并瞬时更新悬浮药丸状态)
+// 仅在弹窗打开时轻量按需轮询，弹窗关闭后彻底停止轮询，0 耗电 0 发热
+let consecutivePollErrors = 0;
+
 function checkAndSyncPolling() {
   if (pollTimer) {
     clearInterval(pollTimer);
     pollTimer = null;
   }
 
-  const needsActivePolling = isOpen.value || hasActiveFeedback.value;
-
-  if (needsActivePolling) {
+  // 严格仅在弹窗打开时轮询，弹窗关闭时坚决不轮询
+  if (isOpen.value) {
     pollTimer = setInterval(async () => {
       if (typeof document !== 'undefined' && document.hidden) return;
-      await fetchHistory(true);
-      if (!isOpen.value && !hasActiveFeedback.value) {
-        checkAndSyncPolling();
+      if (consecutivePollErrors >= 3) {
+        // App 原生环境下若无本地 Mock 服务，连续失败3次后彻底停用轮询，保护电池与散热
+        clearInterval(pollTimer);
+        pollTimer = null;
+        return;
       }
-    }, 3500);
+      try {
+        await fetchHistory(true);
+        consecutivePollErrors = 0;
+      } catch (e) {
+        consecutivePollErrors++;
+      }
+    }, 6000);
   }
 }
 
-watch([isOpen, hasActiveFeedback], () => {
+watch(isOpen, () => {
+  if (isOpen.value) {
+    consecutivePollErrors = 0;
+  }
   checkAndSyncPolling();
 });
 
@@ -830,27 +927,65 @@ function triggerFileInput() {
 }
 
 async function handleFileChange(event) {
-  const file = event.target?.files?.[0];
-  if (!file) return;
+  const files = Array.from(event.target?.files || []);
+  if (!files.length) return;
 
-  try {
-    const res = await compressImage(file, 1280, 0.85);
-    screenshotData.value = res.base64;
-    screenshotMeta.value = {
-      dimensions: `${res.width} × ${res.height}`,
-      sizeText: res.sizeText,
-      source: '手机相册 / 拍照'
-    };
-    autoCaptureCurrentPage.value = false;
-    submitStatus.value = { success: false, message: '' };
-  } catch (err) {
+  const availableSlots = MAX_SCREENSHOTS - screenshotList.value.length;
+  if (availableSlots <= 0) {
     submitStatus.value = {
       success: false,
-      message: `处理图片失败: ${err.message}`
+      message: `截图凭证已达上限 (${MAX_SCREENSHOTS} 张)，请先移除部分截图再添加。`
     };
-  } finally {
     if (fileInputRef.value) fileInputRef.value.value = '';
+    return;
   }
+
+  const filesToProcess = files.slice(0, availableSlots);
+  if (files.length > availableSlots) {
+    submitStatus.value = {
+      success: true,
+      message: `最多支持 ${MAX_SCREENSHOTS} 张截图，已为您导入前 ${availableSlots} 张。`
+    };
+  } else {
+    submitStatus.value = { success: false, message: '' };
+  }
+
+  for (const file of filesToProcess) {
+    try {
+      const res = await compressImage(file, 1280, 0.85);
+      screenshotList.value.push({
+        id: `img_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+        data: res.base64,
+        width: res.width,
+        height: res.height,
+        sizeText: res.sizeText,
+        source: '手机相册 / 拍照',
+        name: file.name || '相册截图'
+      });
+    } catch (err) {
+      console.warn('Process image failed:', err);
+    }
+  }
+
+  if (fileInputRef.value) fileInputRef.value.value = '';
+}
+
+function removeScreenshotItem(index) {
+  const removed = screenshotList.value.splice(index, 1)[0];
+  if (removed && removed.source === '自动截图当前页面') {
+    autoCaptureCurrentPage.value = false;
+  }
+  if (fileInputRef.value) fileInputRef.value.value = '';
+}
+
+function clearAllScreenshots() {
+  screenshotList.value = [];
+  autoCaptureCurrentPage.value = false;
+  if (fileInputRef.value) fileInputRef.value.value = '';
+}
+
+function removeScreenshot() {
+  clearAllScreenshots();
 }
 
 function toggleAutoCapture() {
@@ -862,7 +997,11 @@ async function handleAutoCaptureToggle() {
   if (autoCaptureCurrentPage.value) {
     await handleAutoCapture();
   } else {
-    removeScreenshot();
+    // 移除自动截取的页面截图
+    const autoIdx = screenshotList.value.findIndex((s) => s.source === '自动截图当前页面');
+    if (autoIdx !== -1) {
+      screenshotList.value.splice(autoIdx, 1);
+    }
   }
 }
 
@@ -887,19 +1026,33 @@ async function handleAutoCapture() {
     const rawDataUrl = canvas.toDataURL('image/jpeg', 0.85);
     const res = await compressImage(rawDataUrl, 1280, 0.85);
 
-    screenshotData.value = res.base64;
-    screenshotMeta.value = {
-      dimensions: `${res.width} × ${res.height}`,
+    const autoItem = {
+      id: `auto_${Date.now()}`,
+      data: res.base64,
+      width: res.width,
+      height: res.height,
       sizeText: res.sizeText,
-      source: '自动截图当前页面'
+      source: '自动截图当前页面',
+      name: '当前页面全貌'
     };
+
+    const existingIdx = screenshotList.value.findIndex((s) => s.source === '自动截图当前页面');
+    if (existingIdx !== -1) {
+      screenshotList.value[existingIdx] = autoItem;
+    } else {
+      if (screenshotList.value.length >= MAX_SCREENSHOTS) {
+        screenshotList.value.pop();
+      }
+      screenshotList.value.unshift(autoItem);
+    }
+
     submitStatus.value = { success: false, message: '' };
   } catch (err) {
     console.warn('html2canvas capture warning:', err);
     autoCaptureCurrentPage.value = false;
     submitStatus.value = {
       success: false,
-      message: '自动截屏受限（地图跨域保护），建议点击「从手机相册选取截屏」上传系统截屏。'
+      message: '自动截屏受限（地图跨域保护），建议点击「从相册选取」上传系统截屏。'
     };
   } finally {
     isModalHiddenForCapture.value = false;
@@ -917,16 +1070,26 @@ async function handlePaste(event) {
       const file = item.getAsFile();
       if (file) {
         try {
+          if (screenshotList.value.length >= MAX_SCREENSHOTS) {
+            submitStatus.value = {
+              success: false,
+              message: `截图凭证已达上限 (${MAX_SCREENSHOTS} 张)`
+            };
+            return;
+          }
           const res = await compressImage(file, 1280, 0.85);
-          screenshotData.value = res.base64;
-          screenshotMeta.value = {
-            dimensions: `${res.width} × ${res.height}`,
+          screenshotList.value.push({
+            id: `paste_${Date.now()}`,
+            data: res.base64,
+            width: res.width,
+            height: res.height,
             sizeText: res.sizeText,
-            source: '剪贴板粘贴'
-          };
+            source: '剪贴板粘贴',
+            name: '剪贴板截图'
+          });
           submitStatus.value = {
             success: true,
-            message: '✅ 已成功从剪贴板提取截图！'
+            message: `✅ 已成功从剪贴板添加截图 (当前共 ${screenshotList.value.length} 张)！`
           };
         } catch (err) {
           console.error('Failed to paste image:', err);
@@ -937,16 +1100,9 @@ async function handlePaste(event) {
   }
 }
 
-function removeScreenshot() {
-  screenshotData.value = null;
-  screenshotMeta.value = { dimensions: '', sizeText: '', source: '' };
-  autoCaptureCurrentPage.value = false;
-  if (fileInputRef.value) fileInputRef.value.value = '';
-}
-
 async function handleSubmit() {
   const text = feedbackText.value.trim();
-  if (!text && !screenshotData.value) {
+  if (!text && screenshotList.value.length === 0) {
     submitStatus.value = { success: false, message: '请先输入反馈描述或附带截图' };
     return;
   }
@@ -965,8 +1121,20 @@ async function handleSubmit() {
       mountainId: mountainStore.selectedMountainId,
       mountain: mountainStore.selectedMountain?.name || null
     },
-    screenshot: screenshotData.value || null,
-    screenshotMeta: screenshotData.value ? screenshotMeta.value : null,
+    screenshots: screenshotList.value.map((item) => ({
+      data: item.data,
+      meta: {
+        dimensions: `${item.width} × ${item.height}`,
+        sizeText: item.sizeText,
+        source: item.source
+      }
+    })),
+    screenshot: screenshotList.value[0]?.data || null,
+    screenshotMeta: screenshotList.value[0] ? {
+      dimensions: `${screenshotList.value[0].width} × ${screenshotList.value[0].height}`,
+      sizeText: screenshotList.value[0].sizeText,
+      source: screenshotList.value[0].source
+    } : null,
     errors: consoleErrors.value
   };
 
@@ -986,7 +1154,7 @@ async function handleSubmit() {
         message: '✅ 已送达！AI 哨兵已捕获并开始分析，已自动为您切到进度追踪。'
       };
       feedbackText.value = '';
-      removeScreenshot();
+      clearAllScreenshots();
       await fetchHistory(true);
       setTimeout(() => {
         activeTab.value = 'history';
@@ -1037,6 +1205,7 @@ function copyDiagnostics() {
 }
 
 onMounted(() => {
+  setupSheetAutoSuppress();
   refreshDeviceInfo();
   fetchHistory(true).then(() => {
     checkAndSyncPolling();
@@ -1054,6 +1223,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  if (sheetObserver) sheetObserver.disconnect();
   if (pollTimer) {
     clearInterval(pollTimer);
     pollTimer = null;

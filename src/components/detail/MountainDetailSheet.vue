@@ -3,27 +3,28 @@
   <Transition name="fade">
     <div
       v-if="modelValue && mountain"
-      class="detail-sheet-backdrop fixed inset-0 z-[60] bg-black/75 backdrop-blur-md transition-opacity"
+      class="detail-sheet-backdrop fixed inset-0 w-full h-full z-[60] bg-black/70"
       @click="closeSheet"
     ></div>
   </Transition>
 
-  <!-- Fullscreen Lightbox Modal (Teleported to body for true fullscreen viewing) -->
+  <!-- Fullscreen Lightbox Modal (Teleported to body for true fullscreen and clean compositing) -->
   <Teleport to="body">
     <Transition name="fade">
       <div
         v-if="isLightboxOpen && mountain"
-        class="lightbox-overlay fixed inset-0 z-[120] bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-4 sm:p-6 select-none"
+        class="lightbox-overlay fixed inset-0 w-full h-full z-[9999] bg-black/95 flex flex-col justify-between py-4 sm:py-6 select-none overscroll-contain"
         role="dialog"
         aria-modal="true"
         aria-label="高清大图全屏画廊预览"
-        @click.self="closeLightbox"
-        @touchstart.passive="onLightboxTouchStart"
-        @touchmove.passive="onLightboxTouchMove"
+        @click.self="handleLightboxBackdropClick"
+        @touchstart="onLightboxTouchStart"
+        @touchmove="onLightboxTouchMove"
         @touchend="onLightboxTouchEnd"
+        @touchcancel="onLightboxTouchEnd"
       >
         <!-- Top Toolbar -->
-        <div class="flex items-center justify-between w-full max-w-4xl mx-auto py-2 px-1 z-20">
+        <div class="flex items-center justify-between w-full max-w-4xl mx-auto py-2 px-4 sm:px-6 z-20">
           <div class="flex items-center gap-2.5 min-w-0">
             <span class="material-symbols-outlined text-primary text-[24px] flex-shrink-0">photo_library</span>
             <div class="flex flex-col min-w-0">
@@ -37,6 +38,9 @@
           </div>
 
           <div class="flex items-center gap-2.5 flex-shrink-0">
+            <span class="px-2 py-0.5 rounded-full bg-primary/20 text-primary font-mono text-[10px] font-bold border border-primary/40">
+              v{{ APP_VERSION }}
+            </span>
             <span
               v-if="galleryList.length > 1"
               class="px-2.5 py-1 rounded-full bg-surface-container-high/90 text-label-data-sm font-mono text-primary border border-primary/30"
@@ -60,28 +64,31 @@
           </div>
         </div>
 
-        <!-- Center Image Stage with Left / Right Arrows -->
+        <!-- Center Image Stage with Left / Right Arrows (Direct Flat Centered Stage, 0 Nested Percentage Collapse) -->
         <div
-          class="relative flex-1 flex items-center justify-center w-full max-w-5xl mx-auto my-2 overflow-hidden"
-          @click.self="closeLightbox"
+          class="relative flex-1 min-h-0 w-full flex items-center justify-center mx-auto my-2 p-3 sm:p-6 overflow-hidden select-none"
+          @click.self="handleLightboxBackdropClick"
         >
           <!-- Prev Image Button -->
           <button
             v-if="galleryList.length > 1"
             type="button"
             @click.stop="prevLightboxImage"
-            class="absolute left-2 sm:left-4 z-20 w-11 h-11 rounded-full frost-glass border border-outline-variant/40 flex items-center justify-center text-white hover:text-primary active:scale-90 transition-all shadow-2xl"
+            class="absolute left-2 sm:left-4 z-30 w-11 h-11 rounded-full frost-glass border border-outline-variant/40 flex items-center justify-center text-white hover:text-primary active:scale-90 transition-all shadow-2xl"
             aria-label="上一张图片"
           >
             <span class="material-symbols-outlined text-[24px]">chevron_left</span>
           </button>
 
-          <!-- Large Centered Image -->
+          <!-- Current Active Fullscreen Image (Direct Centered with 100% Intrinsic Contain) -->
           <img
+            :key="lightboxIndex"
             :src="getSlideSrc(lightboxIndex)"
             :alt="activeLightboxImage.title || mountain.name"
-            class="max-w-full max-h-[72vh] object-contain rounded-2xl shadow-[0_0_48px_rgba(0,0,0,0.95)] border border-outline-variant/30 select-none transition-all duration-300 pointer-events-auto"
-            @click.stop
+            class="max-w-full max-h-full w-auto h-auto object-contain rounded-2xl shadow-[0_0_48px_rgba(0,0,0,0.95)] border border-outline-variant/30 select-none pointer-events-auto"
+            loading="eager"
+            decoding="async"
+            draggable="false"
           />
 
           <!-- Next Image Button -->
@@ -89,7 +96,7 @@
             v-if="galleryList.length > 1"
             type="button"
             @click.stop="nextLightboxImage"
-            class="absolute right-2 sm:right-4 z-20 w-11 h-11 rounded-full frost-glass border border-outline-variant/40 flex items-center justify-center text-white hover:text-primary active:scale-90 transition-all shadow-2xl"
+            class="absolute right-2 sm:right-4 z-30 w-11 h-11 rounded-full frost-glass border border-outline-variant/40 flex items-center justify-center text-white hover:text-primary active:scale-90 transition-all shadow-2xl"
             aria-label="下一张图片"
           >
             <span class="material-symbols-outlined text-[24px]">chevron_right</span>
@@ -118,18 +125,18 @@
     </Transition>
   </Teleport>
 
-  <!-- Navigation App Action Sheet / Modal -->
+  <!-- Navigation App Action Sheet / Modal (Teleported to body for clean top-level rendering) -->
   <Teleport to="body">
     <Transition name="fade">
       <div
         v-if="isNavModalOpen && mountain"
-        class="nav-picker-backdrop fixed inset-0 z-[110] bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 select-none"
-        @click.self="closeNavigationPicker"
+        class="nav-picker-backdrop fixed inset-0 w-full h-full z-[9990] bg-black/75 flex items-end sm:items-center justify-center p-0 sm:p-4 select-none"
+        @click.self="handleNavBackdropClick"
         role="dialog"
         aria-modal="true"
       >
         <div
-          class="nav-picker-panel w-full sm:max-w-md bg-surface-container rounded-t-3xl sm:rounded-3xl border border-outline-variant/30 shadow-[0_-12px_40px_rgba(0,0,0,0.8)] p-5 space-y-4 max-h-[85vh] overflow-y-auto"
+          class="nav-picker-panel w-full sm:max-w-md bg-[#1c1f29] rounded-t-3xl sm:rounded-3xl border border-outline-variant/30 shadow-2xl p-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] space-y-4 max-h-[85vh] overflow-y-auto"
         >
           <!-- Header -->
           <div class="flex items-center justify-between pb-2 border-b border-outline-variant/20">
@@ -213,28 +220,26 @@
   </Teleport>
 
   <!-- In-Sheet Toast Notification -->
-  <Teleport to="body">
     <Transition name="fade">
       <div
         v-if="localToastMsg"
-        class="fixed top-14 left-1/2 -translate-x-1/2 z-[140] px-4 py-2.5 rounded-2xl bg-surface-container-lowest/95 backdrop-blur-xl border border-primary/50 shadow-[0_8px_30px_rgba(78,222,163,0.35)] text-primary text-body-sm font-bold flex items-center gap-2 pointer-events-none"
+        class="fixed top-14 left-1/2 -translate-x-1/2 z-[140] px-4 py-2.5 rounded-2xl bg-surface-container-lowest/95 border border-primary/50 shadow-[0_8px_30px_rgba(78,222,163,0.35)] text-primary text-body-sm font-bold flex items-center gap-2 pointer-events-none"
       >
         <span class="material-symbols-outlined text-[18px]">check_circle</span>
         <span>{{ localToastMsg }}</span>
       </div>
     </Transition>
-  </Teleport>
 
   <!-- Detail Sheet Slide-up Drawer -->
   <Transition name="slide-up">
     <aside
       v-if="modelValue && mountain"
       ref="sheetAsideRef"
-      class="mountain-detail-sheet fixed inset-x-0 bottom-0 z-[70] max-w-md mx-auto h-[92vh] max-h-[92vh] flex flex-col rounded-t-3xl bg-surface-container/95 backdrop-blur-2xl border-t border-outline-variant/30 shadow-[0_-16px_48px_rgba(0,0,0,0.85)] select-none text-on-surface overflow-hidden"
+      :class="{ 'invisible pointer-events-none': isLightboxOpen }"
+      class="mountain-detail-sheet fixed inset-x-0 bottom-0 z-[70] max-w-md mx-auto h-[92vh] max-h-[92vh] flex flex-col rounded-t-3xl bg-[#1c1f29] border-t border-outline-variant/30 shadow-2xl select-none text-on-surface overflow-hidden pb-[env(safe-area-inset-bottom)]"
       role="dialog"
       aria-modal="true"
       :aria-label="`${mountain.name} 详情`"
-      @scroll.passive="preventAsideScroll"
     >
       <!-- Top Drag Handle -->
       <div
@@ -244,7 +249,7 @@
       ></div>
 
       <!-- Sticky Top Header Bar -->
-      <header class="flex items-center justify-between px-4 py-2 border-b border-outline-variant/20 bg-surface-container/90 backdrop-blur-md flex-shrink-0 z-20">
+      <header class="flex items-center justify-between px-4 py-2 border-b border-outline-variant/20 bg-[#1c1f29] flex-shrink-0 z-20">
         <div class="flex items-center gap-2 min-w-0">
           <span class="material-symbols-outlined text-primary text-[22px] flex-shrink-0">terrain</span>
           <h2 class="text-headline-md font-bold text-on-surface tracking-tight truncate">
@@ -258,6 +263,9 @@
             :class="diffBadgeClass"
           >
             {{ mountain.difficulty || 'L2' }}
+          </span>
+          <span class="px-1.5 py-0.5 rounded bg-primary/15 text-primary font-mono text-[10px] font-bold border border-primary/30 flex-shrink-0">
+            v{{ APP_VERSION }}
           </span>
         </div>
 
@@ -274,29 +282,45 @@
       <!-- Scrollable Main Content Container -->
       <div
         ref="scrollContainerRef"
+        :class="{ 'invisible pointer-events-none': isNavModalOpen }"
         class="flex-1 overflow-y-auto no-scrollbar scroll-smooth px-4 pb-6 space-y-4"
       >
         <!-- Hero Scenic Image Gallery Carousel Banner -->
         <div
-          class="hero-gallery-banner relative w-full h-52 rounded-2xl overflow-hidden bg-surface-container-lowest border border-outline-variant/30 shadow-lg group select-none cursor-pointer mt-3"
-          @touchstart.passive="onHeroTouchStart"
-          @touchmove.passive="onHeroTouchMove"
+          class="hero-gallery-banner relative w-full h-52 rounded-2xl overflow-hidden bg-surface-container-lowest border border-outline-variant/30 shadow-lg group select-none cursor-pointer mt-3 touch-pan-y"
+          style="touch-action: pan-y; overscroll-behavior-x: none;"
+          @touchstart="onHeroTouchStart"
+          @touchmove="onHeroTouchMove"
           @touchend="onHeroTouchEnd"
-          @click="openLightbox(currentImageIndex)"
+          @touchcancel="onHeroTouchEnd"
+          @click="onHeroBannerClick"
           title="轻触查看高清全屏相册"
         >
-          <!-- Current Active Gallery Image -->
-          <img
-            :src="getSlideSrc(currentImageIndex)"
-            @error="handleImageError(currentImageIndex)"
-            :alt="galleryList[currentImageIndex]?.title || mountain.name"
-            class="w-full h-full object-cover transition-opacity duration-300"
-            loading="lazy"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-surface-container via-surface-container/35 to-transparent pointer-events-none"></div>
+          <!-- Carousel Track Container (每张照片严格 100% 视口宽，滑动时无缝露出下一张，真正 60fps 丝滑切图) -->
+          <div
+            class="hero-track-container carousel-gpu-track flex h-full w-full"
+            :style="heroTrackStyle"
+          >
+            <div
+              v-for="(slide, sIdx) in galleryList"
+              :key="slide.src || sIdx"
+              class="carousel-gpu-slide w-full min-w-full h-full flex-shrink-0 relative overflow-hidden"
+            >
+              <img
+                :src="getSlideSrc(sIdx)"
+                @error="handleImageError(sIdx)"
+                :alt="slide.title || mountain.name"
+                class="carousel-gpu-image w-full h-full object-cover select-none pointer-events-none"
+                loading="eager"
+                decoding="async"
+                draggable="false"
+              />
+            </div>
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-surface-container via-surface-container/35 to-transparent pointer-events-none isolated-composited-layer"></div>
 
           <!-- Top Chips on Hero Image -->
-          <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-10 pointer-events-none">
+          <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-10 pointer-events-none isolated-composited-layer">
             <span class="px-2.5 py-1 rounded-full bg-surface-container-lowest/80 backdrop-blur-md text-[11px] font-mono font-semibold text-secondary border border-secondary/30 flex items-center gap-1">
               <span class="material-symbols-outlined text-[14px]">explore</span>
               梯队 {{ mountain.group || 'A' }} 组 · {{ mountain.county_short || locationShort }}
@@ -783,7 +807,7 @@
             <div class="flex items-center gap-2 pt-1">
               <button
                 type="button"
-                @click="openNavigationPicker"
+                @click.stop.prevent="openNavigationPicker"
                 class="btn-open-nav-app flex-1 py-2 px-3 rounded-xl bg-primary hover:bg-primary-hover text-on-primary text-[12px] font-bold shadow-[0_4px_16px_rgba(78,222,163,0.3)] flex items-center justify-center gap-1.5 active:scale-95 transition-all"
               >
                 <span class="material-symbols-outlined text-[17px]">explore</span>
@@ -1298,11 +1322,11 @@
       </div>
 
       <!-- Sticky Bottom Action Bar -->
-      <footer class="flex-shrink-0 p-3.5 bg-surface-container/95 backdrop-blur-2xl border-t border-outline-variant/30 flex items-center gap-2.5 z-30 shadow-[0_-8px_24px_rgba(0,0,0,0.6)]">
+      <footer :class="{ 'invisible pointer-events-none': isNavModalOpen }" class="flex-shrink-0 p-3.5 bg-[#1c1f29] border-t border-outline-variant/30 flex items-center gap-2.5 z-30 shadow-[0_-8px_24px_rgba(0,0,0,0.7)]">
         <!-- Direct Navigation Button -->
         <button
           type="button"
-          @click="openNavigationPicker"
+          @click.stop.prevent="openNavigationPicker"
           class="btn-bottom-nav py-3 px-3.5 rounded-2xl bg-secondary/15 hover:bg-secondary/25 border border-secondary/40 text-secondary text-body-sm font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all"
           title="打开手机地图导航"
         >
@@ -1343,6 +1367,7 @@
 
 <script setup>
 import { ref, computed, watch, reactive, nextTick, onMounted, onUnmounted } from 'vue';
+import { APP_VERSION } from '@/config/version.js';
 import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { usePlanStore } from '@/stores/planStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
@@ -1564,13 +1589,28 @@ function goToImage(idx) {
   currentImageIndex.value = idx;
 }
 
+let lightboxOpenTime = 0;
+
 function openLightbox(idx = 0) {
+  isNavModalOpen.value = false;
   lightboxIndex.value = idx;
+  lightboxDragOffset.value = 0;
+  isLightboxDragging.value = false;
+  lightboxOpenTime = Date.now();
   isLightboxOpen.value = true;
 }
 
+function handleLightboxBackdropClick(e) {
+  // 彻底拦截 350ms 内移动端物理触控屏幕的穿透 Ghost Click
+  if (Date.now() - lightboxOpenTime < 350) return;
+  closeLightbox();
+}
+
 function closeLightbox() {
+  if (!isLightboxOpen.value) return;
   isLightboxOpen.value = false;
+  lightboxDragOffset.value = 0;
+  isLightboxDragging.value = false;
   currentImageIndex.value = lightboxIndex.value;
 }
 
@@ -1584,62 +1624,205 @@ function prevLightboxImage() {
   lightboxIndex.value = (lightboxIndex.value - 1 + galleryList.value.length) % galleryList.value.length;
 }
 
-// ================= 触控轻扫滑动手势交互 =================
+// ================= 触控轻扫滑动手势交互 (Flex Track 连续滑动画廊架构) =================
 let heroTouchStartX = 0;
 let heroTouchStartY = 0;
+let heroTouchCurrentX = 0;
+let heroTouchCurrentY = 0;
+let isHeroTracking = false;
+let isHeroSwipingHorizontal = false;
+let heroHasMoved = false;
+const isHeroDragging = ref(false);
+const heroDragOffset = ref(0);
 
 function onHeroTouchStart(e) {
   if (e.touches && e.touches[0]) {
     heroTouchStartX = e.touches[0].clientX;
     heroTouchStartY = e.touches[0].clientY;
+    heroTouchCurrentX = heroTouchStartX;
+    heroTouchCurrentY = heroTouchStartY;
+    isHeroTracking = true;
+    isHeroDragging.value = false;
+    isHeroSwipingHorizontal = false;
+    heroHasMoved = false;
+    heroDragOffset.value = 0;
   }
 }
 
-function onHeroTouchMove() {
-  // 保持被动滚动体验
-}
+function onHeroTouchMove(e) {
+  if (!isHeroTracking || !e.touches || !e.touches[0]) return;
+  const touch = e.touches[0];
+  heroTouchCurrentX = touch.clientX;
+  heroTouchCurrentY = touch.clientY;
+  const dx = heroTouchCurrentX - heroTouchStartX;
+  const dy = heroTouchCurrentY - heroTouchStartY;
 
-function onHeroTouchEnd(e) {
-  if (e.changedTouches && e.changedTouches[0]) {
-    const dx = e.changedTouches[0].clientX - heroTouchStartX;
-    const dy = e.changedTouches[0].clientY - heroTouchStartY;
-    if (Math.abs(dx) > 36 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) {
-        nextImage();
-      } else {
-        prevImage();
-      }
+  // 灵敏度判定：只要水平位移显著（> 6px）且水平分量占优（允许手指弧线手势），判定为横向切图
+    // 严格区分水平切图手势与抽屉垂直滚动，杜绝手势抢占
+  if (!isHeroSwipingHorizontal) {
+    if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      isHeroSwipingHorizontal = true;
+      isHeroDragging.value = true;
+    } else if (Math.abs(dy) > 8) {
+      // 判定为垂直滚动抽屉页面，立即放行手势，绝不阻断页面正常滑动！
+      isHeroTracking = false;
+      return;
+    }
+  }
+
+  if (isHeroSwipingHorizontal) {
+    if (e.cancelable) e.preventDefault();
+    e.stopPropagation();
+    heroHasMoved = true;
+    isHeroDragging.value = true;
+
+    // 边缘阻尼弹性计算
+    const atFirst = currentImageIndex.value === 0 && dx > 0;
+    const atLast = currentImageIndex.value === galleryList.value.length - 1 && dx < 0;
+    if (atFirst || atLast) {
+      heroDragOffset.value = dx * 0.32;
+    } else {
+      heroDragOffset.value = dx;
     }
   }
 }
 
+function onHeroTouchEnd(e) {
+  if (!isHeroTracking) return;
+  isHeroTracking = false;
+
+  if (isHeroSwipingHorizontal) {
+    if (e) e.stopPropagation();
+    const dx = heroTouchCurrentX - heroTouchStartX;
+    const threshold = 36;
+    // 有界弹性吸附：最后一张往左拉弹性回弹、第一张往右拉弹性回弹，绝不在最后一张反向乱翻
+    if (dx < -threshold && currentImageIndex.value < galleryList.value.length - 1) {
+      currentImageIndex.value++;
+    } else if (dx > threshold && currentImageIndex.value > 0) {
+      currentImageIndex.value--;
+    }
+  }
+
+  isHeroDragging.value = false;
+  heroDragOffset.value = 0;
+  isHeroSwipingHorizontal = false;
+}
+
+function onHeroBannerClick() {
+  if (heroHasMoved) {
+    heroHasMoved = false;
+    return;
+  }
+  openLightbox(currentImageIndex.value);
+}
+
+const heroTrackStyle = computed(() => {
+  const basePercent = -currentImageIndex.value * 100;
+  if (isHeroDragging.value) {
+    return {
+      transform: `translateX(calc(${basePercent}% + ${heroDragOffset.value}px))`,
+      transition: 'none'
+    };
+  }
+  return {
+    transform: `translateX(${basePercent}%)`,
+    transition: 'transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1)'
+  };
+});
+
 let lightboxTouchStartX = 0;
 let lightboxTouchStartY = 0;
+let lightboxTouchCurrentX = 0;
+let lightboxTouchCurrentY = 0;
+let isLightboxTracking = false;
+let isLightboxSwipingHorizontal = false;
+let lightboxHasMoved = false;
+const isLightboxDragging = ref(false);
+const lightboxDragOffset = ref(0);
 
 function onLightboxTouchStart(e) {
   if (e.touches && e.touches[0]) {
     lightboxTouchStartX = e.touches[0].clientX;
     lightboxTouchStartY = e.touches[0].clientY;
+    lightboxTouchCurrentX = lightboxTouchStartX;
+    lightboxTouchCurrentY = lightboxTouchStartY;
+    isLightboxTracking = true;
+    isLightboxDragging.value = false;
+    isLightboxSwipingHorizontal = false;
+    lightboxHasMoved = false;
+    lightboxDragOffset.value = 0;
   }
 }
 
-function onLightboxTouchMove() {
-  // 保持被动滚动体验
-}
+function onLightboxTouchMove(e) {
+  if (!isLightboxTracking || !e.touches || !e.touches[0]) return;
+  const touch = e.touches[0];
+  lightboxTouchCurrentX = touch.clientX;
+  lightboxTouchCurrentY = touch.clientY;
+  const dx = lightboxTouchCurrentX - lightboxTouchStartX;
+  const dy = lightboxTouchCurrentY - lightboxTouchStartY;
 
-function onLightboxTouchEnd(e) {
-  if (e.changedTouches && e.changedTouches[0]) {
-    const dx = e.changedTouches[0].clientX - lightboxTouchStartX;
-    const dy = e.changedTouches[0].clientY - lightboxTouchStartY;
-    if (Math.abs(dx) > 36 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx < 0) {
-        nextLightboxImage();
-      } else {
-        prevLightboxImage();
-      }
+  if (!isLightboxSwipingHorizontal) {
+    if (Math.abs(dx) > 6 && Math.abs(dx) > Math.abs(dy) * 0.6) {
+      isLightboxSwipingHorizontal = true;
+      isLightboxDragging.value = true;
+    }
+  }
+
+  // 全屏画廊彻底拦截默认滚动，锁死外层
+  if (e.cancelable) e.preventDefault();
+  e.stopPropagation();
+
+  if (isLightboxSwipingHorizontal) {
+    lightboxHasMoved = true;
+    isLightboxDragging.value = true;
+
+    const atFirst = lightboxIndex.value === 0 && dx > 0;
+    const atLast = lightboxIndex.value === galleryList.value.length - 1 && dx < 0;
+    if (atFirst || atLast) {
+      lightboxDragOffset.value = dx * 0.28;
+    } else {
+      lightboxDragOffset.value = dx;
     }
   }
 }
+
+function onLightboxTouchEnd(e) {
+  if (!isLightboxTracking) return;
+  isLightboxTracking = false;
+  if (e) e.stopPropagation();
+
+  if (isLightboxSwipingHorizontal) {
+    const dx = lightboxTouchCurrentX - lightboxTouchStartX;
+    const threshold = 36;
+    if (dx < -threshold && lightboxIndex.value < galleryList.value.length - 1) {
+      lightboxIndex.value++;
+    } else if (dx > threshold && lightboxIndex.value > 0) {
+      lightboxIndex.value--;
+    }
+  }
+
+  isLightboxDragging.value = false;
+  lightboxDragOffset.value = 0;
+  isLightboxSwipingHorizontal = false;
+}
+
+const lightboxTrackStyle = computed(() => {
+  const basePercent = -lightboxIndex.value * 100;
+  if (isLightboxDragging.value) {
+    return {
+      transform: `translateX(calc(${basePercent}% + ${lightboxDragOffset.value}px))`,
+      transition: 'none'
+    };
+  }
+  return {
+    transform: `translateX(${basePercent}%)`,
+    transition: 'transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1)'
+  };
+});
+
+
+// 弹窗状态由 Vue 内部响应式变量控制
 
 // ================= 全局键盘事件监听 (ESC/左右方向键) =================
 function handleKeyDown(e) {
@@ -1763,25 +1946,33 @@ const availableNavApps = computed(() => {
   });
 });
 
+let navModalOpenTime = 0;
+
 function openNavigationPicker() {
+  isLightboxOpen.value = false;
+  navModalOpenTime = Date.now();
   isNavModalOpen.value = true;
+}
+
+function handleNavBackdropClick(e) {
+  // 彻底拦截 350ms 内移动端物理触控屏幕的穿透 Ghost Click
+  if (Date.now() - navModalOpenTime < 350) return;
+  closeNavigationPicker();
 }
 
 function closeNavigationPicker() {
   isNavModalOpen.value = false;
 }
 
-function handleSelectNavApp(app) {
+async function handleSelectNavApp(app) {
   const dest = {
     lat: destinationCoord.value.lat,
     lng: destinationCoord.value.lng,
     name: currentDestinationName.value
   };
-  launchNavigation(app.id, dest);
-  showSheetToast(`正在为你打开 ${app.name}...`);
-  setTimeout(() => {
-    isNavModalOpen.value = false;
-  }, 400);
+  showSheetToast(`正在为你调起 ${app.name}...`);
+  closeNavigationPicker();
+  await launchNavigation(app.id, dest);
 }
 
 async function copyDestinationText() {
@@ -1820,24 +2011,71 @@ async function copyText(str) {
 </script>
 
 <style scoped>
+
+.mountain-detail-sheet {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+
+.mountain-detail-sheet {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+/* 极简高性能轻量切图轨道 (0 延迟、0 黑屏、0 额外线程开销) */
+.carousel-gpu-track {
+  will-change: transform;
+}
+
+.carousel-gpu-slide {
+  /* 保持标准流式布局，严禁嵌套 contain: paint 或额外 3D transform 导致 WebView 延迟光栅化 */
+}
+
+.carousel-gpu-image {
+  user-select: none;
+}
+
+.isolated-composited-layer {
+  will-change: auto;
+}
+
 .detail-module-card {
   scroll-margin-top: 64px;
 }
 
+/* 强力 GPU 硬件加速图层提升，彻底杜绝跨 Compositing Tree 穿透与死锁 */
+.lightbox-overlay,
+.nav-picker-backdrop {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: transform;
+  isolation: isolate;
+  z-index: 99999;
+}
+
+.nav-picker-panel {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
 .slide-up-enter-from,
 .slide-up-leave-to {
   transform: translateY(100%);
-  opacity: 0.8;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.25s ease;
+  transition: opacity 0.22s ease;
 }
 
 .fade-enter-from,

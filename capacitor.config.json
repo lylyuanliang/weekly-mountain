@@ -1,0 +1,8 @@
+{
+  "appId": "com.weeklymountain.app",
+  "appName": "每周一山",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}

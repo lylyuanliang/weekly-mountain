@@ -171,33 +171,19 @@
               :fill="pt.unc ? 'var(--acc-gold, #ffb95f)' : 'var(--acc-aurora, #4edea3)'"
             />
 
-            <!-- Active Pulsing Beacon Ring (Native SVG SMIL Animation, 0 Drift) -->
+            <!-- Active Waypoint Beacon Ring (Static Crisp Vector, 0 CPU / 0 Battery / 0 Heat) -->
             <circle
               v-if="activeWaypointIndex === idx"
               :cx="pt.x"
               :cy="pt.y"
-              r="6"
+              r="9"
               fill="none"
               :stroke="pt.unc ? 'var(--acc-gold, #ffb95f)' : 'var(--acc-aurora, #4edea3)'"
               stroke-width="1.8"
-              opacity="0.8"
+              opacity="0.85"
+              stroke-dasharray="2,2"
               class="pointer-events-none"
-            >
-              <animate
-                attributeName="r"
-                from="6"
-                to="16"
-                dur="1.2s"
-                repeatCount="indefinite"
-              />
-              <animate
-                attributeName="opacity"
-                from="0.85"
-                to="0"
-                dur="1.2s"
-                repeatCount="indefinite"
-              />
-            </circle>
+            />
 
             <!-- Top Seq Badge on Peak or Key Nodes -->
             <text

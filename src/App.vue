@@ -2,9 +2,11 @@
   <div id="mountain-app" class="app-root w-full min-h-screen bg-surface-lowest text-on-surface flex justify-center selection:bg-primary-container selection:text-on-primary">
     <!-- Viewport Container (max-w-[480px] on desktop, 100% on mobile) -->
     <div class="w-full max-w-[480px] min-h-screen relative flex flex-col bg-background border-x border-white/5 overflow-x-hidden">
-      <!-- Main router view host -->
+      <!-- Main view hosts (Native Tab Stacking Architecture, 0ms switch, absolute 0 flicker) -->
       <main class="flex-1 w-full relative">
-        <router-view />
+        <ExploreView v-show="activeTab === 'explore'" />
+        <PlanView v-show="activeTab === 'plan'" />
+        <ProfileView v-show="activeTab === 'profile'" />
       </main>
 
       <!-- Global 3-Tab Bottom Navigation -->
@@ -17,8 +19,21 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import ExploreView from '@/views/ExploreView.vue';
+import PlanView from '@/views/PlanView.vue';
+import ProfileView from '@/views/ProfileView.vue';
 import BottomNav from '@/components/common/BottomNav.vue';
 import MobileFeedbackWidget from '@/components/debug/MobileFeedbackWidget.vue';
+
+const route = useRoute();
+
+const activeTab = computed(() => {
+  if (route.path.startsWith('/plan')) return 'plan';
+  if (route.path.startsWith('/profile')) return 'profile';
+  return 'explore';
+});
 </script>
 
 <style>

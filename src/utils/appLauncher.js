@@ -1,7 +1,10 @@
 /**
  * 手机原生 App 唤起与户外导航工具库 (App Launcher)
  * 支持唤起高德地图、百度地图、腾讯地图、Apple 地图、两步路 (2bulu)、六只脚 (Foottouch)
+ * 完美适配 Capacitor Android 原生环境与移动端 Web
  */
+import { Capacitor } from '@capacitor/core';
+import { AppLauncher } from '@capacitor/app-launcher';
 
 export function isIos() {
   if (typeof navigator === 'undefined') return false;
@@ -64,23 +67,62 @@ export function cleanTrackKeyword(raw) {
 
 /**
  * 尝试通过 Deep Link 唤起第三方 App
+ * 1. 在 Capacitor 原生容器内：通过 AppLauncher 插件唤起 Intent，杜绝 WebView 导航黑屏
+ * 2. 在移动端浏览器中：通过隐藏 iframe 触发，杜绝顶层页面被篡改
  */
-function tryDeepLink(schemeUrl, fallbackUrl = null) {
-  const start = Date.now();
+export async function tryDeepLink(schemeUrl, fallbackUrl = null) {
+  const isNative = Capacitor && typeof Capacitor.isNativePlatform === 'function' && Capacitor.isNativePlatform();
 
-  // 对于大部分现代移动浏览器，直接变更 location.href 即可唤起对应已安装应用
-  window.location.href = schemeUrl;
+  if (isNative) {
+    try {
+      // 优先尝试直接用原生 Intent 调起应用
+      const result = await AppLauncher.openUrl({ url: schemeUrl });
+      if (result && result.completed !== false) {
+        return { success: true, method: 'app-launcher' };
+      }
+    } catch (err) {
+      console.warn('[AppLauncher] openUrl failed, checking fallback:', err);
+    }
 
-  // 如果提供了 fallback 且 2.5 秒内页面未失焦/未挂起（说明手机未安装该 App），则降级打开 fallbackUrl
-  if (fallbackUrl) {
+    // 若未安装或调起失败，使用外部浏览器打开 fallback
+    if (fallbackUrl) {
+      try {
+        await AppLauncher.openUrl({ url: fallbackUrl });
+        return { success: true, method: 'browser-fallback' };
+      } catch (err) {
+        window.open(fallbackUrl, '_blank');
+        return { success: true, method: 'window-open' };
+      }
+    }
+    return { success: false, reason: 'app-not-installed' };
+  }
+
+  // Web 浏览器环境：利用隐藏 iframe 安全拉起 scheme
+  try {
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = schemeUrl;
+    document.body.appendChild(iframe);
     setTimeout(() => {
-      // 若页面仍在前台且时间差在合理范围内，提示或跳转
+      if (iframe.parentNode) {
+        document.body.removeChild(iframe);
+      }
+    }, 1500);
+  } catch (e) {
+    // ignore
+  }
+
+  if (fallbackUrl) {
+    const start = Date.now();
+    setTimeout(() => {
       if (document.hidden || Date.now() - start > 3000) {
         return;
       }
       window.open(fallbackUrl, '_blank');
     }, 2000);
   }
+
+  return { success: true, method: 'web-iframe' };
 }
 
 // ==========================================
@@ -89,20 +131,16 @@ function tryDeepLink(schemeUrl, fallbackUrl = null) {
 
 /**
  * 唤起两步路户外助手 App
- * 1. 自动写入剪贴板
- * 2. 尝试打开 twostep://
- * 3. 失败时降级到两步路网页端搜索
  */
 export async function launchTwoBulu(keyword) {
   const cleanKw = cleanTrackKeyword(keyword);
   await copyToClipboard(cleanKw);
 
   const encoded = encodeURIComponent(cleanKw);
-  // 两步路 URL Scheme 规范
   const scheme = `twostep://search?keyword=${encoded}`;
   const webFallback = `https://www.2bulu.com/track/track_search.htm?keyword=${encoded}`;
 
-  tryDeepLink(scheme, webFallback);
+  await tryDeepLink(scheme, webFallback);
 
   return {
     app: '两步路 (2bulu)',
@@ -123,7 +161,7 @@ export async function launchFootTouch(keyword) {
   const scheme = `foottouch://search?keyword=${encoded}`;
   const webFallback = `https://www.foottouch.com/`;
 
-  tryDeepLink(scheme, webFallback);
+  await tryDeepLink(scheme, webFallback);
 
   return {
     app: '六只脚 (Foottouch)',
@@ -145,10 +183,10 @@ export const NAVIGATION_APPS = [
     color: '#0091ff',
     icon: 'navigation',
     desc: '山路路况精准 · 户外自驾首选',
-    launch: (dest) => {
+    launch: async (dest) => {
       const scheme = `amapuri://route/plan/?dlat=${dest.lat}&dlon=${dest.lng}&dname=${encodeURIComponent(dest.name)}&dev=0&t=0`;
       const web = `https://uri.amap.com/navigation?to=${dest.lng},${dest.lat},${encodeURIComponent(dest.name)}&mode=car&policy=1&src=weeklymountain&coordinate=gaode&callnative=1`;
-      tryDeepLink(scheme, web);
+      return await tryDeepLink(scheme, web);
     }
   },
   {
@@ -158,10 +196,10 @@ export const NAVIGATION_APPS = [
     color: '#3385ff',
     icon: 'explore',
     desc: '全景卫星视图 · 路线规划详尽',
-    launch: (dest) => {
+    launch: async (dest) => {
       const scheme = `baidumap://map/direction?destination=latlng:${dest.lat},${dest.lng}|name:${encodeURIComponent(dest.name)}&mode=driving&coord_type=wgs84`;
       const web = `https://api.map.baidu.com/direction?destination=latlng:${dest.lat},${dest.lng}|name:${encodeURIComponent(dest.name)}&mode=driving&output=html&src=weeklymountain`;
-      tryDeepLink(scheme, web);
+      return await tryDeepLink(scheme, web);
     }
   },
   {
@@ -171,10 +209,10 @@ export const NAVIGATION_APPS = [
     color: '#10b981',
     icon: 'near_me',
     desc: '微信位置直达 · 绿道指引清晰',
-    launch: (dest) => {
+    launch: async (dest) => {
       const scheme = `qqmap://map/routeplan?type=drive&to=${encodeURIComponent(dest.name)}&tocoord=${dest.lat},${dest.lng}`;
       const web = `https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=${encodeURIComponent(dest.name)}&tocoord=${dest.lat},${dest.lng}&policy=1`;
-      tryDeepLink(scheme, web);
+      return await tryDeepLink(scheme, web);
     }
   },
   {
@@ -185,9 +223,9 @@ export const NAVIGATION_APPS = [
     icon: 'map',
     desc: 'iPhone / iPad 原生平滑导航',
     showOnlyIos: true,
-    launch: (dest) => {
+    launch: async (dest) => {
       const scheme = `maps://?daddr=${dest.lat},${dest.lng}&q=${encodeURIComponent(dest.name)}`;
-      tryDeepLink(scheme, null);
+      return await tryDeepLink(scheme, null);
     }
   },
   {
@@ -197,16 +235,17 @@ export const NAVIGATION_APPS = [
     color: '#4edea3',
     icon: 'public',
     desc: '无需安装应用，浏览器内直接路线规划',
-    launch: (dest) => {
+    launch: async (dest) => {
       const web = `https://uri.amap.com/navigation?to=${dest.lng},${dest.lat},${encodeURIComponent(dest.name)}&mode=car&policy=1&src=weeklymountain&coordinate=gaode&callnative=1`;
       window.open(web, '_blank');
+      return { success: true, method: 'web-direct' };
     }
   }
 ];
 
-export function launchNavigation(appId, dest) {
+export async function launchNavigation(appId, dest) {
   const app = NAVIGATION_APPS.find((a) => a.id === appId);
   if (app) {
-    app.launch(dest);
+    return await app.launch(dest);
   }
 }
