@@ -412,7 +412,7 @@ def run_full_e2e_suite():
             print(f"  [SCREENSHOT] Saved: {SCREENSHOT_PROFILE}")
 
             # 5.5 导航返回 Explore 地图主屏
-            explore_nav = page.locator(".nav-tab-explore, a[href*='#/explore']").first
+            explore_nav = page.locator(".stitch-bottom-nav .nav-tab-explore").first
             assert explore_nav.is_visible(), "Assertion Failed: Explore nav tab not visible!"
             explore_nav.click()
             page.wait_for_timeout(800)

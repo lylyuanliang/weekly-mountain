@@ -1,6 +1,6 @@
 {
-  "content": "顶部展示问题，被遮住了",
-  "timestamp": 1793005170109,
+  "content": "这里只能上传一张图，而且导出海报也不能下载",
+  "timestamp": 1793009756156,
   "device": {
     "viewport": "369 × 821",
     "dpr": 3.25,
@@ -8,38 +8,38 @@
     "ua": "Mozilla/5.0 (Linux; Android 16; 24129PN74C Build/BP2A.250605.031.A3; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/156.0.8078.25 Mobile Safari/537.36"
   },
   "state": {
-    "route": "/explore",
-    "mountainId": "longquanshan",
-    "mountain": "龙泉山"
+    "route": "/profile",
+    "mountainId": "changpinggou",
+    "mountain": "四姑娘山·长坪沟"
   },
   "screenshots": [
     {
-      "path": "scratch/feedback_screenshot_1793005170109_1.jpg",
-      "filename": "feedback_screenshot_1793005170109_1.jpg",
+      "path": "scratch/feedback_screenshot_1793009756156_1.jpg",
+      "filename": "feedback_screenshot_1793009756156_1.jpg",
       "ext": "jpg",
-      "sizeKb": 53,
+      "sizeKb": 66,
       "meta": {
         "dimensions": "575 × 1280",
-        "sizeText": "53 KB",
+        "sizeText": "66 KB",
         "source": "手机相册 / 拍照"
       }
     }
   ],
   "screenshotMeta": {
     "dimensions": "575 × 1280",
-    "sizeText": "53 KB",
+    "sizeText": "66 KB",
     "source": "手机相册 / 拍照"
   },
   "errors": [],
-  "id": 1793005170109,
-  "receivedAt": "2026-10-26T08:59:29.462Z",
-  "updatedAt": "2026-10-26T17:05:22.649197",
+  "id": 1793009756156,
+  "receivedAt": "2026-10-26T10:15:54.950Z",
+  "updatedAt": "2026-10-26T18:37:21.520760",
   "status": "completed",
   "remoteInstruction": "【远程无人值守守则 (详见 AGENTS.md / GEMINI.md)】用户在手机端离线操作，严禁在 IDE 中挂起等待提问；遇细节分歧按安全默认值推进；验证完成后将答复写回 reply 字段并重启哨兵。",
-  "reply": "【大图全屏预览遮挡已根治，新版 v0.0.1.003 已推送】：\n非常感谢您的及时截图反馈！已精准定位根因：此前全屏大图预览弹窗（Lightbox）采用了全屏绝对覆盖，顶栏未配置手机顶部状态栏与摄像头安全区（safe-area-inset-top），且顶栏挤入了版本号徽章，导致在挖孔屏/灵动岛机型上，山峰标题、徽章与关闭按钮与手机状态栏和前置摄像头发生重叠遮挡。\n\n【修复与改进】：\n1. 全屏大图画廊（及成就长图弹窗）已全面引入响应式安全区垫高（pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))]），顶栏自动向下避让系统状态栏与前置摄像头；\n2. 移除大图顶栏多余的版本号标签，释放居中视口间距，彻底杜绝灵动岛穿透；\n3. 版本已更新至 v0.0.1.003，您可在 App「我的 -> 调试与内测支持」中点击‘检查更新并升级’进行 OTA 在线升级，或直接下载直装！",
+  "reply": "已在 v0.0.1.004 版本全面升级打卡与海报导出能力：1.【多图打卡画廊】打卡实景现已支持单座山上传最多 9 张照片，支持多选批量上传与轻量压缩，并提供九宫格画廊、全屏大图预览切换、设为主封面及单张删除；2.【海报下载与保存加固】针对 Android WebView 屏蔽虚拟链接下载的问题，接入系统级 Web Share API（可一键呼起系统分享/存入相册），同时生成后自动弹起专属全屏大图，长按海报图片即可直接保存至手机系统相册，并附带浏览器文件下载备用方案。已完成端到端自动化测试与 APK 编译打包（v0.0.1.004），可通过调试中心在线 OTA 升级或重新安装体验！",
   "clientIp": "171.219.176.50",
-  "screenshotPath": "scratch/feedback_screenshot_1793005170109_1.jpg",
-  "screenshotFilename": "feedback_screenshot_1793005170109_1.jpg",
+  "screenshotPath": "scratch/feedback_screenshot_1793009756156_1.jpg",
+  "screenshotFilename": "feedback_screenshot_1793009756156_1.jpg",
   "screenshotExt": "jpg",
-  "screenshotSizeKb": 53
+  "screenshotSizeKb": 66
 }

@@ -184,7 +184,7 @@
                   <!-- 实景照片容器 -->
                   <div class="relative w-full h-44 rounded-xl overflow-hidden bg-black/50 border border-white/10">
                     <img
-                      :src="item.record.photoUrl"
+                      :src="item.photos?.[0] || item.record.photoUrl"
                       :alt="item.name"
                       class="w-full h-full object-cover"
                       crossorigin="anonymous"
@@ -195,6 +195,27 @@
                     </div>
                     <div class="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-md text-[9px] font-mono text-gray-300">
                       {{ formatCheckinDate(item.record.checkedAt) }}
+                    </div>
+                    <!-- 多图数量角标 -->
+                    <div
+                      v-if="item.photos?.length > 1"
+                      class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-black/70 backdrop-blur-md border border-white/10 text-[9px] font-mono text-emerald-300 flex items-center gap-1"
+                    >
+                      <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
+                      </svg>
+                      <span>{{ item.photos.length }} 张实景</span>
+                    </div>
+                  </div>
+
+                  <!-- 如果有 2 张或更多照片，展示次要微缩照片行 -->
+                  <div v-if="item.photos?.length > 1" class="grid grid-cols-3 gap-1.5 pt-0.5">
+                    <div
+                      v-for="(subPhoto, sIdx) in item.photos.slice(1, 4)"
+                      :key="sIdx"
+                      class="h-14 rounded-lg overflow-hidden border border-white/10 bg-black/40"
+                    >
+                      <img :src="subPhoto" :alt="`${item.name} 实景 ${sIdx + 2}`" class="w-full h-full object-cover" crossorigin="anonymous" />
                     </div>
                   </div>
 
@@ -289,7 +310,7 @@
           <button
             @click="handleSavePoster"
             :disabled="isGenerating"
-            class="btn-save-poster w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-[14px] flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(78,222,163,0.4)] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            class="btn-save-poster w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-[14px] flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(78,222,163,0.4)] active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg v-if="!isGenerating" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -298,29 +319,108 @@
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <span>{{ isGenerating ? '正在渲染高质感海报...' : '📥 保存到手机 / 下载海报' }}</span>
+            <span>{{ isGenerating ? '正在渲染视网膜高清海报...' : '📥 导出海报 / 保存到相册' }}</span>
           </button>
 
           <!-- 提示文本 -->
           <p class="text-center text-[11px] text-gray-400">
-            视网膜屏 2x 高清导出 · 包含 GPS 与高山拓扑防伪认证
+            支持一键调起系统分享 / 长按相册保存 · 包含防伪认证编码
           </p>
         </div>
 
-        <!-- 生成成功后的图片直接长按保存预览（移动端最佳体验） -->
+        <!-- 生成成功后的图片长按保存引导条 -->
         <div
           v-if="generatedImageUrl"
-          class="w-full max-w-[390px] mt-2 p-3 rounded-2xl border border-emerald-400/30 bg-surface-container/90 text-center space-y-2"
+          class="w-full max-w-[390px] mt-2 p-3 rounded-2xl border border-emerald-400/30 bg-surface-container/90 text-center space-y-2 cursor-pointer active:scale-98 transition-transform"
+          @click="isPosterReadyModalOpen = true"
         >
           <div class="text-[12px] text-emerald-400 font-semibold flex items-center justify-center gap-1.5">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            <span>海报已生成完毕！手机端可长按下方图片直接保存</span>
+            <span>海报已就绪！点击展开全屏查看并长按存图</span>
           </div>
-          <div class="max-h-60 overflow-y-auto rounded-xl border border-white/10">
-            <img :src="generatedImageUrl" alt="成就海报预览" class="w-full h-auto block" />
+          <div class="h-28 overflow-hidden rounded-xl border border-white/10 relative">
+            <img :src="generatedImageUrl" alt="成就海报缩略图" class="w-full h-full object-cover object-top" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end justify-center pb-1 text-[10px] text-gray-300">
+              点击全屏放大长按保存
+            </div>
           </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- 海报生成成功后专属全屏查看与相册保存弹窗 (最高层级 z-[60]) -->
+    <Transition name="fade">
+      <div
+        v-if="isPosterReadyModalOpen"
+        class="fixed inset-0 z-[60] bg-black/95 backdrop-blur-lg flex flex-col justify-between pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] px-3 sm:px-6 select-none"
+        @click.self="isPosterReadyModalOpen = false"
+      >
+        <!-- 弹窗顶栏 -->
+        <div class="w-full max-w-md mx-auto flex items-center justify-between pb-2 text-white">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-bold text-[15px]">🎉 成就海报已就绪</span>
+          </div>
+          <button
+            @click="isPosterReadyModalOpen = false"
+            class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white active:scale-95 transition-all"
+            aria-label="关闭预览"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- 核心图片展示区 (适合长按保存) -->
+        <div class="relative flex-1 flex flex-col items-center justify-center min-h-0 py-1 overflow-y-auto">
+          <div class="max-w-[360px] w-full rounded-2xl overflow-hidden border border-emerald-400/30 shadow-[0_0_30px_rgba(78,222,163,0.25)] bg-black/50">
+            <img
+              :src="generatedImageUrl"
+              alt="Alpine Explorer 成就长图海报"
+              class="w-full h-auto block max-h-[60vh] object-contain mx-auto select-auto"
+            />
+          </div>
+
+          <!-- 手机端长按核心提示气泡 -->
+          <div class="mt-2.5 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 shadow-sm">
+            <svg class="w-3.5 h-3.5 shrink-0 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+            <span>长按上方海报图片，即可【保存到手机相册】或发送给好友</span>
+          </div>
+        </div>
+
+        <!-- 底部快捷动作栏 -->
+        <div class="w-full max-w-md mx-auto pt-2 space-y-2">
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              @click="handleSystemShare"
+              class="py-3 px-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold text-[12px] flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-md"
+            >
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              <span>系统分享 / 存相册</span>
+            </button>
+            <button
+              @click="handleDirectDownload"
+              class="py-3 px-3 rounded-xl bg-surface-container-high/90 hover:bg-surface-container-highest border border-white/10 text-on-surface font-medium text-[12px] flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+            >
+              <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>浏览器下载文件</span>
+            </button>
+          </div>
+          <button
+            @click="isPosterReadyModalOpen = false"
+            class="w-full py-1.5 text-[12px] text-gray-400 hover:text-white transition-colors text-center"
+          >
+            返回长图海报
+          </button>
         </div>
       </div>
     </Transition>
@@ -363,6 +463,8 @@ const mountainStore = useMountainStore();
 const posterRef = ref(null);
 const isGenerating = ref(false);
 const generatedImageUrl = ref('');
+const generatedBlob = ref(null);
+const isPosterReadyModalOpen = ref(false);
 
 const totalMountainsCount = computed(() => {
   return mountainStore.mountains?.length || 50;
@@ -395,10 +497,15 @@ const featuredMountains = computed(() => {
       if (!m) return null;
       const dn = derivedNums(m);
       const rec = checkinStore.getCheckinRecord(id) || {};
+      const photos = Array.isArray(rec.photos) && rec.photos.length
+        ? rec.photos
+        : (rec.photoUrl ? [rec.photoUrl] : []);
       return {
         ...m,
         ...dn,
-        record: rec
+        record: rec,
+        photos,
+        photoUrl: photos[0] || rec.photoUrl || ''
       };
     })
     .filter(Boolean);
@@ -406,11 +513,11 @@ const featuredMountains = computed(() => {
 
 // 筛选出有照片与无照片的名山
 const mountainsWithPhotos = computed(() => {
-  return featuredMountains.value.filter((item) => Boolean(item.record?.photoUrl));
+  return featuredMountains.value.filter((item) => item.photos.length > 0 || Boolean(item.record?.photoUrl));
 });
 
 const mountainsWithoutPhotos = computed(() => {
-  return featuredMountains.value.filter((item) => !item.record?.photoUrl);
+  return featuredMountains.value.filter((item) => item.photos.length === 0 && !item.record?.photoUrl);
 });
 
 // 当前日期
@@ -449,7 +556,59 @@ function handleClose() {
 }
 
 /**
- * 渲染海报并触发下载
+ * 浏览器直接下载海报文件
+ */
+function handleDirectDownload() {
+  if (!generatedImageUrl.value) return;
+  try {
+    const filename = `Alpine-Explorer-Achievement-${new Date().toISOString().slice(0, 10)}.png`;
+    let url = generatedImageUrl.value;
+    if (generatedBlob.value) {
+      url = URL.createObjectURL(generatedBlob.value);
+    }
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      document.body.removeChild(link);
+      if (generatedBlob.value) {
+        URL.revokeObjectURL(url);
+      }
+    }, 1000);
+  } catch (e) {
+    console.warn('Direct download error:', e);
+  }
+}
+
+/**
+ * 调起系统分享面板（支持直接保存到手机系统相册或转发到微信）
+ */
+async function handleSystemShare() {
+  if (!generatedBlob.value) {
+    handleDirectDownload();
+    return;
+  }
+  const filename = `Alpine-Explorer-Achievement-${new Date().toISOString().slice(0, 10)}.png`;
+  const file = new File([generatedBlob.value], filename, { type: 'image/png' });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        title: '成都周边50座名山巡礼 · 成就海报',
+        text: `我在 Alpine Explorer 已征服 ${checkinStore.stats.doneCount} 座名山！`,
+        files: [file]
+      });
+    } catch (e) {
+      console.log('Share dismissed:', e);
+    }
+  } else {
+    alert('当前环境未开放直接调起分享，请长按海报大图保存至系统相册');
+  }
+}
+
+/**
+ * 渲染海报并触发下载/系统分享
  */
 async function handleSavePoster() {
   if (isGenerating.value) return;
@@ -472,13 +631,30 @@ async function handleSavePoster() {
     const dataUrl = canvas.toDataURL('image/png');
     generatedImageUrl.value = dataUrl;
 
-    // 触发浏览器直接下载
-    const link = document.createElement('a');
-    link.download = `Alpine-Explorer-Achievement-${new Date().toISOString().slice(0, 10)}.png`;
-    link.href = dataUrl;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+    generatedBlob.value = blob;
+
+    // 弹出专属全屏查看与长按保存弹窗
+    isPosterReadyModalOpen.value = true;
+
+    // 如果设备支持 Web Share API，直接调起系统级分享面板保存相册
+    const filename = `Alpine-Explorer-Achievement-${new Date().toISOString().slice(0, 10)}.png`;
+    const file = new File([blob], filename, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: '成都周边50座名山巡礼 · 成就海报',
+          text: `我在 Alpine Explorer 已征服 ${checkinStore.stats.doneCount} 座名山！`,
+          files: [file]
+        });
+      } catch (shareErr) {
+        // 用户取消分享，弹窗仍打开供长按存图
+        console.log('Share dismissed or cancelled:', shareErr);
+      }
+    } else {
+      // 降级尝试常规浏览器下载
+      handleDirectDownload();
+    }
   } catch (err) {
     console.error('Failed to generate poster:', err);
     alert('海报生成失败，请稍后重试');

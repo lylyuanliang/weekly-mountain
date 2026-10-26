@@ -223,7 +223,7 @@ export const useCheckinStore = defineStore('checkin', () => {
   /**
    * 保存或更新某座山的打卡详情（包含实景照片 Base64 与探索心得随笔）
    * @param {string} mountainId 山峰 ID
-   * @param {Object} detail 详情对象 { photoUrl, note, checkedAt }
+   * @param {Object} detail 详情对象 { photoUrl, photos, note, checkedAt }
    */
   function saveCheckinDetail(mountainId, detail = {}) {
     if (!mountainId) return null;
@@ -234,10 +234,124 @@ export const useCheckinStore = defineStore('checkin', () => {
     }
 
     const prev = checkinRecords.value[mountainId] || {};
+    let photos = Array.isArray(detail.photos)
+      ? [...detail.photos]
+      : (Array.isArray(prev.photos) ? [...prev.photos] : (prev.photoUrl ? [prev.photoUrl] : []));
+
+    if (detail.photoUrl !== undefined && detail.photos === undefined) {
+      if (detail.photoUrl) {
+        if (!photos.includes(detail.photoUrl)) {
+          photos = [detail.photoUrl, ...photos];
+        }
+      } else {
+        photos = [];
+      }
+    }
+
+    // 限制单座山最多 9 张照片
+    photos = photos.slice(0, 9);
+    const photoUrl = photos[0] || (detail.photoUrl !== undefined ? detail.photoUrl : (prev.photoUrl || ''));
+
     const updated = {
       checkedAt: detail.checkedAt || prev.checkedAt || new Date().toISOString(),
-      photoUrl: detail.photoUrl !== undefined ? detail.photoUrl : (prev.photoUrl || ''),
+      photoUrl,
+      photos,
       note: detail.note !== undefined ? detail.note : (prev.note || '')
+    };
+
+    checkinRecords.value = {
+      ...checkinRecords.value,
+      [mountainId]: updated
+    };
+    saveRecordsToStorage(checkinRecords.value);
+    return updated;
+  }
+
+  /**
+   * 向某座山追加打卡照片（支持多选批量追加，最多 9 张）
+   * @param {string} mountainId 山峰 ID
+   * @param {string[]} newPhotos Base64 图片数组
+   */
+  function addCheckinPhotos(mountainId, newPhotos = []) {
+    if (!mountainId || !Array.isArray(newPhotos) || !newPhotos.length) return null;
+
+    if (!isDone(mountainId)) {
+      checkedIds.value = [...checkedIds.value, mountainId];
+      saveCheckedToStorage(checkedIds.value);
+    }
+
+    const prev = checkinRecords.value[mountainId] || {};
+    const existing = Array.isArray(prev.photos)
+      ? [...prev.photos]
+      : (prev.photoUrl ? [prev.photoUrl] : []);
+
+    const merged = [...existing, ...newPhotos].slice(0, 9);
+    const updated = {
+      checkedAt: prev.checkedAt || new Date().toISOString(),
+      photoUrl: merged[0] || '',
+      photos: merged,
+      note: prev.note || ''
+    };
+
+    checkinRecords.value = {
+      ...checkinRecords.value,
+      [mountainId]: updated
+    };
+    saveRecordsToStorage(checkinRecords.value);
+    return updated;
+  }
+
+  /**
+   * 删除某座山指定下标的打卡照片
+   * @param {string} mountainId 山峰 ID
+   * @param {number} photoIndex 照片索引
+   */
+  function removeCheckinPhotoAt(mountainId, photoIndex) {
+    if (!mountainId || !checkinRecords.value[mountainId]) return null;
+    const prev = checkinRecords.value[mountainId];
+    const photos = Array.isArray(prev.photos)
+      ? [...prev.photos]
+      : (prev.photoUrl ? [prev.photoUrl] : []);
+
+    if (photoIndex >= 0 && photoIndex < photos.length) {
+      photos.splice(photoIndex, 1);
+    }
+
+    const updated = {
+      ...prev,
+      photos,
+      photoUrl: photos[0] || ''
+    };
+
+    checkinRecords.value = {
+      ...checkinRecords.value,
+      [mountainId]: updated
+    };
+    saveRecordsToStorage(checkinRecords.value);
+    return updated;
+  }
+
+  /**
+   * 将某张照片设为主封面（置顶至首位）
+   * @param {string} mountainId 山峰 ID
+   * @param {number} photoIndex 照片索引
+   */
+  function setCheckinCoverPhoto(mountainId, photoIndex) {
+    if (!mountainId || !checkinRecords.value[mountainId]) return null;
+    const prev = checkinRecords.value[mountainId];
+    const photos = Array.isArray(prev.photos)
+      ? [...prev.photos]
+      : (prev.photoUrl ? [prev.photoUrl] : []);
+
+    if (photoIndex > 0 && photoIndex < photos.length) {
+      const [target] = photos.splice(photoIndex, 1);
+      photos.unshift(target);
+    }
+
+    const updated = {
+      ...prev,
+      photos,
+      photoUrl: photos[0] || ''
     };
 
     checkinRecords.value = {
@@ -256,11 +370,21 @@ export const useCheckinStore = defineStore('checkin', () => {
   function getCheckinRecord(mountainId) {
     if (!mountainId) return null;
     const record = checkinRecords.value[mountainId];
-    if (record) return record;
+    if (record) {
+      const photos = Array.isArray(record.photos)
+        ? record.photos
+        : (record.photoUrl ? [record.photoUrl] : []);
+      return {
+        ...record,
+        photos,
+        photoUrl: record.photoUrl || photos[0] || ''
+      };
+    }
     if (isDone(mountainId)) {
       return {
         checkedAt: new Date().toISOString(),
         photoUrl: '',
+        photos: [],
         note: ''
       };
     }
@@ -268,7 +392,7 @@ export const useCheckinStore = defineStore('checkin', () => {
   }
 
   /**
-   * 删除某座山的打卡照片或重置打卡详情
+   * 删除某座山的全部打卡照片或重置打卡详情
    * @param {string} mountainId 山峰 ID
    */
   function removeCheckinPhoto(mountainId) {
@@ -278,7 +402,8 @@ export const useCheckinStore = defineStore('checkin', () => {
       ...checkinRecords.value,
       [mountainId]: {
         ...prev,
-        photoUrl: ''
+        photoUrl: '',
+        photos: []
       }
     };
     saveRecordsToStorage(checkinRecords.value);
@@ -416,6 +541,9 @@ export const useCheckinStore = defineStore('checkin', () => {
     setChecked,
     saveCheckinDetail,
     getCheckinRecord,
+    addCheckinPhotos,
+    removeCheckinPhotoAt,
+    setCheckinCoverPhoto,
     removeCheckinPhoto,
     stats,
     exportBackup,

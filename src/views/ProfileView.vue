@@ -306,33 +306,113 @@
             </span>
           </div>
 
-          <!-- 照片展示 / 上传区域 -->
-          <div class="relative">
-            <!-- 已经有照片 -->
-            <div
-              v-if="item.record?.photoUrl"
-              class="relative rounded-xl overflow-hidden border border-white/10 bg-black/40 group"
-            >
-              <img
-                :src="item.record.photoUrl"
-                :alt="item.name"
-                class="w-full h-40 object-cover"
-              />
-              <div class="absolute inset-0 bg-black/50 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                <button
+          <!-- 照片展示 / 上传区域 (支持 1~9 张实景相册) -->
+          <div class="relative space-y-2">
+            <!-- 已经有照片时的多图相册 -->
+            <div v-if="getItemPhotos(item).length > 0" class="space-y-2">
+              <!-- 头部工具行 -->
+              <div class="flex items-center justify-between text-[11px] font-label-data-sm text-on-surface-variant">
+                <span class="flex items-center gap-1.5 text-on-surface font-medium">
+                  <span class="material-symbols-outlined text-[14px] text-primary">photo_library</span>
+                  实景画廊 ({{ getItemPhotos(item).length }}/9)
+                </span>
+                <div class="flex items-center gap-2">
+                  <button
+                    v-if="getItemPhotos(item).length < 9"
+                    @click="triggerUploadForMountain(item.id)"
+                    class="text-primary hover:text-primary/80 font-medium flex items-center gap-0.5 active:scale-95 transition-transform"
+                  >
+                    <span class="material-symbols-outlined text-[13px]">add_photo_alternate</span>
+                    <span>添加照片</span>
+                  </button>
+                  <button
+                    @click="removeAllPhotos(item.id)"
+                    class="text-on-surface-variant hover:text-error text-[10px] active:scale-95 transition-colors"
+                  >
+                    清空全部
+                  </button>
+                </div>
+              </div>
+
+              <!-- 单张照片：宽幅封面卡片展示 -->
+              <div
+                v-if="getItemPhotos(item).length === 1"
+                class="relative rounded-xl overflow-hidden border border-white/10 bg-black/40 group cursor-pointer"
+                @click="openPhotoPreview(item.id, 0)"
+              >
+                <img
+                  :src="getItemPhotos(item)[0]"
+                  :alt="item.name"
+                  class="w-full h-44 object-cover"
+                />
+                <div class="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-black/70 backdrop-blur-md border border-white/10 text-[9px] font-label-data-sm text-primary flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  <span>主封面 (点击放大)</span>
+                </div>
+                <div class="absolute inset-0 bg-black/50 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                  <button
+                    @click.stop="triggerUploadForMountain(item.id)"
+                    class="px-2.5 py-1 rounded-lg bg-surface-container-high/90 text-primary text-[11px] font-medium flex items-center gap-1 active:scale-95 transition-transform"
+                  >
+                    <span class="material-symbols-outlined text-[14px]">add_photo_alternate</span>
+                    添加更多
+                  </button>
+                  <button
+                    @click.stop="openPhotoPreview(item.id, 0)"
+                    class="px-2.5 py-1 rounded-lg bg-surface-container-high/90 text-on-surface text-[11px] font-medium flex items-center gap-1 active:scale-95 transition-transform"
+                  >
+                    <span class="material-symbols-outlined text-[14px]">fullscreen</span>
+                    大图预览
+                  </button>
+                  <button
+                    @click.stop="removePhotoAt(item.id, 0)"
+                    class="px-2.5 py-1 rounded-lg bg-surface-container-high/90 text-error text-[11px] font-medium flex items-center gap-1 active:scale-95 transition-transform"
+                  >
+                    <span class="material-symbols-outlined text-[14px]">delete</span>
+                    删除
+                  </button>
+                </div>
+              </div>
+
+              <!-- 多张照片 (2~9张)：三列网格画廊 -->
+              <div v-else class="grid grid-cols-3 gap-2">
+                <div
+                  v-for="(photo, pIdx) in getItemPhotos(item)"
+                  :key="pIdx"
+                  class="aspect-square relative rounded-xl overflow-hidden border border-white/10 bg-black/40 group cursor-pointer"
+                  @click="openPhotoPreview(item.id, pIdx)"
+                >
+                  <img
+                    :src="photo"
+                    :alt="`${item.name} 实景 ${pIdx + 1}`"
+                    class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105"
+                  />
+                  <!-- 封面角标 -->
+                  <span
+                    v-if="pIdx === 0"
+                    class="absolute top-1 left-1 px-1 py-0.2 rounded bg-primary/90 text-surface text-[8px] font-bold font-label-data-sm shadow-sm"
+                  >
+                    封面
+                  </span>
+                  <!-- 删除按钮 -->
+                  <button
+                    @click.stop="removePhotoAt(item.id, pIdx)"
+                    class="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/75 hover:bg-error text-white/90 flex items-center justify-center active:scale-90 transition-all opacity-90 sm:opacity-0 sm:group-hover:opacity-100"
+                    title="删除此张照片"
+                  >
+                    <span class="material-symbols-outlined text-[12px]">close</span>
+                  </button>
+                </div>
+
+                <!-- 添加更多占位格 (未满 9 张) -->
+                <div
+                  v-if="getItemPhotos(item).length < 9"
                   @click="triggerUploadForMountain(item.id)"
-                  class="px-2.5 py-1 rounded-lg bg-surface-container-high/90 text-primary text-[11px] font-medium flex items-center gap-1 active:scale-95 transition-transform"
+                  class="aspect-square rounded-xl border border-dashed border-white/25 hover:border-primary/50 bg-surface-container-lowest/60 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-surface-container-lowest transition-all text-on-surface-variant hover:text-primary active:scale-95"
                 >
-                  <span class="material-symbols-outlined text-[14px]">photo_camera</span>
-                  更换照片
-                </button>
-                <button
-                  @click="removePhoto(item.id)"
-                  class="px-2.5 py-1 rounded-lg bg-surface-container-high/90 text-error text-[11px] font-medium flex items-center gap-1 active:scale-95 transition-transform"
-                >
-                  <span class="material-symbols-outlined text-[14px]">delete</span>
-                  删除照片
-                </button>
+                  <span class="material-symbols-outlined text-[20px]">add_photo_alternate</span>
+                  <span class="font-label-data-sm text-[9px]">+{{ 9 - getItemPhotos(item).length }}张</span>
+                </div>
               </div>
             </div>
 
@@ -340,10 +420,11 @@
             <div
               v-else
               @click="triggerUploadForMountain(item.id)"
-              class="w-full py-4 rounded-xl border border-dashed border-white/20 hover:border-primary/40 bg-surface-container-lowest/50 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-surface-container-lowest/80 transition-all text-on-surface-variant hover:text-primary"
+              class="w-full py-4 px-3 rounded-xl border border-dashed border-white/20 hover:border-primary/40 bg-surface-container-lowest/50 flex flex-col items-center justify-center gap-1.5 cursor-pointer hover:bg-surface-container-lowest/80 transition-all text-on-surface-variant hover:text-primary"
             >
-              <span class="material-symbols-outlined text-[22px]">add_a_photo</span>
-              <span class="font-label-data-sm text-[11px]">点击上传登顶打卡实景照片 (自动轻量压缩)</span>
+              <span class="material-symbols-outlined text-[24px]">add_a_photo</span>
+              <span class="font-label-data-sm text-[11px] font-semibold">上传登顶打卡实景照片 (支持多选批量上传，最多9张)</span>
+              <span class="font-label-data-sm text-[9px] text-outline">自动轻量压缩，防爆本地存储空间</span>
             </div>
           </div>
 
@@ -520,14 +601,86 @@
       <span>{{ toastMessage }}</span>
     </div>
 
-    <!-- 隐藏的照片上传 input -->
+    <!-- 隐藏的照片上传 input (支持 multiple 多选批量上传) -->
     <input
       ref="photoInputRef"
       type="file"
       accept="image/*"
+      multiple
       class="hidden"
       @change="handlePhotoFileChange"
     />
+
+    <!-- 实景照片多图全屏大图预览弹窗 (含防挖孔安全区垫高) -->
+    <Teleport to="body">
+      <Transition name="fade">
+        <div
+          v-if="isPreviewOpen"
+          class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col justify-between pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] px-4 select-none"
+          @click.self="isPreviewOpen = false"
+        >
+          <!-- 顶栏 -->
+          <div class="flex items-center justify-between text-white pb-3">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-[15px]">{{ currentPreviewMountain?.name }}</span>
+              <span class="text-[12px] text-gray-400 font-mono">
+                ({{ activePreviewPhotoIndex + 1 }} / {{ currentPreviewPhotos.length }})
+              </span>
+            </div>
+            <button
+              @click="isPreviewOpen = false"
+              class="btn-close-photo-preview w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white active:scale-95 transition-all"
+            >
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+
+          <!-- 图片展示区 (带左右切换手势/按钮) -->
+          <div class="relative flex-1 flex items-center justify-center min-h-0 py-2">
+            <img
+              :src="currentPreviewPhoto"
+              :alt="currentPreviewMountain?.name"
+              class="max-w-full max-h-full object-contain rounded-xl shadow-2xl transition-all"
+            />
+
+            <!-- 左右切换箭头 -->
+            <button
+              v-if="activePreviewPhotoIndex > 0"
+              @click="activePreviewPhotoIndex--"
+              class="absolute left-2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 border border-white/15 text-white flex items-center justify-center active:scale-90 transition-all"
+            >
+              <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+            </button>
+            <button
+              v-if="activePreviewPhotoIndex < currentPreviewPhotos.length - 1"
+              @click="activePreviewPhotoIndex++"
+              class="absolute right-2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 border border-white/15 text-white flex items-center justify-center active:scale-90 transition-all"
+            >
+              <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+            </button>
+          </div>
+
+          <!-- 底部控制栏 -->
+          <div class="flex items-center justify-center gap-3 pt-3 border-t border-white/10">
+            <button
+              v-if="activePreviewPhotoIndex > 0"
+              @click="handleSetCover(activePreviewMountainId, activePreviewPhotoIndex)"
+              class="px-3 py-1.5 rounded-xl bg-primary/20 border border-primary/40 text-primary text-[12px] font-medium flex items-center gap-1 active:scale-95 transition-all"
+            >
+              <span class="material-symbols-outlined text-[15px]">star</span>
+              <span>设为主封面</span>
+            </button>
+            <button
+              @click="handleDeletePreviewPhoto"
+              class="px-3 py-1.5 rounded-xl bg-error/20 border border-error/40 text-error text-[12px] font-medium flex items-center gap-1 active:scale-95 transition-all"
+            >
+              <span class="material-symbols-outlined text-[15px]">delete</span>
+              <span>删除此张照片</span>
+            </button>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
 
     <!-- 高质感 Alpine Explorer 成就长图海报弹窗 -->
     <AlpineAchievementPosterModal v-model="isPosterModalOpen" />
@@ -557,6 +710,73 @@ const isDebugModalOpen = ref(false);
 const photoInputRef = ref(null);
 const activeUploadMountainId = ref('');
 const notesDraft = reactive({});
+
+// 多图预览 Lightbox 状态
+const isPreviewOpen = ref(false);
+const activePreviewMountainId = ref('');
+const activePreviewPhotoIndex = ref(0);
+
+const currentPreviewMountain = computed(() => {
+  return mountainStore.getMountainById(activePreviewMountainId.value);
+});
+
+const currentPreviewRecord = computed(() => {
+  return checkinStore.getCheckinRecord(activePreviewMountainId.value);
+});
+
+const currentPreviewPhotos = computed(() => {
+  const r = currentPreviewRecord.value;
+  if (!r) return [];
+  if (Array.isArray(r.photos) && r.photos.length) return r.photos;
+  return r.photoUrl ? [r.photoUrl] : [];
+});
+
+const currentPreviewPhoto = computed(() => {
+  return currentPreviewPhotos.value[activePreviewPhotoIndex.value] || '';
+});
+
+function getItemPhotos(item) {
+  if (!item?.record) return [];
+  if (Array.isArray(item.record.photos) && item.record.photos.length) {
+    return item.record.photos;
+  }
+  return item.record.photoUrl ? [item.record.photoUrl] : [];
+}
+
+function openPhotoPreview(mountainId, index = 0) {
+  activePreviewMountainId.value = mountainId;
+  activePreviewPhotoIndex.value = index;
+  isPreviewOpen.value = true;
+}
+
+function handleSetCover(mountainId, index) {
+  checkinStore.setCheckinCoverPhoto(mountainId, index);
+  activePreviewPhotoIndex.value = 0;
+  showToast('已将该照片设为主封面！');
+}
+
+function handleDeletePreviewPhoto() {
+  const mId = activePreviewMountainId.value;
+  const idx = activePreviewPhotoIndex.value;
+  checkinStore.removeCheckinPhotoAt(mId, idx);
+  showToast('已删除该照片');
+  const photos = currentPreviewPhotos.value;
+  if (photos.length === 0) {
+    isPreviewOpen.value = false;
+  } else if (activePreviewPhotoIndex.value >= photos.length) {
+    activePreviewPhotoIndex.value = photos.length - 1;
+  }
+}
+
+function removePhotoAt(mountainId, photoIndex) {
+  checkinStore.removeCheckinPhotoAt(mountainId, photoIndex);
+  showToast('已删除该照片');
+}
+
+function removeAllPhotos(mountainId) {
+  checkinStore.removeCheckinPhoto(mountainId);
+  showToast('已清空该山峰全部实景照片');
+}
 
 // 初始化心得随笔草稿
 watch(
@@ -593,15 +813,34 @@ function triggerUploadForMountain(mountainId) {
 }
 
 async function handlePhotoFileChange(event) {
-  const file = event.target.files?.[0];
+  const files = Array.from(event.target.files || []);
   const targetId = activeUploadMountainId.value;
-  if (!file || !targetId) return;
+  if (!files.length || !targetId) return;
+
+  const record = checkinStore.getCheckinRecord(targetId);
+  const existingCount = record?.photos?.length || (record?.photoUrl ? 1 : 0);
+  const available = 9 - existingCount;
+
+  if (available <= 0) {
+    showToast('该山峰照片已达 9 张上限');
+    event.target.value = '';
+    activeUploadMountainId.value = '';
+    return;
+  }
+
+  const toProcess = files.slice(0, available);
+  if (files.length > available) {
+    showToast(`单座山最多支持 9 张，本次将处理前 ${available} 张`);
+  } else {
+    showToast(`正在压缩优化 ${toProcess.length} 张照片...`);
+  }
 
   try {
-    showToast('正在压缩优化打卡照片...');
-    const base64 = await compressImageToBase64(file, 960, 0.75);
-    checkinStore.saveCheckinDetail(targetId, { photoUrl: base64 });
-    showToast('打卡实景照片保存成功！');
+    const compressedList = await Promise.all(
+      toProcess.map((f) => compressImageToBase64(f, 960, 0.72))
+    );
+    checkinStore.addCheckinPhotos(targetId, compressedList);
+    showToast(`成功添加 ${compressedList.length} 张打卡实景！`);
   } catch (err) {
     console.error('Photo upload failed:', err);
     showToast('照片处理失败，请重试');
