@@ -13,7 +13,7 @@
       <BottomNav />
 
       <!-- Mobile In-App Feedback Widget (Dev / Cpolar Tunnel only) -->
-      <MobileFeedbackWidget />
+      <MobileFeedbackWidget v-if="IS_DEBUG_BUILD" />
     </div>
   </div>
 </template>
@@ -26,6 +26,7 @@ import PlanView from '@/views/PlanView.vue';
 import ProfileView from '@/views/ProfileView.vue';
 import BottomNav from '@/components/common/BottomNav.vue';
 import MobileFeedbackWidget from '@/components/debug/MobileFeedbackWidget.vue';
+import { IS_DEBUG_BUILD } from '@/config/version.js';
 
 const route = useRoute();
 

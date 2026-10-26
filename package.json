@@ -1,11 +1,12 @@
 {
   "name": "weekly-mountain",
-  "version": "2.0.7",
+  "version": "0.0.1.003",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/copy_assets.js",
+    "build:release": "vite build --mode release && node scripts/copy_assets.js",
     "preview": "vite preview",
     "cap:sync": "cap sync android",
     "cap:build": "npm run build && cap sync android"

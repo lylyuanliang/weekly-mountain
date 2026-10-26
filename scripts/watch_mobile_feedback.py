@@ -118,6 +118,15 @@ def main():
                     print("===========================================================\n")
                     sys.stdout.flush()
 
+                    # 更新基准时间戳文件，确保下次重启以这批反馈的最大时间戳为新基准
+                    max_ts = max((np.get("id") or np.get("timestamp") or 0) for np in new_pending)
+                    if max_ts > 0:
+                        try:
+                            with open(LAST_PROCESSED_FILE, "w", encoding="utf-8") as lpf:
+                                lpf.write(str(max_ts))
+                        except Exception:
+                            pass
+
                     # 退出以触发 Antigravity 响应式自动唤醒
                     sys.exit(0)
         except Exception as e:

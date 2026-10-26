@@ -6,12 +6,137 @@ import path from 'node:path'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-// 手机真机即时调试反馈中间件插件
+// 手机真机即时调试反馈与 OTA 在线更新中间件插件
 function viteFeedbackPlugin() {
+  function setCorsHeaders(req, res) {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, HEAD')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Range, Authorization')
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range, Content-Disposition')
+  }
+
   return {
     name: 'vite-plugin-mobile-feedback',
     configureServer(server) {
+      // 0. APK 产物下载服务 (GET /releases/*)
+      server.middlewares.use('/releases', (req, res, next) => {
+        setCorsHeaders(req, res)
+        if (req.method === 'OPTIONS') {
+          res.writeHead(204)
+          res.end()
+          return
+        }
+
+        const releaseDir = path.resolve(__dirname, 'releases')
+        if (!fs.existsSync(releaseDir)) {
+          fs.mkdirSync(releaseDir, { recursive: true })
+        }
+
+        const reqUrl = req.url.split('?')[0]
+        let filename = reqUrl.replace(/^\//, '')
+        if (!filename || filename === '/') {
+          filename = 'weekly-mountain-latest-debug.apk'
+        } else if (filename === 'release' || filename === 'latest-release') {
+          filename = 'weekly-mountain-latest-release.apk'
+        } else if (filename === 'debug' || filename === 'latest-debug') {
+          filename = 'weekly-mountain-latest-debug.apk'
+        }
+
+        let filePath = path.join(releaseDir, filename)
+        if (!fs.existsSync(filePath)) {
+          // 回退寻找最新的 apk 文件
+          const files = fs.readdirSync(releaseDir).filter(f => f.endsWith('.apk'))
+          if (files.length > 0) {
+            filePath = path.join(releaseDir, files[files.length - 1])
+            filename = path.basename(filePath)
+          } else {
+            res.writeHead(404)
+            res.end('APK not found')
+            return
+          }
+        }
+
+        const stat = fs.statSync(filePath)
+        res.writeHead(200, {
+          'Content-Type': 'application/vnd.android.package-archive',
+          'Content-Disposition': `attachment; filename="${filename}"`,
+          'Content-Length': stat.size,
+          'Cache-Control': 'no-cache'
+        })
+        fs.createReadStream(filePath).pipe(res)
+      })
+
+      // 0.5 App 在线检查更新接口 (GET /api/app-update)
+      server.middlewares.use('/api/app-update', (req, res) => {
+        setCorsHeaders(req, res)
+        if (req.method === 'OPTIONS') {
+          res.writeHead(204)
+          res.end()
+          return
+        }
+
+        const releaseDir = path.resolve(__dirname, 'releases')
+        let latestApk = 'weekly-mountain-latest-debug.apk'
+        let apkSize = 0
+        let updateTime = new Date().toISOString()
+
+        if (fs.existsSync(releaseDir)) {
+          const files = fs.readdirSync(releaseDir).filter(f => f.endsWith('.apk'))
+          if (files.length > 0) {
+            let maxTime = 0
+            files.forEach(f => {
+              const stat = fs.statSync(path.join(releaseDir, f))
+              if (stat.mtimeMs > maxTime) {
+                maxTime = stat.mtimeMs
+                latestApk = f
+                apkSize = stat.size
+                updateTime = new Date(stat.mtimeMs).toLocaleString('zh-CN', { hour12: false })
+              }
+            })
+          }
+        }
+
+        let appVersion = '0.0.1.001'
+        let buildCode = 1
+        try {
+          const versionJs = fs.readFileSync(path.resolve(__dirname, 'src/config/version.js'), 'utf-8')
+          const mVer = versionJs.match(/APP_VERSION\s*=\s*['"]([^'"]+)['"]/)
+          if (mVer) appVersion = mVer[1]
+          const mCode = versionJs.match(/BUILD_CODE\s*=\s*(\d+)/)
+          if (mCode) buildCode = parseInt(mCode[1], 10)
+        } catch {}
+
+        const host = req.headers.host || 'localhost:5173'
+        const proto = req.headers['x-forwarded-proto'] || (host.startsWith('localhost') || host.startsWith('127.0.0.1') ? 'http' : 'https')
+
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
+        res.end(
+          JSON.stringify({
+            success: true,
+            latestVersion: appVersion,
+            buildCode: buildCode,
+            downloadUrl: `${proto}://${host}/releases/weekly-mountain-latest-debug.apk`,
+            apkName: latestApk,
+            fileSizeBytes: apkSize,
+            fileSize: apkSize ? `${(apkSize / 1024 / 1024).toFixed(2)} MB` : '27.7 MB',
+            updateTime: updateTime,
+            changelog: [
+              '全新 0.0.1.xxx 研发迭代版本号规范',
+              '新增 App 内直连穿透反馈通道（支持截图与进度追踪）',
+              '新增调试面板在线一键更新 APK 与免线热重载联调'
+            ]
+          })
+        )
+      })
+
+      // 1. 移动端真机反馈服务 (server.middlewares.use('/api/feedback'))
       server.middlewares.use('/api/feedback', (req, res, next) => {
+        setCorsHeaders(req, res)
+        if (req.method === 'OPTIONS') {
+          res.writeHead(204)
+          res.end()
+          return
+        }
         const scratchDir = path.resolve(__dirname, 'scratch')
         if (!fs.existsSync(scratchDir)) {
           fs.mkdirSync(scratchDir, { recursive: true })
@@ -72,7 +197,7 @@ function viteFeedbackPlugin() {
                       }
                     } catch {}
                   }
-                  res.writeHead(200, { 'Content-Type': 'application/json' })
+                  res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
                   res.end(JSON.stringify({ success: true, item }))
                   return
                 }
@@ -223,7 +348,7 @@ function viteFeedbackPlugin() {
               }
               console.log(`========================================\n`)
 
-              res.writeHead(200, { 'Content-Type': 'application/json' })
+              res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
               res.end(JSON.stringify({ success: true, count: history.length, item: data, receivedAt: data.receivedAt }))
             } catch (err) {
               res.writeHead(500, { 'Content-Type': 'application/json' })
@@ -240,7 +365,7 @@ function viteFeedbackPlugin() {
               history = []
             }
           }
-          res.writeHead(200, { 'Content-Type': 'application/json' })
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
           res.end(JSON.stringify({ success: true, history }))
         } else {
           next()

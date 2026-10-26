@@ -13,7 +13,7 @@
     <Transition name="fade">
       <div
         v-if="isLightboxOpen && mountain"
-        class="lightbox-overlay fixed inset-0 w-full h-full z-[9999] bg-black/95 flex flex-col justify-between py-4 sm:py-6 select-none overscroll-contain"
+        class="lightbox-overlay fixed inset-0 w-full h-full z-[9999] bg-black/95 flex flex-col justify-between pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] px-3 sm:px-6 select-none overscroll-contain"
         role="dialog"
         aria-modal="true"
         aria-label="高清大图全屏画廊预览"
@@ -24,7 +24,7 @@
         @touchcancel="onLightboxTouchEnd"
       >
         <!-- Top Toolbar -->
-        <div class="flex items-center justify-between w-full max-w-4xl mx-auto py-2 px-4 sm:px-6 z-20">
+        <div class="flex items-center justify-between w-full max-w-4xl mx-auto py-1 px-1 z-20 gap-2.5">
           <div class="flex items-center gap-2.5 min-w-0">
             <span class="material-symbols-outlined text-primary text-[24px] flex-shrink-0">photo_library</span>
             <div class="flex flex-col min-w-0">
@@ -37,10 +37,7 @@
             </div>
           </div>
 
-          <div class="flex items-center gap-2.5 flex-shrink-0">
-            <span class="px-2 py-0.5 rounded-full bg-primary/20 text-primary font-mono text-[10px] font-bold border border-primary/40">
-              v{{ APP_VERSION }}
-            </span>
+          <div class="flex items-center gap-2 flex-shrink-0">
             <span
               v-if="galleryList.length > 1"
               class="px-2.5 py-1 rounded-full bg-surface-container-high/90 text-label-data-sm font-mono text-primary border border-primary/30"

@@ -3,7 +3,7 @@
     <Transition name="fade">
       <div
         v-if="visible"
-        class="alpine-poster-modal fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col items-center justify-start overflow-y-auto px-3 py-4 sm:p-6"
+        class="alpine-poster-modal fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col items-center justify-start overflow-y-auto px-3 pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] sm:p-6"
         @click.self="handleClose"
       >
         <!-- 弹窗顶栏控制区 -->

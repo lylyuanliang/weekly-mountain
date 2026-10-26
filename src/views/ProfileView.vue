@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-view w-full min-h-screen bg-background text-on-surface pb-28 pt-3 px-space-lg max-w-md mx-auto space-y-space-xl select-none font-body-md">
+  <div class="profile-view w-full min-h-screen bg-background text-on-surface pb-28 pt-[calc(14px+max(env(safe-area-inset-top,0px),16px))] px-space-lg max-w-md mx-auto space-y-space-xl select-none font-body-md">
     <!-- ================= TOP APP BAR ================= -->
     <header class="flex justify-between items-center w-full py-1">
       <div class="flex items-center gap-space-sm">
@@ -464,6 +464,42 @@
       </div>
     </section>
 
+    <!-- ================= SECTION 4.5: 开发者调试与内测通道 ================= -->
+    <section v-if="IS_DEBUG_BUILD" class="space-y-space-md">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-1.5 h-4 rounded-full bg-primary"></span>
+          <h3 class="font-headline-md text-[18px] font-bold text-on-surface">调试与内测支持</h3>
+        </div>
+        <span class="font-mono text-[10px] text-primary px-2 py-0.5 rounded-full bg-primary/10 border border-primary/30">
+          INTERNAL BETA
+        </span>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-surface-container/70 border border-white/10 backdrop-blur-xl space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-primary/20 text-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-[20px]">terminal</span>
+            </div>
+            <div>
+              <h4 class="font-headline-md text-[13px] font-bold text-on-surface">真机联调与在线更新</h4>
+              <p class="font-body-sm text-[10px] text-on-surface-variant">穿透直连 · OTA 在线升级 · 反馈给 AI</p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            @click="isDebugModalOpen = true"
+            class="py-2 px-3.5 rounded-xl bg-primary text-on-primary font-body-sm text-[12px] font-bold flex items-center gap-1 active:scale-95 transition-all shadow-md"
+          >
+            <span class="material-symbols-outlined text-[15px]">tune</span>
+            <span>进入调试</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= SECTION 5: 版本信息与数据核验公示 ================= -->
     <footer class="pt-2 pb-6 text-center space-y-1.5 text-on-surface-variant">
       <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-label-data-sm text-[10px] text-primary">
@@ -495,6 +531,9 @@
 
     <!-- 高质感 Alpine Explorer 成就长图海报弹窗 -->
     <AlpineAchievementPosterModal v-model="isPosterModalOpen" />
+
+    <!-- Alpine 开发者联调与内测弹窗 -->
+    <AlpineDebugModal v-if="IS_DEBUG_BUILD" v-model="isDebugModalOpen" />
   </div>
 </template>
 
@@ -505,7 +544,8 @@ import { useThemeStore } from '@/stores/themeStore.js';
 import { useMountainStore } from '@/stores/mountainStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
 import AlpineAchievementPosterModal from '@/components/achievement/AlpineAchievementPosterModal.vue';
-import { VERSION_LABEL } from '@/config/version.js';
+import AlpineDebugModal from '@/components/debug/AlpineDebugModal.vue';
+import { VERSION_LABEL, IS_DEBUG_BUILD } from '@/config/version.js';
 
 const checkinStore = useCheckinStore();
 const themeStore = useThemeStore();
@@ -513,6 +553,7 @@ const mountainStore = useMountainStore();
 const regionStore = useRegionStore();
 
 const isPosterModalOpen = ref(false);
+const isDebugModalOpen = ref(false);
 const photoInputRef = ref(null);
 const activeUploadMountainId = ref('');
 const notesDraft = reactive({});

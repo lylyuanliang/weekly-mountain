@@ -249,3 +249,31 @@ export async function launchNavigation(appId, dest) {
     return await app.launch(dest);
   }
 }
+
+/**
+ * 唤起外部浏览器或系统下载器打开指定 URL (用于 APK 在线更新下载与外链访问)
+ */
+export async function openExternalUrl(url) {
+  if (!url) return false;
+  if (Capacitor.isNativePlatform()) {
+    try {
+      await AppLauncher.openUrl({ url });
+      return true;
+    } catch (err) {
+      console.warn('AppLauncher.openUrl failed, falling back to window.open:', err);
+    }
+  }
+  try {
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.download = '';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    return true;
+  } catch {
+    window.open(url, '_blank');
+    return true;
+  }
+}

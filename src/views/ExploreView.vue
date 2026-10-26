@@ -1,8 +1,8 @@
 <template>
   <div class="explore-view relative w-full h-screen overflow-hidden bg-background text-on-surface select-none font-body-md">
     <!-- ================= TOP APP BAR (Stitch Shared Header) ================= -->
-    <header class="fixed top-0 inset-x-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/20">
-      <div class="flex justify-between items-center w-full px-margin h-16 max-w-md mx-auto">
+    <header class="fixed top-0 inset-x-0 z-50 bg-surface/80 dark:bg-surface/80 backdrop-blur-md shadow-sm border-b border-outline-variant/20 pt-[max(env(safe-area-inset-top,0px),16px)]">
+      <div class="flex justify-between items-center w-full px-margin h-14 max-w-md mx-auto">
         <div class="flex items-center gap-space-sm text-primary dark:text-primary">
           <!-- Region Switcher Pill -->
           <button

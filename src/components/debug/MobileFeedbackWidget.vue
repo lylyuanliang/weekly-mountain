@@ -3,7 +3,7 @@
   <aside v-if="isEnabled" class="mobile-feedback-container pointer-events-auto">
     <!-- Floating Trigger Pill on Mobile Screen (Draggable, default above bottom sheet) -->
     <button
-      v-if="!isOpen"
+      v-if="!isOpen && debugStore.isCapsuleVisible"
       ref="triggerBtnRef"
       type="button"
       @click="handleBtnClick"
@@ -464,10 +464,10 @@
                     v-for="(sShot, sIdx) in item.screenshots"
                     :key="sShot.filename || sIdx"
                     class="relative w-12 h-12 rounded-lg overflow-hidden bg-black/40 border border-outline-variant/30 flex-shrink-0 cursor-pointer group hover:border-primary transition-all"
-                    @click="openLightbox('/api/feedback/screenshot/' + sShot.filename, `${item.content} (图 ${sIdx + 1})`)"
+                    @click="openLightbox(debugStore.apiBase + '/api/feedback/screenshot/' + sShot.filename, `${item.content} (图 ${sIdx + 1})`)"
                   >
                     <img
-                      :src="'/api/feedback/screenshot/' + sShot.filename"
+                      :src="debugStore.apiBase + '/api/feedback/screenshot/' + sShot.filename"
                       alt="反馈截图缩略图"
                       class="w-full h-full object-cover group-hover:scale-105 transition-transform"
                       loading="lazy"
@@ -481,10 +481,10 @@
               <div
                 v-else-if="item.screenshotFilename"
                 class="flex items-center gap-2.5 p-2 rounded-xl bg-surface-container-high/60 border border-outline-variant/30 cursor-pointer hover:border-primary/50 active:scale-[0.98] transition-all"
-                @click="openLightbox('/api/feedback/screenshot/' + item.screenshotFilename, item.content || '反馈截图')"
+                @click="openLightbox(debugStore.apiBase + '/api/feedback/screenshot/' + item.screenshotFilename, item.content || '反馈截图')"
               >
                 <img
-                  :src="'/api/feedback/screenshot/' + item.screenshotFilename"
+                  :src="debugStore.apiBase + '/api/feedback/screenshot/' + item.screenshotFilename"
                   alt="反馈截图缩略图"
                   class="w-11 h-11 object-cover rounded-lg bg-black/40 border border-outline-variant/30 flex-shrink-0"
                   loading="lazy"
@@ -528,7 +528,7 @@
     <Teleport to="body">
       <div
         v-if="lightboxOpen && lightboxSrc"
-        class="fixed inset-0 z-[1010] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 select-none animate-fade-in"
+        class="fixed inset-0 z-[1010] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] select-none animate-fade-in"
         @click.self="lightboxOpen = false"
       >
         <div class="w-full max-w-md flex items-center justify-between pb-3 text-white">
@@ -554,9 +554,11 @@ import { APP_VERSION } from '@/config/version.js';
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useMountainStore } from '@/stores/mountainStore.js';
+import { useDebugStore } from '@/stores/debugStore.js';
 
 const route = useRoute();
 const mountainStore = useMountainStore();
+const debugStore = useDebugStore();
 
 
 // 自动避让山峰详情页与全屏画廊，避免悬浮在右上角遮挡
@@ -580,7 +582,7 @@ const isEnabled = computed(() => {
     window.location.search.includes('debug=1') ||
     window.location.hostname.includes('cpolar') ||
     window.location.hostname.includes('192.168.') ||
-    window.location.hostname.includes('10.')
+    window.location.hostname.includes('10.') || debugStore.isCapacitorNative || debugStore.isCapsuleVisible
   );
 });
 
@@ -761,7 +763,7 @@ let pollTimer = null;
 async function fetchHistory(silent = false) {
   if (!silent) isFetchingHistory.value = true;
   try {
-    const res = await fetch('/api/feedback');
+    const res = await fetch(debugStore.apiBase + '/api/feedback');
     const data = await res.json();
     if (data && data.success && Array.isArray(data.history)) {
       feedbackHistory.value = data.history;
@@ -1139,7 +1141,7 @@ async function handleSubmit() {
   };
 
   try {
-    const res = await fetch('/api/feedback', {
+    const res = await fetch(debugStore.apiBase + '/api/feedback', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -1205,6 +1207,18 @@ function copyDiagnostics() {
 }
 
 onMounted(() => {
+
+// 监听全局呼出反馈事件 (供个人中心调试面板一键调起)
+if (typeof window !== 'undefined') {
+  window.addEventListener('wm-open-feedback', (e) => {
+    isOpen.value = true;
+    if (e.detail && e.detail.tab) {
+      activeTab.value = e.detail.tab;
+    }
+    fetchHistory(true);
+  });
+}
+
   setupSheetAutoSuppress();
   refreshDeviceInfo();
   fetchHistory(true).then(() => {

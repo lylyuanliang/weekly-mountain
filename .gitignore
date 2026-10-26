@@ -11,6 +11,10 @@ scratch/*
 !scratch/mobile_feedback.json
 !scratch/latest_feedback.json
 
+# Local Environment Variables & Secrets
+.env.local
+.env.*.local
+
 # Android Build & Local Paths
 android/.gradle/
 android/build/

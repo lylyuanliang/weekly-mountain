@@ -1,5 +1,5 @@
 <template>
-  <div class="top-search-bar fixed top-[72px] inset-x-0 z-[55] px-margin flex flex-col gap-2.5 max-w-md mx-auto pointer-events-auto">
+  <div class="top-search-bar fixed top-[calc(68px+max(env(safe-area-inset-top,0px),16px))] inset-x-0 z-[55] px-margin flex flex-col gap-2.5 max-w-md mx-auto pointer-events-auto">
     <!-- Compact Elegant Search Bar (Stitch Precision) -->
     <div class="w-full h-10 rounded-xl frost-glass flex items-center px-3 gap-2 shadow-xl border border-outline-variant/40 focus-within:border-primary/70 focus-within:glow-primary transition-all">
       <span class="material-symbols-outlined text-primary text-[19px] flex-shrink-0">search</span>

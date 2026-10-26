@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <main
     ref="mapContainerRef"
     class="explore-map-container relative w-full h-screen overflow-hidden bg-surface-container-lowest select-none touch-none"
@@ -74,7 +74,7 @@
             <!-- Macro/Medium View (lodMode === 'compact', Z < 9.8): Sleek, Compact Highlighted Pill -->
             <template v-if="lodMode === 'compact'">
               <!-- Subtle Beacon Ring -->
-              <div class="absolute -inset-1 rounded-full bg-primary/20  pointer-events-none"></div>
+              <div class="absolute -inset-1 rounded-full bg-primary/20 beacon-ring pointer-events-none"></div>
 
               <!-- Interactive Pin Pill -->
               <div
@@ -82,7 +82,7 @@
               >
                 <!-- Concentric Pulsing Aurora Dot (100% Coaxial Center, 0 Offset) -->
                 <span class="relative flex items-center justify-center flex-shrink-0 w-2 h-2">
-
+                  <span class="animate-ping absolute inset-0 rounded-full bg-primary opacity-75"></span>
                   <span class="relative w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#4edea3]"></span>
                 </span>
                 <span class="text-[10.5px] font-bold text-on-surface tracking-tight whitespace-nowrap">{{ m.name }}</span>
@@ -96,7 +96,7 @@
             <!-- Detailed Close-up View (lodMode === 'detailed', Z >= 9.8): Compact Elegant Card (Capped) -->
             <template v-else>
               <!-- Subtle Beacon Outer Ring (Gentle Aurora Glow, No Drift Ping) -->
-              <div class="absolute -inset-1.5 rounded-full bg-primary/20  pointer-events-none"></div>
+              <div class="absolute -inset-1.5 rounded-full bg-primary/20 beacon-ring pointer-events-none"></div>
 
               <!-- Interactive Pin Card (Capped Max Width, Refined Typography) -->
               <div
@@ -104,7 +104,7 @@
               >
                 <!-- Concentric Pulsing Aurora Dot (100% Coaxial Center, 0 Offset) -->
                 <span class="relative flex items-center justify-center flex-shrink-0 w-2 h-2">
-
+                  <span class="animate-ping absolute inset-0 rounded-full bg-primary opacity-75"></span>
                   <span class="relative w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#4edea3]"></span>
                 </span>
                 <div class="flex flex-col min-w-0">
@@ -185,8 +185,8 @@
         >
           <!-- Ground Target Radar Anchor centered at (x, y) -->
           <div class="relative w-4 h-4 flex items-center justify-center">
-            <span class="absolute -inset-2 rounded-full border border-primary/60 shadow-[0_0_10px_#4edea3]"></span>
-            <span class="absolute -inset-6 rounded-full border border-primary/40 "></span>
+            <span class="absolute -inset-3 rounded-full border-2 border-primary/80 animate-ping"></span>
+            <span class="absolute -inset-6 rounded-full border border-primary/40 beacon-ring"></span>
             <span class="w-3.5 h-3.5 rounded-full bg-primary shadow-[0_0_14px_#4edea3]"></span>
 
             <!-- Dropline and Tooltip Capsule extending upward -->
@@ -200,14 +200,14 @@
                     {{ probeScreenPos.name }}
                   </span>
                   <span class="text-[10px] font-mono text-primary font-bold whitespace-nowrap">
-                    {{ probeScreenPos.alt_m }}m 路 璺濊捣鐐?{{ probeScreenPos.km }}km
+                    {{ probeScreenPos.alt_m }}m · 距起点 {{ probeScreenPos.km }}km
                   </span>
                 </div>
                 <span
                   class="px-1 py-0.5 rounded text-[9px] font-mono border whitespace-nowrap"
                   :class="probeScreenPos.unc ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-primary/20 text-primary border-primary/40'"
                 >
-                  {{ probeScreenPos.unc ? '浼扮畻' : 'GPS' }}
+                  {{ probeScreenPos.unc ? '估算' : 'GPS' }}
                 </span>
               </div>
               <div class="w-0.5 h-5 bg-gradient-to-t from-primary/90 to-primary/40"></div>
@@ -218,16 +218,16 @@
     </div>
 
     <!-- Floating Top-Left Minimal View Coordinates HUD -->
-    <div class="absolute left-margin top-44 z-30 pointer-events-none flex flex-col gap-1">
+    <div class="absolute left-margin top-[calc(170px+max(env(safe-area-inset-top,0px),16px))] z-30 pointer-events-none flex flex-col gap-1">
       <div class="px-2.5 py-1 rounded-md bg-surface-container-lowest/85 backdrop-blur-md border border-outline-variant/30 inline-flex items-center gap-2 shadow-lg">
-        <span class="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_6px_#4edea3]"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
         <span class="text-label-data-sm font-label-data-sm text-on-surface-variant tracking-wider">
           {{ selectedHudCoordinate }}
         </span>
       </div>
       <!-- Layer Badge -->
       <div class="px-2 py-0.5 rounded bg-surface-container-lowest/70 backdrop-blur-sm border border-outline-variant/20 inline-flex items-center gap-1.5 self-start shadow">
-        <span class="text-[10px] text-primary">馃椇锔?{{ currentLayerMeta.name }}</span>
+        <span class="text-[10px] text-primary">🗺️ {{ currentLayerMeta.name }}</span>
         <span class="text-[9px] font-label-data-sm text-outline">Z{{ mapZoom.toFixed(1) }}</span>
       </div>
     </div>
@@ -239,7 +239,7 @@
         @click="toggle3D"
         class="w-9.5 h-9.5 rounded-full frost-glass flex flex-col items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30 group"
         :class="is3D ? 'border-secondary glow-secondary text-secondary' : ''"
-        title="鍒囨崲 3D 鎷撴墤瑙嗚"
+        title="切换 3D 拓扑视角"
       >
         <span class="material-symbols-outlined text-[20px]" :class="is3D ? 'text-primary' : 'text-secondary'">view_in_ar</span>
         <span class="text-[9px] font-label-data-sm font-bold text-on-surface-variant group-hover:text-primary leading-tight">3D</span>
@@ -249,7 +249,7 @@
       <button
         @click="cycleLayer"
         class="w-9.5 h-9.5 rounded-full frost-glass flex items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30"
-        :title="`鍒囨崲搴曞浘: ${currentLayerMeta.name}`"
+        :title="`切换底图: ${currentLayerMeta.name}`"
       >
         <span class="material-symbols-outlined text-[22px] text-primary">{{ currentLayerMeta.icon }}</span>
       </button>
@@ -258,7 +258,7 @@
       <button
         @click="zoomIn"
         class="w-9.5 h-9.5 rounded-full frost-glass flex items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30"
-        title="鏀惧ぇ鍦板浘"
+        title="放大地图"
       >
         <span class="material-symbols-outlined text-[20px]">add</span>
       </button>
@@ -267,7 +267,7 @@
       <button
         @click="zoomOut"
         class="w-9.5 h-9.5 rounded-full frost-glass flex items-center justify-center text-on-surface hover:text-primary active:scale-95 shadow-xl transition-all border border-outline-variant/30"
-        title="缂╁皬鍦板浘"
+        title="缩小地图"
       >
         <span class="material-symbols-outlined text-[20px]">remove</span>
       </button>
@@ -276,7 +276,7 @@
       <div
         @click="resetNorth"
         class="w-11 h-16 rounded-full frost-glass flex flex-col items-center justify-between py-1.5 shadow-xl border border-outline-variant/30 cursor-pointer active:scale-95 transition-all"
-        title="鎸囧寳閽?/ 鏍囬珮 / 閲嶇疆涓績"
+        title="指北针 / 标高 / 重置中心"
       >
         <span class="text-[10px] font-label-data-sm font-bold text-error tracking-tighter">N</span>
         <span class="material-symbols-outlined text-[18px] text-primary rotate-45">navigation</span>
@@ -287,7 +287,7 @@
       <button
         @click="recenterLocation"
         class="w-9.5 h-9.5 rounded-full frost-glass flex items-center justify-center text-primary active:scale-95 shadow-xl transition-all border border-primary/30 glow-primary"
-        title="閲嶇疆瑙嗚 / 瀹氫綅涓績"
+        title="重置视角 / 定位中心"
       >
         <span class="material-symbols-outlined text-[20px]">my_location</span>
       </button>
@@ -332,22 +332,22 @@ function yToLat(y, z) {
 const TILE_LAYERS = [
   {
     id: 'amap-night',
-    name: '鏋佸厜榛戞洔鐭虫殫澶?,
+    name: '极光黑曜石暗夜',
     icon: 'dark_mode',
     url: (z, x, y) =>
       `https://webrd0${1 + ((x + y) % 4)}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x=${x}&y=${y}&z=${z}`,
     subUrl: null,
-    attrib: '漏 楂樺痉鍦板浘 路 鐭㈤噺鏆楀'
+    attrib: '© 高德地图 · 矢量暗夜'
   },
   {
     id: 'amap-sat',
-    name: '楂樻竻閬ユ劅鍗槦',
+    name: '高清遥感卫星',
     icon: 'satellite_alt',
     url: (z, x, y) =>
       `https://webst0${1 + ((x + y) % 4)}.is.autonavi.com/appmaptile?style=6&x=${x}&y=${y}&z=${z}`,
     subUrl: (z, x, y) =>
       `https://wprd0${1 + ((x + y) % 4)}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x=${x}&y=${y}&z=${z}`,
-    attrib: '漏 楂樺痉鍦板浘 路 鍗槦褰卞儚'
+    attrib: '© 高德地图 · 卫星影像'
   }
 ];
 
@@ -361,15 +361,15 @@ const mapZoom = ref(regionStore.currentRegion.defaultZoom || 9);
 const is3D = ref(false);
 
 // Level of Detail (LOD) display mode based on mapZoom
-// >= 9.8: 'detailed' (杩戞櫙鐗瑰啓锛氬湴鍚?+ 鏍囬珮 + 鍛煎惛鐐?+ 涓嬪瀭绾?
-// < 9.8: 'compact' (涓繙鏅細绮捐嚧绱у噾鍗曡鍦板悕鑳跺泭锛屼紭闆呬笉鎶㈤暅)
+// >= 9.8: 'detailed' (近景特写：地名 + 标高 + 呼吸点 + 下垂线)
+// < 9.8: 'compact' (中远景：精致紧凑单行地名胶囊，优雅不抢镜)
 const lodMode = computed(() => {
   if (mapZoom.value >= 9.8) return 'detailed';
   return 'compact';
 });
 
-// markerScale: 骞虫粦鑷€傚簲閫傚害缂╂斁绯绘暟锛屼弗鏍艰缃斁澶т笂闄愶紝闃叉鍦板浘鏀惧ぇ鏃舵爣璁扮偣鏃犺妭鍒惰啫鑳€
-// 鍦?Z6.0 淇濇寔 0.80x锛屽湪 Z9.0 淇濇寔 0.90x锛屾渶楂樹弗鏍煎皝椤跺湪 0.95x
+// markerScale: 平滑自适应适度缩放系数，严格设置放大上限，防止地图放大时标记点无节制膨胀
+// 在 Z6.0 保持 0.80x，在 Z9.0 保持 0.90x，最高严格封顶在 0.95x
 const markerScale = computed(() => {
   const z = mapZoom.value;
   const clampedZ = Math.max(6.0, Math.min(12.0, z));
@@ -379,7 +379,7 @@ const markerScale = computed(() => {
 
 function getMarkerStyle(m) {
   const isSelected = m.id === mountainStore.selectedMountainId;
-  // 涓ユ牸涓婇檺姝婚攣锛氶€変腑鐘舵€佹渶楂樺皝椤跺湪 1.0x锛堢粷涓嶆棤闄愯啫鑳€锛侊級锛屾湭閫変腑鐘舵€佹渶楂?0.95x
+  // 严格上限死锁：选中状态最高封顶在 1.0x（绝不无限膨胀！），未选中状态最高 0.95x
   const currentScale = isSelected ? Math.min(1.0, markerScale.value) : markerScale.value;
   return {
     left: `${m.x}px`,
@@ -530,15 +530,15 @@ function isMountainVisible(mountainId) {
 const selectedHudCoordinate = computed(() => {
   const m = mountainStore.selectedMountain;
   if (!m) {
-    return `${regionStore.currentRegion.name.toUpperCase()} 路 TOPO 1:25,000`;
+    return `${regionStore.currentRegion.name.toUpperCase()} · TOPO 1:25,000`;
   }
   const c = mountainCoordinates.value[m.id];
   if (c && c.lat && c.lng) {
-    const latStr = `${c.lat.toFixed(2)}掳N`;
-    const lngStr = `${c.lng.toFixed(2)}掳E`;
-    return `${m.name.toUpperCase()} 路 ${latStr} ${lngStr}`;
+    const latStr = `${c.lat.toFixed(2)}°N`;
+    const lngStr = `${c.lng.toFixed(2)}°E`;
+    return `${m.name.toUpperCase()} · ${latStr} ${lngStr}`;
   }
-  return `${regionStore.currentRegion.name.toUpperCase()} 路 TOPO 1:25,000`;
+  return `${regionStore.currentRegion.name.toUpperCase()} · TOPO 1:25,000`;
 });
 
 const selectedElevationDial = computed(() => {
@@ -551,7 +551,7 @@ const selectedElevationDial = computed(() => {
 
 // Marker Click
 function handleMarkerClick(id) {
-  if (isMapMoved) return; // 绉诲姩/缂╂斁鎵嬪娍鏈熼棿鎷︽埅璇Е鐐瑰嚮
+  if (isMapMoved) return; // 移动/缩放手势期间拦截误触点击
   mountainStore.selectMountain(id);
   emit('mountain-select', id);
   panToMountain(id);
@@ -633,14 +633,14 @@ function onTouchStart(e) {
   cancelPanAnimation();
 
   if (e.touches.length === 2) {
-    // 鍙屾寚瑙︽帶锛氫竴寰嬪紑鍚缉鏀炬ā寮忥紝缁濅笉鍙楁爣璁扮偣锛圡arker锛夐樆鏂紒
+    // 双指触控：一律开启缩放模式，绝不受标记点（Marker）阻断！
     isDragging.value = false;
     isPinching.value = true;
     isMapMoved = true;
     initialPinchDist = getPinchDist(e);
     initialPinchZoom = mapZoom.value;
   } else if (e.touches.length === 1) {
-    // 鍗曟寚瑙︽帶锛氬嵆浣挎寜鍦ㄧ偣浣嶄笂涔熸甯歌褰曡捣鐐癸紙杞昏Е閫変腑锛屾嫋鍔ㄥ钩绉伙級
+    // 单指触控：即使按在点位上也正常记录起点（轻触选中，拖动平移）
     isPinching.value = false;
     isDragging.value = true;
     isMapMoved = false;
@@ -785,31 +785,31 @@ function cancelPanAnimation() {
   }
 }
 
-// 璁＄畻閬垮紑椤堕儴鎼滅储鏍忥紙绾?150px锛変笌搴曢儴鍗＄墖鎶藉眽锛堢害 430px锛夊悗鐨勩€屽紑闃斿ぉ闄呭彲瑙嗕腑蹇冦€嶅瀭鐩村亸绉婚噺
+// 计算避开顶部搜索栏（约 150px）与底部卡片抽屉（约 430px）后的「开阔天际可视中心」垂直偏移量
 function getVisibleSkyOffsetY() {
   const h = containerHeight.value;
-  // 椤堕儴鎼滅储鏍忎笌绛涢€夎兌鍥婂崰鐢ㄧ害 150px
+  // 顶部搜索栏与筛选胶囊占用约 150px
   const topOccupied = 150;
-  // 搴曢儴鎶藉眽鍦ㄥ崐灞曞紑鎬佷笅鍗犵敤楂樺害绾?364px锛屽惛搴?66px锛屽叡璁?430px
+  // 底部抽屉在半展开态下占用高度约 364px，吸底 66px，共计 430px
   const sheetHeight = Math.max(180, Math.min(364, h - 180));
   const bottomOccupied = 66 + sheetHeight;
 
-  // 寮€闃斿尯鍩熶笂鐣屼笌涓嬬晫
+  // 开阔区域上界与下界
   const visibleTop = topOccupied;
   const visibleBottom = Math.max(visibleTop + 80, h - bottomOccupied);
   const visibleCenter = (visibleTop + visibleBottom) / 2;
 
-  // 鐩稿灞忓箷鐗╃悊涓績鐨勫悜涓婂亸绉婚噺
+  // 相对屏幕物理中心的向上偏移量
   const screenCenter = h / 2;
   const offsetY = Math.round(screenCenter - visibleCenter);
-  // 瀹夊叏闄愬埗锛氭爣鍑嗙Щ鍔ㄧ绾︿负 135px ~ 140px锛屽眳涓偓娴簬寮€闃斿ぉ闄呬腑澶?
+  // 安全限制：标准移动端约为 135px ~ 140px，居中悬浮于开阔天际中央
   return Math.max(0, Math.min(180, offsetY));
 }
 
 function recenterLocation() {
   cancelPanAnimation();
   const r = regionStore.currentRegion;
-  // 閲嶇疆鍏ㄧ渷/鍏ㄦ櫙瑙嗚鏃讹紝鍚戜笂寰皟 50px锛岀‘淇濆崡閮ㄤ綆娴锋嫈灞卞嘲涓嶈创搴?
+  // 重置全省/全景视角时，向上微调 50px，确保南部低海拔山峰不贴底
   panToLocation(r.center.lng, r.center.lat, r.defaultZoom || 9, 380, 50);
 }
 
@@ -821,7 +821,7 @@ function panToLocation(targetLng, targetLat, targetZoom = null, duration = 380, 
   const startZoom = mapZoom.value;
   const endZoom = targetZoom || startZoom;
 
-  // 鏍规嵁 WebMercator 鎶曞奖璁＄畻鍖呭惈鍙澶╅檯鍋忕Щ鐨勭洰鏍囩含搴︼紝纭繚鍔ㄧ敾缁堢偣鏍囪鐐圭簿鍑嗚惤浜庡紑闃旇閲庝腑蹇?
+  // 根据 WebMercator 投影计算包含可视天际偏移的目标纬度，确保动画终点标记点精准落于开阔视野中心
   const finalLat =
     offsetY !== 0
       ? yToLat(latToY(targetLat, endZoom) + offsetY, endZoom)
@@ -929,7 +929,7 @@ function setProbeMarker(waypoint) {
   const rawLng = parseFloat(waypoint.lng);
   const rawLat = parseFloat(waypoint.lat);
   if (!isNaN(rawLng) && !isNaN(rawLat)) {
-    // 骞虫粦灏嗗湴鍥捐鍙ｅ井璋冨眳涓紝鐣欏嚭涓婃柟澶╅檯寮€闃斿彲瑙嗗甫
+    // 平滑将地图视口微调居中，留出上方天际开阔可视带
     const offsetY = getVisibleSkyOffsetY();
     panToLocation(rawLng, rawLat, Math.max(mapZoom.value, 10.5), 320, offsetY);
   }
@@ -1008,7 +1008,7 @@ defineExpose({
   }
 }
 
-. {
+.beacon-ring {
   animation: beaconPulse 2.8s ease-in-out infinite;
 }
 

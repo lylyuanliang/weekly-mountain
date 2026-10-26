@@ -1,5 +1,5 @@
 <template>
-  <div class="plan-view w-full min-h-screen bg-background text-on-surface pb-28 pt-3 px-space-lg max-w-md mx-auto space-y-space-xl select-none font-body-md">
+  <div class="plan-view w-full min-h-screen bg-background text-on-surface pb-28 pt-[calc(14px+max(env(safe-area-inset-top,0px),16px))] px-space-lg max-w-md mx-auto space-y-space-xl select-none font-body-md">
     <!-- ================= TOP APP BAR ================= -->
     <header class="flex justify-between items-center w-full py-1">
       <div class="flex items-center gap-space-sm">
