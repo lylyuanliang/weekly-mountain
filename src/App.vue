@@ -14,18 +14,36 @@
 
       <!-- Mobile In-App Feedback Widget (Dev / Cpolar Tunnel only, completely stripped in release) -->
       <component :is="MobileFeedbackWidget" v-if="MobileFeedbackWidget" />
+
+      <!-- First-Launch Mandatory Safety & Legal Disclaimer Modal -->
+      <LegalDisclaimerModal v-model="isDisclaimerOpen" :mandatory="true" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, defineAsyncComponent } from 'vue';
+import { ref, computed, defineAsyncComponent, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import ExploreView from '@/views/ExploreView.vue';
 import PlanView from '@/views/PlanView.vue';
 import ProfileView from '@/views/ProfileView.vue';
 import BottomNav from '@/components/common/BottomNav.vue';
+import LegalDisclaimerModal from '@/components/common/LegalDisclaimerModal.vue';
 import { IS_DEBUG_BUILD } from '@/config/version.js';
+
+// 首次启动强制法律免责协议弹窗检测
+const isDisclaimerOpen = ref(false);
+
+onMounted(() => {
+  try {
+    const agreed = localStorage.getItem('alpine_disclaimer_agreed');
+    if (agreed !== 'true') {
+      isDisclaimerOpen.value = true;
+    }
+  } catch (e) {
+    isDisclaimerOpen.value = true;
+  }
+});
 
 // 仅在 Debug 构建下异步按需载入移动端调试反馈浮窗，Release 构建完全物理剔除
 const MobileFeedbackWidget = IS_DEBUG_BUILD

@@ -590,6 +590,18 @@
       <p class="font-label-data-sm text-[10px] text-outline">
         {{ regionStore.currentRegion.title }}遥测与 GPS 轨迹核验数据已通过多源实地复核 (2025 深度核验)
       </p>
+
+      <!-- 法律免责与安全告知常设入口 -->
+      <div class="pt-2">
+        <button
+          type="button"
+          @click="isDisclaimerModalOpen = true"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container/60 hover:bg-surface-container border border-white/10 text-[11px] text-gray-300 hover:text-white transition-all active:scale-95 shadow-sm"
+        >
+          <span class="material-symbols-outlined text-[15px] text-amber-400">gavel</span>
+          <span>《户外安全公约与法律免责声明》</span>
+        </button>
+      </div>
     </footer>
 
     <!-- Toast Feedback -->
@@ -685,6 +697,9 @@
     <!-- 高质感 Alpine Explorer 成就长图海报弹窗 -->
     <AlpineAchievementPosterModal v-model="isPosterModalOpen" />
 
+    <!-- 户外安全公约与法律免责声明弹窗 -->
+    <LegalDisclaimerModal v-model="isDisclaimerModalOpen" :mandatory="false" />
+
     <!-- Alpine 开发者联调与内测弹窗 -->
     <component :is="AlpineDebugModal" v-if="AlpineDebugModal" v-model="isDebugModalOpen" />
   </div>
@@ -697,6 +712,7 @@ import { useThemeStore } from '@/stores/themeStore.js';
 import { useMountainStore } from '@/stores/mountainStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
 import AlpineAchievementPosterModal from '@/components/achievement/AlpineAchievementPosterModal.vue';
+import LegalDisclaimerModal from '@/components/common/LegalDisclaimerModal.vue';
 // 仅在 Debug 构建下异步按需载入开发者调试弹窗，Release 构建完全物理剔除
 const AlpineDebugModal = IS_DEBUG_BUILD
   ? defineAsyncComponent(() => import('@/components/debug/AlpineDebugModal.vue'))
@@ -709,6 +725,7 @@ const mountainStore = useMountainStore();
 const regionStore = useRegionStore();
 
 const isPosterModalOpen = ref(false);
+const isDisclaimerModalOpen = ref(false);
 const isDebugModalOpen = ref(false);
 const photoInputRef = ref(null);
 const activeUploadMountainId = ref('');

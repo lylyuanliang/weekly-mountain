@@ -785,6 +785,18 @@ pm run dev -- --host（已绑定 5173 端口）；
       - 将工单 `#1792985311207`（路线详情闪烁与胶囊遮挡）、`#1792749198230`（六大体验问题）及本次提醒工单 `#1792995985277` 全部置为 `completed` 状态，并写入详尽的修复复盘答复；
       - 更新基准时间戳至 `1792995985277`，重新启动后台静默哨兵 `python scripts/watch_mobile_feedback.py` 维持全时监听。
 
+39. **登顶打卡纪实相册、海报一键导出及发布纯净版安全隔离 (`v0.0.1.005`)**：
+    - **打卡纪实支持拍照/相册上传与修改**：山峰打卡功能全面升级，支持本地照片上传、预览缩略图、随时更新或替换打卡照片，并持久化到打卡历史记录；
+    - **海报照片可选导出与一键保存**：海报生成器支持动态配置「导出所勾选山峰的实拍照片」，彻底解决移动端长按无法呼出浏览器保存菜单的问题，新增专属「一键生成并保存图片」动作按钮；
+    - **Release 纯净发布版安全防线**：针对 GitHub Release 公开发布场景，彻底切断所有私有内网穿透与调试入口。采用 Vite 环境变量（`.env.release` 中 `VITE_ENABLE_DEBUG=false`）配合动态异步组件加载，Rollup 编译期死代码消除（DCE）直接从 Release 产物中剥离 `MobileFeedbackWidget`、`AlpineDebugModal` 及 `debugStore`，解包静态扫描达到 0 泄露标准。
+
+40. **户外安全公约与法律免责声明全面落地 (`v0.0.1.005`)**：
+    - **法律合规与自甘风险防线**：依据《中华人民共和国民法典》第 1176 条（自甘风险原则）、第 1198 条（安全保障义务界定）与第 662 条（无偿技术赠与免责声明），构建完善的法律防护网；
+    - **首次启动强制门禁拦截**：创建独立组件 `LegalDisclaimerModal.vue`，在 `App.vue` 顶层挂载。用户首次进入 App 必须阅览《户外安全公约与免责声明》，并勾选“我已年满18周岁并具备完全民事行为能力，已详尽阅读并自愿承诺自担户外一切人身财产风险”，未勾选强制禁用进入按钮；同意后状态持久化至 `localStorage`；
+    - **山峰详情页常态警示**：在 `MountainDetailSheet.vue` 模块 1 醒目位置增设安全警示徽标，明确标示高山气候多变、轨迹参数为理论参考值、严禁违规穿越自然保护区未开放核心区；
+    - **个人中心常驻查阅入口**：在 `ProfileView.vue` 设置「《户外安全公约与法律免责声明》」常驻按钮，方便用户随时再次查阅；
+    - **自动化测试闭环**：通过 Playwright 编写 `scratch/verify_disclaimer_flow.py`，完成首次启动拦截、未勾选禁用、勾选保存放行、二次冷启静默放行、详情页安全徽标及个人中心呼出全流程自动化验证，100% 通过。
+
 ## 3. 关键决策
 - **内部研发阶段版本号规范**：正式确立 `0.0.1.xxx` 4 位版本号格式。前三位 `0.0.1` 声明当前处于早期内测与功能验证阶段，符合 SemVer 2.0.0 第 4 款对 0.y.z 初始研发期的定义；第 4 位作为内部联调/调试递增序列，兼顾规范性与持续交付诉求。
 - **打包产物归档隔离**：所有打包生成的 `.apk`、`.zip` 等构建介质必须统一进入 `releases/` 目录，严禁在项目根目录倾倒产物，杜绝工作区污染。
@@ -797,22 +809,25 @@ pm run dev -- --host（已绑定 5173 端口）；
 - **拖拽零延迟原则**：使用绝对定位 `left/top` 进行高频拖拽跟随的元素，严禁设置包含 `left`、`top` 或 `all` 的 CSS `transition` 属性。
 - **城市扩展无侵入**：默认定位并激活 `chengdu`（成都周边 51 座），多城市架构对现有数据无破坏性变更。
 - **去官方化**：杜绝可能产生误导的“官方推荐”、“官方认证”措辞，采用更严谨专业的户外社区中立措辞。
+- **法律自甘风险与零泄露发布**：正式对外发布的 release 变体强制剔除所有私有域名与内测反馈组件，并通过全屏不可跳过的《户外安全须知与法律免责声明》构筑坚固的法律抗辩防线。
 
 ## 4. 验证结果
+- `python scratch/verify_disclaimer_flow.py`: PASS (首次启动强制弹窗拦截、未勾选禁用、勾选保存进入、再次打开不弹、详情页安全提示、个人中心随时查看 100% 通过)
+- `python scratch/verify_apk_security.py`: PASS (Release APK 静态扫描 0 敏感泄露，cpolar/debugStore/MobileFeedbackWidget 完全剔除)
 - `python scratch/verify_feedback_1792738756769.py`: PASS (弹窗高度 636px 拒绝塌陷、画廊尾部弹性阻尼顺滑回弹不倒序、全屏 Lightbox 100vw 满宽丝滑滑动无接缝全部 100% 通过，0 错误)
 - `python scratch/verify_carousel_and_teleport.py`: PASS (连续 Flex Track 画廊轨道 60fps 丝滑切图、全屏大图无缝滑入消除 0.5s 突变、反馈弹窗 Teleport 根治视口截断 100% 验证通过，0 控制台错误)
 - `python scratch/verify_swipe_and_multi_upload.py`: PASS (画廊与大图左右手势独占拦截防页面漂移、AI反馈多截图上传与删除增量追加 100% 验证通过，0 控制台错误)
-- python scratch/verify_feedback_fix_1792647942079.py: PASS (真实实拍风景图、0 假图折线图、反馈按钮强制单行及贴边吸附无走位，0 控制台运行时错误)
+- `python scratch/verify_feedback_fix_1792647942079.py`: PASS (真实实拍风景图、0 假图折线图、反馈按钮强制单行及贴边吸附无走位，0 控制台运行时错误)
 - `node scratch/test_pinia_stores.js`: PASS (51 座山峰加载与距离单调升序断言 100% 通过)
 - `node scratch/test_region_store.js`: PASS (区域与城市切换 100% 通过)
 - `python scratch/verify_distance_sorting_and_guangwushan.py`: PASS (卡片严格近到远递增排序、光雾山 12 模块与 6 大打卡点 100% 通过，0 错误)
 - `python scratch/verify_search_and_checkbox_fix.py`: PASS (搜索框 fixed z-[55] 聚焦自动收拢抽屉防遮挡、软键盘 400px 视口无遮挡、Stitch 极光黑曜石定制复选框 100% 正常，0 错误)
 - `python scratch/test_app_e2e_full.py`: PASS (全量端到端 5 大流程 100% 通过，0 控制台错误)
-- `python scripts/package_deploy.py`: PASS (6.147 MB，55 文件，完美命中 html2.link M 档 <= 10MB / <= 100 文件)
 
 ## 5. 待办与恢复
-- 分支：`feature/app-modular-redesign`。
-- 最新 Commit：`356db35`（已推送到 GitHub origin 仓库）。
-- 当前最新内部测试构建：`v0.0.1.002`（对应产物 `releases/weekly-mountain-v0.0.1.002-debug.apk` 与 `releases/weekly-mountain-latest-debug.apk`，27.71 MB）。
-- 在线更新与下载地址（全走 HTTPS 安全通道）：`https://<TUNNEL_DOMAIN>/releases/weekly-mountain-latest-debug.apk`
+- 分支：`main`。
+- 当前版本号：`v0.0.1.005`（BUILD_CODE: 5）。
+- 构建产物：
+  - `releases/weekly-mountain-v0.0.1.005-release.apk` (27.72 MB，公开发布纯净版，0 泄露)
+  - `releases/weekly-mountain-v0.0.1.005-debug.apk` (28.35 MB，内部内测调试版)
 - 恢复入口：`npm run dev` (访问 http://localhost:5173/)，后台静默反馈监听哨兵 `python scripts/watch_mobile_feedback.py` 持续运行中。

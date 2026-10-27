@@ -482,6 +482,14 @@
             <p>{{ mountain.reputation }}</p>
           </div>
 
+          <!-- 安全合规与法律免责提示 -->
+          <div class="p-2.5 rounded-xl bg-surface-container-low/70 border border-outline-variant/20 flex items-start gap-2 text-[11px] text-on-surface-variant leading-relaxed">
+            <span class="material-symbols-outlined text-[15px] text-amber-400 shrink-0 mt-0.5">warning</span>
+            <span>
+              <strong>安全提示：</strong>高山气候与路况多变，本应用里程、爬升与耗时均为理论参考值，请根据个人体能与路况预留安全冗余；严禁违规穿越自然保护区未开放核心区。
+            </span>
+          </div>
+
           <!-- 登顶打卡纪实卡片 (打卡状态与实景相册入口) -->
           <div
             v-if="isChecked"
