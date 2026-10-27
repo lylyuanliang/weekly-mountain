@@ -12,21 +12,25 @@
       <!-- Global 3-Tab Bottom Navigation -->
       <BottomNav />
 
-      <!-- Mobile In-App Feedback Widget (Dev / Cpolar Tunnel only) -->
-      <MobileFeedbackWidget v-if="IS_DEBUG_BUILD" />
+      <!-- Mobile In-App Feedback Widget (Dev / Cpolar Tunnel only, completely stripped in release) -->
+      <component :is="MobileFeedbackWidget" v-if="MobileFeedbackWidget" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import ExploreView from '@/views/ExploreView.vue';
 import PlanView from '@/views/PlanView.vue';
 import ProfileView from '@/views/ProfileView.vue';
 import BottomNav from '@/components/common/BottomNav.vue';
-import MobileFeedbackWidget from '@/components/debug/MobileFeedbackWidget.vue';
 import { IS_DEBUG_BUILD } from '@/config/version.js';
+
+// 仅在 Debug 构建下异步按需载入移动端调试反馈浮窗，Release 构建完全物理剔除
+const MobileFeedbackWidget = IS_DEBUG_BUILD
+  ? defineAsyncComponent(() => import('@/components/debug/MobileFeedbackWidget.vue'))
+  : null;
 
 const route = useRoute();
 

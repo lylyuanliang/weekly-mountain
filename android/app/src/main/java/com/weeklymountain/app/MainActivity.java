@@ -114,8 +114,10 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 显式开启 WebView 远程调试支持
-        WebView.setWebContentsDebuggingEnabled(true);
+        // 仅在 DEBUGgable 编译模式下开启 WebView 远程调试，RELEASE 模式严格关闭防止 USB 审查
+        if ((getApplicationInfo().flags & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE) != 0) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
         if (bridge != null && bridge.getWebView() != null) {
             WebView webView = bridge.getWebView();
             WebSettings settings = webView.getSettings();

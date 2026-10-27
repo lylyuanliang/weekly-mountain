@@ -686,18 +686,21 @@
     <AlpineAchievementPosterModal v-model="isPosterModalOpen" />
 
     <!-- Alpine 开发者联调与内测弹窗 -->
-    <AlpineDebugModal v-if="IS_DEBUG_BUILD" v-model="isDebugModalOpen" />
+    <component :is="AlpineDebugModal" v-if="AlpineDebugModal" v-model="isDebugModalOpen" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, reactive, watch } from 'vue';
+import { ref, computed, reactive, watch, defineAsyncComponent } from 'vue';
 import { useCheckinStore, compressImageToBase64 } from '@/stores/checkinStore.js';
 import { useThemeStore } from '@/stores/themeStore.js';
 import { useMountainStore } from '@/stores/mountainStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
 import AlpineAchievementPosterModal from '@/components/achievement/AlpineAchievementPosterModal.vue';
-import AlpineDebugModal from '@/components/debug/AlpineDebugModal.vue';
+// 仅在 Debug 构建下异步按需载入开发者调试弹窗，Release 构建完全物理剔除
+const AlpineDebugModal = IS_DEBUG_BUILD
+  ? defineAsyncComponent(() => import('@/components/debug/AlpineDebugModal.vue'))
+  : null;
 import { VERSION_LABEL, IS_DEBUG_BUILD } from '@/config/version.js';
 
 const checkinStore = useCheckinStore();

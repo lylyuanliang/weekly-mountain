@@ -257,6 +257,12 @@ def run_full_e2e_suite():
             assert pre_checkin_text != post_checkin_text, f"Assertion Failed: Checkin text did not toggle! ({pre_checkin_text} vs {post_checkin_text})"
             print(f"  [PASS] 3.5 Checkin toggle button verified ('{pre_checkin_text}' -> '{post_checkin_text}')")
 
+            # 若打卡后弹出了 CheckinDetailModal 纪实录入弹窗，点击关闭弹窗以便继续后续抽屉测试
+            checkin_modal_close = page.locator("button[aria-label='关闭打卡弹窗'], button:has-text('取消')").first
+            if checkin_modal_close.is_visible():
+                checkin_modal_close.click()
+                page.wait_for_timeout(400)
+
             # 截取 Detail Sheet 截图
             page.screenshot(path=SCREENSHOT_DETAIL, full_page=False)
             print(f"  [SCREENSHOT] Saved: {SCREENSHOT_DETAIL}")

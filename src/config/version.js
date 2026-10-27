@@ -22,6 +22,6 @@ export const VERSION_LABEL = IS_DEBUG_BUILD
 
 /**
  * 远程穿透与联调服务器地址（用于 App 内真机反馈与在线 OTA 更新）
- * 动态读取环境变量 VITE_TUNNEL_URL (配置于 .env.local)，未配置时安全回退为空字符串，严禁硬编码敏感私有域名
+ * 仅在调试/内测构建 (IS_DEBUG_BUILD = true) 时读取配置，Release 纯净版强制置空并由构建期死代码消除 (DCE) 彻底剔除，杜绝逆向泄露
  */
-export const DEFAULT_CPOLAR_TUNNEL = import.meta.env.VITE_TUNNEL_URL || '';
+export const DEFAULT_CPOLAR_TUNNEL = IS_DEBUG_BUILD ? (import.meta.env.VITE_TUNNEL_URL || '') : '';

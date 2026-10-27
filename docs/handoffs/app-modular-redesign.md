@@ -9,6 +9,13 @@
 - 恢复入口：npm run dev，移动端反馈监听 python scripts/watch_mobile_feedback.py，打包脚本 pwsh -File scripts/build_app.ps1 -NoPause
 
 ## 1. 当前目标
+0. **Release 纯净版逆向防泄露与物理代码剔除（已落地）**：
+   - 彻底废除前端仅靠 `v-if` 的 UI 隐藏方案，改为编译期死代码消除（DCE）+ 异步动态导入（`defineAsyncComponent`）；
+   - `.env.release` 强制锁定 `VITE_TUNNEL_URL=`，`version.js` 在 release 模式下将 `DEFAULT_CPOLAR_TUNNEL` 硬编码置空；
+   - `MainActivity.java` 中的 `WebView.setWebContentsDebuggingEnabled` 增加 `FLAG_DEBUGGABLE` 判定，Release 编译模式严禁开启 USB 调试；
+   - 经过脚本解包扫描 `weekly-mountain-v0.0.1.005-release.apk` 物理验证：敏感穿透域名、调试组件、API 接口实现 0 字节残留。
+
+## 1. 当前目标
 1. **打卡全流程与多端修改支持 (拍照/上传/编辑)**（已完成）：
    - 在山峰详情抽屉 `MountainDetailSheet.vue` 增设「登顶打卡纪实」卡片及「打卡纪实管理弹窗」，点击登顶打卡可直接调起相机拍照或从相册选择照片上传，并即时填写/修改探索随笔；
    - 保持与个人中心 `ProfileView.vue` 数据完全双向实时联动；
