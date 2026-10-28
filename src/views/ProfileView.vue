@@ -1092,78 +1092,6 @@
 
 
 
-    <!-- ================= SECTION 4.5: 开发者调试与内测通道 ================= -->
-
-    <section v-if="IS_DEBUG_BUILD" class="space-y-space-md">
-
-      <div class="flex items-center justify-between">
-
-        <div class="flex items-center gap-2">
-
-          <span class="w-1.5 h-4 rounded-full bg-primary"></span>
-
-          <h3 class="font-headline-md text-[18px] font-bold text-on-surface">调试与内测支持</h3>
-
-        </div>
-
-        <span class="font-mono text-[10px] text-primary px-2 py-0.5 rounded-full bg-primary/10 border border-primary/30">
-
-          INTERNAL BETA
-
-        </span>
-
-      </div>
-
-
-
-      <div class="p-3.5 rounded-2xl bg-surface-container/70 border border-white/10 backdrop-blur-xl space-y-3">
-
-        <div class="flex items-center justify-between">
-
-          <div class="flex items-center gap-2.5">
-
-            <div class="w-9 h-9 rounded-xl bg-primary/20 text-primary flex items-center justify-center">
-
-              <span class="material-symbols-outlined text-[20px]">terminal</span>
-
-            </div>
-
-            <div>
-
-              <h4 class="font-headline-md text-[13px] font-bold text-on-surface">真机联调与在线更新</h4>
-
-              <p class="font-body-sm text-[10px] text-on-surface-variant">穿透直连 · OTA 在线升级 · 反馈给 AI</p>
-
-            </div>
-
-          </div>
-
-
-
-          <button
-
-            type="button"
-
-            @click="isDebugModalOpen = true"
-
-            class="btn-open-debug py-2 px-3.5 rounded-xl bg-primary text-on-primary font-body-sm text-[12px] font-bold flex items-center gap-1 active:scale-95 transition-all shadow-md"
-
-          >
-
-            <span class="material-symbols-outlined text-[15px]">tune</span>
-
-            <span>进入调试</span>
-
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-
     <!-- ================= SECTION 5: 版本信息与数据核验公示 ================= -->
 
     <footer class="pt-2 pb-6 text-center space-y-2 text-on-surface-variant">
@@ -1444,10 +1372,6 @@
 
 
 
-    <!-- Alpine 开发者联调与内测弹窗 -->
-
-    <component :is="AlpineDebugModal" v-if="AlpineDebugModal" v-model="isDebugModalOpen" />
-
   </div>
 
 </template>
@@ -1456,7 +1380,7 @@
 
 <script setup>
 
-import { ref, computed, reactive, watch, defineAsyncComponent } from 'vue';
+import { ref, computed, reactive, watch } from 'vue';
 
 import { useCheckinStore, compressImageToBase64 } from '@/stores/checkinStore.js';
 
@@ -1478,16 +1402,6 @@ import { VERSION_LABEL, IS_DEBUG_BUILD } from '@/config/version.js';
 
 
 
-// 仅在 Debug 构建下异步按需载入开发者调试弹窗，Release 构建完全物理剔除
-
-const AlpineDebugModal = IS_DEBUG_BUILD
-
-  ? defineAsyncComponent(() => import('@/components/debug/AlpineDebugModal.vue'))
-
-  : null;
-
-
-
 const checkinStore = useCheckinStore();
 
 const themeStore = useThemeStore();
@@ -1503,8 +1417,6 @@ const updateStore = useUpdateStore();
 const isPosterModalOpen = ref(false);
 
 const isDisclaimerModalOpen = ref(false);
-
-const isDebugModalOpen = ref(false);
 
 const photoInputRef = ref(null);
 
