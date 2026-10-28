@@ -3,8 +3,9 @@
     <Transition name="fade">
       <div
         v-if="visible"
-        class="fixed inset-0 z-[150] bg-black/85 backdrop-blur-md flex flex-col items-center justify-end sm:justify-center p-0 sm:p-4 select-none"
+        class="fixed inset-0 z-[150] bg-black/85 backdrop-blur-md flex flex-col items-center justify-end sm:justify-center p-0 sm:p-4 select-none modal-backdrop-scroll-contain"
         @click.self="onBackdropClick"
+        @touchmove.self.prevent
       >
         <div
           class="w-full max-w-lg max-h-[92vh] bg-[#161a24] border-t sm:border border-white/10 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden text-on-surface pt-3 pb-[calc(16px+max(env(safe-area-inset-bottom,0px),8px))] px-4 space-y-3"
@@ -28,7 +29,7 @@
           </div>
 
           <!-- 可滚动免责协议正文 -->
-          <div class="flex-1 overflow-y-auto space-y-3.5 pr-1 py-1 text-[12px] text-gray-300 leading-relaxed font-body-sm select-text">
+          <div class="flex-1 overflow-y-auto space-y-3.5 pr-1 py-1 text-[12px] text-gray-300 leading-relaxed font-body-sm select-text overscroll-contain" style="overscroll-behavior: contain; -webkit-overflow-scrolling: touch;">
             <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-400/20 text-amber-300 text-[11px] flex items-start gap-2">
               <span class="material-symbols-outlined text-[16px] text-amber-400 shrink-0 mt-0.5">warning</span>
               <span>
@@ -134,6 +135,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useScrollLock } from '@/composables/useScrollLock.js';
 
 const props = defineProps({
   modelValue: {
@@ -154,6 +156,9 @@ const visible = computed({
   get: () => props.modelValue,
   set: (v) => emit('update:modelValue', v)
 });
+
+// 彻底杜绝底层页面背景滚动穿透
+useScrollLock(visible);
 
 function onBackdropClick() {
   if (!props.mandatory) {

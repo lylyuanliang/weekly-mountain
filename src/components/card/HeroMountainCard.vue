@@ -32,6 +32,15 @@
         >
           {{ mountain.difficulty || 'L2' }} {{ diffLabel }}
         </span>
+
+        <!-- Search Match Badge -->
+        <span
+          v-if="isSearchMatched"
+          class="px-2 py-0.5 rounded-full bg-primary/25 text-label-data-sm font-label-data-sm text-primary border border-primary/50 flex items-center gap-1 shadow-[0_0_8px_rgba(78,222,163,0.3)] animate-pulse"
+        >
+          <span class="material-symbols-outlined text-[12px]">search</span>
+          <span>搜索匹配</span>
+        </span>
       </div>
 
       <!-- Live Condition / Weather Chip on Top-Right -->
@@ -127,7 +136,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { DIFF_LABEL } from '@/stores/mountainStore.js';
+import { DIFF_LABEL, useMountainStore } from '@/stores/mountainStore.js';
 import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { usePlanStore } from '@/stores/planStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
@@ -149,6 +158,11 @@ const emit = defineEmits(['select', 'detail', 'weather']);
 const checkinStore = useCheckinStore();
 const planStore = usePlanStore();
 const regionStore = useRegionStore();
+const mountainStore = useMountainStore();
+
+const isSearchMatched = computed(() => {
+  return Boolean(mountainStore.searchQuery && mountainStore.searchQuery.trim().length > 0);
+});
 
 const nums = computed(() => derivedNums(props.mountain));
 

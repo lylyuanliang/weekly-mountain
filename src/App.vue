@@ -12,29 +12,32 @@
       <!-- Global 3-Tab Bottom Navigation -->
       <BottomNav />
 
-      <!-- Mobile In-App Feedback Widget (Dev / Cpolar Tunnel only, completely stripped in release) -->
-      <component :is="MobileFeedbackWidget" v-if="MobileFeedbackWidget" />
-
       <!-- First-Launch Mandatory Safety & Legal Disclaimer Modal -->
       <LegalDisclaimerModal v-model="isDisclaimerOpen" :mandatory="true" />
+
+      <!-- Official In-App Online Update Modal -->
+      <AppUpdateModal />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, defineAsyncComponent, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import ExploreView from '@/views/ExploreView.vue';
 import PlanView from '@/views/PlanView.vue';
 import ProfileView from '@/views/ProfileView.vue';
 import BottomNav from '@/components/common/BottomNav.vue';
 import LegalDisclaimerModal from '@/components/common/LegalDisclaimerModal.vue';
+import AppUpdateModal from '@/components/common/AppUpdateModal.vue';
+import { useUpdateStore } from '@/stores/updateStore.js';
 import { IS_DEBUG_BUILD } from '@/config/version.js';
 
 // 首次启动强制法律免责协议弹窗检测
 const isDisclaimerOpen = ref(false);
+const updateStore = useUpdateStore();
 
-onMounted(() => {
+onMounted(async () => {
   try {
     const agreed = localStorage.getItem('alpine_disclaimer_agreed');
     if (agreed !== 'true') {
@@ -43,12 +46,19 @@ onMounted(() => {
   } catch (e) {
     isDisclaimerOpen.value = true;
   }
-});
 
-// 仅在 Debug 构建下异步按需载入移动端调试反馈浮窗，Release 构建完全物理剔除
-const MobileFeedbackWidget = IS_DEBUG_BUILD
-  ? defineAsyncComponent(() => import('@/components/debug/MobileFeedbackWidget.vue'))
-  : null;
+  // 启动 2 秒后在后台静默检测是否有新版本发布
+  setTimeout(() => {
+    updateStore.checkForUpdate(true);
+  }, 2000);
+
+  // 在离线 Debug APK 或非 dev 模式下，按需加载 @agent-feedback/client 确保真机常驻悬浮胶囊
+  if (!import.meta.env.DEV && IS_DEBUG_BUILD) {
+    try {
+      await import('@agent-feedback/client');
+    } catch {}
+  }
+});
 
 const route = useRoute();
 

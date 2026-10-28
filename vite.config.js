@@ -3,11 +3,15 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import fs from 'node:fs'
 import path from 'node:path'
+import agentFeedback from '@agent-feedback/vite-plugin'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-// 手机真机即时调试反馈与 OTA 在线更新中间件插件
-function viteFeedbackPlugin() {
+/**
+ * 每周一山专属：Android APK 产物在线下载与 App 内测更新检查中间件插件
+ * (业务定制专属，与通用的 @agent-feedback/vite-plugin 彻底解耦)
+ */
+function viteApkReleasePlugin() {
   function setCorsHeaders(req, res) {
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, HEAD')
@@ -16,9 +20,9 @@ function viteFeedbackPlugin() {
   }
 
   return {
-    name: 'vite-plugin-mobile-feedback',
+    name: 'vite-plugin-alpine-apk-release',
     configureServer(server) {
-      // 0. APK 产物下载服务 (GET /releases/*)
+      // 1. APK 静态安装包流式下载与断点续传服务 (GET /releases/*)
       server.middlewares.use('/releases', (req, res, next) => {
         setCorsHeaders(req, res)
         if (req.method === 'OPTIONS') {
@@ -44,7 +48,6 @@ function viteFeedbackPlugin() {
 
         let filePath = path.join(releaseDir, filename)
         if (!fs.existsSync(filePath)) {
-          // 回退寻找最新的 apk 文件
           const files = fs.readdirSync(releaseDir).filter(f => f.endsWith('.apk'))
           if (files.length > 0) {
             filePath = path.join(releaseDir, files[files.length - 1])
@@ -66,7 +69,7 @@ function viteFeedbackPlugin() {
         fs.createReadStream(filePath).pipe(res)
       })
 
-      // 0.5 App 在线检查更新接口 (GET /api/app-update)
+      // 2. App 内测检查在线更新接口 (GET /api/app-update)
       server.middlewares.use('/api/app-update', (req, res) => {
         setCorsHeaders(req, res)
         if (req.method === 'OPTIONS') {
@@ -96,8 +99,8 @@ function viteFeedbackPlugin() {
           }
         }
 
-        let appVersion = '0.0.1.001'
-        let buildCode = 1
+        let appVersion = '0.0.1.202610281359'
+        let buildCode = 1793165500
         try {
           const versionJs = fs.readFileSync(path.resolve(__dirname, 'src/config/version.js'), 'utf-8')
           const mVer = versionJs.match(/APP_VERSION\s*=\s*['"]([^'"]+)['"]/)
@@ -122,254 +125,107 @@ function viteFeedbackPlugin() {
             updateTime: updateTime,
             changelog: [
               '全新 0.0.1.xxx 研发迭代版本号规范',
-              '新增 App 内直连穿透反馈通道（支持截图与进度追踪）',
-              '新增调试面板在线一键更新 APK 与免线热重载联调'
+              '接入独立通用 @agent-feedback 开源服务',
+              '新增日级工单时间轴流式展示与真机联调扩展面板'
             ]
           })
         )
       })
 
-      // 1. 移动端真机反馈服务 (server.middlewares.use('/api/feedback'))
-      server.middlewares.use('/api/feedback', (req, res, next) => {
+      // 3. 向后兼容：对旧版移动端 App (/api/feedback) 提供 100% 契约保真的响应
+      server.middlewares.use((req, res, next) => {
+        const rawUrl = req.url || ''
+        const urlPath = rawUrl.split('?')[0]
+
+        if (!urlPath.startsWith('/api/feedback')) {
+          return next()
+        }
+
         setCorsHeaders(req, res)
         if (req.method === 'OPTIONS') {
           res.writeHead(204)
           res.end()
           return
         }
-        const scratchDir = path.resolve(__dirname, 'scratch')
-        if (!fs.existsSync(scratchDir)) {
-          fs.mkdirSync(scratchDir, { recursive: true })
-        }
-        const feedbackFile = path.join(scratchDir, 'mobile_feedback.json')
-        const latestFile = path.join(scratchDir, 'latest_feedback.json')
 
-        // 1. 静态截图文件下发 (支持移动端穿透直接加载缩略图)
-        if (req.method === 'GET' && req.url.startsWith('/screenshot/')) {
-          const filename = req.url.replace('/screenshot/', '').split('?')[0]
-          if (!/^[a-zA-Z0-9_.-]+$/.test(filename)) {
-            res.writeHead(400)
-            res.end('Invalid filename')
-            return
-          }
-          const filePath = path.join(scratchDir, filename)
-          if (fs.existsSync(filePath)) {
-            const ext = path.extname(filePath).toLowerCase()
-            const mime = ext === '.png' ? 'image/png' : ext === '.webp' ? 'image/webp' : 'image/jpeg'
-            res.writeHead(200, {
-              'Content-Type': mime,
-              'Cache-Control': 'public, max-age=86400'
-            })
-            fs.createReadStream(filePath).pipe(res)
-            return
-          } else {
-            res.writeHead(404)
-            res.end('Screenshot not found')
-            return
-          }
-        }
+        const feedbackDir = path.resolve(__dirname, 'scratch/feedback')
+        const indexFile = path.join(feedbackDir, 'feedback_index.json')
 
-        // 2. 更新单条反馈的处理进度与答复说明 (POST /api/feedback/status)
-        if (req.method === 'POST' && req.url === '/status') {
-          let body = ''
-          req.on('data', chunk => {
-            body += chunk
-          })
-          req.on('end', () => {
-            try {
-              const { id, status, reply } = JSON.parse(body || '{}')
-              if (fs.existsSync(feedbackFile)) {
-                const history = JSON.parse(fs.readFileSync(feedbackFile, 'utf-8'))
-                const item = history.find(h => h.id == id || h.timestamp == id)
-                if (item) {
-                  if (status) item.status = status
-                  if (reply) item.reply = reply
-                  item.updatedAt = new Date().toISOString()
-                  fs.writeFileSync(feedbackFile, JSON.stringify(history, null, 2), 'utf-8')
-                  if (fs.existsSync(latestFile)) {
-                    try {
-                      const latest = JSON.parse(fs.readFileSync(latestFile, 'utf-8'))
-                      if (latest.id == id || latest.timestamp == id) {
-                        if (status) latest.status = status
-                        if (reply) latest.reply = reply
-                        latest.updatedAt = item.updatedAt
-                        fs.writeFileSync(latestFile, JSON.stringify(latest, null, 2), 'utf-8')
-                      }
-                    } catch {}
-                  }
-                  res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
-                  res.end(JSON.stringify({ success: true, item }))
-                  return
-                }
-              }
-              res.writeHead(404, { 'Content-Type': 'application/json' })
-              res.end(JSON.stringify({ success: false, error: 'Feedback not found' }))
-            } catch (err) {
-              res.writeHead(500, { 'Content-Type': 'application/json' })
-              res.end(JSON.stringify({ success: false, error: err.message }))
+        // 3.1 兼容静态截图访问：GET /api/feedback/screenshot/<filename>
+        if (req.method === 'GET' && urlPath.startsWith('/api/feedback/screenshot/')) {
+          const filename = path.basename(urlPath)
+          const searchPaths = [
+            path.join(feedbackDir, 'screenshots', filename),
+            path.join(__dirname, 'scratch', filename),
+            path.join(feedbackDir, filename)
+          ]
+          for (const sp of searchPaths) {
+            if (fs.existsSync(sp)) {
+              const ext = path.extname(sp).toLowerCase()
+              const mime = ext === '.png' ? 'image/png' : ext === '.webp' ? 'image/webp' : 'image/jpeg'
+              res.writeHead(200, {
+                'Content-Type': mime,
+                'Cache-Control': 'public, max-age=86400'
+              })
+              fs.createReadStream(sp).pipe(res)
+              return
             }
-          })
+          }
+          res.writeHead(404)
+          res.end('Screenshot not found')
           return
         }
 
-        // 3. 提交新反馈 (POST /api/feedback)
-        if (req.method === 'POST') {
-          let body = ''
-          req.on('data', chunk => {
-            body += chunk
-          })
-          req.on('end', () => {
+        // 3.2 兼容 GET /api/feedback (带或不带 ?date=)
+        if (req.method === 'GET') {
+          let index = { dates: [], totalCount: 0 }
+          if (fs.existsSync(indexFile)) {
             try {
-              const data = JSON.parse(body || '{}')
-              const timeStamp = data.timestamp || Date.now()
-              data.id = timeStamp
-              data.receivedAt = new Date().toISOString()
-              data.updatedAt = data.receivedAt
-              data.status = 'pending' // 状态: pending (排队待处理) | processing (处理中) | completed (已解决)
-              data.remoteInstruction = '【远程无人值守守则 (详见 AGENTS.md / GEMINI.md)】用户在手机端离线操作，严禁在 IDE 中挂起等待提问；遇细节分歧按安全默认值推进；验证完成后将答复写回 reply 字段并重启哨兵。'
-              data.reply = '已送达本地 AI 哨兵，正在排队等待分析修复中...'
-              data.clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-
-              // 处理附带的截图文件 (支持多图与单图)
-              const saveImageBuffer = (base64Str, fileName) => {
-                try {
-                  const matches = base64Str.match(/^data:image\/([a-zA-Z0-9]+);base64,(.+)$/)
-                  if (!matches) return null
-                  const ext = matches[1] === 'jpeg' ? 'jpg' : matches[1]
-                  const buffer = Buffer.from(matches[2], 'base64')
-                  const fullFileName = fileName.endsWith(`.${ext}`) ? fileName : `${fileName}.${ext}`
-                  const targetPath = path.join(scratchDir, fullFileName)
-                  fs.writeFileSync(targetPath, buffer)
-
-                  // 同步一份到脑部 Artifact 目录
-                  const brainDir = path.resolve('C:\\Users\\lylyu\\.gemini\\antigravity\\brain\\94773e75-cfd8-4fb7-87e3-d08b195b9520')
-                  if (fs.existsSync(brainDir)) {
-                    try {
-                      fs.writeFileSync(path.join(brainDir, fullFileName), buffer)
-                    } catch {}
-                  }
-
-                  return {
-                    path: `scratch/${fullFileName}`,
-                    filename: fullFileName,
-                    ext,
-                    sizeKb: Math.round(buffer.length / 1024)
-                  }
-                } catch (err) {
-                  console.error('Failed to save screenshot image:', err)
-                  return null
-                }
-              }
-
-              if (Array.isArray(data.screenshots) && data.screenshots.length > 0) {
-                const savedList = []
-                data.screenshots.forEach((item, idx) => {
-                  const base64Str = typeof item === 'string' ? item : item?.data
-                  if (base64Str && base64Str.startsWith('data:image/')) {
-                    const saved = saveImageBuffer(base64Str, `feedback_screenshot_${timeStamp}_${idx + 1}`)
-                    if (saved) {
-                      savedList.push({
-                        ...saved,
-                        meta: item.meta || {}
-                      })
-                    }
-                  }
-                })
-
-                if (savedList.length > 0) {
-                  data.screenshots = savedList
-                  data.screenshotPath = savedList[0].path
-                  data.screenshotFilename = savedList[0].filename
-                  data.screenshotExt = savedList[0].ext
-                  data.screenshotSizeKb = savedList[0].sizeKb
-
-                  try {
-                    const firstBuf = fs.readFileSync(path.join(scratchDir, savedList[0].filename))
-                    fs.writeFileSync(path.join(scratchDir, `latest_feedback_screenshot.${savedList[0].ext}`), firstBuf)
-                    const brainDir = path.resolve('C:\\Users\\lylyu\\.gemini\\antigravity\\brain\\94773e75-cfd8-4fb7-87e3-d08b195b9520')
-                    if (fs.existsSync(brainDir)) {
-                      fs.writeFileSync(path.join(brainDir, `latest_feedback_screenshot.${savedList[0].ext}`), firstBuf)
-                    }
-                  } catch {}
-                }
-                delete data.screenshot
-              } else if (data.screenshot && typeof data.screenshot === 'string' && data.screenshot.startsWith('data:image/')) {
-                const saved = saveImageBuffer(data.screenshot, `feedback_screenshot_${timeStamp}`)
-                if (saved) {
-                  data.screenshotPath = saved.path
-                  data.screenshotFilename = saved.filename
-                  data.screenshotExt = saved.ext
-                  data.screenshotSizeKb = saved.sizeKb
-                  data.screenshots = [{
-                    ...saved,
-                    meta: data.screenshotMeta || {}
-                  }]
-
-                  try {
-                    const firstBuf = fs.readFileSync(path.join(scratchDir, saved.filename))
-                    fs.writeFileSync(path.join(scratchDir, `latest_feedback_screenshot.${saved.ext}`), firstBuf)
-                    const brainDir = path.resolve('C:\\Users\\lylyu\\.gemini\\antigravity\\brain\\94773e75-cfd8-4fb7-87e3-d08b195b9520')
-                    if (fs.existsSync(brainDir)) {
-                      fs.writeFileSync(path.join(brainDir, `latest_feedback_screenshot.${saved.ext}`), firstBuf)
-                    }
-                  } catch {}
-                }
-                delete data.screenshot
-              }
-
-              let history = []
-              if (fs.existsSync(feedbackFile)) {
-                try {
-                  const content = fs.readFileSync(feedbackFile, 'utf-8')
-                  history = JSON.parse(content)
-                  if (!Array.isArray(history)) history = [history]
-                } catch {
-                  history = []
-                }
-              }
-              history.unshift(data)
-              if (history.length > 50) history = history.slice(0, 50)
-
-              fs.writeFileSync(feedbackFile, JSON.stringify(history, null, 2), 'utf-8')
-              fs.writeFileSync(
-                path.join(scratchDir, 'latest_feedback.json'),
-                JSON.stringify(data, null, 2),
-                'utf-8'
-              )
-
-              console.log(`\n========================================`)
-              console.log(`📱 [收到手机真机调试反馈] ${data.receivedAt}`)
-              console.log(`   反馈编号: #${data.id}`)
-              console.log(`   机型视口: ${data.device?.viewport} (DPR: ${data.device?.dpr})`)
-              console.log(`   所在页面: ${data.state?.route} (选中山峰: ${data.state?.mountain || '无'})`)
-              console.log(`   反馈内容: "${data.content}"`)
-              if (data.screenshotPath) {
-                console.log(`   附带截图: ${data.screenshotPath} (${data.screenshotSizeKb} KB)`)
-              }
-              console.log(`========================================\n`)
-
-              res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
-              res.end(JSON.stringify({ success: true, count: history.length, item: data, receivedAt: data.receivedAt }))
-            } catch (err) {
-              res.writeHead(500, { 'Content-Type': 'application/json' })
-              res.end(JSON.stringify({ success: false, error: err.message }))
-            }
-          })
-        } else if (req.method === 'GET') {
-          // 4. 获取反馈历史列表与进度 (GET /api/feedback)
-          let history = []
-          if (fs.existsSync(feedbackFile)) {
-            try {
-              history = JSON.parse(fs.readFileSync(feedbackFile, 'utf-8'))
-            } catch {
-              history = []
-            }
+              index = JSON.parse(fs.readFileSync(indexFile, 'utf-8'))
+            } catch {}
           }
+
+          const parsedUrl = new URL(rawUrl, 'http://localhost')
+          const reqDate = parsedUrl.searchParams.get('date')
+          const targetDate = reqDate || (index.dates && index.dates[0]) || new Date().toISOString().slice(0, 10)
+          const shardFile = path.join(feedbackDir, `feedback_${targetDate}.json`)
+
+          let items = []
+          if (fs.existsSync(shardFile)) {
+            try {
+              items = JSON.parse(fs.readFileSync(shardFile, 'utf-8'))
+            } catch {}
+          }
+
+          const dateIdx = (index.dates || []).indexOf(targetDate)
+          const hasMore = dateIdx !== -1 && dateIdx < (index.dates || []).length - 1
+          const nextDate = hasMore ? index.dates[dateIdx + 1] : null
+
           res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' })
-          res.end(JSON.stringify({ success: true, history }))
-        } else {
-          next()
+          res.end(
+            JSON.stringify({
+              success: true,
+              totalCount: index.totalCount || items.length,
+              dates: index.dates || [targetDate],
+              currentDate: targetDate,
+              date: targetDate,
+              dailyCount: items.length,
+              items: items,
+              history: items,
+              hasMore: hasMore,
+              nextDate: nextDate
+            })
+          )
+          return
         }
+
+        // 3.3 提交工单或更新状态重写给新插件
+        if (urlPath === '/api/feedback/status' || urlPath.startsWith('/api/feedback/status?')) {
+          req.url = rawUrl.replace('/api/feedback/status', '/api/__agent_feedback/status')
+        } else if (req.method === 'POST') {
+          req.url = '/api/__agent_feedback/submit'
+        }
+        next()
       })
     }
   }
@@ -378,7 +234,17 @@ function viteFeedbackPlugin() {
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
-  plugins: [vue(), viteFeedbackPlugin()],
+  plugins: [
+    vue(),
+    // 接入每周一山业务专属 APK 更新服务 (前置兼容改写)
+    viteApkReleasePlugin(),
+    // 接入通用 @agent-feedback/vite-plugin 插件
+    agentFeedback({
+      storageDir: 'scratch/feedback',
+      theme: 'dark',
+      primaryColor: '#4edea3'
+    })
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

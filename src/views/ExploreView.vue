@@ -45,6 +45,7 @@
     <!-- ================= FLOATING SEARCH & CHIP FILTERS ================= -->
     <TopSearchBar
       @focus="onSearchFocus"
+      @mountain-select="onMountainSelected"
     />
 
     <!-- ================= FULLSCREEN INTERACTIVE TOPO MAP CANVAS ================= -->

@@ -30,10 +30,10 @@
         {{ hasActiveFeedback ? (activeCount > 1 ? `处理中 (${activeCount}排队)` : '处理中...') : '反馈给 AI' }}
       </span>
       <span
-        v-if="feedbackHistory.length > 0 && !hasActiveFeedback"
+        v-if="totalFeedbackCount > 0 && !hasActiveFeedback"
         class="px-1.5 py-0.2 rounded-full bg-surface-container-lowest text-primary text-[10px] font-mono border border-primary/30 flex-shrink-0"
       >
-        {{ feedbackHistory.length }}
+        {{ totalFeedbackCount }}
       </span>
     </button>
 
@@ -42,8 +42,9 @@
       <div
         v-if="isOpen"
         v-show="!isModalHiddenForCapture"
-        class="mobile-feedback-modal fixed inset-0 z-[1000] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in select-none"
+        class="mobile-feedback-modal fixed inset-0 z-[1000] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in select-none modal-backdrop-scroll-contain"
         @click.self="closeModal"
+        @touchmove.self.prevent
       >
         <div
           class="w-full max-w-md bg-[#1c1f29] rounded-t-3xl sm:rounded-2xl border-t sm:border border-outline-variant/40 shadow-2xl flex flex-col h-[80vh] max-h-[88dvh] min-h-[440px] overflow-hidden"
@@ -108,7 +109,7 @@
                   v-else-if="feedbackHistory.length > 0"
                   class="px-1.5 py-0.2 rounded-full bg-primary/20 text-primary text-[10px] font-mono"
                 >
-                  {{ feedbackHistory.length }}
+                  {{ totalFeedbackCount }}
                 </span>
               </button>
             </div>
@@ -356,31 +357,36 @@
 
         <!-- TAB 2: PROGRESS & HISTORY LIST -->
         <div v-else-if="activeTab === 'history'" class="space-y-3 animate-fade-in" data-testid="feedback-history-list">
-          <!-- History Subheader with Refresh -->
+          <!-- History Subheader with Refresh & Global Total -->
           <div class="flex items-center justify-between px-1">
-            <span class="text-[12px] font-bold text-on-surface flex items-center gap-1.5">
+            <div class="flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[16px] text-primary">view_timeline</span>
-              <span>调试反馈追踪列表</span>
-            </span>
-            <button
-              type="button"
-              @click="fetchHistory(false)"
-              :disabled="isFetchingHistory"
-              class="text-[11px] text-primary hover:text-primary-fixed flex items-center gap-1 active:scale-95 transition-all disabled:opacity-50 py-1 px-2 rounded-lg bg-surface-container-high/60 border border-outline-variant/20"
-            >
-              <span class="material-symbols-outlined text-[14px]" :class="{ 'animate-spin': isFetchingHistory }">refresh</span>
-              <span>{{ isFetchingHistory ? '刷新中...' : '刷新' }}</span>
-            </button>
+              <span class="text-[12px] font-bold text-on-surface">调试反馈与进度追踪</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-mono text-on-surface-variant px-2 py-0.5 rounded-full bg-surface-container-high border border-white/5">
+                全量: <strong class="text-primary">{{ totalFeedbackCount }}</strong> 条
+              </span>
+              <button
+                type="button"
+                @click="fetchHistory(false)"
+                :disabled="isFetchingHistory"
+                class="text-[11px] text-primary hover:text-primary-fixed flex items-center gap-1 active:scale-95 transition-all disabled:opacity-50 py-1 px-2 rounded-lg bg-surface-container-high/60 border border-outline-variant/20"
+              >
+                <span class="material-symbols-outlined text-[14px]" :class="{ 'animate-spin': isFetchingHistory }">refresh</span>
+                <span>{{ isFetchingHistory ? '刷新中' : '刷新' }}</span>
+              </button>
+            </div>
           </div>
 
           <!-- Loading State -->
-          <div v-if="isFetchingHistory && feedbackHistory.length === 0" class="py-12 text-center text-on-surface-variant text-[12px] space-y-2">
+          <div v-if="isFetchingHistory && loadedDays.length === 0" class="py-12 text-center text-on-surface-variant text-[12px] space-y-2">
             <span class="material-symbols-outlined animate-spin text-[28px] text-primary">progress_activity</span>
-            <p class="font-mono text-caption">正在同步反馈进度...</p>
+            <p class="font-mono text-caption">正在同步按天工单时间轴...</p>
           </div>
 
           <!-- Empty State -->
-          <div v-else-if="feedbackHistory.length === 0" class="p-8 rounded-2xl bg-surface-container-low/50 border border-outline-variant/20 text-center space-y-2">
+          <div v-else-if="loadedDays.length === 0 || totalFeedbackCount === 0" class="p-8 rounded-2xl bg-surface-container-low/50 border border-outline-variant/20 text-center space-y-2">
             <span class="material-symbols-outlined text-[36px] text-on-surface-variant opacity-40">inbox</span>
             <p class="text-caption text-on-surface-variant">暂无历史反馈记录</p>
             <button
@@ -392,129 +398,219 @@
             </button>
           </div>
 
-          <!-- History Item Cards List -->
-          <div v-else class="space-y-2.5 max-h-[58vh] overflow-y-auto pr-1">
+          <!-- Alpine Explorer Timeline History Container -->
+          <div v-else ref="historyScrollContainerRef" @scroll.passive="onHistoryScroll" class="space-y-5 max-h-[58vh] overflow-y-auto pr-1 overscroll-contain">
+            <!-- Day Group Node -->
             <div
-              v-for="item in feedbackHistory"
-              :key="item.id || item.timestamp"
-              class="p-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 space-y-2.5 hover:border-primary/40 transition-colors shadow-sm"
-              :class="{ 'border-amber-500/40 bg-amber-500/5': item.status === 'pending' || item.status === 'processing' }"
+              v-for="day in loadedDays"
+              :key="day.date"
+              class="relative pl-8 sm:pl-9 space-y-3 before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-0 before:w-[2px] before:bg-gradient-to-b before:from-primary/80 before:via-primary/30 before:to-white/10"
             >
-              <!-- Card Header: Status Badge + Mountain + Time -->
-              <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <!-- Pending Status -->
-                  <span
-                    v-if="item.status === 'pending'"
-                    class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-bold flex items-center gap-1"
-                  >
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
-                    <span>排队待处理 {{ getQueueBadge(item.id || item.timestamp) }}</span>
-                  </span>
-                  <!-- Processing Status -->
-                  <span
-                    v-else-if="item.status === 'processing'"
-                    class="px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/30 text-[10px] font-bold flex items-center gap-1"
-                  >
-                    <span class="material-symbols-outlined text-[12px] animate-spin">sync</span>
-                    <span>AI 正在排查修复</span>
-                  </span>
-                  <!-- Answered / Explanation Status -->
-                  <span
-                    v-else-if="item.status === 'answered' || item.status === 'explained' || item.status === 'rejected'"
-                    class="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[10px] font-bold flex items-center gap-1"
-                  >
-                    <span class="material-symbols-outlined text-[12px]">help_outline</span>
-                    <span>方案答复 / 说明</span>
-                  </span>
-                  <!-- Completed Status -->
-                  <span
-                    v-else
-                    class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold flex items-center gap-1"
-                  >
-                    <span class="material-symbols-outlined text-[12px]">check_circle</span>
-                    <span>已完成并验证</span>
-                  </span>
+              <!-- Timeline Date Node Indicator -->
+              <div
+                class="absolute left-[4px] top-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-[#1c1f29] border-2 transition-all z-10"
+                :class="day.isToday ? 'border-primary shadow-[0_0_10px_#4edea3]' : 'border-outline-variant/60'"
+              >
+                <div
+                  class="w-1.5 h-1.5 rounded-full"
+                  :class="day.isToday ? 'bg-primary' : 'bg-on-surface-variant'"
+                ></div>
+              </div>
 
-                  <!-- Context tag: Mountain Name -->
-                  <span v-if="item.state?.mountain" class="px-1.5 py-0.5 rounded bg-surface-container-high text-[10px] text-secondary font-mono">
-                    {{ item.state.mountain }}
+              <!-- Timeline Date Header (包含满足需求3的当日数量) -->
+              <div class="flex items-center justify-between pt-0.5 pb-0.5">
+                <div class="flex items-center gap-2">
+                  <span class="font-headline-md text-[13px] font-bold text-on-surface tracking-tight">{{ day.date }}</span>
+                  <span
+                    v-if="day.isToday"
+                    class="px-1.5 py-0.2 rounded bg-primary/20 text-primary text-[10px] font-bold border border-primary/40 font-mono"
+                  >
+                    今天
+                  </span>
+                  <span
+                    v-else-if="day.label && day.label.includes('昨天')"
+                    class="px-1.5 py-0.2 rounded bg-white/10 text-on-surface-variant text-[10px] font-medium border border-white/10 font-mono"
+                  >
+                    昨天
                   </span>
                 </div>
 
-                <!-- Timestamp -->
-                <span class="text-[10px] text-on-surface-variant font-mono flex-shrink-0">
-                  {{ formatTime(item.timestamp) }}
+                <!-- 当日总条数徽标 (满足需求3: 时间轴上还需要写明当天有多少条) -->
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-surface-container-high/80 border border-white/10 text-on-surface-variant font-mono">
+                  当日共 <strong :class="day.isToday ? 'text-primary' : 'text-on-surface'">{{ day.count }}</strong> 条
                 </span>
               </div>
 
-              <!-- Feedback Content Quote -->
-              <p class="text-[12px] text-on-surface leading-relaxed break-words pl-2.5 border-l-2 border-primary/50 font-sans">
-                {{ item.content }}
-              </p>
+              <!-- Day's Feedback Item Cards -->
+              <div class="space-y-2.5">
+                <div
+                  v-for="item in day.items"
+                  :key="item.id || item.timestamp"
+                  class="p-3.5 rounded-2xl bg-surface-container-low border transition-all shadow-sm space-y-2.5"
+                  :class="[
+                    item.type === 'agent_notice'
+                      ? 'border-emerald-500/40 bg-emerald-950/20 shadow-[0_0_12px_rgba(78,222,163,0.12)]'
+                      : (item.status === 'pending' || item.status === 'processing')
+                        ? 'border-amber-500/40 bg-amber-500/5'
+                        : 'border-outline-variant/30 hover:border-primary/40'
+                  ]"
+                >
+                  <!-- Card Header: Type Badge + Status Badge + Mountain + Time -->
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <!-- 1. 工单类型区分 (满足新需求: 区分主动通知还是反馈) -->
+                      <span
+                        v-if="item.type === 'agent_notice'"
+                        class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 text-[10px] font-bold flex items-center gap-1 shadow-[0_0_8px_rgba(78,222,163,0.25)]"
+                      >
+                        <span class="material-symbols-outlined text-[13px] text-emerald-300">smart_toy</span>
+                        <span>AI 主动通知</span>
+                      </span>
+                      <span
+                        v-else
+                        class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant border border-white/10 text-[10px] font-medium flex items-center gap-1"
+                      >
+                        <span class="material-symbols-outlined text-[12px] text-primary">chat_bubble</span>
+                        <span>用户反馈</span>
+                      </span>
 
-              <!-- Attached Screenshots Thumbnails (支持多图与历史单图平滑兼容) -->
-              <div v-if="item.screenshots && item.screenshots.length > 0" class="space-y-1.5">
-                <span class="text-[10px] font-mono text-on-surface-variant flex items-center gap-1">
-                  <span class="material-symbols-outlined text-[13px] text-primary">photo_library</span>
-                  附带 {{ item.screenshots.length }} 张截图凭证：
-                </span>
-                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
-                  <div
-                    v-for="(sShot, sIdx) in item.screenshots"
-                    :key="sShot.filename || sIdx"
-                    class="relative w-12 h-12 rounded-lg overflow-hidden bg-black/40 border border-outline-variant/30 flex-shrink-0 cursor-pointer group hover:border-primary transition-all"
-                    @click="openLightbox(debugStore.apiBase + '/api/feedback/screenshot/' + sShot.filename, `${item.content} (图 ${sIdx + 1})`)"
+                      <!-- 2. 处理状态标识 -->
+                      <span
+                        v-if="item.status === 'pending'"
+                        class="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 text-[10px] font-bold flex items-center gap-1"
+                      >
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+                        <span>排队待处理 {{ getQueueBadge(item.id || item.timestamp) }}</span>
+                      </span>
+                      <span
+                        v-else-if="item.status === 'processing'"
+                        class="px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/30 text-[10px] font-bold flex items-center gap-1"
+                      >
+                        <span class="material-symbols-outlined text-[12px] animate-spin">sync</span>
+                        <span>AI 正在排查修复</span>
+                      </span>
+                      <span
+                        v-else-if="item.status === 'answered' || item.status === 'explained' || item.status === 'rejected'"
+                        class="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30 text-[10px] font-bold flex items-center gap-1"
+                      >
+                        <span class="material-symbols-outlined text-[12px]">help_outline</span>
+                        <span>方案答复 / 说明</span>
+                      </span>
+                      <span
+                        v-else
+                        class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold flex items-center gap-1"
+                      >
+                        <span class="material-symbols-outlined text-[12px]">check_circle</span>
+                        <span>已完成并验证</span>
+                      </span>
+
+                      <!-- Context tag: Mountain Name -->
+                      <span v-if="item.state?.mountain" class="px-1.5 py-0.5 rounded bg-surface-container-high text-[10px] text-secondary font-mono">
+                        {{ item.state.mountain }}
+                      </span>
+                    </div>
+
+                    <!-- Timestamp -->
+                    <span class="text-[10px] text-on-surface-variant font-mono flex-shrink-0">
+                      {{ formatTime(item.timestamp) }}
+                    </span>
+                  </div>
+
+                  <!-- Feedback Content Quote -->
+                  <p
+                    class="text-[12px] leading-relaxed break-words pl-2.5 font-sans select-text"
+                    :class="item.type === 'agent_notice' ? 'text-emerald-100 border-l-2 border-emerald-400/80 font-medium' : 'text-on-surface border-l-2 border-primary/50'"
                   >
-                    <img
-                      :src="debugStore.apiBase + '/api/feedback/screenshot/' + sShot.filename"
-                      alt="反馈截图缩略图"
-                      class="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                      loading="lazy"
-                    />
-                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                      <span class="material-symbols-outlined text-[14px] text-white">zoom_in</span>
+                    {{ item.content }}
+                  </p>
+
+                  <!-- Attached Screenshots Thumbnails -->
+                  <div v-if="item.screenshots && item.screenshots.length > 0" class="space-y-1.5">
+                    <span class="text-[10px] font-mono text-on-surface-variant flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[13px] text-primary">photo_library</span>
+                      附带 {{ item.screenshots.length }} 张截图凭证：
+                    </span>
+                    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+                      <div
+                        v-for="(sShot, sIdx) in item.screenshots"
+                        :key="sShot.filename || sIdx"
+                        class="relative w-12 h-12 rounded-lg overflow-hidden bg-black/40 border border-outline-variant/30 flex-shrink-0 cursor-pointer group hover:border-primary transition-all"
+                        @click="openLightbox(debugStore.apiBase + '/api/feedback/screenshot/' + sShot.filename, `${item.content} (图 ${sIdx + 1})`)"
+                      >
+                        <img
+                          :src="debugStore.apiBase + '/api/feedback/screenshot/' + sShot.filename"
+                          alt="反馈截图缩略图"
+                          class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                          loading="lazy"
+                        />
+                        <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                          <span class="material-symbols-outlined text-[14px] text-white">zoom_in</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div
-                v-else-if="item.screenshotFilename"
-                class="flex items-center gap-2.5 p-2 rounded-xl bg-surface-container-high/60 border border-outline-variant/30 cursor-pointer hover:border-primary/50 active:scale-[0.98] transition-all"
-                @click="openLightbox(debugStore.apiBase + '/api/feedback/screenshot/' + item.screenshotFilename, item.content || '反馈截图')"
-              >
-                <img
-                  :src="debugStore.apiBase + '/api/feedback/screenshot/' + item.screenshotFilename"
-                  alt="反馈截图缩略图"
-                  class="w-11 h-11 object-cover rounded-lg bg-black/40 border border-outline-variant/30 flex-shrink-0"
-                  loading="lazy"
-                />
-                <div class="flex-1 min-w-0 text-[10px] font-mono text-on-surface-variant space-y-0.5">
-                  <div class="text-on-surface font-semibold flex items-center gap-1 text-[11px]">
-                    <span class="material-symbols-outlined text-[13px] text-primary">image</span>
-                    <span>查看提交时截图凭证</span>
+                  <div
+                    v-else-if="item.screenshotFilename"
+                    class="flex items-center gap-2.5 p-2 rounded-xl bg-surface-container-high/60 border border-outline-variant/30 cursor-pointer hover:border-primary/50 active:scale-[0.98] transition-all"
+                    @click="openLightbox(debugStore.apiBase + '/api/feedback/screenshot/' + item.screenshotFilename, item.content || '反馈截图')"
+                  >
+                    <img
+                      :src="debugStore.apiBase + '/api/feedback/screenshot/' + item.screenshotFilename"
+                      alt="反馈截图缩略图"
+                      class="w-11 h-11 object-cover rounded-lg bg-black/40 border border-outline-variant/30 flex-shrink-0"
+                      loading="lazy"
+                    />
+                    <div class="flex-1 min-w-0 text-[10px] font-mono text-on-surface-variant space-y-0.5">
+                      <div class="text-on-surface font-semibold flex items-center gap-1 text-[11px]">
+                        <span class="material-symbols-outlined text-[13px] text-primary">image</span>
+                        <span>查看提交时截图凭证</span>
+                      </div>
+                      <span class="truncate block text-on-surface-variant/80">
+                        {{ item.screenshotMeta?.dimensions || '' }} · {{ item.screenshotMeta?.sizeText || '' }}
+                      </span>
+                    </div>
+                    <span class="material-symbols-outlined text-[18px] text-on-surface-variant mr-1">zoom_in</span>
                   </div>
-                  <span class="truncate block text-on-surface-variant/80">
-                    {{ item.screenshotMeta?.dimensions || '' }} · {{ item.screenshotMeta?.sizeText || '' }}
-                  </span>
-                </div>
-                <span class="material-symbols-outlined text-[18px] text-on-surface-variant mr-1">zoom_in</span>
-              </div>
 
-              <!-- AI Reply & Solution Explanation Callout -->
-              <div class="p-2.5 rounded-xl bg-surface-container-high/90 border border-primary/30 space-y-1">
-                <div class="flex items-center justify-between text-[11px]">
-                  <span class="font-bold text-primary flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[15px]">smart_toy</span>
-                    <span>AI 进度与处理答复：</span>
-                  </span>
-                  <span v-if="item.updatedAt" class="text-[9px] text-on-surface-variant font-mono">
-                    更新于 {{ formatTime(item.updatedAt) }}
-                  </span>
+                  <!-- AI Reply & Solution Explanation Callout -->
+                  <div
+                    v-if="item.reply"
+                    class="p-2.5 rounded-xl border space-y-1"
+                    :class="item.type === 'agent_notice' ? 'bg-black/40 border-emerald-500/30 text-emerald-200' : 'bg-surface-container-high/90 border-primary/30 text-on-surface-variant'"
+                  >
+                    <div class="flex items-center justify-between text-[11px]">
+                      <span class="font-bold flex items-center gap-1" :class="item.type === 'agent_notice' ? 'text-emerald-400' : 'text-primary'">
+                        <span class="material-symbols-outlined text-[15px]">smart_toy</span>
+                        <span>{{ item.type === 'agent_notice' ? '处理与通知详情：' : 'AI 进度与处理答复：' }}</span>
+                      </span>
+                      <span v-if="item.updatedAt" class="text-[9px] text-on-surface-variant font-mono">
+                        更新于 {{ formatTime(item.updatedAt) }}
+                      </span>
+                    </div>
+                    <p class="text-[11px] leading-relaxed select-text">
+                      {{ item.reply }}
+                    </p>
+                  </div>
                 </div>
-                <p class="text-[11px] text-on-surface-variant leading-relaxed">
-                  {{ item.reply || (item.status === 'completed' ? '已排查并完成代码修复与验证。' : 'AI 正在排查定位中，请稍候刷新...') }}
-                </p>
+              </div>
+            </div>
+
+            <!-- Bottom Pagination / Stream Trigger -->
+            <div class="pt-2 text-center pb-2">
+              <button
+                v-if="hasMoreDays"
+                type="button"
+                @click="loadNextDay"
+                :disabled="isLoadingMore"
+                class="w-full py-2.5 px-3 rounded-xl bg-surface-container-high/60 hover:bg-surface-container-high border border-white/10 text-[11px] text-primary font-semibold flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+              >
+                <span class="material-symbols-outlined text-[14px]" :class="{ 'animate-spin': isLoadingMore }">
+                  {{ isLoadingMore ? 'progress_activity' : 'arrow_downward' }}
+                </span>
+                <span>{{ isLoadingMore ? '正在加载上一天工单...' : `向下滚动或点击加载上一天 (${availableDates[nextDateIndex]})` }}</span>
+              </button>
+              <div v-else class="text-[11px] text-on-surface-variant/60 font-mono py-2">
+                — 已加载全部 {{ totalFeedbackCount }} 条历史工单 (共 {{ availableDates.length }} 天归档) —
               </div>
             </div>
           </div>
@@ -528,8 +624,9 @@
     <Teleport to="body">
       <div
         v-if="lightboxOpen && lightboxSrc"
-        class="fixed inset-0 z-[1010] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] select-none animate-fade-in"
+        class="fixed inset-0 z-[1010] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-4 pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] select-none animate-fade-in modal-backdrop-scroll-contain"
         @click.self="lightboxOpen = false"
+        @touchmove.self.prevent
       >
         <div class="w-full max-w-md flex items-center justify-between pb-3 text-white">
           <span class="text-caption font-mono truncate max-w-[280px]">{{ lightboxTitle || '截图放大预览' }}</span>
@@ -555,6 +652,7 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useMountainStore } from '@/stores/mountainStore.js';
 import { useDebugStore } from '@/stores/debugStore.js';
+import { useScrollLock } from '@/composables/useScrollLock.js';
 
 const route = useRoute();
 const mountainStore = useMountainStore();
@@ -592,6 +690,16 @@ const isModalHiddenForCapture = ref(false);
 const activeTab = ref('create'); // 'create' | 'history'
 const feedbackHistory = ref([]);
 const isFetchingHistory = ref(false);
+const totalFeedbackCount = ref(0);
+const availableDates = ref([]);
+const loadedDays = ref([]);
+const nextDateIndex = ref(1);
+const isLoadingMore = ref(false);
+const historyScrollContainerRef = ref(null);
+
+const hasMoreDays = computed(() => {
+  return nextDateIndex.value < availableDates.value.length;
+});
 
 const feedbackText = ref('');
 const isSubmitting = ref(false);
@@ -674,6 +782,9 @@ const isCapturing = ref(false);
 
 // Full-screen Lightbox
 const lightboxOpen = ref(false);
+
+// 彻底杜绝底层页面背景滚动穿透
+useScrollLock(() => isOpen.value || lightboxOpen.value);
 const lightboxSrc = ref('');
 const lightboxTitle = ref('');
 
@@ -760,19 +871,95 @@ function getQueueBadge(id) {
 // History fetching & polling
 let pollTimer = null;
 
+function formatDayLabel(dateStr) {
+  if (!dateStr) return '';
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+  if (dateStr === todayStr) return `${dateStr} · 今天`;
+
+  const d = new Date(dateStr + 'T00:00:00');
+  const todayDate = new Date(todayStr + 'T00:00:00');
+  const diffDays = Math.round((todayDate - d) / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 1) return `${dateStr} · 昨天`;
+  if (diffDays === 2) return `${dateStr} · 前天`;
+  return `${dateStr} · ${d.getMonth() + 1}月${d.getDate()}日`;
+}
+
+function onHistoryScroll(e) {
+  const el = e.target;
+  if (!el || isLoadingMore.value || !hasMoreDays.value) return;
+  // 滚动距离底部小于 50px 时触发自动加载上一天
+  if (el.scrollHeight - el.scrollTop - el.clientHeight < 50) {
+    loadNextDay();
+  }
+}
+
 async function fetchHistory(silent = false) {
   if (!silent) isFetchingHistory.value = true;
   try {
     const res = await fetch(debugStore.apiBase + '/api/feedback');
     const data = await res.json();
-    if (data && data.success && Array.isArray(data.history)) {
-      feedbackHistory.value = data.history;
+    if (data && data.success) {
+      totalFeedbackCount.value = data.totalCount || (data.items?.length || 0);
+      availableDates.value = data.dates || [data.currentDate || 'today'];
+
+      const now = new Date();
+      const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      const curDate = data.currentDate || availableDates.value[0] || todayStr;
+
+      const items = data.items || data.history || [];
+      feedbackHistory.value = items;
+
+      loadedDays.value = [
+        {
+          date: curDate,
+          label: formatDayLabel(curDate),
+          isToday: curDate === todayStr,
+          count: data.dailyCount || items.length,
+          items: items
+        }
+      ];
+      nextDateIndex.value = 1;
     }
   } catch (err) {
     consecutivePollErrors++;
     console.warn('Failed to fetch feedback history:', err);
   } finally {
     if (!silent) isFetchingHistory.value = false;
+  }
+}
+
+async function loadNextDay() {
+  if (isLoadingMore.value || !hasMoreDays.value) return;
+  const targetDate = availableDates.value[nextDateIndex.value];
+  if (!targetDate) return;
+
+  isLoadingMore.value = true;
+  try {
+    const res = await fetch(`${debugStore.apiBase}/api/feedback?date=${targetDate}`);
+    const data = await res.json();
+    if (data && data.success) {
+      const items = data.items || data.history || [];
+      const now = new Date();
+      const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+      loadedDays.value.push({
+        date: targetDate,
+        label: formatDayLabel(targetDate),
+        isToday: targetDate === todayStr,
+        count: data.dailyCount || items.length,
+        items: items
+      });
+      // Flatten all loaded items into feedbackHistory for active detection
+      feedbackHistory.value = loadedDays.value.flatMap(d => d.items);
+      nextDateIndex.value++;
+    }
+  } catch (err) {
+    console.warn('Failed to load more feedback days:', err);
+  } finally {
+    isLoadingMore.value = false;
   }
 }
 

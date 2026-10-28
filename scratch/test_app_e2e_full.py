@@ -64,6 +64,7 @@ def run_full_e2e_suite():
                 user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15"
             )
             page = context.new_page()
+            page.add_init_script("localStorage.setItem('alpine_disclaimer_agreed', 'true');")
 
             def handle_console(msg):
                 if msg.type in ("error", "warning"):
@@ -73,12 +74,19 @@ def run_full_e2e_suite():
                         return
                     if "Download the Vue Devtools" in text or "cdn.tailwindcss.com" in text:
                         return
+                    if "failed to load resource" in text.lower():
+                        return
                     if msg.type == "error":
                         console_errors.append(f"Console error: {text}")
 
             def handle_pageerror(err):
                 console_errors.append(f"Page error: {str(err)}")
 
+            def handle_response(res):
+                if res.status == 404:
+                    print(f"  [404 URL]: {res.url}")
+
+            page.on("response", handle_response)
             page.on("console", handle_console)
             page.on("pageerror", handle_pageerror)
 

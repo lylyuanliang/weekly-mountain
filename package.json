@@ -1,6 +1,6 @@
 {
   "name": "weekly-mountain",
-  "version": "0.0.1.005",
+  "version": "0.0.1.202610281359",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,8 @@
     "build:release": "vite build --mode release && node scripts/copy_assets.js",
     "preview": "vite preview",
     "cap:sync": "cap sync android",
-    "cap:build": "npm run build && cap sync android"
+    "cap:build": "npm run build && cap sync android",
+    "sentinel": "node ../agent-feedback/packages/sentinel/bin/cli.js watch --dir scratch/feedback"
   },
   "dependencies": {
     "@capacitor/app-launcher": "^8.0.1",
@@ -19,6 +20,10 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@agent-feedback/client": "file:../agent-feedback/packages/client",
+    "@agent-feedback/core": "file:../agent-feedback/packages/core",
+    "@agent-feedback/sentinel": "file:../agent-feedback/packages/sentinel",
+    "@agent-feedback/vite-plugin": "file:../agent-feedback/packages/vite-plugin",
     "@capacitor/android": "^8.5.3",
     "@capacitor/cli": "^8.5.3",
     "@capacitor/core": "^8.5.3",

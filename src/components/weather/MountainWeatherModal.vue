@@ -1,11 +1,14 @@
 <template>
-  <div
-    v-if="modelValue && mountain"
-    class="mountain-weather-modal-wrapper fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm animate-fade-in"
-    @click.self="closeModal"
-  >
+  <Teleport to="body">
     <div
-      class="w-full max-w-md bg-surface-container rounded-t-3xl sm:rounded-2xl border-t sm:border border-outline-variant/30 shadow-2xl p-4 sm:p-5 space-y-4 max-h-[85vh] overflow-y-auto"
+      v-if="modelValue && mountain"
+      class="mountain-weather-modal-wrapper fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-sm animate-fade-in modal-backdrop-scroll-contain select-none"
+      @click.self="closeModal"
+      @touchmove.self.prevent
+    >
+    <div
+      class="w-full max-w-md bg-surface-container rounded-t-3xl sm:rounded-2xl border-t sm:border border-outline-variant/30 shadow-2xl p-4 sm:p-5 space-y-4 max-h-[85vh] overflow-y-auto overscroll-contain"
+      style="overscroll-behavior: contain; -webkit-overflow-scrolling: touch;"
       role="dialog"
       aria-modal="true"
       :aria-label="`${mountain.name} 实时气象预报`"
@@ -57,11 +60,13 @@
         </button>
       </div>
     </div>
-  </div>
+    </div>
+  </Teleport>
 </template>
 
 <script setup>
 import MountainWeatherCard from './MountainWeatherCard.vue';
+import { useScrollLock } from '@/composables/useScrollLock.js';
 
 const props = defineProps({
   modelValue: {
@@ -75,6 +80,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:modelValue', 'view-detail']);
+
+// 彻底杜绝底层页面背景滚动穿透
+useScrollLock(() => props.modelValue && props.mountain);
 
 function closeModal() {
   emit('update:modelValue', false);

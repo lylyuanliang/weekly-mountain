@@ -14,6 +14,7 @@ param(
     [switch]$Pause,
     [switch]$NoPause,
     [switch]$Clean,
+    [switch]$NoBump,
     [string]$Variant = "debug"
 )
 
@@ -116,6 +117,17 @@ if (-not $ValidAndroidHome) {
 
 $env:PATH = "$env:ANDROID_HOME\platform-tools;$env:ANDROID_HOME\cmdline-tools\latest\bin;$env:PATH"
 Write-Success "ANDROID_HOME: $env:ANDROID_HOME"
+
+# -----------------------------------------------------------------------------
+# 0.5 自动时间戳版本升级与全工程同步 (0.0.1.yyyyMMddHHmm)
+# -----------------------------------------------------------------------------
+if (-not $NoBump) {
+    Write-Step "0.5/4 自动更新构建时间戳版本号 (格式: 0.0.1.yyyyMMddHHmm)"
+    & python scripts\sync_version.py
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "自动同步时间戳版本失败，将沿用当前已有版本。"
+    }
+}
 
 # -----------------------------------------------------------------------------
 # 1. 前端工程生产构建

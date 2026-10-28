@@ -152,11 +152,68 @@ export const useDebugStore = defineStore('debug', () => {
     }
   }
 
+  // 流式下载与安装状态管理
+  const downloadStatus = ref('idle'); // 'idle' | 'downloading' | 'installing' | 'completed' | 'cancelled' | 'error'
+  const downloadProgress = ref({
+    percent: 0,
+    receivedBytes: 0,
+    totalBytes: 0,
+    speed: '',
+    message: ''
+  });
+
+  // 监听来自 Android 原生 AlpineNative 的下载进度事件
+  if (typeof window !== 'undefined') {
+    window.addEventListener('alpine-download-progress', (e) => {
+      const data = e.detail;
+      if (!data) return;
+      if (data.status) {
+        downloadStatus.value = data.status;
+      }
+      downloadProgress.value = {
+        percent: data.percent || 0,
+        receivedBytes: data.receivedBytes || 0,
+        totalBytes: data.totalBytes || 0,
+        speed: data.message || '',
+        message: data.message || ''
+      };
+      if (data.status === 'completed' || data.status === 'cancelled' || data.status === 'error') {
+        setTimeout(() => {
+          if (downloadStatus.value === data.status) {
+            downloadStatus.value = 'idle';
+          }
+        }, 3000);
+      }
+    });
+  }
+
+  /**
+   * 取消当前正在进行的 APK 下载
+   */
+  function cancelDownloadApk() {
+    if (typeof window !== 'undefined' && window.AlpineNative?.cancelDownload) {
+      window.AlpineNative.cancelDownload();
+    }
+    downloadStatus.value = 'idle';
+  }
+
   /**
    * 一键在线下载并安装最新 APK
    */
   async function downloadAndInstallApk() {
     const url = updateInfo.value?.downloadUrl || `${tunnelUrl.value.replace(/\/+$/, '')}/releases/weekly-mountain-latest-debug.apk`;
+    if (typeof window !== 'undefined' && window.AlpineNative?.downloadAndInstallApk) {
+      downloadStatus.value = 'downloading';
+      downloadProgress.value = {
+        percent: 0,
+        receivedBytes: 0,
+        totalBytes: 0,
+        speed: '0 KB/s',
+        message: '准备下载...'
+      };
+      window.AlpineNative.downloadAndInstallApk(url, updateInfo.value?.latestVersion || 'latest');
+      return;
+    }
     return await openExternalUrl(url);
   }
 
@@ -193,7 +250,10 @@ export const useDebugStore = defineStore('debug', () => {
     toggleCapsuleVisibility,
     testTunnelHealth,
     checkUpdate,
+    downloadStatus,
+    downloadProgress,
     downloadAndInstallApk,
+    cancelDownloadApk,
     switchLiveTunnelMode
   };
 });

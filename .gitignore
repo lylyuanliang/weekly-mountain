@@ -29,3 +29,5 @@ android/*.iml
 android/app/*.iml
 *.apk
 releases/
+# Agent Feedback Bridge local storage
+.agent/
