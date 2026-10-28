@@ -1,12 +1,12 @@
 {
-  "version": "0.0.1.202610281739",
-  "versionTag": "v0.0.1.202610281739",
-  "title": "v0.0.1.202610281739 体验与真机联调增强版",
+  "version": "0.0.1.202610281758",
+  "versionTag": "v0.0.1.202610281758",
+  "title": "v0.0.1.202610281758 体验与真机联调增强版",
   "publishedAt": "2026-10-28",
   "changelog": "1. Android 原生安装包自动清理：安装升级完成后，重新打开或回到应用时全自动静默清理历史 APK，彻底杜绝手机存储堆积；\n2. 修复调试模块 Store 运行时状态初始化，真机调试弹窗与「反馈给 AI」悬浮球恢复正常显示与交互；\n3. OTA 在线流式更新适配变体分发，调试版自动对齐调试构建，纯净版对齐发布构建；\n4. 全应用弹窗背景防穿透滚动锁与时间戳版本驱动持续增强。",
-  "assetName": "weekly-mountain-v0.0.1.202610281739-debug.apk",
+  "assetName": "weekly-mountain-v0.0.1.202610281758-debug.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.0.1.202610281739/weekly-mountain-v0.0.1.202610281739-debug.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.0.1.202610281739/weekly-mountain-v0.0.1.202610281739-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.0.1.202610281739/weekly-mountain-v0.0.1.202610281739-release.apk"
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.0.1.202610281758/weekly-mountain-v0.0.1.202610281758-debug.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.0.1.202610281758/weekly-mountain-v0.0.1.202610281758-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.0.1.202610281758/weekly-mountain-v0.0.1.202610281758-release.apk"
 }
