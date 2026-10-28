@@ -16,7 +16,7 @@ function viteApkReleasePlugin() {
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, HEAD')
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Range, Authorization')
-    res.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range, Content-Disposition')
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Length, Content-Range, Content-Disposition, Accept-Ranges')
   }
 
   return {
@@ -60,13 +60,31 @@ function viteApkReleasePlugin() {
         }
 
         const stat = fs.statSync(filePath)
-        res.writeHead(200, {
-          'Content-Type': 'application/vnd.android.package-archive',
-          'Content-Disposition': `attachment; filename="${filename}"`,
-          'Content-Length': stat.size,
-          'Cache-Control': 'no-cache'
-        })
-        fs.createReadStream(filePath).pipe(res)
+        const range = req.headers.range
+        if (range) {
+          const parts = range.replace(/bytes=/, '').split('-')
+          const start = parseInt(parts[0], 10)
+          const end = parts[1] ? parseInt(parts[1], 10) : stat.size - 1
+          const chunksize = (end - start) + 1
+          res.writeHead(206, {
+            'Content-Range': `bytes ${start}-${end}/${stat.size}`,
+            'Accept-Ranges': 'bytes',
+            'Content-Length': chunksize,
+            'Content-Type': 'application/vnd.android.package-archive',
+            'Content-Disposition': `attachment; filename="${filename}"`,
+            'Cache-Control': 'no-cache'
+          })
+          fs.createReadStream(filePath, { start, end }).pipe(res)
+        } else {
+          res.writeHead(200, {
+            'Content-Type': 'application/vnd.android.package-archive',
+            'Content-Disposition': `attachment; filename="${filename}"`,
+            'Content-Length': stat.size,
+            'Accept-Ranges': 'bytes',
+            'Cache-Control': 'no-cache'
+          })
+          fs.createReadStream(filePath).pipe(res)
+        }
       })
 
       // 2. App 内测检查在线更新接口 (GET /api/app-update)
@@ -197,6 +215,39 @@ function viteApkReleasePlugin() {
             } catch {}
           }
 
+          // 3.2.1 兼容旧版客户端对 screenshots 对象的严格要求 (包含 filename, path 字段)
+          const normalizedItems = items.map(raw => {
+            const item = { ...raw }
+            if (Array.isArray(item.screenshots) && item.screenshots.length > 0) {
+              item.screenshots = item.screenshots.map(s => {
+                if (typeof s === 'string') {
+                  const fname = path.basename(s)
+                  const ext = path.extname(fname).replace('.', '') || 'jpg'
+                  return {
+                    filename: fname,
+                    path: s,
+                    ext: ext,
+                    sizeKb: 50
+                  }
+                }
+                return s
+              })
+              if (!item.screenshotFilename && item.screenshots[0]) {
+                item.screenshotFilename = item.screenshots[0].filename
+              }
+            } else if (item.screenshot && typeof item.screenshot === 'string' && !item.screenshot.startsWith('data:')) {
+              const fname = path.basename(item.screenshot)
+              item.screenshotFilename = fname
+              item.screenshots = [{
+                filename: fname,
+                path: item.screenshot,
+                ext: path.extname(fname).replace('.', '') || 'jpg',
+                sizeKb: 50
+              }]
+            }
+            return item
+          })
+
           const dateIdx = (index.dates || []).indexOf(targetDate)
           const hasMore = dateIdx !== -1 && dateIdx < (index.dates || []).length - 1
           const nextDate = hasMore ? index.dates[dateIdx + 1] : null
@@ -210,8 +261,8 @@ function viteApkReleasePlugin() {
               currentDate: targetDate,
               date: targetDate,
               dailyCount: items.length,
-              items: items,
-              history: items,
+              items: normalizedItems,
+              history: normalizedItems,
               hasMore: hasMore,
               nextDate: nextDate
             })

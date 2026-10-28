@@ -341,10 +341,17 @@
 
           <!-- 一键在线下载升级按钮 -->
           <div v-else class="action-box">
+            <div v-if="debugStore.downloadStatus === 'error'" style="margin-bottom: 8px; font-size: 11px; color: #fbbf24; text-align: center;">
+              ⚠️ {{ debugStore.downloadProgress.message || '网络连接中断' }}
+            </div>
             <button type="button" @click="handleDownloadApk" class="btn-download">
-              {{ hasNewVersion ? '📥 一键在 App 内免跳转下载并升级' : '🔄 重新下载当前最新 APK' }}
+              {{
+                debugStore.downloadProgress.percent > 0 && debugStore.downloadProgress.percent < 100
+                  ? `📥 继续断点续传下载 (${debugStore.downloadProgress.percent}%)`
+                  : (hasNewVersion ? '📥 一键在 App 内免跳转下载并升级' : '🔄 重新下载当前最新 APK')
+              }}
             </button>
-            <p class="download-tip">原生流式下载至手机并直接唤起安装，支持切屏防中断与权限返回续装</p>
+            <p class="download-tip">原生流式下载至手机并直接唤起安装，支持锁屏与切屏断点续传</p>
           </div>
         </div>
       </div>

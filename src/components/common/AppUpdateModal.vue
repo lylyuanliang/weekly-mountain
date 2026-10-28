@@ -232,7 +232,7 @@
                 class="w-full py-3 rounded-2xl bg-primary hover:bg-primary-hover text-on-primary font-medium text-sm flex items-center justify-center gap-2 shadow-md active:scale-[0.98] transition-all"
               >
                 <span class="material-symbols-outlined text-[18px]">refresh</span>
-                <span>重新尝试下载</span>
+                <span>{{ updateStore.downloadProgress.percent > 0 ? `继续断点续传 (${updateStore.downloadProgress.percent}%)` : '重新尝试下载' }}</span>
               </button>
               <button
                 type="button"

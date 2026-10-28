@@ -261,19 +261,27 @@ public class MainActivity extends BridgeActivity {
                 OutputStream output = null;
                 HttpURLConnection connection = null;
                 PowerManager.WakeLock wakeLock = null;
+                android.net.wifi.WifiManager.WifiLock wifiLock = null;
                 File tempFile = new File(updatesDir, "weekly-mountain-v" + verStr + ".apk.download");
 
                 try {
-                    // 获取 Partial WakeLock 保证切到后台时 CPU 持续运行网络下载
+                    // 获取 Partial WakeLock 保证切到后台或锁屏时 CPU 持续运行网络下载
                     PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
                     if (pm != null) {
                         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "WeeklyMountain:DownloadWakeLock");
-                        wakeLock.acquire(10 * 60 * 1000L); // 最长锁 10 分钟
+                        wakeLock.acquire(15 * 60 * 1000L); // 最长锁 15 分钟
                     }
 
-                    if (tempFile.exists()) {
-                        tempFile.delete();
-                    }
+                    // 获取 WifiLock 防止锁屏时 Wi-Fi 休眠断流
+                    try {
+                        android.net.wifi.WifiManager wm = (android.net.wifi.WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                        if (wm != null) {
+                            wifiLock = wm.createWifiLock(android.net.wifi.WifiManager.WIFI_MODE_FULL_HIGH_PERF, "WeeklyMountain:DownloadWifiLock");
+                            wifiLock.acquire();
+                        }
+                    } catch (Exception ignored) {}
+
+                    long existingLength = (tempFile.exists() && tempFile.isFile()) ? tempFile.length() : 0;
 
                     URL url = new URL(downloadUrl);
                     connection = (HttpURLConnection) url.openConnection();
@@ -281,6 +289,9 @@ public class MainActivity extends BridgeActivity {
                     connection.setConnectTimeout(15000);
                     connection.setReadTimeout(30000);
                     connection.setRequestProperty("User-Agent", "Mozilla/5.0 WeeklyMountain-AppUpdate");
+                    if (existingLength > 0) {
+                        connection.setRequestProperty("Range", "bytes=" + existingLength + "-");
+                    }
                     connection.connect();
 
                     int responseCode = connection.getResponseCode();
@@ -295,30 +306,35 @@ public class MainActivity extends BridgeActivity {
                             connection.setConnectTimeout(15000);
                             connection.setReadTimeout(30000);
                             connection.setRequestProperty("User-Agent", "Mozilla/5.0 WeeklyMountain-AppUpdate");
+                            if (existingLength > 0) {
+                                connection.setRequestProperty("Range", "bytes=" + existingLength + "-");
+                            }
                             connection.connect();
                             responseCode = connection.getResponseCode();
                         }
                     }
 
-                    if (responseCode != HttpURLConnection.HTTP_OK) {
+                    boolean isRange = (responseCode == 206);
+                    if (responseCode != HttpURLConnection.HTTP_OK && !isRange) {
                         throw new Exception("下载服务器响应失败 (HTTP " + responseCode + ")");
                     }
 
-                    int fileLength = connection.getContentLength();
+                    long serverContentLength = connection.getContentLength();
+                    long totalFileLength = isRange ? (existingLength + serverContentLength) : serverContentLength;
+
                     input = connection.getInputStream();
-                    output = new FileOutputStream(tempFile);
+                    output = new FileOutputStream(tempFile, isRange); // isRange 为 true 时开启 append 模式断点续传
 
                     byte[] data = new byte[8192];
-                    long total = 0;
+                    long total = isRange ? existingLength : 0;
                     int count;
                     long lastUpdateTime = System.currentTimeMillis();
-                    long lastBytes = 0;
+                    long lastBytes = total;
                     double speedKb = 0;
 
                     while ((count = input.read(data)) != -1) {
                         if (!isDownloading.get()) {
-                            if (tempFile.exists()) tempFile.delete();
-                            return;
+                            return; // 用户取消，由 cancelDownload 负责清理
                         }
 
                         total += count;
@@ -333,17 +349,17 @@ public class MainActivity extends BridgeActivity {
                             lastUpdateTime = now;
                             lastBytes = total;
 
-                            int percent = fileLength > 0 ? (int) (total * 100 / fileLength) : 0;
+                            int percent = totalFileLength > 0 ? (int) (total * 100 / totalFileLength) : 0;
                             String speedText = String.format("%.1f KB/s", speedKb);
                             if (speedKb >= 1024) {
                                 speedText = String.format("%.2f MB/s", speedKb / 1024.0);
                             }
                             lastPercent = percent;
                             lastReceived = total;
-                            lastTotal = fileLength;
+                            lastTotal = totalFileLength;
                             lastStatus = "downloading";
                             lastMessage = speedText;
-                            notifyJsUpdateStatus("downloading", percent, total, fileLength, speedText);
+                            notifyJsUpdateStatus("downloading", percent, total, totalFileLength, speedText);
                         }
                     }
 
@@ -369,17 +385,21 @@ public class MainActivity extends BridgeActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    if (tempFile.exists()) {
-                        tempFile.delete();
-                    }
+                    // 关键保护：网络中断或锁屏休眠切断时，保留已有 tempFile，下次重试或解锁自动续传，严禁删除已下进度！
                     lastStatus = "error";
-                    lastMessage = "下载失败: " + e.getMessage();
-                    notifyJsUpdateStatus("error", 0, 0, 0, "下载失败: " + e.getMessage());
+                    lastMessage = "下载中断: " + e.getMessage() + " (已保留进度，可继续续传)";
+                    notifyJsUpdateStatus("error", lastPercent, lastReceived, lastTotal, lastMessage);
                 } finally {
                     isDownloading.set(false);
                     if (wakeLock != null && wakeLock.isHeld()) {
                         try {
                             wakeLock.release();
+                        } catch (Exception ignored) {
+                        }
+                    }
+                    if (wifiLock != null && wifiLock.isHeld()) {
+                        try {
+                            wifiLock.release();
                         } catch (Exception ignored) {
                         }
                     }
@@ -486,8 +506,12 @@ public class MainActivity extends BridgeActivity {
                                 if (pendingInstallApk != null && f.getAbsolutePath().equals(pendingInstallApk.getAbsolutePath())) {
                                     continue;
                                 }
-                                if (isDownloading.get() && name.endsWith(".download")) {
-                                    continue;
+                                // 保护正在使用或保留用于断点续传的 .download 临时文件，仅清理超过 24 小时的过期残留
+                                if (name.endsWith(".download")) {
+                                    long ageMs = System.currentTimeMillis() - f.lastModified();
+                                    if (isDownloading.get() || ageMs < 24 * 60 * 60 * 1000L) {
+                                        continue;
+                                    }
                                 }
                             }
                             if (name.endsWith(".apk") || name.endsWith(".download") || name.endsWith(".tmp")) {
@@ -540,8 +564,10 @@ public class MainActivity extends BridgeActivity {
         }
 
         // 2. 切屏返回时向 WebView 补发当前最新下载进度，防止切屏导致前端进度条卡住
-        if (isDownloading.get() && bridge != null && bridge.getWebView() != null) {
-            notifyJsUpdateStatus(lastStatus, lastPercent, lastReceived, lastTotal, lastMessage);
+        if (bridge != null && bridge.getWebView() != null) {
+            if (isDownloading.get() || "error".equals(lastStatus)) {
+                notifyJsUpdateStatus(lastStatus, lastPercent, lastReceived, lastTotal, lastMessage);
+            }
         }
 
         // 3. 注意：严禁在 onResume 盲目调用 cleanUpdateApkCache，避免切屏时误删下载中的文件或待安装文件！

@@ -48,16 +48,76 @@
 
 ## 3. 真机工单处理与自愈记录
 
-- **工单 ID**：`1793175462520`
+### 3.1 工单 #1793175462520（历史记录恢复）
 - **提交时间**：`2026-10-28 16:17:42` (来自小米真机 Android 16)
 - **反馈内容**：“更新之后，历史没有了，能恢复吗”
 - **根因分析**：手机上运行的是旧版安装包（`v0.0.1.202610281342`），其内部组件读取 `/api/feedback` 时要求响应包含 `data.success === true` 的 Object 包装；由于新服务返回的是纯 Array，导致旧版判定失败跳过了历史渲染（底层数据 100% 完好存在）。
 - **自愈方案**：在 `vite.config.js` 的前置中间件中，为旧版 `/api/feedback` 和截图路由补充契约保真逻辑，返回符合旧版期望的包装结构。
 - **验证与答复**：经本地与网络模拟请求，旧路由恢复返回 `success: true` 与 `totalCount: 50`。已通过 CLI 将工单更新为 `completed` 并写回详细答复。
 
+### 3.2 工单 #1793176452985（版本重复提示循环）
+- **提交时间**：`2026-10-28 16:34:12`
+- **反馈内容**：“我明明都升级两次了，为啥版本还是1342，一直提示还有新版本1359？”
+- **根因分析**：此前自动化编译仅输出了正式 Release 变体，而调试模式下载固定指向 `releases/weekly-mountain-latest-debug.apk`，导致物理文件停留在 `1342`。
+- **自愈方案**：运行 `sync_version.py` 升版至 `0.0.1.202610281635`，执行 `build_app.ps1` 重新编译生成全新的 Debug APK（28.08 MB）覆盖镜像。
+- **验证与答复**：版本信息与物理 APK 完全对齐，已通过 CLI 将工单更新为 `completed`。
+
+### 3.3 工单 #1793176493558（历史截图显示问题）
+- **提交时间**：`2026-10-28 16:34:53`
+- **反馈内容**：“历史界面里面的图片看不了了”
+- **根因分析**：新版通用 SDK 将截图存储规范化为简洁的字符串路径，而旧版 App 在渲染历史时严格读取 `sShot.filename` 对象属性，导致获取到 `undefined` 继而白屏破图。
+- **自愈方案**：在 `vite.config.js` 的旧版契约兼容中间件中，增加字段智能规范化转换，自动将字符串路径包装为 `{ filename, path, ext }` 对象并补齐 `screenshotFilename`。同时挂载 `/api/feedback/screenshot/*` 静态资源处理中间件。
+- **验证与答复**：经 curl/fetch 模拟验证，图片资源正常返回 200 HTTP 响应，工单已标记为 `completed`。
+
+### 3.4 移动端原生容器与真机深度适配（API Base 穿透与锁屏断点续传）
+- **反馈内容**：
+  1. 点击反馈显示发送了但 Agent 没收到；
+  2. "新建反馈" 页面的 `/#/profile` 这些内容有什么含义；
+  3. "历史与进度" 为空；
+  4. App 更新过程中锁屏，重新解锁后又要重新下载。
+- **根因分析**：
+  - **反馈未上报与历史为空**：通用 `@agent-feedback/client` 此前采用纯相对路径 `/api/__agent_feedback/*`，在 Capacitor 原生离线包环境下会请求到手机内置的资产静态服务（`http://localhost/`），导致历史为空且提交请求未到达电脑端的 DevServer。
+  - **新建反馈的 `/#/profile` 等标签**：为端侧自动捕获的遥测快照（包含页面当前 Hash 路由、屏幕分辨率与 DPR、运行系统及错误日志统计）。
+  - **锁屏中断需重新下载**：小米 HyperOS 锁屏后 Doze 模式会中断普通套接字，而原生代码缺乏 HTTP Range 断点续传支持且在网络异常时将临时文件全部删除，导致从 0 重下。
+- **自愈方案**：
+  1. `@agent-feedback/client` 新增 `setApiBase`、`getApiUrl`，并在 `weekly-mountain` 的 `setupAgentFeedback.js` 中动态绑定 `debugStore.apiBase`（自动走 cpolar 穿透地址），同时加强提交响应格式严格校验；
+  2. `vite.config.js` 的 `viteApkReleasePlugin` 增加 HTTP 206 Partial Content / `Range` 支持；
+  3. `MainActivity.java` 引入 `Range: bytes=existingLength-` 断点续传请求头、追加模式写入、锁屏 WifiLock/WakeLock 双重保活，并保护未完成的 `.download` 临时文件不被误删；
+  4. 升版至 `0.0.1.202610281718` 并重新编译生成全新的 Debug APK 覆盖镜像。
+
+### 3.5 移动端手势冲突与“反馈给 AI”点击无响应自愈
+- **反馈内容**：
+  - 用户反馈安装新包后，在手机真机上轻触“反馈给 AI”胶囊按钮完全没有反应，弹窗无法打开。
+- **根因分析**：
+  1. **多手势监听器冲突**：`@agent-feedback/client` 原实现在同一元素上同时挂载了 `pointerdown`、`touchstart`、`mousedown`，现代 Android 16 Chrome 156 会触发序列事件并导致标志位覆盖；
+  2. **拖拽位移阈值过小**：此前采用 `Math.abs(delta) > 5` 判断拖拽，而小米 15 屏幕 DPR 为 3.25，人类手指轻触肉体接触变形即超 5px，导致轻触被系统误判为“拖拽”，释放时跳过了 `toggleModal()`；
+  3. **缺少 click 兜底与外部调用能力**：胶囊未注册标准 `click` 监听；且个人中心 `AlpineDebugModal` 无法直接调起反馈窗口。
+- **自愈方案**：
+  1. 彻底重构 `@agent-feedback/client` 的胶囊手势系统，统一走标准 Pointer Events + `setPointerCapture`，阈值放宽至 `Math.hypot(dx, dy) > 10`；
+  2. 增加原生 `click` 兜底事件，且导出 `openFeedbackModal` 与 `window.openAgentFeedbackModal`；
+  3. 在 `weekly-mountain/src/debug/setupAgentFeedback.js` 增加 `wm-open-feedback` 事件监听与统一打开代理；
+  4. 运行 `sync_version.py` 升版至 `0.0.1.202610281739`，重新打包并归档 `weekly-mountain-v0.0.1.202610281739-debug.apk`。
+
+### 3.6 README 文档补全与架构亮点规范化
+- 在 `agent-feedback/README.md` 中补充 `## 🌐 真机联调与网络互通指南`，阐明默认同源服务机制、4 类网络拓扑与 cpolar 穿透配置；
+- 补充 `## 🔄 端到端自愈工作闭环流程`，包含 ASCII 架构全景图及应用极简接入、端侧全息抓取、分片落盘与哨兵防抖、Agent 源码自愈、端侧时间轴复验 5 大生命周期阶段详解；
+- 规范化参考项目架构亮点，移除针对旧 App 的私有描述，替换为通用的“沉浸式主题系统融合 (Design System Integration)”。
+
 ---
 
-## 4. 恢复与运维入口
+## 4. Git 提交与远端推送记录
+- **`agent-feedback` 仓库**:
+  - `feat: 重构升级通用四大特性并支持日级分片、时间轴流式加载、扩展槽与主题系统` (`4957023`)
+  - `docs: 更新 README 并补充扩展接入示例与实战项目参考链接` (`f7e98fc`)
+  - `docs: 优化实战参考亮点为通用设计系统融合与规范化 CLI 示例` (`3973dc0`)
+  - 推送分支：`origin/main`
+- **`weekly-mountain` 仓库**:
+  - `feat: 接入通用 @agent-feedback 服务、支持真机联调扩展槽与旧版 100% 契约保真适配` (`82b6763`)
+  - 推送分支：`origin/feat/integrate-agent-feedback`
+
+---
+
+## 5. 恢复与运维入口
 - **启动 Vite 开发服务**：`npm run dev`
 - **拉起通用哨兵监听**：`npm run sentinel`
 - **发布 Agent 系统通知**：`node ../agent-feedback/packages/sentinel/bin/cli.js notice "通知内容" --dir scratch/feedback`
