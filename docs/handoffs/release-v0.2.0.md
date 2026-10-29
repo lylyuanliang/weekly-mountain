@@ -24,8 +24,10 @@
 - 版本号：`0.2.0` (Tag: `v0.2.0`)
 - Android 原生版本号 (versionCode)：`1793258285` (单调严格递增，杜绝降级安装报错)
 - 产物文件：
-  - `releases/weekly-mountain-v0.2.0-debug.apk` (28.08 MB)
-  - `releases/weekly-mountain-latest-debug.apk` (28.08 MB, 供免改链接直接更新)
+  - `releases/weekly-mountain-v0.2.0-release.apk` (28.08 MB, 纯净发布版，剥离 AI 调试工具)
+  - `releases/weekly-mountain-latest-release.apk` (28.08 MB, 供发布版在线静默更新镜像)
+  - `releases/weekly-mountain-v0.2.0-debug.apk` (28.08 MB, 开发者联调版)
+  - `releases/weekly-mountain-latest-debug.apk` (28.08 MB, 供联调版在线静默更新镜像)
 
 ---
 
