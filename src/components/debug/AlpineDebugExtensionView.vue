@@ -41,6 +41,38 @@
         background: var(--af-primary, #4edea3);
         box-shadow: 0 0 8px var(--af-primary, #4edea3);
         display: inline-block;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+      }
+      .dot-indicator.has-update {
+        background: #f59e0b;
+        box-shadow: 0 0 10px #f59e0b;
+        animation: pulse-ring 1.3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .update-version-title {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .update-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--af-primary, #4edea3);
+        box-shadow: 0 0 8px var(--af-primary, #4edea3);
+        flex-shrink: 0;
+        display: inline-block;
+        transition: all 0.3s ease;
+      }
+      .update-dot.update-dot-ping {
+        background: #f59e0b;
+        box-shadow: 0 0 10px #f59e0b;
+        animation: pulse-ring 1.3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes pulse-ring {
+        0% { transform: scale(0.9); opacity: 0.8; }
+        50% { transform: scale(1.3); opacity: 1; }
+        100% { transform: scale(0.9); opacity: 0.8; }
       }
       .platform-chip, .version-chip {
         font-size: 10px;
@@ -287,7 +319,7 @@
     <section class="ext-card">
       <div class="card-title-row">
         <span class="card-title">
-          <span class="dot-indicator"></span>
+          <span class="dot-indicator" :class="{ 'has-update': hasNewVersion }"></span>
           内测更新与构建管理
         </span>
         <span class="version-chip">v{{ APP_VERSION }}</span>
@@ -310,9 +342,12 @@
         <!-- 发现新构建卡片 -->
         <div v-if="debugStore.updateInfo" class="update-card">
           <div class="update-header">
-            <span class="update-version">
-              {{ hasNewVersion ? `发现新构建: v${debugStore.updateInfo.latestVersion}` : '已是最新构建版本' }}
-            </span>
+            <div class="update-version-title">
+              <span class="update-dot" :class="{ 'update-dot-ping': hasNewVersion }"></span>
+              <span class="update-version">
+                {{ hasNewVersion ? `发现新构建: v${debugStore.updateInfo.latestVersion}` : '已是最新构建版本' }}
+              </span>
+            </div>
             <span class="update-size">{{ debugStore.updateInfo.fileSize }}</span>
           </div>
 

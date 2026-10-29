@@ -228,7 +228,9 @@
             <div
               v-for="m in getWeekMountains(week)"
               :key="m.id"
-              class="flex gap-3 items-center pt-1"
+              @click="openMountainDetail(m)"
+              class="flex gap-3 items-center pt-1 cursor-pointer hover:bg-white/[0.03] active:scale-[0.99] transition-all rounded-xl p-1 -m-1"
+              title="点击查看名山详情与路网路线"
             >
               <!-- Thumbnail -->
               <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 relative border border-white/10 bg-surface-container-low">
@@ -282,16 +284,17 @@
                 class="w-full flex items-center justify-between gap-2"
               >
                 <button
-                  @click="checkinStore.toggleCheckin(m.id)"
+                  @click.stop="handleCheckinBtn(m)"
                   class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg text-[11px] transition-all"
                   :class="checkinStore.isDone(m.id)
-                    ? 'bg-primary/20 text-primary border border-primary/40 font-semibold'
+                    ? 'bg-primary/20 text-primary border border-primary/40 font-semibold shadow-[0_0_10px_rgba(78,222,163,0.15)]'
                     : 'bg-surface-container-high/80 text-on-surface hover:text-primary border border-white/10'"
+                  :title="checkinStore.isDone(m.id) ? '查看与编辑打卡纪实' : '快速打卡确认'"
                 >
                   <span class="material-symbols-outlined text-[14px]" :class="{ fill: checkinStore.isDone(m.id) }">
                     {{ checkinStore.isDone(m.id) ? 'verified' : 'check_circle' }}
                   </span>
-                  <span>{{ checkinStore.isDone(m.id) ? '已打卡' : '打卡确认' }}</span>
+                  <span>{{ checkinStore.isDone(m.id) ? '✓ 已打卡 · 纪实' : '打卡确认' }}</span>
                 </button>
 
                 <button
@@ -365,6 +368,19 @@
       </div>
     </section>
 
+    <!-- 打卡纪实管理模态框 (照片/随笔/登顶日期/管理) -->
+    <CheckinDetailModal
+      v-model="isCheckinModalOpen"
+      :mountain="activeCheckinMountain"
+      @toast="showNotification"
+    />
+
+    <!-- 名山详情抽屉 (路线/海拔/高德两步路导航/装备) -->
+    <MountainDetailSheet
+      v-model="isDetailSheetOpen"
+      :mountain="activeDetailMountain"
+    />
+
     <!-- Toast Feedback -->
     <div
       v-if="toastMessage"
@@ -378,6 +394,8 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import CheckinDetailModal from '@/components/checkin/CheckinDetailModal.vue';
+import MountainDetailSheet from '@/components/detail/MountainDetailSheet.vue';
 import { usePlanStore, REC_PRESETS } from '@/stores/planStore.js';
 import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { useMountainStore } from '@/stores/mountainStore.js';
@@ -387,6 +405,33 @@ const planStore = usePlanStore();
 const checkinStore = useCheckinStore();
 const mountainStore = useMountainStore();
 const regionStore = useRegionStore();
+
+const activeCheckinMountain = ref(null);
+const isCheckinModalOpen = ref(false);
+
+const activeDetailMountain = ref(null);
+const isDetailSheetOpen = ref(false);
+
+function openCheckinModal(mountain) {
+  activeCheckinMountain.value = mountain;
+  isCheckinModalOpen.value = true;
+}
+
+function openMountainDetail(mountain) {
+  activeDetailMountain.value = mountain;
+  isDetailSheetOpen.value = true;
+}
+
+function handleCheckinBtn(mountain) {
+  if (checkinStore.isDone(mountain.id)) {
+    // 已打卡状态：点击唤起打卡纪实详情模态框
+    openCheckinModal(mountain);
+  } else {
+    // 未打卡状态：轻量一键打卡并轻提示，绝不强弹模态框阻断用户
+    checkinStore.toggleCheckin(mountain.id);
+    showNotification(`🏔️ ${mountain.name} 打卡成功！点击可查看打卡纪实`);
+  }
+}
 
 const currentRegionMountainsCount = computed(() => {
   const regId = regionStore.currentRegionId;

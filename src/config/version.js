@@ -3,12 +3,12 @@
  * 规范：前三位为发布版本 (0.0.1)，第 4 位为内部调试/内测递增号 (001, 002...)
  * 供主页、详情抽屉、全屏大图、导航弹窗及个人中心统一展示
  */
-export const APP_VERSION = '0.0.1.202610281816';
+export const APP_VERSION = '0.0.1.202610291426';
 export const RELEASE_VERSION = '0.0.1';
-export const BUILD_DATE = '2026-10-28';
-export const BUILD_TIME = '18:16';
-export const BUILD_TIMESTAMP = '2026-10-28 18:16';
-export const BUILD_CODE = 1793182577;
+export const BUILD_DATE = '2026-10-29';
+export const BUILD_TIME = '14:26';
+export const BUILD_TIMESTAMP = '2026-10-29 14:26';
+export const BUILD_CODE = 1793255200;
 
 /**
  * 开发者调试与 AI 移动端反馈入口开关

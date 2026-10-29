@@ -3,7 +3,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import fs from 'node:fs'
 import path from 'node:path'
-import agentFeedback from '@agent-feedback/vite-plugin'
+import agentFeedback from '@lylyuanliang/agent-feedback-vite-plugin'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 

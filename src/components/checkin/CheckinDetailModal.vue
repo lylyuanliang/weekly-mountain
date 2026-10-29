@@ -3,7 +3,7 @@
     <Transition name="fade">
       <div
         v-if="visible"
-        class="fixed inset-0 z-[120] bg-black/85 backdrop-blur-md flex flex-col items-center justify-end sm:justify-center p-0 sm:p-4 modal-backdrop-scroll-contain select-none"
+        class="fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center p-0 sm:p-4 modal-backdrop-scroll-contain select-none"
         @click.self="handleClose"
         @touchmove.self.prevent
       >
@@ -158,7 +158,7 @@
                 rows="3"
                 maxlength="300"
                 placeholder="记录登顶时刻的心情、路况、天气、野生动物或给同行的避坑建议..."
-                class="w-full p-3 rounded-2xl bg-surface-container-lowest/90 border border-white/10 text-white text-[12px] font-body-sm focus:outline-none focus:border-primary/50 placeholder:text-outline-variant resize-none"
+                class="w-full p-3 rounded-2xl bg-[#12151d] border border-white/20 text-white text-[13px] font-body-sm focus:outline-none focus:border-primary/60 placeholder:text-gray-400 focus:bg-[#151923] resize-none"
               ></textarea>
             </div>
           </div>

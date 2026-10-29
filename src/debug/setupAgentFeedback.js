@@ -11,7 +11,7 @@ export function initAgentFeedbackExtensions(piniaInstance) {
 
   const doRegister = async () => {
     try {
-      const { registerExtensionTab, setApiBase } = await import('@agent-feedback/client');
+      const { registerExtensionTab, setApiBase } = await import('@lylyuanliang/agent-feedback-client');
 
       // 绑定 DebugStore 的动态 API 基地址 (支持 Android 原生离线包走穿透服务)
       if (piniaInstance) {

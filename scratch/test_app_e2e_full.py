@@ -80,6 +80,7 @@ def run_full_e2e_suite():
                         console_errors.append(f"Console error: {text}")
 
             def handle_pageerror(err):
+                print(f"  [PAGE ERROR STACK]: {getattr(err, 'stack', err)}")
                 console_errors.append(f"Page error: {str(err)}")
 
             def handle_response(res):
@@ -94,7 +95,7 @@ def run_full_e2e_suite():
             # SECTION 1: Explore 地图主屏 (50 座山峰、搜索过滤、手势与抽屉吸附)
             # =========================================================================
             print("\n>>> [1/5] Testing Explore View & Map Topo Engine...")
-            page.goto(f"{BASE_URL}/#/explore", wait_until="networkidle")
+            page.goto(f"{BASE_URL}/#/explore", wait_until="domcontentloaded")
             page.wait_for_timeout(1800)
 
             # 1.1 全屏暗黑等高线地图容器

@@ -2021,9 +2021,11 @@ function handleToggleCheckin() {
   if (!wasChecked) {
     checkinStore.toggleCheckin(props.mountain.id);
     emit('checkin', props.mountain.id);
-    showSheetToast('🎉 登顶打卡成功！可上传实拍照片与心得');
+    showSheetToast('🎉 登顶打卡成功！可点击上方实景相册记录心得');
+  } else {
+    // 已经打卡时，再次点击调起纪实录入弹窗以管理相册与心得
+    isCheckinModalOpen.value = true;
   }
-  isCheckinModalOpen.value = true;
 }
 
 function handleAddToPlan() {
