@@ -1,7 +1,9 @@
 # 主题：release-v0.2.0 (正式发版 v0.2.0 里程碑构建与在线更新部署)
 
-- 当前状态：已完成 (Completed)
-- 最后更新时间：2026-10-29 15:24
+- 当前状态：已完成并已推送发布 (Completed & Pushed)
+- 最后更新时间：2026-10-29 15:27
+- Git 提交：`bf8bd1d` (chore: 发布 v0.2.0 里程碑正式版并完成 Native APK 编译分发)
+- Git 标签：`v0.2.0` (已推送到 origin)
 - 恢复入口：`docs/handoffs/release-v0.2.0.md`
 
 ---
