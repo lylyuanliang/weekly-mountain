@@ -88,10 +88,11 @@ python scripts/watch_mobile_feedback.py
 ## 5. 版本号命名与发版规范 (Versioning Policy)
 
 为保持发布版本清晰严谨，严禁随意消耗正式发布语义化版本：
-1. **内部调试/测试构建规范**：
-   - 统一采用 **4 位版本号**，从 `2.0.0.xxx` 开始（例如 `2.0.0.208`）；
-   - 调试、排查 Bug、真机联调时，严禁递增前 3 位发布版本号；统一递增第 4 位；
-   - 构建号（`BUILD_CODE`）与第 4 位保持同步递增。
+1. **内部调试/测试构建规范 (时间戳版本驱动)**：
+   - 统一采用 **4 位版本号**，格式为 `0.0.1.YYYYMMDDHHmm`（例如 `0.0.1.202610281045`），**彻底废弃 `00x` 手工递增格式**；
+   - 每次打包由流水线脚本 `scripts/sync_version.py` 自动获取当前精确时间戳并原子化同步至 `package.json`、`src/config/version.js`、`public/version.json` 和 `android/app/build.gradle`；
+   - Android 原生 `versionCode` 统一采用秒级时间戳（Unix Epoch Seconds，例如 `1793155500`），保证底层 `versionCode` 单调严格递增，彻底消除 Android 系统 `INSTALL_FAILED_VERSION_DOWNGRADE` 降级安装错误；
+   - 保证 App 内部检查更新能实时感应到新版本并提供免跳转在线下载升级。
 2. **正式对外发布版本规范**：
-   - 严格遵循语义化版本（SemVer 3 位，如 `2.0.1`、`2.1.0`）；
+   - 严格遵循语义化版本（SemVer 3 位，如 `0.0.1`、`0.0.2` 或 `1.0.0`）；
    - 仅在阶段性功能完备、全量回归通过且得到用户确认发布时，方可正式推进发布版本。

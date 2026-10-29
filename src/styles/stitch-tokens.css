@@ -259,3 +259,15 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Global Modal Scroll Lock & Anti-Chaining */
+body.body-scroll-locked {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  touch-action: none !important;
+}
+
+.modal-backdrop-scroll-contain {
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch;
+}

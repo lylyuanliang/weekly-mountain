@@ -1,6 +1,6 @@
 {
-  "content": "这里只能上传一张图，而且导出海报也不能下载",
-  "timestamp": 1793009756156,
+  "content": "这里错位了",
+  "timestamp": 1793165588167,
   "device": {
     "viewport": "369 × 821",
     "dpr": 3.25,
@@ -9,37 +9,38 @@
   },
   "state": {
     "route": "/profile",
-    "mountainId": "changpinggou",
-    "mountain": "四姑娘山·长坪沟"
+    "mountainId": "longquanshan",
+    "mountain": "龙泉山"
   },
   "screenshots": [
     {
-      "path": "scratch/feedback_screenshot_1793009756156_1.jpg",
-      "filename": "feedback_screenshot_1793009756156_1.jpg",
+      "path": "scratch/feedback_screenshot_1793165588167_1.jpg",
+      "filename": "feedback_screenshot_1793165588167_1.jpg",
       "ext": "jpg",
-      "sizeKb": 66,
+      "sizeKb": 88,
       "meta": {
         "dimensions": "575 × 1280",
-        "sizeText": "66 KB",
+        "sizeText": "88 KB",
         "source": "手机相册 / 拍照"
       }
     }
   ],
   "screenshotMeta": {
     "dimensions": "575 × 1280",
-    "sizeText": "66 KB",
+    "sizeText": "88 KB",
     "source": "手机相册 / 拍照"
   },
   "errors": [],
-  "id": 1793009756156,
-  "receivedAt": "2026-10-26T10:15:54.950Z",
-  "updatedAt": "2026-10-26T18:37:21.520760",
+  "id": 1793165588167,
+  "receivedAt": "2026-10-28T05:33:12.019Z",
+  "updatedAt": "2026-10-28T13:43:59.110564",
+  "type": "user_feedback",
   "status": "completed",
-  "remoteInstruction": "【远程无人值守守则 (详见 AGENTS.md / GEMINI.md)】用户在手机端离线操作，严禁在 IDE 中挂起等待提问；遇细节分歧按安全默认值推进；验证完成后将答复写回 reply 字段并重启哨兵。",
-  "reply": "已在 v0.0.1.004 版本全面升级打卡与海报导出能力：1.【多图打卡画廊】打卡实景现已支持单座山上传最多 9 张照片，支持多选批量上传与轻量压缩，并提供九宫格画廊、全屏大图预览切换、设为主封面及单张删除；2.【海报下载与保存加固】针对 Android WebView 屏蔽虚拟链接下载的问题，接入系统级 Web Share API（可一键呼起系统分享/存入相册），同时生成后自动弹起专属全屏大图，长按海报图片即可直接保存至手机系统相册，并附带浏览器文件下载备用方案。已完成端到端自动化测试与 APK 编译打包（v0.0.1.004），可通过调试中心在线 OTA 升级或重新安装体验！",
-  "clientIp": "171.219.176.50",
-  "screenshotPath": "scratch/feedback_screenshot_1793009756156_1.jpg",
-  "screenshotFilename": "feedback_screenshot_1793009756156_1.jpg",
+  "remoteInstruction": "【远程无人值守守则】用户在手机端离线操作，遇细节分歧按安全默认值推进；验证完成后将答复写回 reply 字段并重启哨兵。",
+  "reply": "【时间轴圆点与日期重叠错位已彻底修复】已精准定位并修复工单时间轴左侧节点错位问题：1. 轴线绝对居中：修正了发光指示圆点的定位偏置（由 -left-[5px] 改为精确居中对齐左侧 11px 垂直轴线的 left-[4px]），并赋予 z-10 杜绝层叠裁切；2. 充裕呼吸边距：将时间轴内容区左内边距扩展至 pl-8 (32px)，与指示圆点形成 12px 的舒适视觉留白，彻底解决与日期文本「2026-10-28」首字符的碰撞重叠；3. 新版本已同步完成自动化打包 (v0.0.1.202610281342)，全量 E2E 回归 100% 通过！",
+  "clientIp": "171.219.181.235",
+  "screenshotPath": "scratch/feedback_screenshot_1793165588167_1.jpg",
+  "screenshotFilename": "feedback_screenshot_1793165588167_1.jpg",
   "screenshotExt": "jpg",
-  "screenshotSizeKb": 66
+  "screenshotSizeKb": 88
 }

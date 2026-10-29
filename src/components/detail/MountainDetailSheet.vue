@@ -3,8 +3,9 @@
   <Transition name="fade">
     <div
       v-if="modelValue && mountain"
-      class="detail-sheet-backdrop fixed inset-0 w-full h-full z-[60] bg-black/70"
+      class="detail-sheet-backdrop fixed inset-0 w-full h-full z-[60] bg-black/70 modal-backdrop-scroll-contain select-none"
       @click="closeSheet"
+      @touchmove.self.prevent
     ></div>
   </Transition>
 
@@ -280,7 +281,8 @@
       <div
         ref="scrollContainerRef"
         :class="{ 'invisible pointer-events-none': isNavModalOpen }"
-        class="flex-1 overflow-y-auto no-scrollbar scroll-smooth px-4 pb-6 space-y-4"
+        class="flex-1 overflow-y-auto no-scrollbar scroll-smooth px-4 pb-6 space-y-4 overscroll-contain"
+        style="overscroll-behavior: contain; -webkit-overflow-scrolling: touch;"
       >
         <!-- Hero Scenic Image Gallery Carousel Banner -->
         <div
@@ -1461,6 +1463,7 @@ import {
   copyToClipboard
 } from '@/utils/appLauncher.js';
 import { getMountainCoordinate } from '@/stores/mountainStore.js';
+import { useScrollLock } from '@/composables/useScrollLock.js';
 
 const props = defineProps({
   mountain: {
@@ -1472,6 +1475,9 @@ const props = defineProps({
     default: false
   }
 });
+
+// 彻底杜绝底层页面背景滚动穿透
+useScrollLock(() => props.modelValue && props.mountain);
 
 const emit = defineEmits([
   'update:modelValue',
@@ -2015,9 +2021,11 @@ function handleToggleCheckin() {
   if (!wasChecked) {
     checkinStore.toggleCheckin(props.mountain.id);
     emit('checkin', props.mountain.id);
-    showSheetToast('🎉 登顶打卡成功！可上传实拍照片与心得');
+    showSheetToast('🎉 登顶打卡成功！可点击上方实景相册记录心得');
+  } else {
+    // 已经打卡时，再次点击调起纪实录入弹窗以管理相册与心得
+    isCheckinModalOpen.value = true;
   }
-  isCheckinModalOpen.value = true;
 }
 
 function handleAddToPlan() {

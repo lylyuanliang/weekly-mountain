@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     《每周一山》移动端 App 自动化打包流水线 (PowerShell / pwsh)
 .DESCRIPTION

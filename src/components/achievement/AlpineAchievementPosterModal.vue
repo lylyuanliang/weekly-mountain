@@ -3,8 +3,9 @@
     <Transition name="fade">
       <div
         v-if="visible"
-        class="alpine-poster-modal fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col items-center justify-start overflow-y-auto px-3 pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] sm:p-6"
+        class="alpine-poster-modal fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col items-center justify-start overflow-y-auto px-3 pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] sm:p-6 overscroll-contain modal-backdrop-scroll-contain"
         @click.self="handleClose"
+        @touchmove.self.prevent
       >
         <!-- 弹窗顶栏控制区 -->
         <div class="w-full max-w-[390px] flex items-center justify-between pb-3 px-1 text-on-surface">
@@ -446,8 +447,9 @@
     <Transition name="fade">
       <div
         v-if="isPosterReadyModalOpen"
-        class="fixed inset-0 z-[60] bg-black/95 backdrop-blur-lg flex flex-col justify-between pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] px-3 sm:px-6 select-none"
+        class="fixed inset-0 z-[60] bg-black/95 backdrop-blur-lg flex flex-col justify-between pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] px-3 sm:px-6 select-none modal-backdrop-scroll-contain"
         @click.self="isPosterReadyModalOpen = false"
+        @touchmove.self.prevent
       >
         <!-- 弹窗顶栏 -->
         <div class="w-full max-w-md mx-auto flex items-center justify-between pb-2 text-white">
@@ -535,6 +537,7 @@
 import { ref, computed, watch } from 'vue';
 import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { useMountainStore } from '@/stores/mountainStore.js';
+import { useScrollLock } from '@/composables/useScrollLock.js';
 
 const props = defineProps({
   modelValue: {
@@ -569,6 +572,9 @@ const isGenerating = ref(false);
 const generatedImageUrl = ref('');
 const generatedBlob = ref(null);
 const isPosterReadyModalOpen = ref(false);
+
+// 彻底杜绝底层页面背景滚动穿透
+useScrollLock(() => visible.value || isPosterReadyModalOpen.value);
 
 // 定制选项 1：是否包含照片
 const includePhotos = ref(true);

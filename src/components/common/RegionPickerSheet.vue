@@ -3,12 +3,14 @@
     <!-- Backdrop Overlay -->
     <div
       v-if="modelValue"
-      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-300 flex items-end sm:items-center justify-center p-0 sm:p-4 modal-backdrop-scroll-contain select-none"
       @click="close"
+      @touchmove.self.prevent
     >
       <!-- Sheet Modal Container -->
       <div
-        class="w-full max-w-md bg-surface-container-low border border-outline-variant/40 rounded-t-3xl sm:rounded-2xl shadow-2xl p-5 flex flex-col gap-4 max-h-[85vh] overflow-y-auto no-scrollbar"
+        class="w-full max-w-md bg-surface-container-low border border-outline-variant/40 rounded-t-3xl sm:rounded-2xl shadow-2xl p-5 flex flex-col gap-4 max-h-[85vh] overflow-y-auto no-scrollbar overscroll-contain"
+        style="overscroll-behavior: contain; -webkit-overflow-scrolling: touch;"
         @click.stop
       >
         <!-- Header -->
@@ -122,6 +124,7 @@
 
 <script setup>
 import { useRegionStore } from '@/stores/regionStore.js';
+import { useScrollLock } from '@/composables/useScrollLock.js';
 
 const props = defineProps({
   modelValue: {
@@ -133,6 +136,9 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'region-change', 'toast']);
 
 const regionStore = useRegionStore();
+
+// 彻底杜绝底层页面背景滚动穿透
+useScrollLock(() => props.modelValue);
 
 function close() {
   emit('update:modelValue', false);

@@ -3,8 +3,9 @@
     <Transition name="fade">
       <div
         v-if="visible"
-        class="fixed inset-0 z-[120] bg-black/85 backdrop-blur-md flex flex-col items-center justify-end sm:justify-center p-0 sm:p-4"
+        class="fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm flex flex-col items-center justify-end sm:justify-center p-0 sm:p-4 modal-backdrop-scroll-contain select-none"
         @click.self="handleClose"
+        @touchmove.self.prevent
       >
         <div
           class="w-full max-w-lg max-h-[90vh] bg-[#161a24] border-t sm:border border-white/10 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden text-on-surface pt-2 pb-[calc(16px+max(env(safe-area-inset-bottom,0px),8px))] px-4 space-y-3 select-none"
@@ -30,7 +31,7 @@
           </div>
 
           <!-- 可滚动内容区 -->
-          <div class="flex-1 overflow-y-auto space-y-4 pr-0.5 py-1 text-on-surface">
+          <div class="flex-1 overflow-y-auto space-y-4 pr-0.5 py-1 text-on-surface overscroll-contain" style="overscroll-behavior: contain; -webkit-overflow-scrolling: touch;">
             <!-- 打卡状态行 -->
             <div class="p-3 rounded-2xl bg-surface-container/60 border border-white/5 flex items-center justify-between">
               <div class="flex items-center gap-2">
@@ -157,7 +158,7 @@
                 rows="3"
                 maxlength="300"
                 placeholder="记录登顶时刻的心情、路况、天气、野生动物或给同行的避坑建议..."
-                class="w-full p-3 rounded-2xl bg-surface-container-lowest/90 border border-white/10 text-white text-[12px] font-body-sm focus:outline-none focus:border-primary/50 placeholder:text-outline-variant resize-none"
+                class="w-full p-3 rounded-2xl bg-[#12151d] border border-white/20 text-white text-[13px] font-body-sm focus:outline-none focus:border-primary/60 placeholder:text-gray-400 focus:bg-[#151923] resize-none"
               ></textarea>
             </div>
           </div>
@@ -193,8 +194,9 @@
         <!-- 大图全屏预览 Lightbox -->
         <div
           v-if="isPreviewLightboxOpen"
-          class="fixed inset-0 z-[130] bg-black/95 backdrop-blur-md flex flex-col justify-between pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] px-4"
+          class="fixed inset-0 z-[130] bg-black/95 backdrop-blur-md flex flex-col justify-between pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] px-4 modal-backdrop-scroll-contain"
           @click.self="isPreviewLightboxOpen = false"
+          @touchmove.self.prevent
         >
           <div class="flex items-center justify-between text-white pb-2">
             <span class="text-[13px] font-mono">
@@ -254,6 +256,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import { useCheckinStore, compressImageToBase64 } from '@/stores/checkinStore.js';
+import { useScrollLock } from '@/composables/useScrollLock.js';
 
 const props = defineProps({
   modelValue: {
@@ -280,6 +283,9 @@ const isMarkedDone = ref(false);
 const draftPhotos = ref([]);
 const draftNote = ref('');
 const isPreviewLightboxOpen = ref(false);
+
+// 彻底杜绝底层页面背景滚动穿透
+useScrollLock(() => visible.value || isPreviewLightboxOpen.value);
 const activePreviewIndex = ref(0);
 
 // 当弹窗打开或山峰变化时，拉取最新打卡记录填充草稿

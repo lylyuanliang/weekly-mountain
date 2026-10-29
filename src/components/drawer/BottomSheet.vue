@@ -34,7 +34,7 @@
           <span class="w-2.5 h-2.5 rounded-full bg-primary glow-primary shadow-[0_0_6px_#4edea3] flex-shrink-0"></span>
           <div class="flex items-baseline gap-1.5 overflow-hidden">
             <span class="text-on-surface text-body-sm font-bold truncate">
-              {{ activeMountainName || `全景探索 ${mountainStore.filteredMountains.length} 座山峰` }}
+              {{ isSearchActive ? `搜索结果: 匹配 ${mountainStore.filteredMountains.length} 座` : (activeMountainName || `全景探索 ${mountainStore.filteredMountains.length} 座山峰`) }}
             </span>
             <span class="text-[11px] text-on-surface-variant font-normal hidden xs:inline truncate">
               轻触或上滑查看卡片
@@ -55,17 +55,41 @@
       <template v-else>
         <!-- Section Header: Peaks Count & Quick Collapse Button -->
         <div class="flex items-center justify-between pt-0.5 flex-shrink-0">
-          <div class="flex items-baseline gap-2">
+          <div v-if="isSearchActive" class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center text-primary flex-shrink-0 shadow-sm">
+              <span class="material-symbols-outlined text-[15px]">manage_search</span>
+            </div>
+            <div class="flex items-baseline gap-1.5">
+              <h2 class="text-headline-md font-headline-md text-on-surface font-bold tracking-tight">搜索结果</h2>
+              <span class="text-label-data-sm font-label-data-sm text-primary font-semibold px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20">
+                匹配 {{ mountainStore.filteredMountains.length }} 座
+              </span>
+            </div>
+          </div>
+          <div v-else class="flex items-baseline gap-2">
             <h2 class="text-headline-md font-headline-md text-on-surface font-bold tracking-tight">Active Peaks</h2>
             <span class="text-label-data-sm font-label-data-sm text-primary font-semibold px-2 py-0.5 rounded-md bg-primary/10">
               {{ mountainStore.filteredMountains.length }} TRACKS
             </span>
           </div>
+
           <div class="flex items-center gap-2">
-            <div class="hidden xs:flex items-center gap-1.5 text-on-surface-variant text-caption">
+            <!-- Quick Clear Search Button in Search Mode -->
+            <button
+              v-if="isSearchActive"
+              type="button"
+              @click="clearSearch"
+              class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high hover:bg-surface-bright text-primary active:scale-95 transition-all border border-primary/30 text-caption font-semibold cursor-pointer"
+              title="清除搜索关键词"
+            >
+              <span class="material-symbols-outlined text-[14px]">close</span>
+              <span>清除搜索</span>
+            </button>
+            <div v-else class="hidden xs:flex items-center gap-1.5 text-on-surface-variant text-caption">
               <span class="material-symbols-outlined text-secondary text-[16px]">filter_drama</span>
               <span>Live Radar</span>
             </div>
+
             <!-- Explicit Collapse Button to View Full Map -->
             <button
               @click.stop="collapse"
@@ -79,8 +103,9 @@
           </div>
         </div>
 
-        <!-- Weather Bulletin Banner -->
+        <!-- Weather Bulletin Banner (Hidden in Search Mode for Maximum Card Visibility) -->
         <div
+          v-if="!isSearchActive"
           class="w-full px-3 py-2 rounded-xl bg-surface-container-low/90 border border-outline-variant/30 flex items-center gap-2.5 flex-shrink-0 transition-opacity duration-200"
         >
           <span class="material-symbols-outlined text-tertiary-fixed-dim text-[18px] flex-shrink-0">warning</span>
@@ -108,16 +133,16 @@
             v-if="mountainStore.filteredMountains.length === 0"
             class="w-full py-8 px-4 flex flex-col items-center justify-center text-center text-on-surface-variant gap-2 animate-fade-in"
           >
-            <span class="material-symbols-outlined text-[36px] text-outline">terrain</span>
-            <p class="text-body-md font-bold text-on-surface">暂无匹配山峰</p>
+            <span class="material-symbols-outlined text-[36px] text-outline">{{ isSearchActive ? 'search_off' : 'terrain' }}</span>
+            <p class="text-body-md font-bold text-on-surface">{{ isSearchActive ? '未搜索到匹配山峰' : '暂无匹配山峰' }}</p>
             <p class="text-caption text-on-surface-variant max-w-[280px] leading-relaxed">
-              当前收录以成都周边 0.5~4h 车程圈为主。如巴中光雾山等川北/川东远线名峰，可随时点击右下角反馈建议收录！
+              {{ isSearchActive ? `未找到与“${mountainStore.searchQuery}”相关的路线，建议尝试其他关键词。` : '当前收录以成都周边 0.5~4h 车程圈为主。如巴中光雾山等川北/川东远线名峰，可随时点击右下角反馈建议收录！' }}
             </p>
             <button
-              @click="mountainStore.resetFilters"
-              class="mt-1 px-4 py-1.5 rounded-full bg-surface-container-high text-primary text-body-sm font-semibold border border-primary/40 active:scale-95 shadow"
+              @click="resetAllFilters"
+              class="mt-1 px-4 py-1.5 rounded-full bg-surface-container-high text-primary text-body-sm font-semibold border border-primary/40 active:scale-95 shadow cursor-pointer"
             >
-              重置筛选条件
+              {{ isSearchActive ? '清空搜索并查看全部' : '重置筛选条件' }}
             </button>
           </div>
         </div>
@@ -141,6 +166,19 @@ const sheetContainerRef = ref(null);
 const snapState = ref('half');
 const customHeight = ref(null);
 const isDragging = ref(false);
+
+const isSearchActive = computed(() => {
+  return Boolean(mountainStore.searchQuery && mountainStore.searchQuery.trim().length > 0);
+});
+
+function clearSearch() {
+  mountainStore.setSearch('');
+}
+
+function resetAllFilters() {
+  mountainStore.setSearch('');
+  mountainStore.resetFilters();
+}
 
 const activeMountainName = computed(() => {
   const m = mountainStore.selectedMountain;
