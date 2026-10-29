@@ -26,7 +26,7 @@ if sys.platform == "win32":
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def generate_timestamp_version(base_version="0.0.1"):
+def generate_timestamp_version(base_version="0.2.0"):
     now = datetime.now()
     timestamp_str = now.strftime("%Y%m%d%H%M")
     unix_seconds = int(time.time())
@@ -46,7 +46,7 @@ def sync_all(explicit_version=None):
         unix_seconds = int(time.time())
         app_version = explicit_version.replace("v", "")
     else:
-        app_version, timestamp_str, unix_seconds, now = generate_timestamp_version("0.0.1")
+        app_version, timestamp_str, unix_seconds, now = generate_timestamp_version("0.2.0")
 
     date_str = now.strftime("%Y-%m-%d")
     time_str = now.strftime("%H:%M")
@@ -98,10 +98,10 @@ def sync_all(explicit_version=None):
         "title": f"{version_tag} 体验与真机联调增强版",
         "publishedAt": date_str,
         "changelog": (
-            "1. Android 原生安装包自动清理：安装升级完成后，重新打开或回到应用时全自动静默清理历史 APK，彻底杜绝手机存储堆积；\n"
-            "2. 修复调试模块 Store 运行时状态初始化，真机调试弹窗与「反馈给 AI」悬浮球恢复正常显示与交互；\n"
-            "3. OTA 在线流式更新适配变体分发，调试版自动对齐调试构建，纯净版对齐发布构建；\n"
-            "4. 全应用弹窗背景防穿透滚动锁与时间戳版本驱动持续增强。"
+            "1. 升级接入全新 @lylyuanliang/agent-feedback 神经闭环架构，哨兵原生伴随 DevServer 自动启停与常驻守护；\n"
+            "2. 彻底解除人工提示词约束，端侧反馈自动防抖聚合与状态自愈闭环；\n"
+            "3. 客户端悬浮弹窗采用顶部固定与统一基准高度，多面板 Tab 切换 3~5ms 原生极速响应、零闪烁；\n"
+            "4. Android 原生安装包自动清理与断点续传流式更新持续保持最平滑体验。"
         ),
         "assetName": debug_apk_name,
         "assetSizeText": "约 29 MB",

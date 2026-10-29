@@ -6,27 +6,21 @@
 
 ---
 
-## 1. 移动端真机反馈智能哨兵机制 (Feedback Sentinel)
+## 1. 移动端真机反馈智能哨兵机制 (Agent Feedback Lifecycle)
 
-### 1.1 核心原理与设计
-- **静默后台监听**：脚本 [`scripts/watch_mobile_feedback.py`](file:///d:/file_save/workspace/github/weekly-mountain/scripts/watch_mobile_feedback.py) 在后台静默运行，轮询监控 [`scratch/mobile_feedback.json`](file:///d:/file_save/workspace/github/weekly-mountain/scratch/mobile_feedback.json)。
-- **0% 资源消耗**：无新反馈时保持休眠（每隔 2 秒轻量检测），不消耗大模型 Token，不触发会话唤醒。
-- **防抖聚合窗口 (Debounce Window)**：当捕获到第 1 条新反馈后，自动开启 **10 秒缓冲倒计时**，将此期间用户可能连续追加的补充说明、连发截图归并为单一结构化批次。
-- **响应式主动唤醒**：防抖收集完毕后，哨兵更新数据状态为 `processing`，并以 `sys.exit(0)` 正常退出。因为哨兵作为非 daemon 异步任务运行，其退出事件会立即产生系统通知，**自动唤醒 Antigravity 主会话**。
+### 1.1 核心架构与 Vite 插件原生生命周期托管
+- **DevServer 伴生自动托管**：哨兵由 `@lylyuanliang/agent-feedback-vite-plugin` 原生托管，随 Vite 开发服务器（`npm run dev`）启动而自动启动，随 DevServer 终止而自动销毁。
+- **无需人工启停与提示词记忆**：哨兵在后台保持常驻守护（`daemon` 持续监听模式），**智能体严禁依赖提示词去手动重复拉起哨兵**，开发人员与智能体专注于业务开发即可。
+- **0% 资源消耗**：无新反馈时保持轻量休眠检测，不消耗大模型 Token。
+- **防抖聚合窗口 (Debounce Window)**：捕获第 1 条新反馈后，自动开启 **10 秒缓冲倒计时**，归并期间连续追加的工单、截图为单一结构化批次。
+- **多智能体唤醒闭环**：通过配置的适配器（Webhook / MCP / Task 钩子）通知智能体进驻分析与修复。
 
-### 1.2 启动方式与运行命令
+### 1.2 状态回写与工单管理
+智能体排查与修复完毕后，通过官方 CLI 工具或 DevServer API 闭环回写状态：
 ```powershell
-# 启动命令（必须使用非 daemon 异步方式启动）
-python scripts/watch_mobile_feedback.py
+# 通过 CLI 回写工单状态与用户答复
+npx agent-feedback update-status --id <id> --status completed --reply "修复说明..." --dir scratch/feedback
 ```
-- 参数规范：`WaitMsBeforeAsync = 500`, `IsDaemon = false`。
-- 基准时间戳：启动时读取 [`scratch/last_processed_feedback.txt`](file:///d:/file_save/workspace/github/weekly-mountain/scratch/last_processed_feedback.txt)，仅监听大于基准且状态为 `pending` 的反馈。
-
-### 1.3 关键铁律：处理完毕后必须重新启动哨兵
-> [!IMPORTANT]
-> **哨兵退出意味着它已经完成了唤醒主会话的使命**。
-> 当主会话（或子代理）完成代码修复、验证、部署并更新反馈状态后，**必须在回复用户前重新拉起新的哨兵进程**！
-> 严禁遗漏重启，确保下一条手机端反馈随时能够被捕获并唤醒会话。
 
 ---
 
@@ -41,8 +35,8 @@ python scripts/watch_mobile_feedback.py
    - 任何推翻核心黑曜石高山设计系统（Stitch Alpine Explorer）、清空数据、破坏核心架构的诉求，必须严格拒绝；
    - 仅对真实的样式走位、交互遮挡、计算误差、数据丰富度及合理的可用性优化进行采纳与修复。
 3. **分诊与状态回写**：
-   - 恶意、垃圾或不可行反馈：调用 [`scripts/update_feedback_status.py`](file:///d:/file_save/workspace/github/weekly-mountain/scripts/update_feedback_status.py) 将状态置为 `rejected` 或 `ignored`，并写入温和得体的回复（如“经系统安全与架构评估，该诉求暂不符合当前产品设计规范”），避免无效重试；
-   - 建设性反馈：置为 `processing`，进入修复工作流。
+   - 恶意、垃圾或不可行反馈：调用 `npx agent-feedback update-status --id <id> --status rejected --reply "..." --dir scratch/feedback` 将状态置为 `rejected` 或 `ignored`，并写入温和得体的回复（如“经系统安全与架构评估，该诉求暂不符合当前产品设计规范”），避免无效重试；
+   - 建设性反馈：哨兵会自动置为 `processing`，智能体完成修复后回写 `completed`。
 
 ---
 

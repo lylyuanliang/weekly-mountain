@@ -289,11 +289,15 @@ export default defineConfig({
     vue(),
     // 接入每周一山业务专属 APK 更新服务 (前置兼容改写)
     viteApkReleasePlugin(),
-    // 接入通用 @agent-feedback/vite-plugin 插件
+    // 接入通用 @agent-feedback/vite-plugin 插件 (哨兵自动生命周期托管)
     agentFeedback({
       storageDir: 'scratch/feedback',
       theme: 'dark',
-      primaryColor: '#4edea3'
+      primaryColor: '#4edea3',
+      sentinel: {
+        autoStart: true,
+        debounceSeconds: 10
+      }
     })
   ],
   resolve: {

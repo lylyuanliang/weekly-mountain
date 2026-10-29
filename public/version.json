@@ -1,12 +1,12 @@
 {
-  "version": "0.2.0",
-  "versionTag": "v0.2.0",
-  "title": "v0.2.0 里程碑正式版 · 极致平滑与自愈增强",
+  "version": "0.2.0.202610291809",
+  "versionTag": "v0.2.0.202610291809",
+  "title": "v0.2.0.202610291809 体验与真机联调增强版",
   "publishedAt": "2026-10-29",
-  "changelog": "1. 彻底根除调试弹窗切换 Tab 闪烁与上下跳动缺陷，切换耗时降低 40 倍至 3~5ms 原生响应；\n2. 正式切替至 npm 官方源 @lylyuanliang/agent-feedback 神经闭环架构；\n3. 全面增强移动真机触控手势防抖、450ms 穿透门禁与软键盘防挤压；\n4. 支持 Android 原生安装包自动清理与断点续传流式更新。",
-  "assetName": "weekly-mountain-v0.2.0-release.apk",
-  "assetSizeText": "约 28 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0/weekly-mountain-v0.2.0-release.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0/weekly-mountain-v0.2.0-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0/weekly-mountain-v0.2.0-release.apk"
+  "changelog": "1. 升级接入全新 @lylyuanliang/agent-feedback 神经闭环架构，哨兵原生伴随 DevServer 自动启停与常驻守护；\n2. 彻底解除人工提示词约束，端侧反馈自动防抖聚合与状态自愈闭环；\n3. 客户端悬浮弹窗采用顶部固定与统一基准高度，多面板 Tab 切换 3~5ms 原生极速响应、零闪烁；\n4. Android 原生安装包自动清理与断点续传流式更新持续保持最平滑体验。",
+  "assetName": "weekly-mountain-v0.2.0.202610291809-debug.apk",
+  "assetSizeText": "约 29 MB",
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610291809/weekly-mountain-v0.2.0.202610291809-debug.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610291809/weekly-mountain-v0.2.0.202610291809-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610291809/weekly-mountain-v0.2.0.202610291809-release.apk"
 }

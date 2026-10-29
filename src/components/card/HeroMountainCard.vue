@@ -45,12 +45,14 @@
 
       <!-- Live Condition / Weather Chip on Top-Right -->
       <div class="absolute top-2 right-2 z-10 flex items-center gap-1 max-w-[145px]">
+        <!-- Summit / Check-in Badge -->
         <span
           v-if="isChecked"
-          class="px-2 py-0.5 rounded-full bg-primary/20 text-label-data-sm font-label-data-sm text-primary border border-primary/40 flex items-center gap-0.5 flex-shrink-0"
+          class="px-2 py-0.5 rounded-full bg-[#0a0e17]/90 text-label-data-sm font-label-data-sm text-primary border border-primary/40 flex items-center gap-1 flex-shrink-0 shadow-md backdrop-blur-sm"
+          title="您已登顶此山峰"
         >
-          <span class="material-symbols-outlined text-[13px]">check_circle</span>
-          <span>已登</span>
+          <span class="material-symbols-outlined text-[13px] fill text-primary">verified</span>
+          <span class="font-bold">已登顶</span>
         </span>
         <button
           type="button"
