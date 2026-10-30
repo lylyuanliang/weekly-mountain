@@ -292,11 +292,13 @@ export default defineConfig({
     // 接入通用 @agent-feedback/vite-plugin 插件 (哨兵自动生命周期托管)
     agentFeedback({
       storageDir: 'scratch/feedback',
-      theme: 'dark',
-      primaryColor: '#4edea3',
       sentinel: {
         autoStart: true,
-        debounceSeconds: 10
+        debounceSeconds: 10,
+        adapter: 'webhook',
+        // 兼容当前 npm 1.1.0 的 webhookCmd 字段，并使用真实 DSH CLI headless 语法
+        // 用 call + 绝对路径：PATH 里没有 dsh，且 cmd /s /c 会剥离首尾引号，必须避开引号开头
+        webhookCmd: 'call "D:\\soft\\DeepSeek Harness\\resources\\runtime\\cli\\bin\\dsh.cmd" headless "检测到手机端新工单(ID: %FEEDBACK_IDS%)，请读取 scratch/feedback 目录排查并修复源码，通过单测后调用 npx agent-feedback update-status 回写结果"'
       }
     })
   ],
