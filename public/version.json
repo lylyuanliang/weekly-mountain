@@ -1,12 +1,12 @@
 {
-  "version": "0.2.0.202610291809",
-  "versionTag": "v0.2.0.202610291809",
-  "title": "v0.2.0.202610291809 体验与真机联调增强版",
-  "publishedAt": "2026-10-29",
-  "changelog": "1. 升级接入全新 @lylyuanliang/agent-feedback 神经闭环架构，哨兵原生伴随 DevServer 自动启停与常驻守护；\n2. 彻底解除人工提示词约束，端侧反馈自动防抖聚合与状态自愈闭环；\n3. 客户端悬浮弹窗采用顶部固定与统一基准高度，多面板 Tab 切换 3~5ms 原生极速响应、零闪烁；\n4. Android 原生安装包自动清理与断点续传流式更新持续保持最平滑体验。",
-  "assetName": "weekly-mountain-v0.2.0.202610291809-debug.apk",
+  "version": "0.2.0.202610301337",
+  "versionTag": "v0.2.0.202610301337",
+  "title": "v0.2.0.202610301337 体验与真机联调增强版",
+  "publishedAt": "2026-10-30",
+  "changelog": "1. 【重大修复】彻底修复成就长图海报预览与导出的截断问题：解决 Flex 弹性挤压与手势拦截，海报现已全高度自然展开且支持顺畅上下滑动检视；\n2. 【导出升级】升级 html2canvas 视网膜全高度捕获算法，导出的高清海报 100% 完整包含所有登顶照片、心得纪实、防伪编码与认证印章，告别硬生生截断；\n3. 【架构纯净】全面切换为 npm 官方源 @lylyuanliang/agent-feedback@1.1.0 架构，彻底消除本地路径依赖；\n4. 哨兵原生伴随 DevServer 自动启停与常驻守护，端侧反馈自动防抖聚合与自愈闭环；\n5. Android 原生安装包自动清理与断点续传流式更新持续保持最平滑体验。",
+  "assetName": "weekly-mountain-v0.2.0.202610301337-debug.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610291809/weekly-mountain-v0.2.0.202610291809-debug.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610291809/weekly-mountain-v0.2.0.202610291809-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610291809/weekly-mountain-v0.2.0.202610291809-release.apk"
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610301337/weekly-mountain-v0.2.0.202610301337-debug.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610301337/weekly-mountain-v0.2.0.202610301337-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610301337/weekly-mountain-v0.2.0.202610301337-release.apk"
 }
