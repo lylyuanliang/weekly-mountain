@@ -264,10 +264,12 @@
 body.body-scroll-locked {
   overflow: hidden !important;
   overscroll-behavior: none !important;
-  touch-action: none !important;
 }
 
-.modal-backdrop-scroll-contain {
+.modal-backdrop-scroll-contain,
+.alpine-poster-modal,
+.alpine-scroll-viewport {
   overscroll-behavior: contain !important;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
 }
