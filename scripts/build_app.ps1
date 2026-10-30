@@ -160,6 +160,10 @@ if (-not (Test-Path $AndroidDir)) {
 
 Push-Location $AndroidDir
 try {
+    if ($Clean) {
+        Write-Info "正在执行 Gradle Clean 清理历史构建与缓存..."
+        & .\gradlew.bat clean
+    }
     Write-Info "正在启动 Gradle Daemon 进行 Native APK 打包..."
     & .\gradlew.bat assembleDebug
     $GradleStatus = $LASTEXITCODE
