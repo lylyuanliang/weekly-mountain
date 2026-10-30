@@ -3,12 +3,11 @@
     <Transition name="fade">
       <div
         v-if="visible"
-        class="alpine-poster-modal fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col items-center justify-start overflow-y-auto px-3 pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] sm:p-6 overscroll-contain modal-backdrop-scroll-contain"
+        class="alpine-poster-modal fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex flex-col items-center justify-start overflow-y-auto px-3 pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(24px+max(env(safe-area-inset-bottom,0px),24px))] sm:p-6 overscroll-contain modal-backdrop-scroll-contain"
         @click.self="handleClose"
-        @touchmove.self.prevent
       >
-        <!-- 弹窗顶栏控制区 -->
-        <div class="w-full max-w-[390px] flex items-center justify-between pb-3 px-1 text-on-surface">
+        <!-- 弹窗顶栏控制区 (Sticky 浮顶保活) -->
+        <div class="sticky top-0 z-30 w-full max-w-[390px] shrink-0 flex items-center justify-between py-2 px-2.5 rounded-2xl bg-black/75 backdrop-blur-md border border-white/10 text-on-surface mb-3 shadow-xl">
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
             <span class="font-headline-md text-[16px] font-bold tracking-tight text-white">Alpine Explorer 成就长图</span>
@@ -25,7 +24,7 @@
         </div>
 
         <!-- 海报生成与导出定制控制卡片 -->
-        <div class="w-full max-w-[390px] mb-3 p-3.5 rounded-2xl bg-surface-container/90 border border-white/10 space-y-3 select-none shadow-xl">
+        <div class="w-full max-w-[390px] shrink-0 mb-3 p-3.5 rounded-2xl bg-surface-container/90 border border-white/10 space-y-3 select-none shadow-xl">
           <div class="flex items-center justify-between border-b border-white/10 pb-2">
             <span class="text-[12px] font-bold text-white flex items-center gap-1.5">
               <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -112,10 +111,10 @@
           </div>
         </div>
 
-        <!-- 海报渲染容器 (用于 html2canvas 精准抓取) -->
+        <!-- 海报渲染容器 (用于 html2canvas 精准抓取，全高度自然展开) -->
         <div
           ref="posterRef"
-          class="alpine-poster-canvas w-full max-w-[390px] rounded-3xl overflow-hidden shadow-2xl relative select-none"
+          class="alpine-poster-canvas w-full max-w-[390px] shrink-0 rounded-3xl overflow-hidden shadow-2xl relative select-none"
           style="background: linear-gradient(180deg, #090d16 0%, #0d1320 50%, #090d16 100%); border: 1px solid rgba(255, 255, 255, 0.12);"
         >
           <!-- 背景拓扑微光与等高线纹理 -->
@@ -399,7 +398,7 @@
         </div>
 
         <!-- 弹窗底部操作按钮组 -->
-        <div class="w-full max-w-[390px] pt-4 pb-2 space-y-2.5">
+        <div class="w-full max-w-[390px] shrink-0 pt-4 pb-4 space-y-2.5">
           <button
             @click="handleSavePoster"
             :disabled="isGenerating"
@@ -424,7 +423,7 @@
         <!-- 生成成功后的图片就绪快捷入口条 -->
         <div
           v-if="generatedImageUrl"
-          class="w-full max-w-[390px] mt-2 p-3 rounded-2xl border border-emerald-400/30 bg-surface-container/90 text-center space-y-2 cursor-pointer active:scale-98 transition-transform"
+          class="w-full max-w-[390px] shrink-0 mt-2 p-3 rounded-2xl border border-emerald-400/30 bg-surface-container/90 text-center space-y-2 cursor-pointer active:scale-98 transition-transform"
           @click="isPosterReadyModalOpen = true"
         >
           <div class="text-[12px] text-emerald-400 font-semibold flex items-center justify-center gap-1.5">
@@ -447,12 +446,11 @@
     <Transition name="fade">
       <div
         v-if="isPosterReadyModalOpen"
-        class="fixed inset-0 z-[60] bg-black/95 backdrop-blur-lg flex flex-col justify-between pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] px-3 sm:px-6 select-none modal-backdrop-scroll-contain"
+        class="alpine-scroll-viewport fixed inset-0 z-[60] bg-black/95 backdrop-blur-lg flex flex-col justify-between pt-[calc(14px+max(env(safe-area-inset-top,0px),34px))] pb-[calc(14px+max(env(safe-area-inset-bottom,0px),16px))] px-3 sm:px-6 select-none modal-backdrop-scroll-contain"
         @click.self="isPosterReadyModalOpen = false"
-        @touchmove.self.prevent
       >
         <!-- 弹窗顶栏 -->
-        <div class="w-full max-w-md mx-auto flex items-center justify-between pb-2 text-white">
+        <div class="w-full max-w-md mx-auto flex items-center justify-between pb-2 text-white shrink-0">
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span class="font-bold text-[15px]">🎉 成就海报已就绪</span>
@@ -468,20 +466,20 @@
           </button>
         </div>
 
-        <!-- 核心图片展示区 -->
-        <div class="relative flex-1 flex flex-col items-center justify-center min-h-0 py-1 overflow-y-auto">
-          <div class="max-w-[360px] w-full rounded-2xl overflow-hidden border border-emerald-400/30 shadow-[0_0_30px_rgba(78,222,163,0.25)] bg-black/50">
+        <!-- 核心图片展示区 (长图自由平滑上下滚动检视) -->
+        <div class="relative flex-1 w-full min-h-0 py-2 overflow-y-auto alpine-scroll-viewport">
+          <div class="max-w-[360px] w-full mx-auto rounded-2xl overflow-hidden border border-emerald-400/30 shadow-[0_0_30px_rgba(78,222,163,0.25)] bg-black/50">
             <img
               :src="generatedImageUrl"
               alt="Alpine Explorer 成就长图海报"
-              class="w-full h-auto block max-h-[60vh] object-contain mx-auto select-auto"
+              class="w-full h-auto block select-auto"
             />
           </div>
 
           <!-- 保存状态反馈气泡 -->
           <div
             v-if="isNativeApp"
-            class="mt-2.5 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 shadow-sm"
+            class="mt-3 max-w-[360px] mx-auto px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 shadow-sm"
           >
             <svg class="w-3.5 h-3.5 shrink-0 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -490,7 +488,7 @@
           </div>
           <div
             v-else
-            class="mt-2.5 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 shadow-sm"
+            class="mt-3 max-w-[360px] mx-auto px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-[11px] font-mono flex items-center gap-1.5 shadow-sm"
           >
             <svg class="w-3.5 h-3.5 shrink-0 text-emerald-400" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
@@ -500,7 +498,7 @@
         </div>
 
         <!-- 底部快捷动作栏 (物理按钮一键操作，无需长按) -->
-        <div class="w-full max-w-md mx-auto pt-2 space-y-2">
+        <div class="w-full max-w-md mx-auto pt-2 space-y-2 shrink-0">
           <div class="grid grid-cols-2 gap-2">
             <button
               @click="saveToGalleryDirectly()"
@@ -799,7 +797,7 @@ async function handleSystemShare() {
 }
 
 /**
- * 渲染海报并直接触发保存到系统相册
+ * 渲染海报并直接触发保存到系统相册 (彻底杜绝视口高度截断与偏移)
  */
 async function handleSavePoster() {
   if (isGenerating.value) return;
@@ -811,12 +809,52 @@ async function handleSavePoster() {
     const html2canvasModule = await import('html2canvas');
     const html2canvas = html2canvasModule.default || html2canvasModule;
 
-    const canvas = await html2canvas(posterRef.value, {
+    const el = posterRef.value;
+    const fullWidth = el.offsetWidth || 390;
+    const fullHeight = el.scrollHeight;
+
+    const canvas = await html2canvas(el, {
       scale: 2,
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#090d16',
-      logging: false
+      logging: false,
+      width: fullWidth,
+      height: fullHeight,
+      windowWidth: fullWidth,
+      windowHeight: fullHeight + 200,
+      x: 0,
+      y: 0,
+      scrollX: 0,
+      scrollY: 0,
+      onclone: (clonedDoc, clonedEl) => {
+        // 1. 递归释放克隆树上所有父级容器的任何高度与滚动裁剪
+        let parent = clonedEl.parentElement;
+        while (parent && parent !== clonedDoc.body) {
+          parent.style.overflow = 'visible';
+          parent.style.maxHeight = 'none';
+          parent.style.height = 'auto';
+          parent.style.transform = 'none';
+          parent.style.padding = '0';
+          parent.style.margin = '0';
+          parent = parent.parentElement;
+        }
+
+        // 2. 将海报节点自身从原点平铺并展开完整视网膜全高
+        clonedEl.style.position = 'static';
+        clonedEl.style.margin = '0 auto';
+        clonedEl.style.transform = 'none';
+        clonedEl.style.width = `${fullWidth}px`;
+        clonedEl.style.height = `${fullHeight}px`;
+        clonedEl.style.maxHeight = 'none';
+        clonedEl.style.overflow = 'visible';
+
+        // 3. 确保所有实拍照片标签完整展示
+        const imgs = clonedEl.querySelectorAll('img');
+        imgs.forEach((img) => {
+          img.style.maxHeight = 'none';
+        });
+      }
     });
 
     const dataUrl = canvas.toDataURL('image/png');
@@ -848,5 +886,25 @@ async function handleSavePoster() {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.alpine-poster-modal {
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+}
+
+.alpine-poster-modal > * {
+  flex-shrink: 0 !important;
+}
+
+.alpine-scroll-viewport {
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+}
+
+.alpine-poster-canvas {
+  touch-action: pan-y !important;
 }
 </style>
