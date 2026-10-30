@@ -9,9 +9,9 @@
 [![Vite](https://img.shields.io/badge/Vite-5.4.21-646cff?style=flat-square&logo=vite)](https://vitejs.dev/)
 [![Capacitor](https://img.shields.io/badge/Capacitor-8.0-119EFF?style=flat-square&logo=capacitor)](https://capacitorjs.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-4edea3.svg?style=flat-square)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20PWA%20%7C%20Android-green?style=flat-square)]()
-[![Version](https://img.shields.io/badge/Version-v0.0.1.003-blue?style=flat-square)]()
+[![License: MIT](https://img.shields.io/badge/license-MIT-4edea3?style=flat-square)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Android_|_PWA_|_Web-34d399?style=flat-square)](releases/)
+[![Version](https://img.shields.io/badge/version-v0.2.0-2563eb?style=flat-square)](https://github.com/lylyuanliang/weekly-mountain/releases)
 
 <p align="center">
   <a href="#-核心特性">核心特性</a> •
@@ -30,7 +30,7 @@
 
 《每周一山 · 成都周边 50 座山》（Alpine Explorer）打破了传统户外攻略零散、图层迟钝与信息过时的痛点。项目基于 **暗黑高山拓扑设计系统（Stitch Dark Alpine Architecture）** 构建，将 51 座成都周边及川西名山的地理测绘、路线轨迹、实景影像、行车导航、气象遥测与打卡成就深度融合，提供 0ms 极速响应、原生级触控手感及离线可用的户外探索体验。
 
-无论你是刚入坑的初级周末徒步者（L1~L2 轻松休闲），还是追求极高山雪线挑战的硬核驴友（L3~L5 进阶重装），都能在指尖快速锁定下一座山峰。
+无论你是刚入坑的初级周末徒步者（L1～L2 轻松休闲），还是追求极高山雪线挑战的硬核驴友（L3～L5 进阶重装），都能在指尖快速锁定下一座山峰。
 
 ---
 
