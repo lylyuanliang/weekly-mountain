@@ -318,11 +318,13 @@
           </div>
           <div class="absolute inset-0 bg-gradient-to-t from-surface-container via-surface-container/35 to-transparent pointer-events-none isolated-composited-layer"></div>
 
-          <!-- Top Chips on Hero Image -->
+          <!-- Top Chips on Hero Image (Solid Obsidian Backgrounds, 0 Backdrop-Blur to Prevent Mobile GPU Ghosting) -->
           <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-10 pointer-events-none isolated-composited-layer">
-            <span class="px-2.5 py-1 rounded-full bg-surface-container-lowest/80 backdrop-blur-md text-[11px] font-mono font-semibold text-secondary border border-secondary/30 flex items-center gap-1">
-              <span class="material-symbols-outlined text-[14px]">explore</span>
-              梯队 {{ mountain.group || 'A' }} 组 · {{ mountain.county_short || locationShort }}
+            <span class="pl-1.5 pr-2.5 py-1 rounded-full bg-black/85 text-[11px] font-mono font-semibold text-white border border-white/20 flex items-center gap-1.5 shadow-md">
+              <span class="w-5 h-5 rounded-full bg-secondary/30 text-secondary border border-secondary/50 flex items-center justify-center flex-shrink-0 shadow-sm">
+                <span class="material-symbols-outlined text-[13px] font-bold">explore</span>
+              </span>
+              <span>梯队 {{ mountain.group || 'A' }} 组 · {{ mountain.county_short || locationShort }}</span>
             </span>
 
             <div class="flex items-center gap-1.5 pointer-events-auto">
@@ -330,7 +332,7 @@
               <button
                 type="button"
                 @click.stop="openLightbox(currentImageIndex)"
-                class="px-2 py-0.5 rounded-full bg-surface-container-lowest/80 backdrop-blur-md text-[11px] font-mono font-bold text-primary border border-primary/30 flex items-center gap-1 hover:bg-surface-container-high active:scale-95 transition-all shadow"
+                class="px-2 py-0.5 rounded-full bg-[#0d131a]/92 text-[11px] font-mono font-bold text-primary border border-primary/35 flex items-center gap-1 hover:bg-surface-container-high active:scale-95 transition-all shadow-sm"
                 title="轻触全屏放大画廊"
               >
                 <span class="material-symbols-outlined text-[13px]">photo_library</span>
@@ -338,7 +340,7 @@
               </button>
 
               <!-- Weather Chip -->
-              <span class="px-2 py-0.5 rounded-full bg-surface-container-lowest/80 backdrop-blur-md text-[11px] font-mono text-tertiary-fixed-dim border border-tertiary/30 flex items-center gap-1">
+              <span class="px-2 py-0.5 rounded-full bg-[#0d131a]/92 text-[11px] font-mono text-tertiary-fixed-dim border border-tertiary/35 flex items-center gap-1 shadow-sm">
                 <span class="material-symbols-outlined text-[13px] text-tertiary-fixed-dim">wb_sunny</span>
                 {{ weatherCondition }}
               </span>
@@ -351,7 +353,7 @@
             type="button"
             @click.stop="prevImage"
             aria-label="查看上一张图片"
-            class="gallery-arrow-btn absolute left-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full frost-glass border border-outline-variant/30 flex items-center justify-center text-on-surface hover:text-primary active:scale-95 transition-all opacity-70 group-hover:opacity-100 shadow-md"
+            class="gallery-arrow-btn absolute left-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/65 border border-outline-variant/35 flex items-center justify-center text-on-surface hover:text-primary active:scale-95 transition-all opacity-70 group-hover:opacity-100 shadow-md"
           >
             <span class="material-symbols-outlined text-[18px]">chevron_left</span>
           </button>
@@ -360,7 +362,7 @@
             type="button"
             @click.stop="nextImage"
             aria-label="查看下一张图片"
-            class="gallery-arrow-btn absolute right-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full frost-glass border border-outline-variant/30 flex items-center justify-center text-on-surface hover:text-primary active:scale-95 transition-all opacity-70 group-hover:opacity-100 shadow-md"
+            class="gallery-arrow-btn absolute right-2 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-black/65 border border-outline-variant/35 flex items-center justify-center text-on-surface hover:text-primary active:scale-95 transition-all opacity-70 group-hover:opacity-100 shadow-md"
           >
             <span class="material-symbols-outlined text-[18px]">chevron_right</span>
           </button>
@@ -574,11 +576,20 @@
             </span>
           </div>
 
+          <!-- 真实高德底图多路线地图轨迹对比系统 -->
+          <RouteTrajectoryMap
+            :mountain="mountain"
+            v-model="activeRouteMapIndex"
+            class="my-2"
+          />
+
           <div v-if="mountain.routes && mountain.routes.length" class="space-y-2.5">
             <div
               v-for="(r, idx) in mountain.routes"
               :key="`route-${idx}`"
-              class="p-3 rounded-xl bg-surface-container-low/70 border border-outline-variant/20 space-y-1.5"
+              class="p-3 rounded-xl bg-surface-container-low/70 border space-y-1.5 cursor-pointer transition-all duration-200"
+              :class="activeRouteMapIndex === idx ? 'border-secondary/60 bg-surface-container/90 ring-1 ring-secondary/30' : 'border-outline-variant/20 hover:border-outline-variant/40'"
+              @click="activeRouteMapIndex = (activeRouteMapIndex === idx ? null : idx)"
             >
               <div class="flex items-center justify-between">
                 <span class="text-body-md font-bold text-on-surface flex items-center gap-1.5">
@@ -1451,6 +1462,7 @@ import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { usePlanStore } from '@/stores/planStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
 import RouteElevationChart from '@/components/detail/RouteElevationChart.vue';
+import RouteTrajectoryMap from '@/components/detail/RouteTrajectoryMap.vue';
 import CheckinDetailModal from '@/components/checkin/CheckinDetailModal.vue';
 import MountainWeatherCard from '@/components/weather/MountainWeatherCard.vue';
 import {
@@ -1501,6 +1513,7 @@ function preventAsideScroll(e) {
   }
 }
 const activeAnchor = ref('overview');
+const activeRouteMapIndex = ref(null);
 const gearCheckedMap = reactive({});
 
 // ================= 多图相册与全屏 Lightbox 画廊状态 =================
