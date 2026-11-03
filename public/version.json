@@ -1,12 +1,12 @@
 {
-  "version": "0.2.0.202610301337",
-  "versionTag": "v0.2.0.202610301337",
-  "title": "v0.2.0.202610301337 体验与真机联调增强版",
-  "publishedAt": "2026-10-30",
-  "changelog": "1. 【重大修复】彻底修复成就长图海报预览与导出的截断问题：解决 Flex 弹性挤压与手势拦截，海报现已全高度自然展开且支持顺畅上下滑动检视；\n2. 【导出升级】升级 html2canvas 视网膜全高度捕获算法，导出的高清海报 100% 完整包含所有登顶照片、心得纪实、防伪编码与认证印章，告别硬生生截断；\n3. 【架构纯净】全面切换为 npm 官方源 @lylyuanliang/agent-feedback@1.1.0 架构，彻底消除本地路径依赖；\n4. 哨兵原生伴随 DevServer 自动启停与常驻守护，端侧反馈自动防抖聚合与自愈闭环；\n5. Android 原生安装包自动清理与断点续传流式更新持续保持最平滑体验。",
-  "assetName": "weekly-mountain-v0.2.0.202610301337-debug.apk",
+  "version": "0.2.0.202611031641",
+  "versionTag": "v0.2.0.202611031641",
+  "title": "v0.2.0.202611031641 成都周边50座山高精度真实轨迹与多路线对比系统",
+  "publishedAt": "2026-11-03",
+  "changelog": "1. 【重磅功能】新增成都周边50座山高精度真实GPS/拓扑轨迹数据，支持真实高德暗夜底图与多路线交互对比、航点标注与全屏沉浸式探索；\n2. 【打卡与交互】重构周计划时间轴渲染逻辑，修复打卡按钮与山峰卡片映射错位，优化一键打卡即时轻提示；\n3. 【真机与画质】详情页去除易导致手机端GPU重影的背景模糊效果，全面提升低端机型渲染帧率；\n4. 【哨兵诊断】升级端侧大文件切片流式上传与录屏视频播放支持，复杂场景体验问题可视化闭环自愈。",
+  "assetName": "weekly-mountain-v0.2.0.202611031641-debug.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610301337/weekly-mountain-v0.2.0.202610301337-debug.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610301337/weekly-mountain-v0.2.0.202610301337-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202610301337/weekly-mountain-v0.2.0.202610301337-release.apk"
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202611031641/weekly-mountain-v0.2.0.202611031641-debug.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202611031641/weekly-mountain-v0.2.0.202611031641-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202611031641/weekly-mountain-v0.2.0.202611031641-release.apk"
 }
