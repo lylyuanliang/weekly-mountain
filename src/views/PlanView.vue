@@ -159,32 +159,32 @@
       <!-- Timeline Container -->
       <div
         v-else
-        class="relative pl-3 space-y-space-lg before:content-[''] before:absolute before:left-[11px] before:top-3 before:bottom-3 before:w-[1.5px] before:bg-gradient-to-b before:from-primary before:via-secondary before:to-outline-variant/40"
+        class="relative pl-7 space-y-space-lg before:content-[''] before:absolute before:left-[9px] before:top-3.5 before:bottom-3.5 before:w-[2px] before:bg-gradient-to-b before:from-primary before:via-secondary before:to-outline-variant/40"
       >
         <!-- Cards -->
         <div
           v-for="week in planStore.plans"
           :key="week.week"
-          class="timeline-week-card relative pl-6"
+          class="timeline-week-card relative"
         >
           <!-- Timeline Node Indicator -->
           <div
             v-if="isWeekCompleted(week)"
-            class="absolute -left-[5px] top-4 w-5 h-5 rounded-full bg-surface-container-lowest border-2 border-primary flex items-center justify-center shadow-[0_0_8px_rgba(16,185,129,0.8)] z-10"
+            class="absolute -left-[28px] top-4 w-5 h-5 rounded-full bg-surface-container-lowest border-2 border-primary flex items-center justify-center shadow-[0_0_8px_rgba(16,185,129,0.8)] z-10"
             title="本周已完成"
           >
             <span class="material-symbols-outlined text-[12px] text-primary font-bold">check</span>
           </div>
           <div
             v-else-if="week.week === currentActiveWeekNum"
-            class="absolute -left-[5px] top-4 w-5 h-5 rounded-full bg-secondary-container border-2 border-secondary flex items-center justify-center glow-secondary z-10 animate-pulse"
+            class="absolute -left-[28px] top-4 w-5 h-5 rounded-full bg-secondary-container border-2 border-secondary flex items-center justify-center glow-secondary z-10 animate-pulse"
             title="进行中"
           >
             <span class="w-2 h-2 rounded-full bg-on-secondary"></span>
           </div>
           <div
             v-else
-            class="absolute -left-[5px] top-4 w-5 h-5 rounded-full bg-surface-container-lowest border-2 border-tertiary flex items-center justify-center glow-tertiary z-10"
+            class="absolute -left-[28px] top-4 w-5 h-5 rounded-full bg-surface-container-lowest border-2 border-tertiary flex items-center justify-center glow-tertiary z-10"
             title="预定规划中"
           >
             <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
@@ -225,86 +225,88 @@
               本周尚未添加目标山峰
             </div>
 
-            <div
-              v-for="m in getWeekMountains(week)"
-              :key="m.id"
-              @click="openMountainDetail(m)"
-              class="flex gap-3 items-center pt-1 cursor-pointer hover:bg-white/[0.03] active:scale-[0.99] transition-all rounded-xl p-1 -m-1"
-              title="点击查看名山详情与路网路线"
-            >
-              <!-- Thumbnail -->
-              <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 relative border border-white/10 bg-surface-container-low">
-                <img
-                  v-if="m.cover_image || m.id"
-                  :src="m.cover_image || `assets/mountains/${m.id}.jpg`"
-                  :alt="m.name"
-                  class="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div v-else class="w-full h-full flex items-center justify-center bg-surface-container-high text-outline">
-                  <span class="material-symbols-outlined text-[24px]">terrain</span>
-                </div>
-                <div class="absolute bottom-0 inset-x-0 bg-surface-container-lowest/80 text-center font-label-data-sm text-[9px] text-on-surface py-0.5">
-                  {{ m.altitude_m || derivedNums(m).alt }}m
-                </div>
-              </div>
-
-              <!-- Main Info -->
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between">
-                  <h4 class="font-headline-md text-[14px] font-bold text-on-surface truncate">{{ m.name }}</h4>
-                  <span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-label-data-sm text-[9px] shrink-0">
-                    {{ m.difficulty || 'L2' }}
-                  </span>
-                </div>
-                <p class="font-body-sm text-[11px] text-on-surface-variant truncate mt-0.5">
-                  {{ m.subtitle || m.tags?.[0] || `${regionStore.currentRegion.name}名山` }}
-                </p>
-                <div class="flex items-center gap-2 mt-1 text-on-surface-variant font-label-data-sm text-[10px]">
-                  <span class="flex items-center gap-0.5 text-primary">
-                    <span class="material-symbols-outlined text-[11px]">trending_up</span>
-                    +{{ derivedNums(m).asc }}m
-                  </span>
-                  <span>·</span>
-                  <span class="flex items-center gap-0.5 text-secondary">
-                    <span class="material-symbols-outlined text-[11px]">directions_car</span>
-                    {{ m.drive_hours || m.car_time_h || 2 }}h
-                  </span>
-                  <span>·</span>
-                  <span>{{ derivedNums(m).dist }}km</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card Action Footer -->
-            <div class="pt-2 border-t border-white/5 flex items-center justify-between text-on-surface-variant font-label-data-sm text-[10px]">
+            <!-- 名山实体卡片列表：各名山独立卡片，打卡与移除操作内聚于对应山峰下方 -->
+            <div v-else class="space-y-2.5">
               <div
                 v-for="m in getWeekMountains(week)"
-                :key="'act-' + m.id"
-                class="w-full flex items-center justify-between gap-2"
+                :key="m.id"
+                class="rounded-xl bg-surface-container-lowest/50 border border-white/5 p-2.5 space-y-2 hover:border-white/10 transition-all"
               >
-                <button
-                  @click.stop="handleCheckinBtn(m)"
-                  class="flex items-center gap-1.5 py-1 px-2.5 rounded-lg text-[11px] transition-all"
-                  :class="checkinStore.isDone(m.id)
-                    ? 'bg-primary/20 text-primary border border-primary/40 font-semibold shadow-[0_0_10px_rgba(78,222,163,0.15)]'
-                    : 'bg-surface-container-high/80 text-on-surface hover:text-primary border border-white/10'"
-                  :title="checkinStore.isDone(m.id) ? '查看与编辑打卡纪实' : '快速打卡确认'"
+                <!-- Mountain Main Info Row (Click to open detail) -->
+                <div
+                  @click="openMountainDetail(m)"
+                  class="flex gap-3 items-center cursor-pointer active:scale-[0.99] transition-all"
+                  title="点击查看名山详情与路网路线"
                 >
-                  <span class="material-symbols-outlined text-[14px]" :class="{ fill: checkinStore.isDone(m.id) }">
-                    {{ checkinStore.isDone(m.id) ? 'verified' : 'check_circle' }}
-                  </span>
-                  <span>{{ checkinStore.isDone(m.id) ? '✓ 已打卡 · 纪实' : '打卡确认' }}</span>
-                </button>
+                  <!-- Thumbnail -->
+                  <div class="w-14 h-14 rounded-lg overflow-hidden shrink-0 relative border border-white/10 bg-surface-container-low">
+                    <img
+                      v-if="m.cover_image || m.id"
+                      :src="m.cover_image || `assets/mountains/${m.id}.jpg`"
+                      :alt="m.name"
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div v-else class="w-full h-full flex items-center justify-center bg-surface-container-high text-outline">
+                      <span class="material-symbols-outlined text-[24px]">terrain</span>
+                    </div>
+                    <div class="absolute bottom-0 inset-x-0 bg-surface-container-lowest/80 text-center font-label-data-sm text-[9px] text-on-surface py-0.5">
+                      {{ m.altitude_m || derivedNums(m).alt }}m
+                    </div>
+                  </div>
 
-                <button
-                  @click="planStore.removeFromPlan(m.id, week.week)"
-                  class="text-on-surface-variant hover:text-error p-1 text-[11px] flex items-center gap-0.5"
-                  title="从周计划移除"
-                >
-                  <span class="material-symbols-outlined text-[14px]">remove_circle_outline</span>
-                  <span>移除</span>
-                </button>
+                  <!-- Main Info -->
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <h4 class="font-headline-md text-[14px] font-bold text-on-surface truncate">{{ m.name }}</h4>
+                      <span class="px-1.5 py-0.5 rounded bg-primary/10 text-primary font-label-data-sm text-[9px] shrink-0">
+                        {{ m.difficulty || 'L2' }}
+                      </span>
+                    </div>
+                    <p class="font-body-sm text-[11px] text-on-surface-variant truncate mt-0.5">
+                      {{ m.subtitle || m.tags?.[0] || `${regionStore.currentRegion.name}名山` }}
+                    </p>
+                    <div class="flex items-center gap-2 mt-1 text-on-surface-variant font-label-data-sm text-[10px]">
+                      <span class="flex items-center gap-0.5 text-primary">
+                        <span class="material-symbols-outlined text-[11px]">trending_up</span>
+                        +{{ derivedNums(m).asc }}m
+                      </span>
+                      <span>·</span>
+                      <span class="flex items-center gap-0.5 text-secondary">
+                        <span class="material-symbols-outlined text-[11px]">directions_car</span>
+                        {{ m.drive_hours || m.car_time_h || 2 }}h
+                      </span>
+                      <span>·</span>
+                      <span>{{ derivedNums(m).dist }}km</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Mountain Action Row: 严格附属在当前名山下方 -->
+                <div class="pt-2 border-t border-white/5 flex items-center justify-between text-on-surface-variant font-label-data-sm text-[10px]">
+                  <button
+                    @click.stop="handleCheckinBtn(m)"
+                    class="flex items-center gap-1.5 py-1 px-3 rounded-lg text-[11px] transition-all"
+                    :class="checkinStore.isDone(m.id)
+                      ? 'bg-primary/20 text-primary border border-primary/40 font-semibold shadow-[0_0_10px_rgba(78,222,163,0.15)]'
+                      : 'bg-surface-container-high/80 text-on-surface hover:text-primary border border-white/10 active:scale-95'"
+                    :title="checkinStore.isDone(m.id) ? '查看与编辑打卡纪实' : '快速打卡确认'"
+                  >
+                    <span class="material-symbols-outlined text-[14px]" :class="{ fill: checkinStore.isDone(m.id) }">
+                      {{ checkinStore.isDone(m.id) ? 'verified' : 'check_circle' }}
+                    </span>
+                    <span>{{ checkinStore.isDone(m.id) ? '✓ 已打卡 · 纪实' : '打卡确认' }}</span>
+                  </button>
+
+                  <button
+                    @click.stop="planStore.removeFromPlan(m.id, week.week)"
+                    class="text-on-surface-variant hover:text-error p-1 text-[11px] flex items-center gap-0.5 active:scale-95 transition-colors"
+                    title="从周计划移除"
+                  >
+                    <span class="material-symbols-outlined text-[14px]">remove_circle_outline</span>
+                    <span>移除</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
