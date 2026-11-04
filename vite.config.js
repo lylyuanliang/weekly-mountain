@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import fs from 'node:fs'
 import path from 'node:path'
+import crypto from 'node:crypto'
 import agentFeedback from '@lylyuanliang/agent-feedback-vite-plugin'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
@@ -282,6 +283,44 @@ function viteApkReleasePlugin() {
   }
 }
 
+/**
+ * 解析并生成端侧配对授权安全配置
+ * 遵守安全基线：开发机明文秘钥仅留存本地未跟踪文件或环境变量，编译期仅下发 SHA-256 哈希值
+ */
+function resolveAccessControlConfig() {
+  const secretFile = path.resolve(__dirname, 'scratch', '.agent-feedback-secret');
+  let secret = process.env.AGENT_FEEDBACK_SECRET || '';
+  if (!secret) {
+    if (fs.existsSync(secretFile)) {
+      try {
+        secret = fs.readFileSync(secretFile, 'utf8').trim();
+      } catch (e) {
+        // ignore
+      }
+    }
+    if (!secret) {
+      secret = 'wm-' + crypto.randomBytes(4).toString('hex');
+      try {
+        if (!fs.existsSync(path.dirname(secretFile))) {
+          fs.mkdirSync(path.dirname(secretFile), { recursive: true });
+        }
+        fs.writeFileSync(secretFile, secret, 'utf8');
+      } catch (e) {
+        // ignore
+      }
+    }
+  }
+
+  const keyHash = crypto.createHash('sha256').update(secret).digest('hex');
+  return {
+    enabled: true,
+    keyHash,
+    storageKey: 'wm_debug_access_key',
+    promptTitle: '受限访问保护',
+    promptMessage: '当前调试版内含开发机 AI 哨兵直连通道，仅对授权协作者开放。请在下方输入开发机生成的配对密钥解锁；普通用户如遇山峰数据或应用问题，请前往官方 GitHub Issues 提交。'
+  };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
@@ -289,11 +328,17 @@ export default defineConfig({
     vue(),
     // 接入每周一山业务专属 APK 更新服务 (前置兼容改写)
     viteApkReleasePlugin(),
-    // 接入通用 @agent-feedback/vite-plugin 插件 (哨兵自动生命周期托管)
+    // 接入通用 @agent-feedback/vite-plugin 插件 (哨兵自动生命周期托管 + v1.3.0 安全门禁与宿主渠道)
     agentFeedback({
       storageDir: 'scratch/feedback',
       theme: 'dark',
       primaryColor: '#4edea3',
+      hostChannel: {
+        name: 'GitHub Issues',
+        url: 'https://github.com/lylyuanliang/weekly-mountain/issues',
+        description: '未持有内测密钥时，请前往官方 GitHub 提交建议与问题反馈'
+      },
+      accessControl: resolveAccessControlConfig(),
       sentinel: {
         autoStart: true,
         debounceSeconds: 10
@@ -304,6 +349,9 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  optimizeDeps: {
+    exclude: ['@lylyuanliang/agent-feedback-client', '@lylyuanliang/agent-feedback-core']
   },
   server: {
     host: true,

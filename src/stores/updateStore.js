@@ -116,6 +116,27 @@ export const useUpdateStore = defineStore('update', () => {
   }
 
   /**
+   * 打开安装包下载选择弹窗 (常用于 Web 网页版暴露下载或用户主动查看)
+   */
+  async function openDownloadModal() {
+    isModalOpen.value = true;
+    errorMessage.value = '';
+    if (latestRelease.value) {
+      return;
+    }
+    isChecking.value = true;
+    try {
+      const release = await fetchLatestRelease();
+      latestRelease.value = release;
+    } catch (err) {
+      console.warn('[updateStore] 获取安装包下载信息异常:', err);
+      errorMessage.value = err.message || '获取安装包信息失败，请检查网络连接';
+    } finally {
+      isChecking.value = false;
+    }
+  }
+
+  /**
    * 开始下载并安装 APK
    * @param {'release' | 'debug' | null} variant 指定下载安装包变体
    */
@@ -192,6 +213,7 @@ export const useUpdateStore = defineStore('update', () => {
       cancelDownload,
       openInstallPermissionSettings,
       openModal,
+      openDownloadModal,
       closeModal,
       setMockRelease(release, forceStatus = null) {
         latestRelease.value = release;
@@ -233,6 +255,7 @@ export const useUpdateStore = defineStore('update', () => {
     cancelDownload,
     openInstallPermissionSettings,
     openModal,
+    openDownloadModal,
     closeModal
   };
 });

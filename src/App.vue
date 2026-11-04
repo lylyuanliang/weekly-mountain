@@ -15,8 +15,8 @@
       <!-- First-Launch Mandatory Safety & Legal Disclaimer Modal -->
       <LegalDisclaimerModal v-model="isDisclaimerOpen" :mandatory="true" />
 
-      <!-- Official In-App Online Update Modal (仅原生 App 容器形态挂载) -->
-      <AppUpdateModal v-if="isNativeAppEnv" />
+      <!-- Official In-App Online Update & APK Download Modal -->
+      <AppUpdateModal />
     </div>
   </div>
 </template>

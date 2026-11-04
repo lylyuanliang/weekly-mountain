@@ -21,21 +21,26 @@
                   :class="updateStore.versionDiffStatus === 'ahead_of_release' ? 'bg-cyan-500/20 border border-cyan-500/40 text-cyan-400' : 'bg-primary/20 border border-primary/30 text-primary'"
                 >
                   <span class="material-symbols-outlined text-[24px]">
-                    {{ updateStore.errorMessage ? 'info' : (updateStore.hasUpdate ? 'system_update' : (updateStore.versionDiffStatus === 'ahead_of_release' ? 'rocket_launch' : 'verified')) }}
+                    {{ updateStore.errorMessage ? 'info' : (!isNativeAppEnv ? 'android' : (updateStore.hasUpdate ? 'system_update' : (updateStore.versionDiffStatus === 'ahead_of_release' ? 'rocket_launch' : 'verified'))) }}
                   </span>
                 </div>
                 <div>
                   <h3 class="font-headline-md text-base font-bold text-on-surface flex items-center gap-1.5">
-                    {{ updateStore.errorMessage ? '更新检测提示' : (updateStore.hasUpdate ? '发现新版本' : (updateStore.versionDiffStatus === 'ahead_of_release' ? '当前为先行内测版' : '当前已是最新版')) }}
+                    {{ updateStore.errorMessage ? '更新检测提示' : (!isNativeAppEnv ? 'Android 客户端下载' : (updateStore.hasUpdate ? '发现新版本' : (updateStore.versionDiffStatus === 'ahead_of_release' ? '当前为先行内测版' : '当前已是最新版'))) }}
                   </h3>
                   <div class="flex items-center gap-2 mt-0.5 text-[11px] text-on-surface-variant">
-                    <span>当前: v{{ currentVersion }}</span>
-                    <span v-if="!updateStore.errorMessage && updateStore.hasUpdate && updateStore.latestRelease" class="text-primary font-semibold">
-                      ➔ v{{ updateStore.latestRelease.version }}
-                    </span>
-                    <span v-else-if="!updateStore.errorMessage && updateStore.versionDiffStatus === 'ahead_of_release' && updateStore.latestRelease" class="text-cyan-400 font-semibold">
-                      (领先官方 v{{ updateStore.latestRelease.version }})
-                    </span>
+                    <template v-if="!isNativeAppEnv">
+                      <span>{{ updateStore.latestRelease ? `最新发布: v${updateStore.latestRelease.version}` : '官方 Android 客户端' }}</span>
+                    </template>
+                    <template v-else>
+                      <span>当前: v{{ currentVersion }}</span>
+                      <span v-if="!updateStore.errorMessage && updateStore.hasUpdate && updateStore.latestRelease" class="text-primary font-semibold">
+                        ➔ v{{ updateStore.latestRelease.version }}
+                      </span>
+                      <span v-else-if="!updateStore.errorMessage && updateStore.versionDiffStatus === 'ahead_of_release' && updateStore.latestRelease" class="text-cyan-400 font-semibold">
+                        (领先官方 v{{ updateStore.latestRelease.version }})
+                      </span>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -55,8 +60,16 @@
 
           <!-- Modal Body Content -->
           <div class="p-5 flex-1 flex flex-col space-y-4 max-h-[60vh] overflow-y-auto overscroll-contain" style="overscroll-behavior: contain; -webkit-overflow-scrolling: touch;">
-            <!-- 状态 A: 存在新版本，准备升级 -->
-            <div v-if="updateStore.hasUpdate && updateStore.downloadStatus === 'idle'" class="space-y-3.5">
+            <!-- 状态 0: 正在检测或拉取最新安装包元数据 -->
+            <div v-if="updateStore.isChecking" class="py-8 flex flex-col items-center justify-center text-center space-y-3">
+              <div class="w-10 h-10 rounded-full border-2 border-primary border-t-transparent animate-spin flex items-center justify-center">
+                <span class="material-symbols-outlined text-[20px] text-primary">sync</span>
+              </div>
+              <p class="text-xs text-on-surface-variant font-mono">正在拉取最新安装包与版本信息...</p>
+            </div>
+
+            <!-- 状态 A: 存在新版本或处于 Web 下载模式，准备升级/下载 -->
+            <div v-else-if="(!isNativeAppEnv || updateStore.hasUpdate) && updateStore.downloadStatus === 'idle'" class="space-y-3.5">
               <!-- Version metadata chips -->
               <div class="flex items-center justify-between text-xs px-3 py-2 rounded-xl bg-surface-container/60 border border-outline-variant/20">
                 <span class="text-on-surface-variant flex items-center gap-1">
@@ -217,15 +230,15 @@
 
           <!-- Modal Footer Actions -->
           <div class="p-4 pt-3 bg-surface-container/40 border-t border-outline-variant/20 flex flex-col gap-2">
-            <!-- 状态 A 动作按钮：立即在线更新 -->
-            <template v-if="updateStore.hasUpdate && updateStore.downloadStatus === 'idle'">
+            <!-- 状态 A 动作按钮：立即在线更新 / 下载 -->
+            <template v-if="(!isNativeAppEnv || updateStore.hasUpdate) && updateStore.downloadStatus === 'idle'">
               <button
                 type="button"
                 @click="updateStore.startDownloadAndInstall(selectedVariant)"
                 class="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-medium text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30 active:scale-[0.98] transition-all"
               >
                 <span class="material-symbols-outlined text-[18px]">download</span>
-                <span>立即在线升级【{{ selectedVariant === 'debug' ? '调试版' : '正式版' }}】</span>
+                <span>{{ isNativeAppEnv ? '立即在线升级' : '立即下载' }}【{{ selectedVariant === 'debug' ? '调试版' : '正式版' }}】</span>
               </button>
               <button
                 type="button"
@@ -325,9 +338,11 @@ import { useScrollLock } from '@/composables/useScrollLock.js';
 import { APP_VERSION } from '@/config/version.js';
 import { formatBytes } from '@/services/updateService.js';
 import { openExternalUrl } from '@/utils/appLauncher.js';
+import { isNativeApp } from '@/utils/platform.js';
 
 const updateStore = useUpdateStore();
 const selectedVariant = ref('release'); // 默认优选纯净正式版，亦可切换为调试版
+const isNativeAppEnv = isNativeApp();
 
 // 彻底杜绝底层页面背景滚动穿透
 useScrollLock(() => updateStore.isModalOpen);

@@ -1109,39 +1109,33 @@
 
 
         <!-- 检查更新按钮 (仅在原生 App 容器环境下展示) -->
-
         <button
-
           v-if="isNativeAppEnv"
-
           type="button"
-
           @click="updateStore.checkForUpdate(false)"
-
           :disabled="updateStore.isChecking"
-
           class="btn-check-update relative inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 text-[10px] text-on-surface active:scale-95 transition-all"
-
         >
-
           <span class="material-symbols-outlined text-[12px]" :class="{ 'animate-spin': updateStore.isChecking }">
-
             {{ updateStore.isChecking ? 'progress_activity' : 'sync' }}
-
           </span>
-
           <span>{{ updateStore.isChecking ? '检测中...' : '检查更新' }}</span>
-
           <!-- 红点标记 -->
-
           <span
-
             v-if="updateStore.hasUpdate"
-
             class="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_6px_#ef4444]"
-
           ></span>
+        </button>
 
+        <!-- 下载 Android App 按钮 (仅在 Web 网页版环境下展示) -->
+        <button
+          v-else
+          type="button"
+          @click="updateStore.openDownloadModal()"
+          class="btn-download-apk relative inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-[10px] text-emerald-300 active:scale-95 transition-all shadow-sm"
+        >
+          <span class="material-symbols-outlined text-[12px]">android</span>
+          <span>下载 Android App</span>
         </button>
 
       </div>
@@ -1155,13 +1149,20 @@
 
 
       <!-- 社区开源反馈与安全法律免责常设入口矩阵 -->
-
       <div class="pt-2 flex items-center justify-center gap-2 flex-wrap px-4">
+        <!-- Web 网页端专属 Android 客户端下载入口 -->
+        <button
+          v-if="!isNativeAppEnv"
+          type="button"
+          @click="updateStore.openDownloadModal()"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-[11px] text-emerald-300 hover:text-emerald-200 transition-all active:scale-95 shadow-sm"
+        >
+          <span class="material-symbols-outlined text-[14px]">install_mobile</span>
+          <span>下载 Android 客户端</span>
+        </button>
 
         <button
-
           type="button"
-
           @click="openGitHubIssues"
 
           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container/60 hover:bg-surface-container border border-white/10 text-[11px] text-gray-300 hover:text-white transition-all active:scale-95 shadow-sm"
