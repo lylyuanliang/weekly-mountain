@@ -120,12 +120,17 @@ jobs:
 
       - name: Archive Release APK
         run: |
-          echo "=== Searching for generated APK files ==="
-          find android/ -name "*.apk" -ls
-          APK_FILE=$(find android/ -name "*.apk" | head -n 1)
-          if [ -z "$APK_FILE" ]; then
-            echo "### ERROR: No Release APK file was generated!" >> $GITHUB_STEP_SUMMARY
-            find android/app/build/ -maxdepth 4 >> $GITHUB_STEP_SUMMARY || true
+          echo "=== Verifying and Archiving Release APK ==="
+          APK_FILE="android/app/build/outputs/apk/debug/app-debug.apk"
+          if [ ! -f "$APK_FILE" ]; then
+            echo "### ERROR: Canonical Release APK not found at $APK_FILE!" >> $GITHUB_STEP_SUMMARY
+            find android/app/build/ -ls >> $GITHUB_STEP_SUMMARY || true
+            exit 1
+          fi
+          APK_SIZE=$(stat -c%s "$APK_FILE")
+          echo "Canonical Release APK Size: $APK_SIZE bytes"
+          if [ "$APK_SIZE" -lt 20000000 ]; then
+            echo "### ERROR: Release APK size ($APK_SIZE bytes) is suspiciously under 20 MB! Assets might be missing!" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
           echo "Copying $APK_FILE to weekly-mountain-${{ env.TAG }}-release.apk"
@@ -172,12 +177,17 @@ jobs:
 
       - name: Archive Debug APK
         run: |
-          echo "=== Searching for generated APK files ==="
-          find android/ -name "*.apk" -ls
-          APK_FILE=$(find android/ -name "*.apk" | head -n 1)
-          if [ -z "$APK_FILE" ]; then
-            echo "### ERROR: No Debug APK file was generated!" >> $GITHUB_STEP_SUMMARY
-            find android/app/build/ -maxdepth 4 >> $GITHUB_STEP_SUMMARY || true
+          echo "=== Verifying and Archiving Debug APK ==="
+          APK_FILE="android/app/build/outputs/apk/debug/app-debug.apk"
+          if [ ! -f "$APK_FILE" ]; then
+            echo "### ERROR: Canonical Debug APK not found at $APK_FILE!" >> $GITHUB_STEP_SUMMARY
+            find android/app/build/ -ls >> $GITHUB_STEP_SUMMARY || true
+            exit 1
+          fi
+          APK_SIZE=$(stat -c%s "$APK_FILE")
+          echo "Canonical Debug APK Size: $APK_SIZE bytes"
+          if [ "$APK_SIZE" -lt 20000000 ]; then
+            echo "### ERROR: Debug APK size ($APK_SIZE bytes) is suspiciously under 20 MB! Assets might be missing!" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
           echo "Copying $APK_FILE to weekly-mountain-${{ env.TAG }}-debug.apk"
