@@ -9,8 +9,8 @@ const sourceDir = path.resolve(__dirname, '../assets/mountains');
 const targetDir = path.resolve(__dirname, '../dist/assets/mountains');
 
 if (!fs.existsSync(sourceDir)) {
-  console.warn(`[copy_assets] Source directory not found: ${sourceDir}`);
-  process.exit(0);
+  console.error(`[copy_assets] FATAL: Source directory not found: ${sourceDir}`);
+  process.exit(1);
 }
 
 fs.mkdirSync(targetDir, { recursive: true });
@@ -27,6 +27,11 @@ for (const file of files) {
     copiedCount++;
     totalBytes += fs.statSync(destFile).size;
   }
+}
+
+if (copiedCount === 0 || totalBytes < 10 * 1024 * 1024) {
+  console.error(`[copy_assets] FATAL: Expected at least 10MB assets, but copied ${copiedCount} files (${(totalBytes / (1024 * 1024)).toFixed(2)} MB). Aborting build.`);
+  process.exit(1);
 }
 
 console.log(`[copy_assets] Successfully synced ${copiedCount} assets (${(totalBytes / (1024 * 1024)).toFixed(2)} MB) to dist/assets/mountains/`);
