@@ -1,12 +1,12 @@
 {
-  "version": "0.2.0.202611031641",
-  "versionTag": "v0.2.0.202611031641",
-  "title": "v0.2.0.202611031641 成都周边50座山高精度真实轨迹与多路线对比系统",
-  "publishedAt": "2026-11-03",
-  "changelog": "1. 【重磅功能】新增成都周边50座山高精度真实GPS/拓扑轨迹数据，支持真实高德暗夜底图与多路线交互对比、航点标注与全屏沉浸式探索；\n2. 【打卡与交互】重构周计划时间轴渲染逻辑，修复打卡按钮与山峰卡片映射错位，优化一键打卡即时轻提示；\n3. 【真机与画质】详情页去除易导致手机端GPU重影的背景模糊效果，全面提升低端机型渲染帧率；\n4. 【哨兵诊断】升级端侧大文件切片流式上传与录屏视频播放支持，复杂场景体验问题可视化闭环自愈。",
-  "assetName": "weekly-mountain-v0.2.0.202611031641-debug.apk",
+  "version": "0.3.0.202611041156",
+  "versionTag": "v0.3.0.202611041156",
+  "title": "v0.3.0.202611041156 多端形态感知、GitHub 双包CI/CD与调试访问控制重大升级",
+  "publishedAt": "2026-11-04",
+  "changelog": "1. 【多端形态】新增 Web 浏览器与 Native App 平台形态感知，Cloudflare Pages 网页端自适应隐藏更新检查与弹窗；\n2. 【官方渠道】个人中心增设 GitHub Issues 官方社区反馈常设入口，打通全平台规范反馈通路；\n3. 【双包下载】应用内在线更新升级为「正式发布版」与「内测调试版」双通道下载，并增设内测受限警示卡片；\n4. 【调试解耦】调试面板彻底剥离冗余 APK 下载，增设开发者配对密钥访问控制与配置实时持久化；\n5. 【CI/CD 流水线】接入 GitHub Actions 自动化构建，推送 Tag 自动矩阵编译 Debug/Release 双版本 APK 并发布至 GitHub Releases。",
+  "assetName": "weekly-mountain-v0.3.0.202611041156-release.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202611031641/weekly-mountain-v0.2.0.202611031641-debug.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202611031641/weekly-mountain-v0.2.0.202611031641-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.2.0.202611031641/weekly-mountain-v0.2.0.202611031641-release.apk"
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611041156/weekly-mountain-v0.3.0.202611041156-release.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611041156/weekly-mountain-v0.3.0.202611041156-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611041156/weekly-mountain-v0.3.0.202611041156-release.apk"
 }

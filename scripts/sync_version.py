@@ -26,7 +26,7 @@ if sys.platform == "win32":
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-def generate_timestamp_version(base_version="0.2.0"):
+def generate_timestamp_version(base_version="0.3.0"):
     now = datetime.now()
     timestamp_str = now.strftime("%Y%m%d%H%M")
     unix_seconds = int(time.time())
@@ -44,9 +44,10 @@ def sync_all(explicit_version=None):
             timestamp_str = datetime.now().strftime("%Y%m%d%H%M")
         now = datetime.now()
         unix_seconds = int(time.time())
-        app_version = explicit_version.replace("v", "")
+        app_version = f"{base_version}.{timestamp_str}" if len(parts) < 4 else explicit_version.replace("v", "")
     else:
-        app_version, timestamp_str, unix_seconds, now = generate_timestamp_version("0.2.0")
+        base_version = "0.3.0"
+        app_version, timestamp_str, unix_seconds, now = generate_timestamp_version(base_version)
 
     date_str = now.strftime("%Y-%m-%d")
     time_str = now.strftime("%H:%M")
@@ -73,6 +74,7 @@ def sync_all(explicit_version=None):
             v_content = f.read()
 
         v_content = re.sub(r"export const APP_VERSION = '[^']+';", f"export const APP_VERSION = '{app_version}';", v_content)
+        v_content = re.sub(r"export const RELEASE_VERSION = '[^']+';", f"export const RELEASE_VERSION = '{base_version}';", v_content)
         v_content = re.sub(r"export const BUILD_DATE = '[^']+';", f"export const BUILD_DATE = '{date_str}';", v_content)
         v_content = re.sub(r"export const BUILD_TIME = '[^']+';", f"export const BUILD_TIME = '{time_str}';", v_content)
         v_content = re.sub(r"export const BUILD_TIMESTAMP = '[^']+';", f"export const BUILD_TIMESTAMP = '{build_timestamp}';", v_content)
@@ -95,17 +97,18 @@ def sync_all(explicit_version=None):
     version_json_data = {
         "version": app_version,
         "versionTag": version_tag,
-        "title": f"{version_tag} 体验与真机联调增强版",
+        "title": f"{version_tag} 多端形态感知、GitHub 双包CI/CD与调试访问控制重大升级",
         "publishedAt": date_str,
         "changelog": (
-            "1. 升级接入全新 @lylyuanliang/agent-feedback 神经闭环架构，哨兵原生伴随 DevServer 自动启停与常驻守护；\n"
-            "2. 彻底解除人工提示词约束，端侧反馈自动防抖聚合与状态自愈闭环；\n"
-            "3. 客户端悬浮弹窗采用顶部固定与统一基准高度，多面板 Tab 切换 3~5ms 原生极速响应、零闪烁；\n"
-            "4. Android 原生安装包自动清理与断点续传流式更新持续保持最平滑体验。"
+            "1. 【多端形态】新增 Web 浏览器与 Native App 平台形态感知，Cloudflare Pages 网页端自适应隐藏更新检查与弹窗；\n"
+            "2. 【官方渠道】个人中心增设 GitHub Issues 官方社区反馈常设入口，打通全平台规范反馈通路；\n"
+            "3. 【双包下载】应用内在线更新升级为「正式发布版」与「内测调试版」双通道下载，并增设内测受限警示卡片；\n"
+            "4. 【调试解耦】调试面板彻底剥离冗余 APK 下载，增设开发者配对密钥访问控制与配置实时持久化；\n"
+            "5. 【CI/CD 流水线】接入 GitHub Actions 自动化构建，推送 Tag 自动矩阵编译 Debug/Release 双版本 APK 并发布至 GitHub Releases。"
         ),
-        "assetName": debug_apk_name,
+        "assetName": release_apk_name,
         "assetSizeText": "约 29 MB",
-        "downloadUrl": debug_download_url,
+        "downloadUrl": release_download_url,
         "debugDownloadUrl": debug_download_url,
         "releaseDownloadUrl": release_download_url
     }
