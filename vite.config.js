@@ -48,6 +48,22 @@ function viteApkReleasePlugin() {
         }
 
         let filePath = path.join(releaseDir, filename)
+        const localDebugApk = path.resolve(__dirname, 'android/app/build/outputs/apk/debug/app-debug.apk')
+        const localReleaseApk = path.resolve(__dirname, 'android/app/build/outputs/apk/release/app-release-unsigned.apk')
+
+        // 优先检查开发机刚构建的本地 APK 产物
+        if (filename.includes('debug') && fs.existsSync(localDebugApk)) {
+          if (!fs.existsSync(filePath) || fs.statSync(localDebugApk).mtimeMs > fs.statSync(filePath).mtimeMs) {
+            filePath = localDebugApk
+            filename = 'weekly-mountain-latest-debug.apk'
+          }
+        } else if (filename.includes('release') && fs.existsSync(localReleaseApk)) {
+          if (!fs.existsSync(filePath) || fs.statSync(localReleaseApk).mtimeMs > fs.statSync(filePath).mtimeMs) {
+            filePath = localReleaseApk
+            filename = 'weekly-mountain-latest-release.apk'
+          }
+        }
+
         if (!fs.existsSync(filePath)) {
           const files = fs.readdirSync(releaseDir).filter(f => f.endsWith('.apk'))
           if (files.length > 0) {
@@ -102,10 +118,10 @@ function viteApkReleasePlugin() {
         let apkSize = 0
         let updateTime = new Date().toISOString()
 
+        let maxTime = 0
         if (fs.existsSync(releaseDir)) {
           const files = fs.readdirSync(releaseDir).filter(f => f.endsWith('.apk'))
           if (files.length > 0) {
-            let maxTime = 0
             files.forEach(f => {
               const stat = fs.statSync(path.join(releaseDir, f))
               if (stat.mtimeMs > maxTime) {
@@ -115,6 +131,17 @@ function viteApkReleasePlugin() {
                 updateTime = new Date(stat.mtimeMs).toLocaleString('zh-CN', { hour12: false })
               }
             })
+          }
+        }
+
+        const localDebugApk = path.resolve(__dirname, 'android/app/build/outputs/apk/debug/app-debug.apk')
+        if (fs.existsSync(localDebugApk)) {
+          const stat = fs.statSync(localDebugApk)
+          if (stat.mtimeMs > maxTime) {
+            maxTime = stat.mtimeMs
+            latestApk = 'app-debug.apk (本地刚构建)'
+            apkSize = stat.size
+            updateTime = new Date(stat.mtimeMs).toLocaleString('zh-CN', { hour12: false })
           }
         }
 
