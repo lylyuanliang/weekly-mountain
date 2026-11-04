@@ -97,8 +97,18 @@ jobs:
       - name: Compile Android Release APK
         working-directory: android
         run: |
-          set -eo pipefail
-          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee ../gradle_release.log
+          echo "=== Java Environment ==="
+          java -version
+          javac -version
+          echo "JAVA_HOME=$JAVA_HOME"
+          set -o pipefail
+          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee ../gradle_release.log || {
+            echo "### Gradle Release Failure Log" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -n 120 ../gradle_release.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
 
       - name: Archive Release APK
         run: |
@@ -135,8 +145,14 @@ jobs:
       - name: Compile Android Debug APK
         working-directory: android
         run: |
-          set -eo pipefail
-          ./gradlew clean assembleDebug --stacktrace --no-daemon 2>&1 | tee ../gradle_debug.log
+          set -o pipefail
+          ./gradlew clean assembleDebug --stacktrace --no-daemon 2>&1 | tee ../gradle_debug.log || {
+            echo "### Gradle Debug Failure Log" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -n 120 ../gradle_debug.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
 
       - name: Archive Debug APK
         run: |
