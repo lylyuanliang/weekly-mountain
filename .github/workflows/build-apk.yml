@@ -84,11 +84,26 @@ jobs:
         run: npm run build:release
 
       - name: Sync Web Assets to Android (Release)
-        run: npm run cap:sync
+        run: |
+          chmod +x node_modules/.bin/* || true
+          npx --yes @capacitor/cli sync android 2>&1 | tee sync_release.log || {
+            echo "### Sync Release Failure" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat sync_release.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
 
       - name: Compile Android Release APK
         working-directory: android
-        run: ./gradlew assembleDebug --stacktrace --no-daemon
+        run: |
+          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee gradle_release.log || {
+            echo "### Gradle Release Failure" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -n 100 gradle_release.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
 
       - name: Archive Release APK
         run: |
@@ -102,11 +117,26 @@ jobs:
         run: npm run build
 
       - name: Sync Web Assets to Android (Debug)
-        run: npm run cap:sync
+        run: |
+          chmod +x node_modules/.bin/* || true
+          npx --yes @capacitor/cli sync android 2>&1 | tee sync_debug.log || {
+            echo "### Sync Debug Failure" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat sync_debug.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
 
       - name: Compile Android Debug APK
         working-directory: android
-        run: ./gradlew clean assembleDebug --stacktrace --no-daemon
+        run: |
+          ./gradlew clean assembleDebug --stacktrace --no-daemon 2>&1 | tee gradle_debug.log || {
+            echo "### Gradle Debug Failure" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            tail -n 100 gradle_debug.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
 
       - name: Archive Debug APK
         run: |
