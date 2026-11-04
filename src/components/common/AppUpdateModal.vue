@@ -21,12 +21,12 @@
                   :class="updateStore.versionDiffStatus === 'ahead_of_release' ? 'bg-cyan-500/20 border border-cyan-500/40 text-cyan-400' : 'bg-primary/20 border border-primary/30 text-primary'"
                 >
                   <span class="material-symbols-outlined text-[24px]">
-                    {{ updateStore.errorMessage ? 'info' : (!isNativeAppEnv ? 'android' : (updateStore.hasUpdate ? 'system_update' : (updateStore.versionDiffStatus === 'ahead_of_release' ? 'rocket_launch' : 'verified'))) }}
+                    {{ updateStore.errorMessage ? 'info' : (!isNativeAppEnv ? 'android' : (updateStore.hasUpdate ? (updateStore.downloadStatus === 'completed' ? 'task_alt' : 'system_update') : (updateStore.versionDiffStatus === 'ahead_of_release' ? 'rocket_launch' : 'verified'))) }}
                   </span>
                 </div>
                 <div>
                   <h3 class="font-headline-md text-base font-bold text-on-surface flex items-center gap-1.5">
-                    {{ updateStore.errorMessage ? '更新检测提示' : (!isNativeAppEnv ? 'Android 客户端下载' : (updateStore.hasUpdate ? '发现新版本' : (updateStore.versionDiffStatus === 'ahead_of_release' ? '当前为先行内测版' : '当前已是最新版'))) }}
+                    {{ updateStore.errorMessage ? '更新检测提示' : (!isNativeAppEnv ? 'Android 客户端下载' : (updateStore.hasUpdate ? (updateStore.downloadStatus === 'completed' ? '安装包已就绪' : '发现新版本') : (updateStore.versionDiffStatus === 'ahead_of_release' ? '当前为先行内测版' : '当前已是最新版'))) }}
                   </h3>
                   <div class="flex items-center gap-2 mt-0.5 text-[11px] text-on-surface-variant">
                     <template v-if="!isNativeAppEnv">
@@ -170,10 +170,34 @@
               <div class="w-12 h-12 rounded-full border-2 border-primary border-t-transparent animate-spin flex items-center justify-center">
                 <span class="material-symbols-outlined text-[20px] text-primary">install_mobile</span>
               </div>
-              <h4 class="text-sm font-bold text-on-surface">安装包准备就绪</h4>
+              <h4 class="text-sm font-bold text-on-surface">正在唤起安装</h4>
               <p class="text-xs text-on-surface-variant leading-relaxed max-w-[240px]">
                 正在唤起系统安装器，请在稍后弹出的系统界面中点击「更新」确认安装。
               </p>
+            </div>
+
+            <!-- 状态 C2: 安装包已就绪 / 唤起后返回 -->
+            <div v-else-if="updateStore.downloadStatus === 'completed'" class="py-4 space-y-3.5">
+              <div class="flex flex-col items-center justify-center text-center space-y-2">
+                <div class="w-12 h-12 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-1">
+                  <span class="material-symbols-outlined text-[26px]">task_alt</span>
+                </div>
+                <h4 class="text-sm font-bold text-on-surface">新版本安装包已就绪</h4>
+                <p class="text-xs text-on-surface-variant leading-relaxed max-w-[260px]">
+                  已完成下载。若刚才系统未自动弹出安装界面，或因签名/权限取消，可点击下方按钮重新调起或重下。
+                </p>
+              </div>
+
+              <div class="p-3 rounded-2xl bg-surface-container/60 border border-outline-variant/20 space-y-2 text-xs">
+                <div class="flex items-center justify-between text-on-surface-variant">
+                  <span>目标版本</span>
+                  <span class="font-mono text-primary font-bold">v{{ updateStore.latestRelease?.version }}</span>
+                </div>
+                <div class="flex items-center justify-between text-on-surface-variant">
+                  <span>安装包文件</span>
+                  <span class="font-mono text-on-surface text-[11px] truncate max-w-[180px]">{{ updateStore.latestRelease?.assetName }}</span>
+                </div>
+              </div>
             </div>
 
             <!-- 状态 D: 等待授予未知应用安装权限 -->
@@ -247,6 +271,34 @@
               >
                 稍后再说
               </button>
+            </template>
+
+            <!-- 状态 C2 动作按钮：已完成下载/唤起后 -->
+            <template v-else-if="updateStore.downloadStatus === 'completed'">
+              <button
+                type="button"
+                @click="updateStore.retriggerInstall"
+                class="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-medium text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30 active:scale-[0.98] transition-all"
+              >
+                <span class="material-symbols-outlined text-[18px]">install_mobile</span>
+                <span>再次调起系统安装</span>
+              </button>
+              <div class="flex gap-2 w-full">
+                <button
+                  type="button"
+                  @click="updateStore.resetDownloadState"
+                  class="flex-1 py-2.5 rounded-2xl bg-surface-container-high hover:bg-surface-bright text-on-surface-variant text-xs font-medium transition-colors"
+                >
+                  重新选择/下载
+                </button>
+                <button
+                  type="button"
+                  @click="updateStore.closeModal"
+                  class="flex-1 py-2.5 rounded-2xl bg-surface-container-high hover:bg-surface-bright text-on-surface-variant text-xs font-medium transition-colors"
+                >
+                  稍后再说
+                </button>
+              </div>
             </template>
 
             <!-- 状态 B 动作按钮：下载中支持取消 -->

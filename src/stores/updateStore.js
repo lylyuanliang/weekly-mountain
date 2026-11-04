@@ -75,6 +75,11 @@ export const useUpdateStore = defineStore('update', () => {
 
     isChecking.value = true;
     errorMessage.value = '';
+    // 检查时若非正在下载，重置为 idle，避免残留 completed 状态卡死
+    if (downloadStatus.value !== 'downloading') {
+      downloadStatus.value = 'idle';
+      downloadProgress.value = { percent: 0, receivedBytes: 0, totalBytes: 0, message: '' };
+    }
 
     try {
       const release = await fetchLatestRelease();
@@ -121,6 +126,9 @@ export const useUpdateStore = defineStore('update', () => {
   async function openDownloadModal() {
     isModalOpen.value = true;
     errorMessage.value = '';
+    if (downloadStatus.value !== 'downloading') {
+      downloadStatus.value = 'idle';
+    }
     if (latestRelease.value) {
       return;
     }
@@ -192,8 +200,30 @@ export const useUpdateStore = defineStore('update', () => {
     }
   }
 
+  /**
+   * 再次唤起已就绪安装包的系统安装
+   */
+  function retriggerInstall() {
+    if (typeof window !== 'undefined' && window.AlpineNative?.installDownloadedApk) {
+      downloadStatus.value = 'installing';
+      window.AlpineNative.installDownloadedApk();
+    }
+  }
+
+  /**
+   * 重置下载状态，允许用户重新选择版本并重下
+   */
+  function resetDownloadState() {
+    downloadStatus.value = 'idle';
+    downloadProgress.value = { percent: 0, receivedBytes: 0, totalBytes: 0, message: '' };
+    errorMessage.value = '';
+  }
+
   function openModal() {
     isModalOpen.value = true;
+    if (downloadStatus.value !== 'downloading') {
+      downloadStatus.value = 'idle';
+    }
   }
 
   function closeModal() {
@@ -202,6 +232,7 @@ export const useUpdateStore = defineStore('update', () => {
       isModalOpen.value = false;
       return;
     }
+    downloadStatus.value = 'idle';
     isModalOpen.value = false;
   }
 
@@ -212,6 +243,8 @@ export const useUpdateStore = defineStore('update', () => {
       startDownloadAndInstall,
       cancelDownload,
       openInstallPermissionSettings,
+      retriggerInstall,
+      resetDownloadState,
       openModal,
       openDownloadModal,
       closeModal,
@@ -254,6 +287,8 @@ export const useUpdateStore = defineStore('update', () => {
     startDownloadAndInstall,
     cancelDownload,
     openInstallPermissionSettings,
+    retriggerInstall,
+    resetDownloadState,
     openModal,
     openDownloadModal,
     closeModal

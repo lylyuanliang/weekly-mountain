@@ -169,6 +169,27 @@
             </p>
           </div>
 
+          <!-- 微信内置浏览器直跳限制引导提示卡片 -->
+          <div
+            v-if="isWeChatBrowser"
+            class="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-200 text-xs flex items-start gap-3 shadow-sm"
+          >
+            <span class="material-symbols-outlined text-[20px] text-amber-400 shrink-0 mt-0.5">open_in_browser</span>
+            <div class="space-y-1 flex-1">
+              <div class="font-bold text-amber-300 flex items-center justify-between">
+                <span>微信浏览器限制提示</span>
+                <span class="px-1.5 py-0.2 rounded bg-amber-400/20 text-[10px] text-amber-300 font-normal">需外部浏览器</span>
+              </div>
+              <p class="text-[11px] text-amber-200/90 leading-relaxed">
+                受微信安全限制，内置浏览器无法直接唤起手机中的第三方地图 App。
+              </p>
+              <div class="mt-1.5 p-2 rounded-xl bg-black/30 border border-amber-500/20 text-[11px] text-amber-300 font-semibold leading-relaxed flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[15px] text-amber-400 shrink-0">touch_app</span>
+                <span>建议点击右上角「···」选择「在浏览器打开」，即可直接跳转导航软件。</span>
+              </div>
+            </div>
+          </div>
+
           <!-- Apps List -->
           <div class="space-y-2">
             <div
@@ -1467,6 +1488,7 @@ import CheckinDetailModal from '@/components/checkin/CheckinDetailModal.vue';
 import MountainWeatherCard from '@/components/weather/MountainWeatherCard.vue';
 import {
   isIos,
+  isWeChat,
   launchTwoBulu,
   launchFootTouch,
   launchNavigation,
@@ -2071,6 +2093,8 @@ const currentDestinationName = computed(() => {
   return props.mountain.name + (props.mountain.nav_point ? ` · ${props.mountain.nav_point.split(/[,，;；]/)[0]}` : '');
 });
 
+const isWeChatBrowser = computed(() => isWeChat());
+
 const availableNavApps = computed(() => {
   const isAppleDevice = isIos();
   return NAVIGATION_APPS.filter((app) => {
@@ -2103,7 +2127,11 @@ async function handleSelectNavApp(app) {
     lng: destinationCoord.value.lng,
     name: currentDestinationName.value
   };
-  showSheetToast(`正在为你调起 ${app.name}...`);
+  if (isWeChatBrowser.value && app.id !== 'web') {
+    showSheetToast(`微信限制无法直接唤起，建议点击右上角「···」在系统浏览器中打开`);
+  } else {
+    showSheetToast(`正在为你调起 ${app.name}...`);
+  }
   closeNavigationPicker();
   await launchNavigation(app.id, dest);
 }
