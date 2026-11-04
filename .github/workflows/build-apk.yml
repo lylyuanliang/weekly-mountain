@@ -107,12 +107,16 @@ jobs:
       - name: Report Release Build Failure
         if: failure()
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -B ci-build-log
-          find . -name "*.log" -exec git add -f {} +
-          git commit -m "ci: capture build failure logs [skip ci]" || true
-          git push origin ci-build-log --force || true
+          echo "### Gradle Release Failure Diagnostics" >> $GITHUB_STEP_SUMMARY
+          if [ -f gradle_release.log ]; then
+            echo '```text' >> $GITHUB_STEP_SUMMARY
+            grep -E -C 5 "FAILED|error:|Exception|FAILURE:" gradle_release.log | head -n 80 >> $GITHUB_STEP_SUMMARY || true
+            echo "=== TAIL OF LOG ===" >> $GITHUB_STEP_SUMMARY
+            tail -n 60 gradle_release.log >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No gradle_release.log found at root." >> $GITHUB_STEP_SUMMARY
+          fi
 
       - name: Archive Release APK
         run: |
