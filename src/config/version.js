@@ -5,12 +5,12 @@
  */
 import { isNativeApp } from '@/utils/platform.js';
 
-export const APP_VERSION = '0.3.0.202611041156';
+export const APP_VERSION = '0.3.0.202611041610';
 export const RELEASE_VERSION = '0.3.0';
 export const BUILD_DATE = '2026-11-04';
-export const BUILD_TIME = '11:56';
-export const BUILD_TIMESTAMP = '2026-11-04 11:56';
-export const BUILD_CODE = 1793764561;
+export const BUILD_TIME = '16:10';
+export const BUILD_TIMESTAMP = '2026-11-04 16:10';
+export const BUILD_CODE = 1793779818;
 
 /**
  * 开发者调试与 AI 移动端反馈入口开关
