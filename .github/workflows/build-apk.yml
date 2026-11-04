@@ -96,7 +96,9 @@ jobs:
             exit 1
           }
           echo "=== Verifying Synced Release Assets in Android ==="
-          COUNT=$(find android/app/src/main/assets/public/assets/mountains -type f | wc -l)
+          node scripts/copy_assets.js
+          mkdir -p android/app/src/main/assets/public/assets/mountains
+          COUNT=$(find android/app/src/main/assets/public/assets/mountains -type f 2>/dev/null | wc -l || echo 0)
           echo "Total Mountain Assets in Android (Release): $COUNT files"
           if [ "$COUNT" -lt 50 ]; then
             echo "### ERROR: Less than 50 mountain assets found in Android assets directory!" >> $GITHUB_STEP_SUMMARY
@@ -164,7 +166,9 @@ jobs:
             exit 1
           }
           echo "=== Verifying Synced Debug Assets in Android ==="
-          COUNT=$(find android/app/src/main/assets/public/assets/mountains -type f | wc -l)
+          node scripts/copy_assets.js
+          mkdir -p android/app/src/main/assets/public/assets/mountains
+          COUNT=$(find android/app/src/main/assets/public/assets/mountains -type f 2>/dev/null | wc -l || echo 0)
           echo "Total Mountain Assets in Android (Debug): $COUNT files"
           if [ "$COUNT" -lt 50 ]; then
             echo "### ERROR: Less than 50 mountain assets found in Android assets directory!" >> $GITHUB_STEP_SUMMARY
