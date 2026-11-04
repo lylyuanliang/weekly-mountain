@@ -107,8 +107,18 @@ jobs:
 
       - name: Archive Release APK
         run: |
-          cp android/app/build/outputs/apk/debug/app-debug.apk "weekly-mountain-${{ env.TAG }}-release.apk"
+          echo "=== Searching for generated APK files ==="
+          find android/ -name "*.apk" -ls
+          APK_FILE=$(find android/ -name "*.apk" | head -n 1)
+          if [ -z "$APK_FILE" ]; then
+            echo "### ERROR: No Release APK file was generated!" >> $GITHUB_STEP_SUMMARY
+            find android/app/build/ -maxdepth 4 >> $GITHUB_STEP_SUMMARY || true
+            exit 1
+          fi
+          echo "Copying $APK_FILE to weekly-mountain-${{ env.TAG }}-release.apk"
+          cp "$APK_FILE" "weekly-mountain-${{ env.TAG }}-release.apk"
           ls -lh "weekly-mountain-${{ env.TAG }}-release.apk"
+          rm -rf android/app/build/outputs/apk
 
       # =========================================================================
       # 阶段 2：构建内测调试版 (Debug - 集成哨兵与悬浮球)
@@ -140,7 +150,16 @@ jobs:
 
       - name: Archive Debug APK
         run: |
-          cp android/app/build/outputs/apk/debug/app-debug.apk "weekly-mountain-${{ env.TAG }}-debug.apk"
+          echo "=== Searching for generated APK files ==="
+          find android/ -name "*.apk" -ls
+          APK_FILE=$(find android/ -name "*.apk" | head -n 1)
+          if [ -z "$APK_FILE" ]; then
+            echo "### ERROR: No Debug APK file was generated!" >> $GITHUB_STEP_SUMMARY
+            find android/app/build/ -maxdepth 4 >> $GITHUB_STEP_SUMMARY || true
+            exit 1
+          fi
+          echo "Copying $APK_FILE to weekly-mountain-${{ env.TAG }}-debug.apk"
+          cp "$APK_FILE" "weekly-mountain-${{ env.TAG }}-debug.apk"
           ls -lh "weekly-mountain-${{ env.TAG }}-debug.apk"
 
       # =========================================================================
