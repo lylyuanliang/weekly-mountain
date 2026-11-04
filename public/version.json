@@ -1,12 +1,12 @@
 {
-  "version": "0.3.0.202611041915",
-  "versionTag": "v0.3.0.202611041915",
-  "title": "v0.3.0.202611041915 签名一致性对齐、CI双包体积硬门禁与微信导航引导优化",
+  "version": "0.3.0.202611041932",
+  "versionTag": "v0.3.0.202611041932",
+  "title": "v0.3.0.202611041932 签名一致性对齐、CI双包体积硬门禁与微信导航引导优化",
   "publishedAt": "2026-11-04",
   "changelog": "1. 【签名对齐】固化 Android 原生 debug.keystore 签名配置，根治跨环境覆盖安装签名不一致 (INSTALL_FAILED_UPDATE_INCOMPATIBLE)；\n2. 【状态机修复】修复安装中断或取消后更新弹窗卡死在「您正在使用最新版本」的状态停滞，增设「安装包已就绪」直接安装入口；\n3. 【流水线硬门禁】修复 GitHub CI 归档残缺中间 APK 导致 3.94MB 的严重缺陷，锁定 canonical outputs 产物并增设 20MB 体积门禁；\n4. 【静态资源断言】硬化 scripts/copy_assets.js，防范缺失资源时静默退出 0，确保 153 座山峰全景高清大图 100% 完整打包；\n5. 【微信导航引导】Web 版微信内置浏览器增设系统浏览器打开引导卡片，主动提示右上角在浏览器打开直达高德/百度/腾讯地图导航；\n6. 【本地联调包】真机反馈面板无缝打通开发机本地刚构建 APK 直连极速下载，免除远端流水线漫长等待。",
-  "assetName": "weekly-mountain-v0.3.0.202611041915-release.apk",
+  "assetName": "weekly-mountain-v0.3.0.202611041932-release.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611041915/weekly-mountain-v0.3.0.202611041915-release.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611041915/weekly-mountain-v0.3.0.202611041915-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611041915/weekly-mountain-v0.3.0.202611041915-release.apk"
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611041932/weekly-mountain-v0.3.0.202611041932-release.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611041932/weekly-mountain-v0.3.0.202611041932-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611041932/weekly-mountain-v0.3.0.202611041932-release.apk"
 }
