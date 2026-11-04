@@ -74,8 +74,53 @@
                   <span class="material-symbols-outlined text-[13px] text-primary">auto_awesome</span>
                   更新亮点与优化日志
                 </h4>
-                <div class="p-3 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/15 text-xs text-on-surface-variant/90 leading-relaxed max-h-36 overflow-y-auto whitespace-pre-wrap font-sans">
+                <div class="p-3 rounded-2xl bg-surface-container-lowest/80 border border-outline-variant/15 text-xs text-on-surface-variant/90 leading-relaxed max-h-32 overflow-y-auto whitespace-pre-wrap font-sans">
                   {{ updateStore.latestRelease?.changelog }}
+                </div>
+              </div>
+
+              <!-- 安装包版本变体选择 -->
+              <div class="space-y-1.5 pt-1">
+                <div class="text-[11px] font-bold text-on-surface-variant flex items-center justify-between">
+                  <span>选择安装包版本</span>
+                  <span class="text-[10px] text-outline font-normal">默认推荐纯净正式版</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <!-- 正式版卡片 -->
+                  <button
+                    type="button"
+                    @click="selectedVariant = 'release'"
+                    class="p-2.5 rounded-xl border text-left transition-all relative flex flex-col justify-between"
+                    :class="selectedVariant === 'release' ? 'bg-primary/10 border-primary shadow-sm' : 'bg-surface-container/60 border-outline-variant/20 opacity-70 hover:opacity-100'"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs font-bold" :class="selectedVariant === 'release' ? 'text-primary' : 'text-on-surface'">正式发布版</span>
+                      <span v-if="selectedVariant === 'release'" class="material-symbols-outlined text-primary text-[14px]">check_circle</span>
+                    </div>
+                    <span class="text-[10px] text-on-surface-variant mt-1">推荐 · 纯净轻量稳定</span>
+                  </button>
+
+                  <!-- 调试版卡片 -->
+                  <button
+                    type="button"
+                    @click="selectedVariant = 'debug'"
+                    class="p-2.5 rounded-xl border text-left transition-all relative flex flex-col justify-between"
+                    :class="selectedVariant === 'debug' ? 'bg-amber-500/10 border-amber-500 shadow-sm' : 'bg-surface-container/60 border-outline-variant/20 opacity-70 hover:opacity-100'"
+                  >
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs font-bold" :class="selectedVariant === 'debug' ? 'text-amber-400' : 'text-on-surface'">内测调试版</span>
+                      <span v-if="selectedVariant === 'debug'" class="material-symbols-outlined text-amber-400 text-[14px]">check_circle</span>
+                    </div>
+                    <span class="text-[10px] text-amber-400/90 mt-1">含联调 · 需授权口令</span>
+                  </button>
+                </div>
+
+                <!-- 调试版特别警示条 -->
+                <div v-if="selectedVariant === 'debug'" class="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-[11px] text-amber-200 flex items-start gap-2">
+                  <span class="material-symbols-outlined text-[15px] text-amber-400 shrink-0 mt-0.5">warning</span>
+                  <span class="leading-relaxed">
+                    <strong>受限提示</strong>：调试版内含 AI 哨兵直连入口，需持有开发者专属授权码解锁使用；普通用户无法使用反馈，建议下载<strong>正式发布版</strong>。
+                  </span>
                 </div>
               </div>
             </div>
@@ -176,11 +221,11 @@
             <template v-if="updateStore.hasUpdate && updateStore.downloadStatus === 'idle'">
               <button
                 type="button"
-                @click="updateStore.startDownloadAndInstall"
+                @click="updateStore.startDownloadAndInstall(selectedVariant)"
                 class="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-medium text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30 active:scale-[0.98] transition-all"
               >
                 <span class="material-symbols-outlined text-[18px]">download</span>
-                <span>立即在线升级 (免跳转)</span>
+                <span>立即在线升级【{{ selectedVariant === 'debug' ? '调试版' : '正式版' }}】</span>
               </button>
               <button
                 type="button"
@@ -274,7 +319,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useUpdateStore } from '@/stores/updateStore.js';
 import { useScrollLock } from '@/composables/useScrollLock.js';
 import { APP_VERSION } from '@/config/version.js';
@@ -282,6 +327,7 @@ import { formatBytes } from '@/services/updateService.js';
 import { openExternalUrl } from '@/utils/appLauncher.js';
 
 const updateStore = useUpdateStore();
+const selectedVariant = ref('release'); // 默认优选纯净正式版，亦可切换为调试版
 
 // 彻底杜绝底层页面背景滚动穿透
 useScrollLock(() => updateStore.isModalOpen);

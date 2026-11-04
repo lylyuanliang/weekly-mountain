@@ -13,9 +13,17 @@ function getInitialTunnelUrl() {
   return saved || DEFAULT_CPOLAR_TUNNEL;
 }
 
+function getInitialAccessKey() {
+  if (typeof window === 'undefined') return '';
+  return localStorage.getItem('wm_debug_access_key') || '';
+}
+
 export const useDebugStore = defineStore('debug', () => {
-  // 穿透服务基地址 (支持用户在调试面板中动态修改或重置)
+  // 穿透服务基地址 (支持用户在调试面板中动态修改或重置，自动持久化)
   const tunnelUrl = ref(getInitialTunnelUrl());
+
+  // 开发者私有授权配对口令 (本地持久化，未授权时锁定调试功能)
+  const accessKey = ref(getInitialAccessKey());
 
   // 浮动反馈胶囊显示开关 (默认在调试与内测版中开启，但允许用户一键关闭以防遮挡)
   const isCapsuleVisible = ref(
@@ -30,13 +38,7 @@ export const useDebugStore = defineStore('debug', () => {
       window.location.href.includes('cpolar.top')
   );
 
-  // 更新检测状态
-  const isCheckingUpdate = ref(false);
-  const updateInfo = ref(null);
-  const updateError = ref('');
-  const lastCheckTime = ref('');
-
-  // 穿透连通性状态
+  // 穿透连通性与健康状态
   const tunnelStatus = ref({
     checking: false,
     healthy: null, // true | false | null
@@ -57,9 +59,15 @@ export const useDebugStore = defineStore('debug', () => {
   });
 
   /**
+   * 判断当前客户端是否已获得开发者授权
+   * 采用口令存在性校验与基本规则，真正提交时由 DevServer 哨兵比对
+   */
+  const isAuthorized = computed(() => {
+    return Boolean(accessKey.value && accessKey.value.trim().length >= 4);
+  });
+
+  /**
    * 获取针对当前运行环境的 API 请求基准前缀
-   * - 若在 Android 原生离线包环境运行，必须走 cpolar 穿透地址；
-   * - 若在开发机浏览器 (localhost:5173) 运行，可直接走相对路径 '' 或穿透地址。
    */
   const apiBase = computed(() => {
     if (isCapacitorNative.value) {
@@ -70,7 +78,7 @@ export const useDebugStore = defineStore('debug', () => {
   });
 
   /**
-   * 保存穿透地址
+   * 设置并自动保存穿透地址
    */
   function setTunnelUrl(url) {
     let cleanUrl = (url || '').trim().replace(/\/+$/, '');
@@ -80,6 +88,26 @@ export const useDebugStore = defineStore('debug', () => {
     tunnelUrl.value = cleanUrl || DEFAULT_CPOLAR_TUNNEL;
     if (typeof window !== 'undefined') {
       localStorage.setItem('wm_debug_tunnel_url', tunnelUrl.value);
+    }
+  }
+
+  /**
+   * 设置并自动保存授权口令
+   */
+  function setAccessKey(key) {
+    accessKey.value = (key || '').trim();
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('wm_debug_access_key', accessKey.value);
+    }
+  }
+
+  /**
+   * 清除本地授权口令 (解除配对)
+   */
+  function clearAccessKey() {
+    accessKey.value = '';
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('wm_debug_access_key');
     }
   }
 
@@ -101,7 +129,7 @@ export const useDebugStore = defineStore('debug', () => {
     tunnelStatus.value.msg = '正在探测穿透服务器响应...';
     const startTime = Date.now();
     try {
-      const target = `${tunnelUrl.value.replace(/\/+$/, '')}/api/app-update?t=${Date.now()}`;
+      const target = `${tunnelUrl.value.replace(/\/+$/, '')}/api/feedback?t=${Date.now()}`;
       const res = await fetch(target, { method: 'GET', cache: 'no-cache' });
       const latency = Date.now() - startTime;
       if (res.ok) {
@@ -126,100 +154,7 @@ export const useDebugStore = defineStore('debug', () => {
   }
 
   /**
-   * 检查在线版本更新
-   */
-  async function checkUpdate() {
-    isCheckingUpdate.value = true;
-    updateError.value = '';
-    try {
-      const target = `${tunnelUrl.value.replace(/\/+$/, '')}/api/app-update?t=${Date.now()}`;
-      const res = await fetch(target, { method: 'GET', cache: 'no-cache' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (data && data.success) {
-        updateInfo.value = data;
-        lastCheckTime.value = new Date().toLocaleTimeString('zh-CN', { hour12: false });
-        return data;
-      } else {
-        throw new Error(data?.message || '获取更新信息失败');
-      }
-    } catch (err) {
-      console.warn('检查更新失败:', err);
-      updateError.value = `检查更新失败 (${err.message})，请确认穿透服务是否正常。`;
-      return null;
-    } finally {
-      isCheckingUpdate.value = false;
-    }
-  }
-
-  // 流式下载与安装状态管理
-  const downloadStatus = ref('idle'); // 'idle' | 'downloading' | 'installing' | 'completed' | 'cancelled' | 'error'
-  const downloadProgress = ref({
-    percent: 0,
-    receivedBytes: 0,
-    totalBytes: 0,
-    speed: '',
-    message: ''
-  });
-
-  // 监听来自 Android 原生 AlpineNative 的下载进度事件
-  if (typeof window !== 'undefined') {
-    window.addEventListener('alpine-download-progress', (e) => {
-      const data = e.detail;
-      if (!data) return;
-      if (data.status) {
-        downloadStatus.value = data.status;
-      }
-      downloadProgress.value = {
-        percent: data.percent || 0,
-        receivedBytes: data.receivedBytes || 0,
-        totalBytes: data.totalBytes || 0,
-        speed: data.message || '',
-        message: data.message || ''
-      };
-      if (data.status === 'completed' || data.status === 'cancelled' || data.status === 'error') {
-        setTimeout(() => {
-          if (downloadStatus.value === data.status) {
-            downloadStatus.value = 'idle';
-          }
-        }, 3000);
-      }
-    });
-  }
-
-  /**
-   * 取消当前正在进行的 APK 下载
-   */
-  function cancelDownloadApk() {
-    if (typeof window !== 'undefined' && window.AlpineNative?.cancelDownload) {
-      window.AlpineNative.cancelDownload();
-    }
-    downloadStatus.value = 'idle';
-  }
-
-  /**
-   * 一键在线下载并安装最新 APK
-   */
-  async function downloadAndInstallApk() {
-    const url = updateInfo.value?.downloadUrl || `${tunnelUrl.value.replace(/\/+$/, '')}/releases/weekly-mountain-latest-debug.apk`;
-    if (typeof window !== 'undefined' && window.AlpineNative?.downloadAndInstallApk) {
-      downloadStatus.value = 'downloading';
-      downloadProgress.value = {
-        percent: 0,
-        receivedBytes: 0,
-        totalBytes: 0,
-        speed: '0 KB/s',
-        message: '准备下载...'
-      };
-      window.AlpineNative.downloadAndInstallApk(url, updateInfo.value?.latestVersion || 'latest');
-      return;
-    }
-    return await openExternalUrl(url);
-  }
-
-  /**
-   * 切换实时穿透热重载模式 (Live Tunnel Mode)
-   * 允许在手机 App 内直接加载电脑的 Vite 热重载服务，电脑改代码手机秒级同步！
+   * 切换实时穿透热重载模式 (供开发联调热更新)
    */
   function switchLiveTunnelMode(enable) {
     if (typeof window === 'undefined') return;
@@ -237,23 +172,18 @@ export const useDebugStore = defineStore('debug', () => {
 
   return {
     tunnelUrl,
+    accessKey,
+    isAuthorized,
     isCapsuleVisible,
     isLiveTunnelMode,
-    isCheckingUpdate,
-    updateInfo,
-    updateError,
-    lastCheckTime,
     tunnelStatus,
     isCapacitorNative,
     apiBase,
     setTunnelUrl,
+    setAccessKey,
+    clearAccessKey,
     toggleCapsuleVisibility,
     testTunnelHealth,
-    checkUpdate,
-    downloadStatus,
-    downloadProgress,
-    downloadAndInstallApk,
-    cancelDownloadApk,
     switchLiveTunnelMode
   };
 });

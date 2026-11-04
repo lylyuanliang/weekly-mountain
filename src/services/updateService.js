@@ -95,38 +95,17 @@ export async function fetchLatestRelease() {
   const ver = releaseData.version || releaseData.versionTag.replace(/^v/i, '');
   const verTag = releaseData.versionTag || `v${ver}`;
 
-  // 根据当前运行环境变体 (Debug 调试版 vs Release 纯净版) 自动匹配对应的 APK 下载源
-  let rawDownloadUrl = releaseData.downloadUrl || '';
-  let assetName = releaseData.assetName || '';
+  // 分别解析并预置「正式发布版」与「内测调试版」双下载通道 (均走 GitHub Releases)
+  const rawReleaseUrl = releaseData.releaseDownloadUrl || `https://github.com/${GITHUB_REPO}/releases/download/${verTag}/weekly-mountain-${verTag}-release.apk`;
+  const rawDebugUrl = releaseData.debugDownloadUrl || `https://github.com/${GITHUB_REPO}/releases/download/${verTag}/weekly-mountain-${verTag}-debug.apk`;
 
-  if (IS_DEBUG_BUILD) {
-    if (releaseData.debugDownloadUrl) {
-      rawDownloadUrl = releaseData.debugDownloadUrl;
-    } else if (rawDownloadUrl && rawDownloadUrl.includes('-release.apk')) {
-      rawDownloadUrl = rawDownloadUrl.replace('-release.apk', '-debug.apk');
-    } else if (!rawDownloadUrl) {
-      rawDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/download/${verTag}/weekly-mountain-${verTag}-debug.apk`;
-    }
-    if (assetName && assetName.includes('-release.apk')) {
-      assetName = assetName.replace('-release.apk', '-debug.apk');
-    } else if (!assetName) {
-      assetName = `weekly-mountain-${verTag}-debug.apk`;
-    }
-  } else {
-    if (releaseData.releaseDownloadUrl) {
-      rawDownloadUrl = releaseData.releaseDownloadUrl;
-    } else if (!rawDownloadUrl) {
-      rawDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/download/${verTag}/weekly-mountain-${verTag}-release.apk`;
-    }
-    if (!assetName) {
-      assetName = `weekly-mountain-${verTag}-release.apk`;
-    }
-  }
+  const acceleratedReleaseUrl = rawReleaseUrl.startsWith('http') ? `${ACCELERATOR_PREFIX}${rawReleaseUrl}` : rawReleaseUrl;
+  const acceleratedDebugUrl = rawDebugUrl.startsWith('http') ? `${ACCELERATOR_PREFIX}${rawDebugUrl}` : rawDebugUrl;
 
-  // 拼装国内高速代理加速地址
-  const acceleratedUrl = rawDownloadUrl.startsWith('http')
-    ? `${ACCELERATOR_PREFIX}${rawDownloadUrl}`
-    : rawDownloadUrl;
+  // 根据当前运行环境默认优选下载源
+  let rawDownloadUrl = IS_DEBUG_BUILD ? rawDebugUrl : rawReleaseUrl;
+  let acceleratedUrl = IS_DEBUG_BUILD ? acceleratedDebugUrl : acceleratedReleaseUrl;
+  let assetName = IS_DEBUG_BUILD ? `weekly-mountain-${verTag}-debug.apk` : `weekly-mountain-${verTag}-release.apk`;
 
   return {
     version: ver,
@@ -138,6 +117,10 @@ export async function fetchLatestRelease() {
     assetSizeText: releaseData.assetSizeText || '约 29 MB',
     downloadUrl: acceleratedUrl,
     rawDownloadUrl: rawDownloadUrl,
+    releaseDownloadUrl: acceleratedReleaseUrl,
+    debugDownloadUrl: acceleratedDebugUrl,
+    rawReleaseDownloadUrl: rawReleaseUrl,
+    rawDebugDownloadUrl: rawDebugUrl,
     htmlUrl: `https://github.com/${GITHUB_REPO}/releases/tag/${verTag}`
   };
 }

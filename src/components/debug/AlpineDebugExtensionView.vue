@@ -42,46 +42,31 @@
         box-shadow: 0 0 8px var(--af-primary, #4edea3);
         display: inline-block;
         flex-shrink: 0;
-        transition: all 0.3s ease;
       }
-      .dot-indicator.has-update {
-        background: #f59e0b;
-        box-shadow: 0 0 10px #f59e0b;
-        animation: pulse-ring 1.3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      .dot-indicator.dot-locked {
+        background: #ef4444;
+        box-shadow: 0 0 8px #ef4444;
       }
-      .update-version-title {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .update-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--af-primary, #4edea3);
-        box-shadow: 0 0 8px var(--af-primary, #4edea3);
-        flex-shrink: 0;
-        display: inline-block;
-        transition: all 0.3s ease;
-      }
-      .update-dot.update-dot-ping {
-        background: #f59e0b;
-        box-shadow: 0 0 10px #f59e0b;
-        animation: pulse-ring 1.3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-      @keyframes pulse-ring {
-        0% { transform: scale(0.9); opacity: 0.8; }
-        50% { transform: scale(1.3); opacity: 1; }
-        100% { transform: scale(0.9); opacity: 0.8; }
-      }
-      .platform-chip, .version-chip {
+      .platform-chip, .auth-chip {
         font-size: 10px;
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
         padding: 2px 8px;
         border-radius: 9999px;
+      }
+      .platform-chip {
         background: rgba(78, 222, 163, 0.12);
         color: var(--af-primary, #4edea3);
         border: 1px solid rgba(78, 222, 163, 0.3);
+      }
+      .auth-chip.chip-locked {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+      }
+      .auth-chip.chip-ok {
+        background: rgba(16, 185, 129, 0.15);
+        color: #34d399;
+        border: 1px solid rgba(16, 185, 129, 0.3);
       }
       .field-group {
         display: flex;
@@ -105,6 +90,9 @@
       }
       .btn-link:hover {
         text-decoration: underline;
+      }
+      .btn-link.danger {
+        color: #f87171;
       }
       .input-with-action {
         display: flex;
@@ -141,141 +129,106 @@
       .status-msg.status-ok {
         color: var(--af-primary, #4edea3);
       }
-      .btn-primary {
-        width: 100%;
-        background: var(--af-primary, #4edea3);
-        color: #0b0e14;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 14px;
-        font-size: 13px;
+      .locked-warning-box {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        border-radius: 10px;
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .locked-title {
+        font-size: 11px;
         font-weight: 700;
+        color: #fca5a5;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .locked-desc {
+        font-size: 11px;
+        color: #e5e7eb;
+        line-height: 1.5;
+      }
+      .btn-github-issue {
+        width: 100%;
+        background: #24292e;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #fff;
+        border-radius: 8px;
+        padding: 8px 12px;
+        font-size: 11px;
+        font-weight: 600;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 6px;
-        transition: opacity 0.15s;
       }
-      .btn-primary:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+      .btn-github-issue:hover {
+        background: #2f363d;
       }
-      .error-msg {
-        padding: 8px 12px;
-        background: rgba(239, 68, 68, 0.15);
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        color: #f87171;
-        border-radius: 8px;
-        font-size: 11px;
-      }
-      .update-card {
-        background: var(--af-bg-base, #11141b);
-        border: 1px solid var(--af-border, rgba(255, 255, 255, 0.08));
-        border-radius: 10px;
-        padding: 12px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-      }
-      .update-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .update-version {
-        font-size: 12px;
-        font-weight: 700;
-        color: var(--af-text-main, #fff);
-      }
-      .update-size {
-        font-size: 11px;
-        color: var(--af-text-muted, #9ca3af);
-        font-family: monospace;
-      }
-      .changelog-list {
-        padding-left: 18px;
-        margin: 0;
-        font-size: 11px;
-        color: var(--af-text-muted, #9ca3af);
-        line-height: 1.6;
-      }
-      .btn-download {
-        width: 100%;
-        background: linear-gradient(135deg, #10b981, #0d9488);
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 10px;
-        font-size: 12px;
-        font-weight: 700;
-        cursor: pointer;
-      }
-      .download-tip {
+      .info-notice {
         font-size: 10px;
-        color: var(--af-text-muted, #6b7280);
-        text-align: center;
-        margin: 4px 0 0 0;
-      }
-      .progress-box {
-        background: rgba(78, 222, 163, 0.08);
-        border: 1px solid rgba(78, 222, 163, 0.25);
+        color: #9ca3af;
+        line-height: 1.4;
+        background: rgba(255, 255, 255, 0.03);
         border-radius: 8px;
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .progress-header, .progress-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 11px;
-      }
-      .progress-percent {
-        font-weight: 700;
-        color: var(--af-primary, #4edea3);
-        font-family: monospace;
-      }
-      .progress-track {
-        height: 6px;
-        width: 100%;
-        background: rgba(0, 0, 0, 0.4);
-        border-radius: 9999px;
-        overflow: hidden;
-      }
-      .progress-bar {
-        height: 100%;
-        background: var(--af-primary, #4edea3);
-        border-radius: 9999px;
-        transition: width 0.15s ease;
-      }
-      .btn-cancel {
-        background: none;
-        border: none;
-        color: #f59e0b;
-        font-size: 10px;
-        cursor: pointer;
-        padding: 0;
-      }
-      .install-ready {
-        padding: 10px;
-        background: rgba(16, 185, 129, 0.15);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        color: #34d399;
-        font-size: 12px;
-        border-radius: 8px;
-        text-align: center;
-      }
-      .ext-footer {
-        text-align: center;
-        font-size: 10px;
-        color: var(--af-text-muted, #6b7280);
-        padding-top: 4px;
+        padding: 8px;
       }
     </component>
 
-    <!-- 1. 穿透通信诊断 -->
+    <!-- 1. 开发者授权与访问控制 (解决 Point 3.1 & 3.2: 密钥输入 + 自动持久化 + 受限引导) -->
+    <section class="ext-card">
+      <div class="card-title-row">
+        <span class="card-title">
+          <span class="dot-indicator" :class="{ 'dot-locked': !debugStore.isAuthorized }"></span>
+          开发者授权与访问控制
+        </span>
+        <span class="auth-chip" :class="debugStore.isAuthorized ? 'chip-ok' : 'chip-locked'">
+          {{ debugStore.isAuthorized ? '● 已授权' : '▲ 未授权受限' }}
+        </span>
+      </div>
+
+      <!-- 未授权锁定屏障提示 -->
+      <div v-if="!debugStore.isAuthorized" class="locked-warning-box">
+        <div class="locked-title">
+          <span>🔒 核心联调通道受限保护</span>
+        </div>
+        <div class="locked-desc">
+          当前通道直接与开发者本机的 AI 自愈哨兵实时通讯，仅供内部协同测试使用。普通用户如遇到体验缺陷或山峰数据建议，请前往官方 GitHub 提交反馈。
+        </div>
+        <button type="button" @click="openGitHubIssues" class="btn-github-issue">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" width="14" height="14">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>前往 GitHub Issues 提交问题</span>
+        </button>
+      </div>
+
+      <!-- 口令输入与自动保存 (输入即刻存入当前设备 localStorage，下次免输) -->
+      <div class="field-group">
+        <div class="field-header">
+          <span>开发者配对密钥 (输入自动持久化)</span>
+          <button v-if="debugStore.isAuthorized" type="button" @click="handleClearAccessKey" class="btn-link danger">
+            解除配对
+          </button>
+        </div>
+        <input
+          v-model="inputAccessKey"
+          type="password"
+          class="ext-input"
+          placeholder="输入开发者专属密钥解锁联调通道"
+          @input="handleAccessKeyInput"
+        />
+        <div class="info-notice">
+          💡 密钥仅保存在当前设备，绝不上库或打包入包；开发机未配置时启动 DevServer 会在控制台打印临时配对码。
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 穿透与哨兵通信诊断 (仅配置通信与测试，彻底移除冗余的 APK 下载) -->
     <section class="ext-card">
       <div class="card-title-row">
         <span class="card-title">
@@ -289,7 +242,7 @@
 
       <div class="field-group">
         <div class="field-header">
-          <span>穿透通信基地址</span>
+          <span>穿透通信基地址 (输入自动保存)</span>
           <button type="button" @click="resetTunnelUrl" class="btn-link">重置默认</button>
         </div>
         <div class="input-with-action">
@@ -297,11 +250,12 @@
             v-model="inputTunnelUrl"
             type="text"
             class="ext-input"
-            placeholder="https://your-tunnel-domain.cpolar.top"
+            placeholder="https://your-tunnel.cpolar.top"
+            @input="handleTunnelUrlInput"
           />
           <button
             type="button"
-            @click="handleSaveAndTestTunnel"
+            @click="handleTestTunnel"
             :disabled="debugStore.tunnelStatus.checking"
             class="btn-action"
           >
@@ -315,96 +269,34 @@
       </div>
     </section>
 
-    <!-- 2. 内测更新与构建管理 -->
+    <!-- 3. 发布与架构原则公约说明 -->
     <section class="ext-card">
       <div class="card-title-row">
         <span class="card-title">
-          <span class="dot-indicator" :class="{ 'has-update': hasNewVersion }"></span>
-          内测更新与构建管理
+          <span class="dot-indicator"></span>
+          分发架构与网络解耦说明
         </span>
-        <span class="version-chip">v{{ APP_VERSION }}</span>
       </div>
-
-      <div class="field-group">
-        <button
-          type="button"
-          @click="handleCheckUpdate"
-          :disabled="debugStore.isCheckingUpdate"
-          class="btn-primary"
-        >
-          {{ debugStore.isCheckingUpdate ? '正在检测远端构建产物...' : '⚡ 检查在线更新' }}
-        </button>
-
-        <div v-if="debugStore.updateError" class="error-msg">
-          {{ debugStore.updateError }}
-        </div>
-
-        <!-- 发现新构建卡片 -->
-        <div v-if="debugStore.updateInfo" class="update-card">
-          <div class="update-header">
-            <div class="update-version-title">
-              <span class="update-dot" :class="{ 'update-dot-ping': hasNewVersion }"></span>
-              <span class="update-version">
-                {{ hasNewVersion ? `发现新构建: v${debugStore.updateInfo.latestVersion}` : '已是最新构建版本' }}
-              </span>
-            </div>
-            <span class="update-size">{{ debugStore.updateInfo.fileSize }}</span>
-          </div>
-
-          <ul v-if="debugStore.updateInfo.changelog?.length" class="changelog-list">
-            <li v-for="(log, idx) in debugStore.updateInfo.changelog" :key="idx">{{ log }}</li>
-          </ul>
-
-          <!-- 原生流式下载进度条 -->
-          <div v-if="debugStore.downloadStatus === 'downloading'" class="progress-box">
-            <div class="progress-header">
-              <span>正在应用内极速下载 APK...</span>
-              <span class="progress-percent">{{ debugStore.downloadProgress.percent }}%</span>
-            </div>
-            <div class="progress-track">
-              <div class="progress-bar" :style="{ width: `${debugStore.downloadProgress.percent}%` }"></div>
-            </div>
-            <div class="progress-footer">
-              <span>{{ debugStore.downloadProgress.speed || '连接中...' }}</span>
-              <button type="button" @click="debugStore.cancelDownloadApk" class="btn-cancel">取消下载</button>
-            </div>
-          </div>
-
-          <div v-else-if="debugStore.downloadStatus === 'installing'" class="install-ready">
-            <span>🚀 下载完成，正在唤起手机系统安装界面...</span>
-          </div>
-
-          <!-- 一键在线下载升级按钮 -->
-          <div v-else class="action-box">
-            <div v-if="debugStore.downloadStatus === 'error'" style="margin-bottom: 8px; font-size: 11px; color: #fbbf24; text-align: center;">
-              ⚠️ {{ debugStore.downloadProgress.message || '网络连接中断' }}
-            </div>
-            <button type="button" @click="handleDownloadApk" class="btn-download">
-              {{
-                debugStore.downloadProgress.percent > 0 && debugStore.downloadProgress.percent < 100
-                  ? `📥 继续断点续传下载 (${debugStore.downloadProgress.percent}%)`
-                  : (hasNewVersion ? '📥 一键在 App 内免跳转下载并升级' : '🔄 重新下载当前最新 APK')
-              }}
-            </button>
-            <p class="download-tip">原生流式下载至手机并直接唤起安装，支持锁屏与切屏断点续传</p>
-          </div>
-        </div>
+      <div class="info-notice">
+        📌 <strong>网络流向解耦规范</strong>：<br/>
+        1. <strong>安装包更新与下载</strong>：统一由主应用关于页/更新弹窗通过 GitHub Releases（及加速镜像）分发，本面板已彻底解耦 APK 下载；<br/>
+        2. <strong>AI 反馈与实时哨兵</strong>：仅用于开发机实时排查，走上方配置的内网穿透通道。
       </div>
     </section>
-
-    <footer class="ext-footer">
-      成都周边50座山 · Alpine Explorer 内测联调模式
-    </footer>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { useDebugStore } from '@/stores/debugStore.js';
-import { APP_VERSION, BUILD_CODE, DEFAULT_CPOLAR_TUNNEL } from '@/config/version.js';
+import { DEFAULT_CPOLAR_TUNNEL } from '@/config/version.js';
+import { openExternalUrl } from '@/utils/appLauncher.js';
+
+const GITHUB_ISSUES_URL = 'https://github.com/lylyuanliang/weekly-mountain/issues';
 
 const debugStore = useDebugStore();
 const inputTunnelUrl = ref(debugStore.tunnelUrl);
+const inputAccessKey = ref(debugStore.accessKey);
 
 watch(
   () => debugStore.tunnelUrl,
@@ -413,33 +305,37 @@ watch(
   }
 );
 
-const hasNewVersion = computed(() => {
-  if (!debugStore.updateInfo) return false;
-  const remoteCode = debugStore.updateInfo.buildCode || 0;
-  return remoteCode > BUILD_CODE || debugStore.updateInfo.latestVersion !== APP_VERSION;
-});
+watch(
+  () => debugStore.accessKey,
+  (val) => {
+    inputAccessKey.value = val;
+  }
+);
+
+function handleTunnelUrlInput() {
+  debugStore.setTunnelUrl(inputTunnelUrl.value);
+}
+
+function handleAccessKeyInput() {
+  debugStore.setAccessKey(inputAccessKey.value);
+}
+
+function handleClearAccessKey() {
+  inputAccessKey.value = '';
+  debugStore.clearAccessKey();
+}
 
 function resetTunnelUrl() {
   inputTunnelUrl.value = DEFAULT_CPOLAR_TUNNEL;
   debugStore.setTunnelUrl(DEFAULT_CPOLAR_TUNNEL);
 }
 
-async function handleSaveAndTestTunnel() {
+async function handleTestTunnel() {
   debugStore.setTunnelUrl(inputTunnelUrl.value);
   await debugStore.testTunnelHealth();
 }
 
-async function handleCheckUpdate() {
-  debugStore.setTunnelUrl(inputTunnelUrl.value);
-  await debugStore.checkUpdate();
+function openGitHubIssues() {
+  openExternalUrl(GITHUB_ISSUES_URL);
 }
-
-async function handleDownloadApk() {
-  await debugStore.downloadAndInstallApk();
-}
-
-onMounted(() => {
-  debugStore.testTunnelHealth();
-  debugStore.checkUpdate();
-});
 </script>

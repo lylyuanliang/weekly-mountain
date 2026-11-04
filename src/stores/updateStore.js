@@ -117,8 +117,9 @@ export const useUpdateStore = defineStore('update', () => {
 
   /**
    * 开始下载并安装 APK
+   * @param {'release' | 'debug' | null} variant 指定下载安装包变体
    */
-  async function startDownloadAndInstall() {
+  async function startDownloadAndInstall(variant = null) {
     if (!latestRelease.value) return;
 
     downloadStatus.value = 'downloading';
@@ -130,7 +131,13 @@ export const useUpdateStore = defineStore('update', () => {
     };
     errorMessage.value = '';
 
-    const downloadUrl = latestRelease.value.downloadUrl || latestRelease.value.rawDownloadUrl;
+    let downloadUrl = latestRelease.value.downloadUrl || latestRelease.value.rawDownloadUrl;
+    if (variant === 'release' && latestRelease.value.releaseDownloadUrl) {
+      downloadUrl = latestRelease.value.releaseDownloadUrl;
+    } else if (variant === 'debug' && latestRelease.value.debugDownloadUrl) {
+      downloadUrl = latestRelease.value.debugDownloadUrl;
+    }
+
     const targetVersion = latestRelease.value.version;
 
     // 1. Android 原生容器环境：直接调用 Java 原生流式下载与安装

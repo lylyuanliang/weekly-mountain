@@ -1,0 +1,175 @@
+name: Build and Release Android APK
+
+'on':
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: '发布版本 Tag（留空则自动提取自 public/version.json）'
+        required: false
+        default: ''
+
+jobs:
+  build-and-release:
+    name: Build & Release Dual APKs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle Cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Resolve Version and Tag
+        id: resolve_version
+        run: |
+          if [ -n "${{ inputs.tag_name }}" ]; then
+            TAG="${{ inputs.tag_name }}"
+          elif [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG="${{ github.ref_name }}"
+          else
+            TAG=$(node -p "require('./public/version.json').versionTag || ('v' + require('./public/version.json').version)")
+          fi
+          echo "Resolved Tag: $TAG"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x android/gradlew
+
+      - name: "Build Release Variant APK (版本 A: 正式发布版)"
+        run: |
+          echo "=== 1. Building release web assets (Zero-DCE) ==="
+          npm run build:release
+
+          echo "=== 2. Syncing assets to Capacitor Android ==="
+          npx cap sync android
+
+          echo "=== 3. Compiling Android Release APK ==="
+          cd android
+          ./gradlew assembleDebug
+          cd ..
+
+          echo "=== 4. Archiving release APK ==="
+          cp android/app/build/outputs/apk/debug/app-debug.apk "weekly-mountain-${TAG}-release.apk"
+          ls -lh "weekly-mountain-${TAG}-release.apk"
+
+      - name: "Build Debug Variant APK (版本 B: 内测调试版)"
+        run: |
+          echo "=== 1. Building debug web assets with feedback sentinel ==="
+          npm run build
+
+          echo "=== 2. Syncing assets to Capacitor Android ==="
+          npx cap sync android
+
+          echo "=== 3. Compiling Android Debug APK ==="
+          cd android
+          ./gradlew clean assembleDebug
+          cd ..
+
+          echo "=== 4. Archiving debug APK ==="
+          cp android/app/build/outputs/apk/debug/app-debug.apk "weekly-mountain-${TAG}-debug.apk"
+          ls -lh "weekly-mountain-${TAG}-debug.apk"
+
+      - name: Generate Release Notes
+        id: release_notes
+        run: |
+          cat << 'EOF' > generate_notes.cjs
+          const fs = require('fs');
+          let versionInfo = {};
+          try {
+            versionInfo = JSON.parse(fs.readFileSync('public/version.json', 'utf8'));
+          } catch (e) {
+            console.error('Failed to read public/version.json', e);
+          }
+          const tag = process.env.TAG || 'v0.0.0';
+          const title = versionInfo.title || `${tag} 成都周边50座山高精度真实轨迹与多路线对比系统`;
+          const changelog = versionInfo.changelog || '1. 常规功能升级与性能优化；\n2. 高精度真实山峰数据与多路线体验更新。';
+
+          const getFileSize = (filePath) => {
+            if (fs.existsSync(filePath)) {
+              const bytes = fs.statSync(filePath).size;
+              return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            }
+            return '约 30 MB';
+          };
+
+          const releaseApk = `weekly-mountain-${tag}-release.apk`;
+          const debugApk = `weekly-mountain-${tag}-debug.apk`;
+          const releaseSize = getFileSize(releaseApk);
+          const debugSize = getFileSize(debugApk);
+
+          const notes = [
+            `## 🏔️ ${title}`,
+            '',
+            '### 📝 更新日志',
+            changelog,
+            '',
+            '---',
+            '',
+            '### 📦 安装包下载指引',
+            '',
+            '| 构建版本 | APK 文件名 | 文件大小 | 适用场景说明 |',
+            '| :--- | :--- | :--- | :--- |',
+            `| 🚀 **正式发布版 (Release)** | \`${releaseApk}\` | \`${releaseSize}\` | **推荐日常使用**：采用 Zero-DCE 纯净精简构建，已剔除调试悬浮球与哨兵诊断模块，启动飞快、性能最优。 |`,
+            `| 🛠️ **内测调试版 (Debug)** | \`${debugApk}\` | \`${debugSize}\` | **公测与体验排障**：集成移动端真机反馈悬浮球、端侧切片录屏与实时诊断功能，供开发者与先锋测试员使用。 |`,
+            '',
+            '---',
+            '',
+            '### 🌐 多端体验与访问',
+            '- 📱 **Android 原生端**：请在下方 **Assets** 附件列表中选择适合的版本直接下载安装。',
+            '- 🌏 **Web 沉浸体验**：[https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/)',
+            '',
+            '> 💡 *小提示：若系统弹出“未知来源应用安装”，请在手机系统权限设置中选择“允许来自此来源的应用安装”即可畅享高山探索。*',
+            ''
+          ].join('\n');
+
+          fs.writeFileSync('release_notes.md', notes, 'utf8');
+          console.log('=== Generated release_notes.md ===');
+          console.log(notes);
+          if (process.env.GITHUB_OUTPUT) {
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `title=${title}\n`);
+          }
+          EOF
+          node generate_notes.cjs
+          rm -f generate_notes.cjs
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.release_notes.outputs.title }}
+          tag_name: ${{ env.TAG }}
+          body_path: release_notes.md
+          files: |
+            weekly-mountain-${{ env.TAG }}-release.apk
+            weekly-mountain-${{ env.TAG }}-debug.apk
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
