@@ -102,13 +102,22 @@ jobs:
           javac -version
           echo "JAVA_HOME=$JAVA_HOME"
           set -o pipefail
-          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee ../gradle_release.log || {
-            echo "### Gradle Release Failure Log" >> $GITHUB_STEP_SUMMARY
+          ./gradlew assembleDebug --stacktrace --no-daemon 2>&1 | tee ../gradle_release.log
+
+      - name: Report Release Build Failure
+        if: failure()
+        run: |
+          echo "### Gradle Release Failure Diagnostics" >> $GITHUB_STEP_SUMMARY
+          if [ -f gradle_release.log ]; then
+            echo '```text' >> $GITHUB_STEP_SUMMARY
+            grep -E -C 5 "FAILED|error:|Exception|FAILURE:" gradle_release.log | head -n 80 >> $GITHUB_STEP_SUMMARY || true
+            echo "=== TAIL OF LOG ===" >> $GITHUB_STEP_SUMMARY
+            tail -n 60 gradle_release.log >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
-            tail -n 120 ../gradle_release.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            exit 1
-          }
+          else
+            echo "No gradle_release.log found at root." >> $GITHUB_STEP_SUMMARY
+            find . -name "*.log" -ls >> $GITHUB_STEP_SUMMARY || true
+          fi
 
       - name: Archive Release APK
         run: |
@@ -146,13 +155,21 @@ jobs:
         working-directory: android
         run: |
           set -o pipefail
-          ./gradlew clean assembleDebug --stacktrace --no-daemon 2>&1 | tee ../gradle_debug.log || {
-            echo "### Gradle Debug Failure Log" >> $GITHUB_STEP_SUMMARY
+          ./gradlew clean assembleDebug --stacktrace --no-daemon 2>&1 | tee ../gradle_debug.log
+
+      - name: Report Debug Build Failure
+        if: failure()
+        run: |
+          echo "### Gradle Debug Failure Diagnostics" >> $GITHUB_STEP_SUMMARY
+          if [ -f gradle_debug.log ]; then
+            echo '```text' >> $GITHUB_STEP_SUMMARY
+            grep -E -C 5 "FAILED|error:|Exception|FAILURE:" gradle_debug.log | head -n 80 >> $GITHUB_STEP_SUMMARY || true
+            echo "=== TAIL OF LOG ===" >> $GITHUB_STEP_SUMMARY
+            tail -n 60 gradle_debug.log >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
-            tail -n 120 ../gradle_debug.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            exit 1
-          }
+          else
+            echo "No gradle_debug.log found at root." >> $GITHUB_STEP_SUMMARY
+          fi
 
       - name: Archive Debug APK
         run: |
