@@ -15,8 +15,8 @@
       <!-- First-Launch Mandatory Safety & Legal Disclaimer Modal -->
       <LegalDisclaimerModal v-model="isDisclaimerOpen" :mandatory="true" />
 
-      <!-- Official In-App Online Update Modal -->
-      <AppUpdateModal />
+      <!-- Official In-App Online Update Modal (仅原生 App 容器形态挂载) -->
+      <AppUpdateModal v-if="isNativeAppEnv" />
     </div>
   </div>
 </template>
@@ -32,10 +32,12 @@ import LegalDisclaimerModal from '@/components/common/LegalDisclaimerModal.vue';
 import AppUpdateModal from '@/components/common/AppUpdateModal.vue';
 import { useUpdateStore } from '@/stores/updateStore.js';
 import { IS_DEBUG_BUILD } from '@/config/version.js';
+import { isNativeApp } from '@/utils/platform.js';
 
 // 首次启动强制法律免责协议弹窗检测
 const isDisclaimerOpen = ref(false);
 const updateStore = useUpdateStore();
+const isNativeAppEnv = isNativeApp();
 
 onMounted(async () => {
   try {
@@ -47,10 +49,12 @@ onMounted(async () => {
     isDisclaimerOpen.value = true;
   }
 
-  // 启动 2 秒后在后台静默检测是否有新版本发布
-  setTimeout(() => {
-    updateStore.checkForUpdate(true);
-  }, 2000);
+  // 仅在原生 App 容器环境下启动 2 秒后在后台静默检测是否有新版本发布
+  if (isNativeAppEnv) {
+    setTimeout(() => {
+      updateStore.checkForUpdate(true);
+    }, 2000);
+  }
 
   // 在离线 Debug APK 或非 dev 模式下，按需加载 @agent-feedback/client 确保真机常驻悬浮胶囊
   if (!import.meta.env.DEV && IS_DEBUG_BUILD) {

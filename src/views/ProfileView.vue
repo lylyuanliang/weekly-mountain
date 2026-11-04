@@ -1102,15 +1102,17 @@
 
           <span class="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_4px_#4edea3]"></span>
 
-          <span>每周一山 · {{ VERSION_LABEL }}</span>
+          <span>每周一山 · {{ displayVersionLabel }}</span>
 
         </div>
 
 
 
-        <!-- 检查更新按钮 -->
+        <!-- 检查更新按钮 (仅在原生 App 容器环境下展示) -->
 
         <button
+
+          v-if="isNativeAppEnv"
 
           type="button"
 
@@ -1398,7 +1400,9 @@ import { useUpdateStore } from '@/stores/updateStore.js';
 
 import { useScrollLock } from '@/composables/useScrollLock.js';
 
-import { VERSION_LABEL, IS_DEBUG_BUILD } from '@/config/version.js';
+import { VERSION_LABEL, IS_DEBUG_BUILD, getVersionLabel } from '@/config/version.js';
+
+import { isNativeApp } from '@/utils/platform.js';
 
 
 
@@ -1411,6 +1415,10 @@ const mountainStore = useMountainStore();
 const regionStore = useRegionStore();
 
 const updateStore = useUpdateStore();
+
+const isNativeAppEnv = isNativeApp();
+
+const displayVersionLabel = computed(() => getVersionLabel());
 
 
 

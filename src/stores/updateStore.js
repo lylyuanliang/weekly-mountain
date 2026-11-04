@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { APP_VERSION } from '@/config/version.js';
 import { fetchLatestRelease, compareVersions } from '@/services/updateService.js';
 import { openExternalUrl } from '@/utils/appLauncher.js';
+import { isNativeApp } from '@/utils/platform.js';
 
 export const useUpdateStore = defineStore('update', () => {
   const isChecking = ref(false);
@@ -63,6 +64,15 @@ export const useUpdateStore = defineStore('update', () => {
    */
   async function checkForUpdate(silent = false) {
     if (isChecking.value) return;
+
+    // 平台形态隔离：Web 浏览器端通过页面刷新/CDN即加载最新版本，无需检测原生 APK 更新
+    if (!isNativeApp()) {
+      if (!silent) {
+        console.info('[updateStore] Web 网页版已是最新实时部署版本，无需执行原生 APK 检查');
+      }
+      return;
+    }
+
     isChecking.value = true;
     errorMessage.value = '';
 
