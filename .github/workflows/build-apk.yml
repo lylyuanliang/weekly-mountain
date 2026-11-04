@@ -34,11 +34,11 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Fix Android SDK permissions
         run: |
@@ -86,7 +86,7 @@ jobs:
 
           echo "=== 3. Compiling Android Release APK ==="
           cd android
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --stacktrace
           cd ..
 
           echo "=== 4. Archiving release APK ==="
@@ -103,7 +103,7 @@ jobs:
 
           echo "=== 3. Compiling Android Debug APK ==="
           cd android
-          ./gradlew clean assembleDebug
+          ./gradlew clean assembleDebug --stacktrace
           cd ..
 
           echo "=== 4. Archiving debug APK ==="
