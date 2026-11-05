@@ -1,5 +1,5 @@
 <!-- RELEASE_METADATA_START
-title: "服务端门禁拦截、远程动态密钥校验与真机双变体联调"
+title: "服务端门禁与动态配对升级"
 changelog:
   - "【安全门禁】集成 @lylyuanliang/agent-feedback 1.4.0，服务端数据接口全面实施 HTTP 401 鉴权拦截；"
   - "【动态配对】解决独立编译 Debug APK 本地无密钥导致的配对失败，支持端侧向开发机 (/auth/verify) 动态校验并持久化；"

@@ -110,3 +110,4 @@ npx agent-feedback update-status --id <id> --status completed --reply "修复说
    RELEASE_METADATA_END -->
    ```
 4. **自动化与防重复机制**：`scripts/sync_version.py` 会自动解析 `docs/releases/` 下的最新版本元数据并注入 `public/version.json`，供 GitHub Actions CI/CD 流水线直接生成 GitHub Release 正文。**严禁在构建脚本中硬编码任何固定的 Release 标题或更新日志**，任何新发版必须先在对应文档中更新记录后再触发构建。
+5. **Release 标题简短精炼原则**：发版标题必须简短、凝练（**严格控制在 15 个字以内**，如 `服务端门禁与动态配对升级`），严禁长句堆砌或罗列冗长特性名词。
