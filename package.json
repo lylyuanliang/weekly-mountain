@@ -1,15 +1,15 @@
 {
   "name": "weekly-mountain",
-  "version": "0.3.0.202611041932",
+  "version": "0.3.0.202611050851",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/copy_assets.js",
-    "build:release": "vite build --mode release && node scripts/copy_assets.js",
+    "build": "vite build && node scripts/copy_assets.js && node scripts/sync_android_assets.js",
+    "build:release": "vite build --mode release && node scripts/copy_assets.js && node scripts/sync_android_assets.js",
     "preview": "vite preview",
-    "cap:sync": "cap sync android",
-    "cap:build": "npm run build && cap sync android",
+    "cap:sync": "cap sync android && node scripts/sync_android_assets.js",
+    "cap:build": "npm run build && cap sync android && node scripts/sync_android_assets.js",
     "sentinel": "agent-feedback watch --dir scratch/feedback"
   },
   "dependencies": {
