@@ -1,12 +1,12 @@
 {
-  "version": "0.3.0.202611051055",
-  "versionTag": "v0.3.0.202611051055",
-  "title": "v0.3.0.202611051055 签名一致性对齐、CI双包体积硬门禁与微信导航引导优化",
+  "version": "0.3.0.202611051106",
+  "versionTag": "v0.3.0.202611051106",
+  "title": "v0.3.0.202611051106 服务端门禁拦截、远程动态密钥校验与真机双变体联调",
   "publishedAt": "2026-11-05",
-  "changelog": "1. 【签名对齐】固化 Android 原生 debug.keystore 签名配置，根治跨环境覆盖安装签名不一致 (INSTALL_FAILED_UPDATE_INCOMPATIBLE)；\n2. 【状态机修复】修复安装中断或取消后更新弹窗卡死在「您正在使用最新版本」的状态停滞，增设「安装包已就绪」直接安装入口；\n3. 【流水线硬门禁】修复 GitHub CI 归档残缺中间 APK 导致 3.94MB 的严重缺陷，锁定 canonical outputs 产物并增设 20MB 体积门禁；\n4. 【静态资源断言】硬化 scripts/copy_assets.js，防范缺失资源时静默退出 0，确保 153 座山峰全景高清大图 100% 完整打包；\n5. 【微信导航引导】Web 版微信内置浏览器增设系统浏览器打开引导卡片，主动提示右上角在浏览器打开直达高德/百度/腾讯地图导航；\n6. 【本地联调包】真机反馈面板无缝打通开发机本地刚构建 APK 直连极速下载，免除远端流水线漫长等待。",
-  "assetName": "weekly-mountain-v0.3.0.202611051055-release.apk",
+  "changelog": "1. 【安全门禁】集成 @lylyuanliang/agent-feedback 1.4.0，服务端数据接口全面实施 HTTP 401 鉴权拦截；\n2. 【动态配对】解决独立编译 Debug APK 本地无密钥导致的配对失败，支持端侧向开发机 (/auth/verify) 动态校验并持久化；\n3. 【历史保护】端侧历史面板未授权状态下展示受限遮罩，阻断轮询，严防历史工单与排查日志外泄；\n4. 【开发机直连】本地 scratch/.agent-feedback-secret 零明文下发与防泄露机制，完善 README 开发者联调配对指南；\n5. 【签名固化】固化 Android 原生 debug.keystore 签名配置，消除跨机器覆盖安装签名不一致 (INSTALL_FAILED_UPDATE_INCOMPATIBLE)；\n6. 【流水线硬门禁】隔离 Release (Zero-DCE) 与 Debug (集成哨兵) 双包变体，锁定 20MB 产物体积硬门禁。",
+  "assetName": "weekly-mountain-v0.3.0.202611051106-release.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611051055/weekly-mountain-v0.3.0.202611051055-release.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611051055/weekly-mountain-v0.3.0.202611051055-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611051055/weekly-mountain-v0.3.0.202611051055-release.apk"
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611051106/weekly-mountain-v0.3.0.202611051106-release.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611051106/weekly-mountain-v0.3.0.202611051106-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611051106/weekly-mountain-v0.3.0.202611051106-release.apk"
 }
