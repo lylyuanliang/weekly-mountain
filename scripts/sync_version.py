@@ -5,7 +5,7 @@
 用于自动将应用版本号第四位更新为当前时间戳 (YYYYMMDDHHmm)，并同步对齐：
 1. package.json
 2. src/config/version.js
-3. public/version.json
+3. public/version.json (动态从 docs/releases/RELEASE-v*.md 或命令行入参提取标题与日志)
 4. android/app/build.gradle (versionName & versionCode)
 """
 
@@ -14,6 +14,7 @@ import re
 import sys
 import json
 import time
+import argparse
 from datetime import datetime
 
 # 确保 Windows 控制台字符编码为 UTF-8
@@ -33,7 +34,72 @@ def generate_timestamp_version(base_version="0.3.0"):
     app_version = f"{base_version}.{timestamp_str}"
     return app_version, timestamp_str, unix_seconds, now
 
-def sync_all(explicit_version=None):
+def extract_release_doc_meta(base_version):
+    """
+    从 docs/releases/ 目录下按规范提取对应版本的标题与更新日志
+    优先读取 <!-- RELEASE_METADATA_START ... RELEASE_METADATA_END --> 结构化块
+    """
+    releases_dir = os.path.join(PROJECT_ROOT, "docs", "releases")
+    target_file = os.path.join(releases_dir, f"RELEASE-v{base_version}.md")
+
+    # 若不存在精确文件名，尝试在 docs/releases 下寻找最新的 RELEASE-*.md
+    if not os.path.exists(target_file) and os.path.exists(releases_dir):
+        all_files = sorted(
+            [f for f in os.listdir(releases_dir) if f.startswith("RELEASE-v") and f.endswith(".md")],
+            reverse=True
+        )
+        if all_files:
+            target_file = os.path.join(releases_dir, all_files[0])
+
+    if not os.path.exists(target_file):
+        return None, None
+
+    try:
+        with open(target_file, "r", encoding="utf-8") as f:
+            content = f.read()
+
+        # 1. 结构化元数据块解析
+        m = re.search(r"<!--\s*RELEASE_METADATA_START([\s\S]*?)RELEASE_METADATA_END\s*-->", content)
+        if m:
+            raw_meta = m.group(1).strip()
+            lines = [l.strip() for l in raw_meta.splitlines() if l.strip()]
+            title = ""
+            changelog_items = []
+            in_changelog = False
+            for l in lines:
+                if l.startswith("title:"):
+                    title = l.split("title:", 1)[1].strip().strip("\"'")
+                elif l.startswith("changelog:"):
+                    in_changelog = True
+                elif in_changelog and l.startswith("-"):
+                    item = l.lstrip("-").strip().strip("\"'")
+                    changelog_items.append(item)
+
+            if title or changelog_items:
+                formatted_changelog = "\n".join(
+                    [f"{i}. {it}" if not re.match(r"^\d+\.", it) else it for i, it in enumerate(changelog_items, 1)]
+                )
+                return title, formatted_changelog
+
+        # 2. 降级：从普通 Markdown 块中智能提取
+        m_quote = re.search(r"> \*\*([^\*]+)\*\*", content)
+        title = m_quote.group(1).strip() if m_quote else ""
+
+        bullets = []
+        for m_bullet in re.finditer(r"- \*\*([^*]+)\*\*[:：]\s*([^\r\n]+)", content):
+            tag_name = m_bullet.group(1).split("(")[0].strip()
+            desc = m_bullet.group(2).strip()
+            bullets.append(f"【{tag_name}】{desc}")
+
+        if bullets:
+            formatted_changelog = "\n".join([f"{i}. {it}" for i, it in enumerate(bullets[:6], 1)])
+            return title, formatted_changelog
+    except Exception as e:
+        print(f"  [!] 读取或解析版本文档 {target_file} 失败: {e}")
+
+    return None, None
+
+def sync_all(explicit_version=None, explicit_title=None, explicit_changelog=None):
     if explicit_version:
         parts = explicit_version.replace("v", "").split(".")
         if len(parts) >= 4:
@@ -84,10 +150,24 @@ def sync_all(explicit_version=None):
             f.write(v_content)
         print(f"  [✓] src/config/version.js -> {app_version} ({build_timestamp})")
 
-    # 3. 更新 public/version.json
+    # 3. 动态解析并更新 public/version.json
     public_dir = os.path.join(PROJECT_ROOT, "public")
     os.makedirs(public_dir, exist_ok=True)
     version_json_path = os.path.join(public_dir, "version.json")
+
+    # 从 docs/releases/RELEASE-v*.md 获取动态标题与更新日志
+    doc_title, doc_changelog = extract_release_doc_meta(base_version)
+
+    title_suffix = explicit_title or doc_title or "全新高精度山峰轨迹与多端适配系统"
+    if title_suffix.startswith(version_tag):
+        final_title = title_suffix
+    else:
+        final_title = f"{version_tag} {title_suffix}".strip()
+
+    final_changelog = explicit_changelog or doc_changelog or (
+        "1. 【版本升级】应用架构优化与数据体验升级；\n"
+        "2. 【体验调优】高精度山峰轨迹与离线瓦片加载优化。"
+    )
 
     release_apk_name = f"weekly-mountain-{version_tag}-release.apk"
     debug_apk_name = f"weekly-mountain-{version_tag}-debug.apk"
@@ -97,16 +177,9 @@ def sync_all(explicit_version=None):
     version_json_data = {
         "version": app_version,
         "versionTag": version_tag,
-        "title": f"{version_tag} 签名一致性对齐、CI双包体积硬门禁与微信导航引导优化",
+        "title": final_title,
         "publishedAt": date_str,
-        "changelog": (
-            "1. 【签名对齐】固化 Android 原生 debug.keystore 签名配置，根治跨环境覆盖安装签名不一致 (INSTALL_FAILED_UPDATE_INCOMPATIBLE)；\n"
-            "2. 【状态机修复】修复安装中断或取消后更新弹窗卡死在「您正在使用最新版本」的状态停滞，增设「安装包已就绪」直接安装入口；\n"
-            "3. 【流水线硬门禁】修复 GitHub CI 归档残缺中间 APK 导致 3.94MB 的严重缺陷，锁定 canonical outputs 产物并增设 20MB 体积门禁；\n"
-            "4. 【静态资源断言】硬化 scripts/copy_assets.js，防范缺失资源时静默退出 0，确保 153 座山峰全景高清大图 100% 完整打包；\n"
-            "5. 【微信导航引导】Web 版微信内置浏览器增设系统浏览器打开引导卡片，主动提示右上角在浏览器打开直达高德/百度/腾讯地图导航；\n"
-            "6. 【本地联调包】真机反馈面板无缝打通开发机本地刚构建 APK 直连极速下载，免除远端流水线漫长等待。"
-        ),
+        "changelog": final_changelog,
         "assetName": release_apk_name,
         "assetSizeText": "约 29 MB",
         "downloadUrl": release_download_url,
@@ -116,7 +189,7 @@ def sync_all(explicit_version=None):
     with open(version_json_path, "w", encoding="utf-8") as f:
         json.dump(version_json_data, f, ensure_ascii=False, indent=2)
         f.write("\n")
-    print(f"  [✓] public/version.json -> {version_tag}")
+    print(f"  [✓] public/version.json -> {version_tag} (Title: '{final_title}')")
 
     # 4. 更新 android/app/build.gradle
     build_gradle_path = os.path.join(PROJECT_ROOT, "android", "app", "build.gradle")
@@ -135,5 +208,10 @@ def sync_all(explicit_version=None):
     return app_version
 
 if __name__ == "__main__":
-    target = sys.argv[1] if len(sys.argv) > 1 else None
-    sync_all(target)
+    parser = argparse.ArgumentParser(description="版本同步与时间戳版本升级工具")
+    parser.add_argument("version", nargs="?", default=None, help="目标版本号或基线版本 (如 0.3.0 或 0.3.0.202611051055)")
+    parser.add_argument("--title", default=None, help="自定义 Release 标题")
+    parser.add_argument("--changelog", default=None, help="自定义 Release 更新日志")
+    args = parser.parse_args()
+
+    sync_all(args.version, explicit_title=args.title, explicit_changelog=args.changelog)
