@@ -57,13 +57,15 @@ export async function fetchLatestRelease() {
   const candidateUrls = [
     // 0. 穿透联调高速通道 (若已配置 cpolar/局域网，优先获取本机热打包版本)
     tunnelVersionUrl,
-    // 1. jsDelivr 全球加速 CDN (CORS 友好，无 Rate-limit，保证获取真实远端发布版本)
-    `${JSDELIVR_ENDPOINT}?t=${timestamp}`,
-    // 2. 国内代理镜像
+    // 1. 国内代理镜像 (实时直连 GitHub Raw，无 CDN 边缘缓存延迟)
     `${PROXY_RAW_ENDPOINT}?t=${timestamp}`,
-    // 3. jsDelivr package.json 兜底
+    // 2. 官方 GitHub Raw 直连 (无边缘强缓存)
+    `https://raw.githubusercontent.com/${GITHUB_REPO}/main/public/version.json?t=${timestamp}`,
+    // 3. jsDelivr 全球加速 CDN (若有缓存则兜底)
+    `${JSDELIVR_ENDPOINT}?t=${timestamp}`,
+    // 4. jsDelivr package.json 兜底
     `${PACKAGE_JSON_ENDPOINT}?t=${timestamp}`,
-    // 4. 本地/同源静态路径（开发与测试环境离线兜底）
+    // 5. 本地/同源静态路径（开发与测试环境离线兜底）
     typeof window !== 'undefined' ? `/version.json?t=${timestamp}` : null
   ].filter(Boolean);
 
@@ -79,8 +81,14 @@ export async function fetchLatestRelease() {
       if (res.ok) {
         const json = await res.json();
         if (json && (json.version || json.versionTag)) {
-          releaseData = json;
-          break;
+          // 若初次获取，或当前通道版本比已缓存版本更新，则采纳
+          if (!releaseData || compareVersions(releaseData.version || releaseData.versionTag, json.version || json.versionTag) > 0) {
+            releaseData = json;
+          }
+          // 优先通道（穿透直连或 GitHub raw 实时通道）直接命中退出，防范慢速降级
+          if (url === tunnelVersionUrl || url.includes('ghfast.top') || url.includes('raw.githubusercontent.com')) {
+            break;
+          }
         }
       }
     } catch (e) {

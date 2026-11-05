@@ -314,6 +314,14 @@ jobs:
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Purge jsDelivr CDN Cache
+        if: success()
+        run: |
+          echo "Purging jsDelivr edge cache for version.json and package.json..."
+          curl -s -X POST "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/public/version.json" || true
+          curl -s -X POST "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/package.json" || true
+          echo "jsDelivr CDN cache purge completed."
+
       - name: Upload Diagnostic Logs on Failure
         if: failure()
         uses: actions/upload-artifact@v4
