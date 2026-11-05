@@ -2,7 +2,7 @@
   <article
     :id="`mountain-card-${mountain.id}`"
     @click="$emit('select', mountain.id)"
-    class="hero-mountain-card flex-shrink-0 w-[84vw] max-w-[340px] snap-center rounded-2xl bg-[#1c202c] border overflow-hidden shadow-2xl relative group"
+    class="hero-mountain-card flex-shrink-0 w-[84vw] max-w-[340px] snap-center rounded-2xl bg-[#1c202c] border overflow-hidden shadow-2xl relative group cursor-pointer transition-[transform,border-color,box-shadow] duration-300 ease-out will-change-transform"
     :class="isActive ? 'border-primary ring-2 ring-primary/40 glow-primary scale-[1.01]' : 'border-outline-variant/40 hover:border-outline-variant/70'"
   >
     <!-- Mountain Hero Image -->
@@ -269,3 +269,10 @@ function handleAddToPlan() {
   }
 }
 </script>
+
+<style scoped>
+.hero-mountain-card {
+  box-sizing: border-box;
+  transform: translateZ(0);
+}
+</style>

@@ -2,8 +2,8 @@
   <article
     :id="`compact-mountain-card-${mountain.id}`"
     @click="handleClick"
-    class="compact-mountain-card group flex items-center gap-3 p-2 h-[84px] min-h-[84px] max-h-[84px] rounded-[14px] bg-[#1c202c] border select-none transition-all duration-200 cursor-pointer overflow-hidden relative"
-    :class="isActive ? 'border-primary ring-1 ring-primary/40 glow-primary bg-[#1f2432]' : 'border-outline-variant/30 hover:border-outline-variant/60'"
+    class="compact-mountain-card group flex items-center gap-3 p-2 h-[84px] min-h-[84px] max-h-[84px] rounded-[14px] bg-[#1c202c] border select-none cursor-pointer overflow-hidden relative"
+    :class="isActive ? 'is-active border-primary glow-primary bg-[#1f2432]' : 'border-outline-variant/30 hover:border-outline-variant/60'"
   >
     <!-- Left: 68x68 Rounded Thumbnail with Fallback & Difficulty Badge -->
     <div class="relative w-[68px] h-[68px] rounded-xl overflow-hidden bg-surface-container-lowest flex-shrink-0">
@@ -288,5 +288,16 @@ function handleImgError() {
 <style scoped>
 .compact-mountain-card {
   box-sizing: border-box;
+  transform: translateZ(0);
+  transition: border-color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.compact-mountain-card.is-active {
+  border-color: #4edea3 !important;
+  background-color: #1f2533 !important;
+  box-shadow: 0 0 0 1px rgba(78, 222, 163, 0.4), 0 4px 18px rgba(78, 222, 163, 0.18) !important;
 }
 </style>

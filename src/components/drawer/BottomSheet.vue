@@ -14,8 +14,7 @@
       @mousedown="onMouseDown"
       style="overscroll-behavior: none; -webkit-overflow-scrolling: touch;"
       :class="[
-        'h-full rounded-t-3xl bg-[#171b26] border-t border-outline-variant/30 shadow-[0_-12px_40px_rgba(0,0,0,0.7)] pt-2 px-margin flex flex-col gap-1.5 overflow-hidden',
-        snapState === 'expanded' ? 'pb-[72px]' : 'pb-2'
+        'h-full rounded-t-3xl bg-[#171b26] border-t border-outline-variant/30 shadow-[0_-12px_40px_rgba(0,0,0,0.7)] pt-2 px-margin flex flex-col gap-1.5 overflow-hidden pb-2'
       ]"
     >
       <!-- Drawer Drag Indicator Bar -->
@@ -55,102 +54,142 @@
       <!-- ================= HALF & EXPANDED STATES ================= -->
       <template v-else>
         <!-- Section Header: Peaks Count & Action Buttons (Visual Anchor) -->
-        <div class="flex items-center justify-between pt-0.5 flex-shrink-0">
-          <div v-if="isSearchActive" class="flex items-center gap-2">
+        <div class="flex items-center justify-between pt-0.5 flex-shrink-0 gap-2">
+          <div v-if="isSearchActive" class="flex items-center gap-2 min-w-0 flex-shrink-0">
             <div class="w-6 h-6 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center text-primary flex-shrink-0 shadow-sm">
               <span class="material-symbols-outlined text-[15px]">manage_search</span>
             </div>
-            <div class="flex items-baseline gap-1.5">
-              <h2 class="text-headline-md font-headline-md text-on-surface font-bold tracking-tight">搜索结果</h2>
-              <span class="text-label-data-sm font-label-data-sm text-primary font-semibold px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20">
+            <div class="flex items-baseline gap-1.5 flex-shrink-0 whitespace-nowrap">
+              <h2 class="text-headline-md font-headline-md text-on-surface font-bold tracking-tight whitespace-nowrap">搜索结果</h2>
+              <span class="text-label-data-sm font-label-data-sm text-primary font-semibold px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20 whitespace-nowrap">
                 匹配 {{ mountainStore.filteredMountains.length }} 座
               </span>
             </div>
           </div>
-          <div v-else class="flex items-baseline gap-2">
-            <h2 class="text-headline-md font-headline-md text-on-surface font-bold tracking-tight">Active Peaks</h2>
-            <span class="text-label-data-sm font-label-data-sm text-primary font-semibold px-2 py-0.5 rounded-md bg-primary/10">
+          <div v-else class="flex items-baseline gap-2 min-w-0 flex-shrink-0 whitespace-nowrap">
+            <h2 class="text-headline-md font-headline-md text-on-surface font-bold tracking-tight whitespace-nowrap">Active Peaks</h2>
+            <span class="text-label-data-sm font-label-data-sm text-primary font-semibold px-2 py-0.5 rounded-md bg-primary/10 whitespace-nowrap">
               {{ mountainStore.filteredMountains.length }} TRACKS
             </span>
           </div>
 
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1.5 flex-shrink-0">
             <!-- Quick Clear Search Button in Search Mode -->
             <button
               v-if="isSearchActive"
               type="button"
               @click="clearSearch"
-              class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high hover:bg-surface-bright text-primary active:scale-95 transition-all border border-primary/30 text-caption font-semibold cursor-pointer"
+              class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high hover:bg-surface-bright text-primary active:scale-95 transition-all border border-primary/30 text-caption font-semibold cursor-pointer whitespace-nowrap flex-shrink-0"
               title="清除搜索关键词"
             >
               <span class="material-symbols-outlined text-[14px]">close</span>
               <span>清除搜索</span>
             </button>
-            <div v-else class="hidden xs:flex items-center gap-1.5 text-on-surface-variant text-caption">
+            <div v-else class="hidden xs:flex items-center gap-1.5 text-on-surface-variant text-caption whitespace-nowrap flex-shrink-0">
               <span class="material-symbols-outlined text-secondary text-[16px]">filter_drama</span>
               <span>Live Radar</span>
             </div>
 
-            <!-- Action Buttons for Snap State Cycling -->
+            <!-- Action Buttons for Snap State Cycling (Compact Icon-Only to Prevent Wrapping) -->
             <template v-if="snapState === 'half'">
               <!-- Collapse to Minimal Peek Bar -->
               <button
+                type="button"
                 @click.stop="collapse"
-                aria-label="收起卡片以查看大地图"
-                class="flex items-center gap-0.5 px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary active:scale-95 transition-all border border-outline-variant/30 text-caption font-semibold cursor-pointer"
-                title="降到最低以查看大地图"
+                aria-label="收起大图"
+                title="收起大图"
+                class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary active:scale-90 transition-all border border-outline-variant/30 flex items-center justify-center cursor-pointer shadow-sm flex-shrink-0"
               >
-                <span>收起大图</span>
-                <span class="material-symbols-outlined text-[16px]">expand_more</span>
+                <span class="material-symbols-outlined text-[18px]">expand_more</span>
               </button>
 
               <!-- Expand to Fullscreen Compact List -->
               <button
+                type="button"
                 @click.stop="expandToFull"
-                aria-label="展开全屏高密度列表"
-                class="flex items-center gap-0.5 px-2.5 py-1 rounded-full bg-primary/15 hover:bg-primary/25 text-primary active:scale-95 transition-all border border-primary/35 text-caption font-semibold cursor-pointer shadow-sm"
-                title="展开全屏高密度列表"
+                aria-label="展开全屏"
+                title="展开全屏"
+                class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary/15 hover:bg-primary/25 text-primary active:scale-90 transition-all border border-primary/35 flex items-center justify-center cursor-pointer shadow-sm flex-shrink-0"
               >
-                <span>展开全屏</span>
-                <span class="material-symbols-outlined text-[16px]">expand_less</span>
+                <span class="material-symbols-outlined text-[18px]">expand_less</span>
               </button>
             </template>
 
             <template v-else-if="snapState === 'expanded'">
               <!-- Retract back to Half Screen Carousel -->
               <button
+                type="button"
                 @click.stop="expandToHalf"
-                aria-label="收回半屏大图轮播"
-                class="flex items-center gap-0.5 px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary active:scale-95 transition-all border border-outline-variant/30 text-caption font-semibold cursor-pointer"
-                title="收回半屏大图轮播"
+                aria-label="收回半屏"
+                title="收回半屏"
+                class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary active:scale-90 transition-all border border-outline-variant/30 flex items-center justify-center cursor-pointer shadow-sm flex-shrink-0"
               >
-                <span>收回半屏</span>
-                <span class="material-symbols-outlined text-[16px]">expand_more</span>
+                <span class="material-symbols-outlined text-[18px]">expand_more</span>
               </button>
             </template>
           </div>
         </div>
 
-        <!-- Weather Bulletin Banner (In Half State when not search active) -->
-        <div
-          v-if="snapState === 'half' && !isSearchActive"
-          class="w-full px-3 py-1.5 rounded-xl bg-surface-container-low/90 border border-outline-variant/30 flex items-center gap-2.5 flex-shrink-0 transition-opacity duration-200"
-        >
-          <span class="material-symbols-outlined text-tertiary-fixed-dim text-[18px] flex-shrink-0">warning</span>
-          <p class="text-caption font-caption text-on-surface-variant truncate">
-            <strong class="text-on-surface font-semibold">Balang Pass:</strong> 实时路况 · 巴朗山及 3800m+ 积雪路段需防滑链
-          </p>
-        </div>
-
-        <!-- Mode Transition Container (Zero-tear Crossfade) -->
-        <Transition name="drawer-content-fade" mode="out-in">
-          <!-- EXPANDED STATE: VERTICAL COMPACT LIST -->
+        <!-- Content Area: Dual-Mode Smooth Morph Container (Zero DOM Mounting Lag & Continuous Touch Interpolation) -->
+        <div class="relative flex-1 min-h-0 w-full overflow-hidden">
+          <!-- MODE A: HORIZONTAL HERO CAROUSEL (Active in Half Mode) -->
           <div
-            v-if="snapState === 'expanded'"
-            key="expanded-list"
+            ref="carouselContainerRef"
+            class="carousel-mode-view absolute inset-0 flex flex-col gap-1.5 will-change-[opacity,transform]"
+            :style="carouselViewStyle"
+          >
+            <!-- Weather Bulletin Banner (In Half State) -->
+            <div
+              v-if="!isSearchActive"
+              class="w-full px-3 py-1.5 rounded-xl bg-surface-container-low/90 border border-outline-variant/30 flex items-center gap-2.5 flex-shrink-0"
+            >
+              <span class="material-symbols-outlined text-tertiary-fixed-dim text-[18px] flex-shrink-0">warning</span>
+              <p class="text-caption font-caption text-on-surface-variant truncate">
+                <strong class="text-on-surface font-semibold">Balang Pass:</strong> 实时路况 · 巴朗山及 3800m+ 积雪路段需防滑链
+              </p>
+            </div>
+
+            <!-- Horizontal Hero Cards Carousel -->
+            <div
+              ref="carouselRef"
+              class="flex gap-3.5 overflow-x-auto no-scrollbar -mx-margin px-margin pt-1 pb-2 snap-x snap-mandatory flex-1 items-start"
+            >
+              <HeroMountainCard
+                v-for="mountain in mountainStore.filteredMountains"
+                :key="mountain.id"
+                :mountain="mountain"
+                :is-active="mountain.id === mountainStore.selectedMountainId"
+                @select="handleCardSelect"
+                @detail="handleCardDetail"
+                @weather="handleCardWeather"
+              />
+
+              <!-- Empty State -->
+              <div
+                v-if="mountainStore.filteredMountains.length === 0"
+                class="w-full py-8 px-4 flex flex-col items-center justify-center text-center text-on-surface-variant gap-2 animate-fade-in"
+              >
+                <span class="material-symbols-outlined text-[36px] text-outline">{{ isSearchActive ? 'search_off' : 'terrain' }}</span>
+                <p class="text-body-md font-bold text-on-surface">{{ isSearchActive ? '未搜索到匹配山峰' : '暂无匹配山峰' }}</p>
+                <p class="text-caption text-on-surface-variant max-w-[280px] leading-relaxed">
+                  {{ isSearchActive ? `未找到与“${mountainStore.searchQuery}”相关的路线，建议尝试其他关键词。` : '当前收录以成都周边 0.5~4h 车程圈为主。如巴中光雾山等川北/川东远线名峰，可随时点击右下角反馈建议收录！' }}
+                </p>
+                <button
+                  @click="resetAllFilters"
+                  class="mt-1 px-4 py-1.5 rounded-full bg-surface-container-high text-primary text-body-sm font-semibold border border-primary/40 active:scale-95 shadow cursor-pointer"
+                >
+                  {{ isSearchActive ? '清空搜索并查看全部' : '重置筛选条件' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODE B: VERTICAL COMPACT LIST (Active in Expanded Mode) -->
+          <div
             ref="compactListRef"
-            class="compact-list-container flex-1 overflow-y-auto overscroll-contain pr-0.5 flex flex-col gap-2 pt-1 pb-4"
+            class="compact-list-container absolute inset-0 overflow-y-auto overscroll-contain pr-0.5 flex flex-col gap-2 pt-1 pb-4 will-change-[opacity,transform]"
             style="-webkit-overflow-scrolling: touch;"
+            :style="compactListViewStyle"
           >
             <CompactMountainCard
               v-for="mountain in mountainStore.filteredMountains"
@@ -180,43 +219,7 @@
               </button>
             </div>
           </div>
-
-          <!-- HALF STATE: HORIZONTAL HERO CAROUSEL -->
-          <div
-            v-else
-            key="half-carousel"
-            ref="carouselRef"
-            class="flex gap-3.5 overflow-x-auto no-scrollbar -mx-margin px-margin pt-1 pb-2 snap-x snap-mandatory flex-1 items-start"
-          >
-            <HeroMountainCard
-              v-for="mountain in mountainStore.filteredMountains"
-              :key="mountain.id"
-              :mountain="mountain"
-              :is-active="mountain.id === mountainStore.selectedMountainId"
-              @select="handleCardSelect"
-              @detail="handleCardDetail"
-              @weather="handleCardWeather"
-            />
-
-            <!-- Empty State -->
-            <div
-              v-if="mountainStore.filteredMountains.length === 0"
-              class="w-full py-8 px-4 flex flex-col items-center justify-center text-center text-on-surface-variant gap-2 animate-fade-in"
-            >
-              <span class="material-symbols-outlined text-[36px] text-outline">{{ isSearchActive ? 'search_off' : 'terrain' }}</span>
-              <p class="text-body-md font-bold text-on-surface">{{ isSearchActive ? '未搜索到匹配山峰' : '暂无匹配山峰' }}</p>
-              <p class="text-caption text-on-surface-variant max-w-[280px] leading-relaxed">
-                {{ isSearchActive ? `未找到与“${mountainStore.searchQuery}”相关的路线，建议尝试其他关键词。` : '当前收录以成都周边 0.5~4h 车程圈为主。如巴中光雾山等川北/川东远线名峰，可随时点击右下角反馈建议收录！' }}
-              </p>
-              <button
-                @click="resetAllFilters"
-                class="mt-1 px-4 py-1.5 rounded-full bg-surface-container-high text-primary text-body-sm font-semibold border border-primary/40 active:scale-95 shadow cursor-pointer"
-              >
-                {{ isSearchActive ? '清空搜索并查看全部' : '重置筛选条件' }}
-              </button>
-            </div>
-          </div>
-        </Transition>
+        </div>
       </template>
     </div>
   </section>
@@ -232,6 +235,7 @@ const emit = defineEmits(['mountain-select', 'mountain-detail', 'mountain-weathe
 
 const mountainStore = useMountainStore();
 const carouselRef = ref(null);
+const carouselContainerRef = ref(null);
 const compactListRef = ref(null);
 const sheetContainerRef = ref(null);
 
@@ -262,26 +266,159 @@ const drawerStyle = computed(() => {
   if (isDragging.value && customHeight.value !== null) {
     return {
       height: `${customHeight.value}px`,
-      bottom: snapState.value === 'expanded' ? '0px' : '66px',
+      bottom: '66px',
       transition: 'none'
     };
   }
 
-  let h = 'clamp(180px, min(364px, calc(100vh - 180px)), 364px)';
-  let b = '66px';
+  let h = 'clamp(180px, min(364px, calc(100vh - 66px - 180px)), 364px)';
+  const b = '66px';
 
   if (snapState.value === 'collapsed') {
     h = '66px';
-    b = '66px';
   } else if (snapState.value === 'expanded') {
-    h = 'calc(100vh - 72px)';
-    b = '0px';
+    h = 'calc(100vh - 66px - 72px)';
   }
 
   return {
     height: h,
     bottom: b,
-    transition: 'height 0.28s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.28s cubic-bezier(0.16, 1, 0.3, 1)'
+    transition: 'height 0.28s cubic-bezier(0.16, 1, 0.3, 1)'
+  };
+});
+
+// Dual-mode morph progress between 'half' (hero carousel) and 'expanded' (compact list)
+const carouselViewStyle = computed(() => {
+  // 1. 手势拖拽中：基于实时拉升像素进行平滑线性插值 (0% jank, 60fps)
+  if (isDragging.value && customHeight.value !== null) {
+    const vh = typeof window !== 'undefined' ? window.innerHeight : 844;
+    const halfPx = Math.max(180, Math.min(364, vh - 66 - 180));
+    const expandedPx = Math.max(200, vh - 66 - 72);
+    const h = customHeight.value;
+
+    if (h <= halfPx) {
+      return {
+        opacity: 1,
+        transform: 'translateY(0px)',
+        pointerEvents: 'auto',
+        visibility: 'visible',
+        transition: 'none'
+      };
+    }
+    if (h >= expandedPx) {
+      return {
+        opacity: 0,
+        transform: 'translateY(-20px)',
+        pointerEvents: 'none',
+        visibility: 'hidden',
+        transition: 'none'
+      };
+    }
+    const progress = Math.min(1, Math.max(0, (h - halfPx) / (expandedPx - halfPx)));
+    return {
+      opacity: (1 - progress).toFixed(3),
+      transform: `translateY(-${(progress * 20).toFixed(1)}px)`,
+      pointerEvents: progress > 0.5 ? 'none' : 'auto',
+      visibility: progress >= 0.98 ? 'hidden' : 'visible',
+      transition: 'none'
+    };
+  }
+
+  // 2. 静态吸附 / 按钮点击过渡 (CSS Hardware Accelerated Transition)
+  if (snapState.value === 'expanded') {
+    return {
+      opacity: 0,
+      transform: 'translateY(-20px)',
+      pointerEvents: 'none',
+      visibility: 'hidden',
+      transition: 'opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s'
+    };
+  }
+
+  if (snapState.value === 'half') {
+    return {
+      opacity: 1,
+      transform: 'translateY(0px)',
+      pointerEvents: 'auto',
+      visibility: 'visible',
+      transition: 'opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)'
+    };
+  }
+
+  // snapState === 'collapsed'
+  return {
+    opacity: 0,
+    transform: 'translateY(12px)',
+    pointerEvents: 'none',
+    visibility: 'hidden',
+    transition: 'opacity 0.2s ease, transform 0.2s ease'
+  };
+});
+
+const compactListViewStyle = computed(() => {
+  // 1. 手势拖拽中：基于实时拉升像素进行平滑线性插值
+  if (isDragging.value && customHeight.value !== null) {
+    const vh = typeof window !== 'undefined' ? window.innerHeight : 844;
+    const halfPx = Math.max(180, Math.min(364, vh - 66 - 180));
+    const expandedPx = Math.max(200, vh - 66 - 72);
+    const h = customHeight.value;
+
+    if (h <= halfPx) {
+      return {
+        opacity: 0,
+        transform: 'translateY(24px)',
+        pointerEvents: 'none',
+        visibility: 'hidden',
+        transition: 'none'
+      };
+    }
+    if (h >= expandedPx) {
+      return {
+        opacity: 1,
+        transform: 'translateY(0px)',
+        pointerEvents: 'auto',
+        visibility: 'visible',
+        transition: 'none'
+      };
+    }
+    const progress = Math.min(1, Math.max(0, (h - halfPx) / (expandedPx - halfPx)));
+    return {
+      opacity: progress.toFixed(3),
+      transform: `translateY(${((1 - progress) * 24).toFixed(1)}px)`,
+      pointerEvents: progress > 0.5 ? 'auto' : 'none',
+      visibility: progress <= 0.02 ? 'hidden' : 'visible',
+      transition: 'none'
+    };
+  }
+
+  // 2. 静态吸附 / 按钮点击过渡
+  if (snapState.value === 'expanded') {
+    return {
+      opacity: 1,
+      transform: 'translateY(0px)',
+      pointerEvents: 'auto',
+      visibility: 'visible',
+      transition: 'opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)'
+    };
+  }
+
+  if (snapState.value === 'half') {
+    return {
+      opacity: 0,
+      transform: 'translateY(24px)',
+      pointerEvents: 'none',
+      visibility: 'hidden',
+      transition: 'opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1), transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.24s'
+    };
+  }
+
+  // snapState === 'collapsed'
+  return {
+    opacity: 0,
+    transform: 'translateY(24px)',
+    pointerEvents: 'none',
+    visibility: 'hidden',
+    transition: 'opacity 0.2s ease, transform 0.2s ease'
   };
 });
 
@@ -333,8 +470,8 @@ function getCurrentPixelHeight() {
   }
   const vh = window.innerHeight;
   if (snapState.value === 'collapsed') return 66;
-  if (snapState.value === 'expanded') return vh - 72;
-  return Math.max(180, Math.min(364, vh - 180));
+  if (snapState.value === 'expanded') return Math.max(200, vh - 66 - 72);
+  return Math.max(180, Math.min(364, vh - 66 - 180));
 }
 
 function onTouchStart(e) {
@@ -415,7 +552,7 @@ function onTouchMove(e) {
     const deltaY = touchStartY - currentY; // 向下拉为负，向上拉为正
     const newHeight = initialHeight + deltaY;
     const minH = 66;
-    const maxH = Math.max(window.innerHeight - 72, 364);
+    const maxH = Math.max(window.innerHeight - 66 - 72, 364);
     customHeight.value = Math.max(minH, Math.min(maxH, newHeight));
   }
 }
@@ -440,8 +577,8 @@ function onTouchEnd(e) {
 
   const vh = window.innerHeight;
   const collapsedPx = 66;
-  const halfPx = Math.max(180, Math.min(364, vh - 180));
-  const expandedPx = vh - 72;
+  const halfPx = Math.max(180, Math.min(364, vh - 66 - 180));
+  const expandedPx = Math.max(200, vh - 66 - 72);
 
   // 快速轻扫 (Flick) 判定
   const isFlickUp = deltaY > 20 || velocityY < -0.15;
@@ -560,7 +697,7 @@ function onMouseMove(e) {
     const deltaY = mouseStartY - currentY;
     const newHeight = initialHeight + deltaY;
     const minH = 66;
-    const maxH = Math.max(window.innerHeight - 72, 364);
+    const maxH = Math.max(window.innerHeight - 66 - 72, 364);
     customHeight.value = Math.max(minH, Math.min(maxH, newHeight));
   }
 }
@@ -589,8 +726,8 @@ function onMouseUp(e) {
 
   const vh = window.innerHeight;
   const collapsedPx = 66;
-  const halfPx = Math.max(180, Math.min(364, vh - 180));
-  const expandedPx = vh - 72;
+  const halfPx = Math.max(180, Math.min(364, vh - 66 - 180));
+  const expandedPx = Math.max(200, vh - 66 - 72);
 
   const isFlickUp = deltaY > 20 || velocityY < -0.15;
   const isFlickDown = deltaY < -20 || velocityY > 0.15;
@@ -669,6 +806,35 @@ watch(
   }
 );
 
+// 双模态切换时自动平滑居中选中山峰卡片，杜绝视角迷航
+watch(
+  () => snapState.value,
+  (newState) => {
+    const activeId = mountainStore.selectedMountainId;
+    if (!activeId) return;
+    nextTick(() => {
+      if (newState === 'expanded') {
+        const cardEl = document.getElementById(`compact-mountain-card-${activeId}`);
+        if (cardEl && compactListRef.value) {
+          cardEl.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      } else if (newState === 'half') {
+        const cardEl = document.getElementById(`mountain-card-${activeId}`);
+        if (cardEl && carouselRef.value) {
+          cardEl.scrollIntoView({
+            behavior: 'smooth',
+            inline: 'center',
+            block: 'nearest'
+          });
+        }
+      }
+    });
+  }
+);
+
 onUnmounted(() => {
   window.removeEventListener('mousemove', onMouseMove);
   window.removeEventListener('mouseup', onMouseUp);
@@ -688,22 +854,9 @@ defineExpose({
   box-sizing: border-box;
 }
 
-/* 零撕裂交叉淡入淡出及微位移动效 */
-.drawer-content-fade-enter-active {
-  transition: opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1), transform 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.drawer-content-fade-leave-active {
-  transition: opacity 0.15s ease-in, transform 0.15s ease-in;
-}
-
-.drawer-content-fade-enter-from {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.drawer-content-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
+.carousel-mode-view,
+.compact-list-container {
+  box-sizing: border-box;
+  transform: translateZ(0);
 }
 </style>
