@@ -64,11 +64,11 @@
 4. **微信导航提示**：
    - `MountainDetailSheet.vue` 引入 `isWeChat` 计算属性，微信环境下自动呈现暖色引导卡片并在调起时精准提示。
 
-5. **GitHub Actions CI/CD 流水线全量验证通过**：
-   - 流水线 Run 21 (`41821895242`) 顺利通过并发布至 GitHub Releases；
-   - 正式版 APK (`weekly-mountain-v0.3.0.202611041932-release.apk`)：**23.3 MB**，包含完整的 153 个山峰资源与纯净高山拓扑引擎；
-   - 调试版 APK (`weekly-mountain-v0.3.0.202611041932-debug.apk`)：**24.2 MB**，内置真机反馈智能哨兵与调试工具；
-   - 证书指纹一致，支持 App 内部下载直接平滑覆盖安装。
+5. **GitHub Actions CI/CD 流水线 Run 22 全量验证通过**：
+   - 流水线 Run 22 (`41944640412`) 顺利通过并发布至 GitHub Releases；
+   - 正式版 APK (`weekly-mountain-v0.3.0.202611050851-release.apk`)：**28.4 MB**，经直接解压验证，完整包含 `assets/public/index.html`（797 字节）、`assets/capacitor.config.json`、JS/CSS 及 153 个山峰资源；
+   - 调试版 APK (`weekly-mountain-v0.3.0.202611050851-debug.apk`)：**29.5 MB**，同样完整包含 Web 前端资产与真机反馈智能哨兵；
+   - 证书指纹一致，彻底解决 `ERR_CONNECTION_REFUSED` 无法打开网页的异常。
 
 ## 3. 分批原子提交与发版记录
 
@@ -89,6 +89,6 @@
   12. `4c800b5` - `fix(ci): 支持静态资源双端直写与 CI 目录安全校验防御`
   13. `9491e2d` - `chore(release): 升级时间戳版本至 v0.3.0.202611041932 并同步版本元数据`
   14. `1bf97a6` - `docs(handoff): 更新发布版本至 v0.3.0.202611041932`
-  15. `fix(android): 增加全量 Web 资产同步脚本与 CI APK 内部 index.html 解压断言`
-  16. `chore(release): 升级时间戳版本至 v0.3.0.202611050851 并同步版本元数据`
-  17. `docs(handoff): 更新 ERR_CONNECTION_REFUSED 根因修复与发布记录`
+  15. `8916b52` - `fix(android): 增加全量 Web 资产同步脚本与 CI APK 内部 index.html 解压断言`
+  16. `cfed005` - `chore(release): 升级时间戳版本至 v0.3.0.202611050851 并同步版本元数据`
+  17. `1d22c58` - `docs(handoff): 更新 ERR_CONNECTION_REFUSED 根因修复与发布记录`
