@@ -117,6 +117,9 @@
   24. `86eb16f` - `docs(rules): 在 AGENTS.md 和 GEMINI.md 中增加 docs/releases 版本升级文档维护规约`
   25. `155205d` - `feat(release): 建立 docs/releases 版本文档体系并重构 sync_version 脚本支持动态日志提取`
   26. `6f07b08` - `chore(release): 升级时间戳版本至 v0.3.0.202611051106 并同步全新版本说明`
+  27. `e19b525` - `fix(update): 调整版本检测多通道优先级并增设 CI 自动清理 jsDelivr 缓存`
+  28. `f52e72c` - `docs(rules): 确立 Release 标题精炼原则并缩短 v0.3.0 标题`
+  29. `ad9633c` - `chore(release): 升级时间戳版本至 v0.3.0.202611051117 并同步版本元数据`
 
 ---
 
@@ -136,4 +139,8 @@
   - `npm run build` 成功完成打包并同步 153 项 Android 静态资产；
   - **Release 内容硬编码根因治理与动态化改造**：
     - 根因：`scripts/sync_version.py` 内部写死了上一版标题与更新日志，覆盖了 `public/version.json`；
-    - 方案：创建 `docs/releases/` 规范子目录及 `RELEASE-v0.3.0.md`，改造 `scripts/sync_version.py` 支持动态解析与 CLI 传参；并在 `AGENTS.md` / `GEMINI.md` 中固化「6.3 版本升级内容文档维护规约」。
+    - 方案：创建 `docs/releases/` 规范子目录及 `RELEASE-v0.3.0.md`，改造 `scripts/sync_version.py` 支持动态解析与 CLI 传参；并在 `AGENTS.md` / `GEMINI.md` 中固化「6.3 版本升级内容文档维护规约」；
+  - **手机端检测不到新版本根因与修复**：
+    - 根因：`updateService.js` 候选通道将 `cdn.jsdelivr.net` 置于首位，而 jsDelivr 针对 `@main` 分支存在 12-24 小时强边缘缓存且忽略查询参数，直接返回旧版本 0.3.0.202611050851 导致版本比对判定已是最新；
+    - 修复：调整通道优先级，将无缓存实时镜像 `ghfast.top` 与官方 GitHub Raw 置于首位，并在 CI/CD 中增加 jsDelivr CDN 自动 Purge 步骤；
+    - 标题规范：按用户要求在 `RELEASE_METADATA` 与项目规约中确立 Title 简短精炼原则（15 字以内）。
