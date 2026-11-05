@@ -28,10 +28,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Node.js 20
+      - name: Set up Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Set up JDK 21
@@ -88,16 +88,17 @@ jobs:
       - name: Sync Web Assets to Android (Release)
         run: |
           chmod +x node_modules/.bin/* || true
-          npx --yes @capacitor/cli sync android 2>&1 | tee sync_release.log || {
-            echo "### Sync Release Failure" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            cat sync_release.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
+          npx cap sync android || true
+          node scripts/sync_android_assets.js
+          echo "=== Verifying Synced Release Assets in Android ==="
+          test -f android/app/src/main/assets/public/index.html || {
+            echo "### ERROR: index.html missing from Android assets!" >> $GITHUB_STEP_SUMMARY
             exit 1
           }
-          echo "=== Verifying Synced Release Assets in Android ==="
-          node scripts/copy_assets.js
-          mkdir -p android/app/src/main/assets/public/assets/mountains
+          test -f android/app/src/main/assets/capacitor.config.json || {
+            echo "### ERROR: capacitor.config.json missing from Android assets!" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
           COUNT=$(find android/app/src/main/assets/public/assets/mountains -type f 2>/dev/null | wc -l || echo 0)
           echo "Total Mountain Assets in Android (Release): $COUNT files"
           if [ "$COUNT" -lt 50 ]; then
@@ -144,6 +145,15 @@ jobs:
             echo "### ERROR: Release APK size ($APK_SIZE bytes) is suspiciously under 20 MB! Assets might be missing!" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
+          echo "=== Inspecting APK Internal Files ==="
+          unzip -l "$APK_FILE" | grep "assets/public/index.html" || {
+            echo "### ERROR: assets/public/index.html missing inside Release APK!" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
+          unzip -l "$APK_FILE" | grep "assets/capacitor.config.json" || {
+            echo "### ERROR: assets/capacitor.config.json missing inside Release APK!" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
           echo "Copying $APK_FILE to weekly-mountain-${{ env.TAG }}-release.apk"
           cp "$APK_FILE" "weekly-mountain-${{ env.TAG }}-release.apk"
           ls -lh "weekly-mountain-${{ env.TAG }}-release.apk"
@@ -158,16 +168,17 @@ jobs:
       - name: Sync Web Assets to Android (Debug)
         run: |
           chmod +x node_modules/.bin/* || true
-          npx --yes @capacitor/cli sync android 2>&1 | tee sync_debug.log || {
-            echo "### Sync Debug Failure" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            cat sync_debug.log >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
+          npx cap sync android || true
+          node scripts/sync_android_assets.js
+          echo "=== Verifying Synced Debug Assets in Android ==="
+          test -f android/app/src/main/assets/public/index.html || {
+            echo "### ERROR: index.html missing from Android assets!" >> $GITHUB_STEP_SUMMARY
             exit 1
           }
-          echo "=== Verifying Synced Debug Assets in Android ==="
-          node scripts/copy_assets.js
-          mkdir -p android/app/src/main/assets/public/assets/mountains
+          test -f android/app/src/main/assets/capacitor.config.json || {
+            echo "### ERROR: capacitor.config.json missing from Android assets!" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
           COUNT=$(find android/app/src/main/assets/public/assets/mountains -type f 2>/dev/null | wc -l || echo 0)
           echo "Total Mountain Assets in Android (Debug): $COUNT files"
           if [ "$COUNT" -lt 50 ]; then
@@ -210,6 +221,15 @@ jobs:
             echo "### ERROR: Debug APK size ($APK_SIZE bytes) is suspiciously under 20 MB! Assets might be missing!" >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
+          echo "=== Inspecting APK Internal Files ==="
+          unzip -l "$APK_FILE" | grep "assets/public/index.html" || {
+            echo "### ERROR: assets/public/index.html missing inside Debug APK!" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
+          unzip -l "$APK_FILE" | grep "assets/capacitor.config.json" || {
+            echo "### ERROR: assets/capacitor.config.json missing inside Debug APK!" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          }
           echo "Copying $APK_FILE to weekly-mountain-${{ env.TAG }}-debug.apk"
           cp "$APK_FILE" "weekly-mountain-${{ env.TAG }}-debug.apk"
           ls -lh "weekly-mountain-${{ env.TAG }}-debug.apk"
