@@ -6,30 +6,71 @@
 export function initAgentFeedbackExtensions(piniaInstance) {
   if (typeof window === 'undefined') return;
 
+  // 1. 提取构建期注入的安全门禁与宿主渠道配置
+  const acConfig = typeof __WM_ACCESS_CONTROL_CONFIG__ !== 'undefined'
+    ? __WM_ACCESS_CONTROL_CONFIG__
+    : { enabled: true };
+
+  const hostChannelConfig = {
+    name: 'GitHub Issues',
+    url: 'https://github.com/lylyuanliang/weekly-mountain/issues',
+    description: '未持有内测密钥时，请前往官方 GitHub 提交建议与问题反馈'
+  };
+
+  // 2. 注入 window.__AGENT_FEEDBACK_OPTIONS__，确保离线 Debug APK 无论在 Web 还是原生容器下
+  // 均能激活原生「⚙️ 联调设置」(Settings) Tab 与配对安全门禁
+  if (!window.__AGENT_FEEDBACK_OPTIONS__) {
+    window.__AGENT_FEEDBACK_OPTIONS__ = {
+      showSettings: true,
+      accessControl: acConfig,
+      hostChannel: hostChannelConfig,
+      sentinel: {
+        autoStart: true,
+        debounceSeconds: 10
+      }
+    };
+  } else {
+    window.__AGENT_FEEDBACK_OPTIONS__.showSettings = true;
+    if (!window.__AGENT_FEEDBACK_OPTIONS__.accessControl) {
+      window.__AGENT_FEEDBACK_OPTIONS__.accessControl = acConfig;
+    }
+    if (!window.__AGENT_FEEDBACK_OPTIONS__.hostChannel) {
+      window.__AGENT_FEEDBACK_OPTIONS__.hostChannel = hostChannelConfig;
+    }
+  }
+
   const doRegister = async () => {
     try {
       const [
-        { registerExtensionTab, openFeedbackModal },
+        client,
         { alpineDevApkTab }
       ] = await Promise.all([
         import('@lylyuanliang/agent-feedback-client'),
         import('./alpineDevApkPlugin.js')
       ]);
 
-      // 注册业务定制插件：开发机本地构建 APK 直连下载与联调面板
-      registerExtensionTab(alpineDevApkTab);
+      // 3. 显式同步设置到客户端运行时
+      if (client.setAccessControl) {
+        client.setAccessControl(acConfig);
+      }
+      if (client.setHostChannel) {
+        client.setHostChannel(hostChannelConfig);
+      }
 
-      // 监听全局呼出反馈事件 (供个人中心或业务组件一键调起对应 Tab)
+      // 4. 注册业务定制插件：开发机本地构建 APK 直连下载与联调面板
+      client.registerExtensionTab(alpineDevApkTab);
+
+      // 5. 监听全局呼出反馈事件 (供个人中心或业务组件一键调起对应 Tab)
       window.addEventListener('wm-open-feedback', async (e) => {
         const tab = e.detail?.tab || 'submit';
         try {
-          openFeedbackModal(tab);
+          client.openFeedbackModal(tab);
         } catch (err) {
           console.warn('[Alpine Debug] Failed to open feedback modal:', err);
         }
       });
 
-      console.log('[Alpine Debug] Native @agent-feedback/client v1.3.0 with AlpineDevApkExtension initialized.');
+      console.log('[Alpine Debug] Native @agent-feedback/client v1.3.0 initialized with Settings and DevApkExtension.');
     } catch (err) {
       console.warn('[Alpine Debug] Failed to register agent feedback extensions:', err);
     }

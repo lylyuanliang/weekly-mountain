@@ -348,9 +348,14 @@ function resolveAccessControlConfig() {
   };
 }
 
+const accessControlConfig = resolveAccessControlConfig();
+
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
+  define: {
+    __WM_ACCESS_CONTROL_CONFIG__: JSON.stringify(accessControlConfig),
+  },
   plugins: [
     vue(),
     // 接入每周一山业务专属 APK 更新服务 (前置兼容改写)
@@ -365,7 +370,7 @@ export default defineConfig({
         url: 'https://github.com/lylyuanliang/weekly-mountain/issues',
         description: '未持有内测密钥时，请前往官方 GitHub 提交建议与问题反馈'
       },
-      accessControl: resolveAccessControlConfig(),
+      accessControl: accessControlConfig,
       sentinel: {
         autoStart: true,
         debounceSeconds: 10
