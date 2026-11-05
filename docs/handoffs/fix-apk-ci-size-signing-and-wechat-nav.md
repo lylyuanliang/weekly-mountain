@@ -82,6 +82,9 @@
      - 流水线 Run 23 (`41951002723`) 成功完成全部构建、断言并发布至 GitHub Releases；
      - 调试版 APK (`weekly-mountain-v0.3.0.202611050945-debug.apk`)：**28.2 MB**，完整包含离线穿透地址编辑、密钥配对与「⚙️ 联调设置」Tab；
      - 正式版 APK (`weekly-mountain-v0.3.0.202611050945-release.apk`)：**27.1 MB**。
+   - **开发者文档指引补充**：
+     - 在 `weekly-mountain/README.md` 中新增「6. 真机联调与开发机 AI 哨兵配对秘钥指南 (Debug APK)」，详细说明了配对密钥生成路径 `scratch/.agent-feedback-secret`、环境变量自定义配置方式及端侧配对解锁流程；
+     - 在 `agent-feedback/README.md` 中同步补充了「4. 端侧访问授权门禁与配对密钥 (Access Control & Pairing Secret)」，提供完整的 SHA-256 安全哈希集成示例与开发者获取密钥流程。
 
 ## 3. 分批原子提交与发版记录
 
@@ -108,3 +111,23 @@
   18. `c78ee8c` - `fix(feedback): 支持在 Debug APK 中直接配置穿透地址并激活联调设置与密钥配对`
   19. `0031754` - `chore(release): 升级时间戳版本至 v0.3.0.202611050945 并同步版本元数据`
   20. `367483c` - `docs(handoff): 更新 Debug APK 穿透地址编辑与密钥配对交接记录`
+  21. `261bb06` - `fix(feedback): 升级 @lylyuanliang/agent-feedback 套件至 1.4.0 接入服务端门禁与动态配对`
+  22. `5976188` - `docs(guide): 完善 README 中 Debug APK 真机联调与开发机哨兵配对秘钥指南`
+  23. `6626ffc` - `chore(release): 升级时间戳版本至 v0.3.0.202611051055 并同步版本元数据`
+
+---
+
+## 阶段进展：agent-feedback v1.4.0 核心框架发布与每周一山集成验证
+
+- **当前状态**：已完成 agent-feedback v1.4.0 框架研发、npm 发布验证、每周一山集成升级与自动化构建推送
+- **最新发版 Tag**：`v0.3.0.202611051055`
+- **框架仓库**：`d:\file_save\workspace\github\agent-feedback`（commit `d928c49`，Tag: `v1.4.0`）
+- **核心升级点**：
+  1. `accessControl` 默认开启（`enabled: true`），服务端所有历史读取与提交端点全面实施 HTTP 401 鉴权拦截；
+  2. 修复客户端与 DevServer 编译期密钥哈希不一致导致的配对失败，支持端侧向目标 DevServer（`/auth/verify`）发起动态校验并持久化；
+  3. 客户端未授权状态下历史工单全面阻断，展示受限遮罩保护层；
+  4. 自动在本地生成 `scratch/.agent-feedback-secret`（并在 `.gitignore` 中防护），严守零凭据泄漏红线；
+  5. 增加 GitHub Release 自动化发布工作流（`.github/workflows/release.yml`）与版本说明提取脚本。
+- **每周一山端侧验证结果**：
+  - 本地 DevServer 接口自动化测试通过：未鉴权请求 `/list` 严格返回 401，携带 Bearer 凭据成功放行，`/auth/verify` 动态配对成功返回 200；
+  - `npm run build` 成功完成打包并同步 153 项 Android 静态资产。
