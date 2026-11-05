@@ -70,10 +70,19 @@
    - 调试版 APK (`weekly-mountain-v0.3.0.202611050851-debug.apk`)：**29.5 MB**，同样完整包含 Web 前端资产与真机反馈智能哨兵；
    - 证书指纹一致，彻底解决 `ERR_CONNECTION_REFUSED` 无法打开网页的异常。
 
+6. **Debug APK 本地包穿透配置与配对密钥门禁优化（已完成自测并推送）**：
+   - **问题现象 1**：真机打开 Debug 包「本地包」选项卡报错 `Unexpected token '<', "<!doctype "... is not valid JSON`，且无法输入内网穿透地址；
+     - **根因**：移动端原生容器下 `origin` 默认为 `https://localhost`，在未配置穿透地址时直接请求本地 `/api/app-update` 命中 Capacitor 的 SPA 兜底拦截器返回了 `index.html`，触发 JSON 解析异常；同时原视图穿透地址为只读 `<span>` 标签，未提供输入框；
+     - **修复**：在 `AlpineDevApkExtensionView.vue` 增设可编辑输入框与「保存并应用」按钮，空地址或 localhost 下友好提示未配置，并增加 HTML 返回兜底检测，避免抛出底层语法异常；
+   - **问题现象 2**：配对密钥机制在 Debug APK 中看不到入口；
+     - **根因**：`@lylyuanliang/agent-feedback-client` 原生具备「⚙️ 联调设置」Tab，但其显示门禁依赖 `showSettings` 或 `accessControl` 运行时注入。在离线 APK 打包构建时，由于之前未在 `vite.config.js` 的 `define` 中固化 accessControl 配置，导致离线包中的客户端判断 `hasSettings` 为 false，隐藏了设置面板；
+     - **修复**：在 `vite.config.js` 中将门禁哈希固化至全局定义 `__WM_ACCESS_CONTROL_CONFIG__`；并在 `setupAgentFeedback.js` 初始化时声明 `showSettings: true` 和 `accessControl`，使原生「⚙️ 联调设置」始终可见；同时在「本地包」自定义面板中直接集成本地内测密钥配对输入框与解锁状态指示，支持一键在面板内或跳转至设置页完成配对；
+   - **本地构建自测**：执行 `npm run build`，编译顺利通过（18.79s），资产无缝同步。用户发出推送指令后执行分批原子提交与发版推送。
+
 ## 3. 分批原子提交与发版记录
 
-- **已推送发版 Tag**：`v0.3.0.202611041803`, `v0.3.0.202611041906`, `v0.3.0.202611041915`, `v0.3.0.202611041932`
-- **最新发版 Tag**：`v0.3.0.202611050851`
+- **已推送发版 Tag**：`v0.3.0.202611041803`, `v0.3.0.202611041906`, `v0.3.0.202611041915`, `v0.3.0.202611041932`, `v0.3.0.202611050851`
+- **最新发版 Tag**：`v0.3.0.202611050945`
 - **原子提交批次**：
   1. `6bd3acc` - `fix(update): 修复更新弹窗状态机停滞与微信内置浏览器导航引导卡片`
   2. `34d388e` - `fix(android): 固化 debug.keystore 签名配置并增设静态资源复制断言`
@@ -92,3 +101,6 @@
   15. `8916b52` - `fix(android): 增加全量 Web 资产同步脚本与 CI APK 内部 index.html 解压断言`
   16. `cfed005` - `chore(release): 升级时间戳版本至 v0.3.0.202611050851 并同步版本元数据`
   17. `1d22c58` - `docs(handoff): 更新 ERR_CONNECTION_REFUSED 根因修复与发布记录`
+  18. `c78ee8c` - `fix(feedback): 支持在 Debug APK 中直接配置穿透地址并激活联调设置与密钥配对`
+  19. `0031754` - `chore(release): 升级时间戳版本至 v0.3.0.202611050945 并同步版本元数据`
+  20. `367483c` - `docs(handoff): 更新 Debug APK 穿透地址编辑与密钥配对交接记录`
