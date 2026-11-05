@@ -42,6 +42,17 @@
   2. 在 `MountainDetailSheet.vue` 导航弹窗顶部增设醒目橙色提示条：“微信内置浏览器限制提示：受微信限制无法直接唤起手机导航 App，建议点击右上角「···」选择「在浏览器打开」”；
   3. 在微信内点击时给出更精准的交互引导，同时保留「网页版高德直接导航」与「复制终点坐标」兜底能力。
 
+### 1.5 打开 App 报错 net::ERR_CONNECTION_REFUSED (位于 https://localhost/ 的网页无法加载)
+- **现象**：安装发版 APK 后打开 App 呈现 Android WebView 错误页，提示 `net::ERR_CONNECTION_REFUSED`。
+- **根因**：
+  1. 流水线中使用了 `npx --yes @capacitor/cli sync android 2>&1 | tee ...`。在 npm 中，`@capacitor/cli` 的 bin 命名为 `cap` 和 `capacitor`，直接执行包名抛出 `could not determine executable to run`；且管道中 `tee` 屏蔽了非零退出码；
+  2. 导致 `cap sync` 未生效，`dist/index.html` 与 JS/CSS 未同步到 `android/app/src/main/assets/public/`，仅执行了复制山峰照片；
+  3. Capacitor Bridge 启动时在 `assets/public/` 找不到 `index.html`，WebView 尝试直接发起网络请求连接 `https://localhost/`，因本地无对应 Web 端口直接触发 `ERR_CONNECTION_REFUSED`。
+- **解决**：
+  1. 新增 `scripts/sync_android_assets.js`，将 `dist/`（包含 `index.html`、JS/CSS、配置及高清图片）全量、直接同步至 `android/app/src/main/assets/public/` 并严格校验文件大小与条数；
+  2. 流水线修正为 `npx cap sync android` 并升级至 Node 22（匹配 Capacitor 8 运行环境）；
+  3. 在 CI 中增加编译前断言与编译后解压断言（`unzip -l "$APK_FILE" | grep "assets/public/index.html"`），缺少 Web 入口立即阻断构建。
+
 ## 2. 验证与自测结果
 
 1. **证书指纹对齐**：
@@ -61,8 +72,8 @@
 
 ## 3. 分批原子提交与发版记录
 
-- **已推送发版 Tag**：`v0.3.0.202611041803`, `v0.3.0.202611041906`, `v0.3.0.202611041915`
-- **最新发版 Tag**：`v0.3.0.202611041932`
+- **已推送发版 Tag**：`v0.3.0.202611041803`, `v0.3.0.202611041906`, `v0.3.0.202611041915`, `v0.3.0.202611041932`
+- **最新发版 Tag**：`v0.3.0.202611050851`
 - **原子提交批次**：
   1. `6bd3acc` - `fix(update): 修复更新弹窗状态机停滞与微信内置浏览器导航引导卡片`
   2. `34d388e` - `fix(android): 固化 debug.keystore 签名配置并增设静态资源复制断言`
@@ -78,3 +89,6 @@
   12. `4c800b5` - `fix(ci): 支持静态资源双端直写与 CI 目录安全校验防御`
   13. `9491e2d` - `chore(release): 升级时间戳版本至 v0.3.0.202611041932 并同步版本元数据`
   14. `1bf97a6` - `docs(handoff): 更新发布版本至 v0.3.0.202611041932`
+  15. `fix(android): 增加全量 Web 资产同步脚本与 CI APK 内部 index.html 解压断言`
+  16. `chore(release): 升级时间戳版本至 v0.3.0.202611050851 并同步版本元数据`
+  17. `docs(handoff): 更新 ERR_CONNECTION_REFUSED 根因修复与发布记录`
