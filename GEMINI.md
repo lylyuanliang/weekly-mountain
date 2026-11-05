@@ -96,3 +96,17 @@ npx agent-feedback update-status --id <id> --status completed --reply "修复说
 2. **Android versionCode 单调递增**：Android 原生 `versionCode` 统一同步为秒级时间戳（Unix Epoch Seconds，例如 `1793337729`），彻底消除 Android 系统 `INSTALL_FAILED_VERSION_DOWNGRADE` 覆盖安装降级错误；
 3. **App 内部在线热更新感知**：时间戳版本保证 App 内部检查更新（`updateService.js`）能够实时、精确感应到新版本的构建产物，实现免跳转顺畅更新升级；
 4. **正式发布规范**：仅在阶段性功能完备、全量回归通过且得到用户明确确认时，方可正式推进对外正式发布版本（如 `0.2.0` 或 `1.0.0`）。
+
+### 6.3 版本升级内容文档维护规约 (Release Documentation Policy)
+1. **严禁平铺，必须存入专属子目录**：版本升级文档**严禁直接丢在 `docs/` 根目录下**，必须集中维护在 `docs/releases/` 子目录中；
+2. **命名与里程碑对齐**：每个大版本/次版本里程碑维护一个专属文档，文件统一采用 `docs/releases/RELEASE-vX.Y.Z.md` 命名规范（例如 `docs/releases/RELEASE-v0.3.0.md`）；
+3. **结构化元数据块（自动化同步源头）**：每个版本文档顶部必须包含结构化元数据块，标明本次发版的真实主题与要点：
+   ```markdown
+   <!-- RELEASE_METADATA_START
+   title: "本次发版核心主题名称"
+   changelog:
+     - "【模块/分类】更新要点 1 说明"
+     - "【模块/分类】更新要点 2 说明"
+   RELEASE_METADATA_END -->
+   ```
+4. **自动化与防重复机制**：`scripts/sync_version.py` 会自动解析 `docs/releases/` 下的最新版本元数据并注入 `public/version.json`，供 GitHub Actions CI/CD 流水线直接生成 GitHub Release 正文。**严禁在构建脚本中硬编码任何固定的 Release 标题或更新日志**，任何新发版必须先在对应文档中更新记录后再触发构建。
