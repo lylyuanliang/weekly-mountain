@@ -114,6 +114,9 @@
   21. `261bb06` - `fix(feedback): 升级 @lylyuanliang/agent-feedback 套件至 1.4.0 接入服务端门禁与动态配对`
   22. `5976188` - `docs(guide): 完善 README 中 Debug APK 真机联调与开发机哨兵配对秘钥指南`
   23. `6626ffc` - `chore(release): 升级时间戳版本至 v0.3.0.202611051055 并同步版本元数据`
+  24. `86eb16f` - `docs(rules): 在 AGENTS.md 和 GEMINI.md 中增加 docs/releases 版本升级文档维护规约`
+  25. `155205d` - `feat(release): 建立 docs/releases 版本文档体系并重构 sync_version 脚本支持动态日志提取`
+  26. `6f07b08` - `chore(release): 升级时间戳版本至 v0.3.0.202611051106 并同步全新版本说明`
 
 ---
 
@@ -130,4 +133,7 @@
   5. 增加 GitHub Release 自动化发布工作流（`.github/workflows/release.yml`）与版本说明提取脚本。
 - **每周一山端侧验证结果**：
   - 本地 DevServer 接口自动化测试通过：未鉴权请求 `/list` 严格返回 401，携带 Bearer 凭据成功放行，`/auth/verify` 动态配对成功返回 200；
-  - `npm run build` 成功完成打包并同步 153 项 Android 静态资产。
+  - `npm run build` 成功完成打包并同步 153 项 Android 静态资产；
+  - **Release 内容硬编码根因治理与动态化改造**：
+    - 根因：`scripts/sync_version.py` 内部写死了上一版标题与更新日志，覆盖了 `public/version.json`；
+    - 方案：创建 `docs/releases/` 规范子目录及 `RELEASE-v0.3.0.md`，改造 `scripts/sync_version.py` 支持动态解析与 CLI 传参；并在 `AGENTS.md` / `GEMINI.md` 中固化「6.3 版本升级内容文档维护规约」。
