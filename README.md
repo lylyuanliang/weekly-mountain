@@ -149,6 +149,28 @@ pwsh -File scripts/build_app.ps1 -Variant release -NoPause
 pwsh -File scripts/build_app.ps1 -Variant debug -NoPause
 ```
 
+### 6. 真机联调与开发机 AI 哨兵配对秘钥指南 (Debug APK)
+
+本项目 Debug APK 内置了真机智能哨兵（`@lylyuanliang/agent-feedback`）与开发机直连通道。为防止内网穿透（如 cpolar / ngrok）暴露至公网时被未经授权的外部恶意访问，系统启用了 **SHA-256 零明文泄露端侧授权门禁**：
+
+#### 🔑 秘钥生成与查看位置
+1. **自动生成**：当首次运行 `npm run dev` 或 `npm run build` 时，系统会自动生成强随机配对秘钥并保存在本地未跟踪文件：
+   ```text
+   scratch/.agent-feedback-secret
+   ```
+   *(该文件已被 `.gitignore` 自动忽略，绝不入库，保证开发机凭据安全)*；
+2. **自定义配置**：开发者亦可在 `.env.local` 或环境变量中声明自定义秘钥：
+   ```env
+   AGENT_FEEDBACK_SECRET=wm-your-custom-secret
+   ```
+3. **安全哈希下发**：构建期仅计算秘钥的 SHA-256 哈希值下发至客户端运行时，即使反编译 APK 也无法直接获取原始明文秘钥。
+
+#### 📱 手机端 Debug APK 配对解锁步骤
+1. 打开 Debug 版 App 右上角反馈浮窗，切换至 **「📦 本地包」** 选项卡；
+2. 在「开发机内测配对秘钥」输入框中填入上述 `scratch/.agent-feedback-secret` 文件中的秘钥，点击 **「立即配对解锁」**；
+3. 解锁后，点击「当前穿透基地址」旁的 **「编辑」** 按钮，填入开发机的局域网 IP（如 `http://192.168.x.x:5173`）或内网穿透域名（如 `https://xxxx.cpolar.top`），点击 **「保存并应用」**；
+4. 配对成功后，App 即可直连开发机获取秒级构建的增量 APK 并直接在真机上闭环触发 AI 智能排查修复！也可随时切换至 **「⚙️ 联调设置」** 选项卡查看或重新配置授权状态。
+
 ---
 
 ## 🌐 线上部署与发布方案
