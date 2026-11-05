@@ -78,6 +78,10 @@
      - **根因**：`@lylyuanliang/agent-feedback-client` 原生具备「⚙️ 联调设置」Tab，但其显示门禁依赖 `showSettings` 或 `accessControl` 运行时注入。在离线 APK 打包构建时，由于之前未在 `vite.config.js` 的 `define` 中固化 accessControl 配置，导致离线包中的客户端判断 `hasSettings` 为 false，隐藏了设置面板；
      - **修复**：在 `vite.config.js` 中将门禁哈希固化至全局定义 `__WM_ACCESS_CONTROL_CONFIG__`；并在 `setupAgentFeedback.js` 初始化时声明 `showSettings: true` 和 `accessControl`，使原生「⚙️ 联调设置」始终可见；同时在「本地包」自定义面板中直接集成本地内测密钥配对输入框与解锁状态指示，支持一键在面板内或跳转至设置页完成配对；
    - **本地构建自测**：执行 `npm run build`，编译顺利通过（18.79s），资产无缝同步。用户发出推送指令后执行分批原子提交与发版推送。
+   - **GitHub Actions Run 23 全量验证通过**：
+     - 流水线 Run 23 (`41951002723`) 成功完成全部构建、断言并发布至 GitHub Releases；
+     - 调试版 APK (`weekly-mountain-v0.3.0.202611050945-debug.apk`)：**28.2 MB**，完整包含离线穿透地址编辑、密钥配对与「⚙️ 联调设置」Tab；
+     - 正式版 APK (`weekly-mountain-v0.3.0.202611050945-release.apk`)：**27.1 MB**。
 
 ## 3. 分批原子提交与发版记录
 
