@@ -273,3 +273,23 @@ body.body-scroll-locked {
   -webkit-overflow-scrolling: touch !important;
   touch-action: pan-y !important;
 }
+
+/* ================= Agent Feedback: Video Player Aspect Ratio Fix ================= */
+.ticket-video-card {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  border-radius: 8px !important;
+  background: #000 !important;
+  overflow: hidden !important;
+}
+
+.ticket-video-player {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9 !important;
+  max-height: 260px !important;
+  object-fit: contain !important;
+  display: block !important;
+  background: #000 !important;
+  outline: none !important;
+}
