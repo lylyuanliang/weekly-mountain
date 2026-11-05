@@ -169,7 +169,7 @@ function handleFilterClick() {
 }
 
 function onMountainSelected(id) {
-  if (bottomSheetRef.value?.expandToHalf) {
+  if (bottomSheetRef.value?.snapState === 'collapsed' && bottomSheetRef.value?.expandToHalf) {
     bottomSheetRef.value.expandToHalf();
   }
   if (mapRef.value?.panToMountain) {
