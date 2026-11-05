@@ -158,11 +158,12 @@ def sync_all(explicit_version=None, explicit_title=None, explicit_changelog=None
     # 从 docs/releases/RELEASE-v*.md 获取动态标题与更新日志
     doc_title, doc_changelog = extract_release_doc_meta(base_version)
 
-    title_suffix = explicit_title or doc_title or "全新高精度山峰轨迹与多端适配系统"
-    if title_suffix.startswith(version_tag):
-        final_title = title_suffix
+    # 依据项目规范：从当前及后续版本起，Release 标题统一仅保留纯净版本号（如 v0.3.0.202611051117）
+    # 严禁在标题后拼接长描述，避免 GitHub Release 侧边栏堆砌；详细说明全部在更新日志中展现
+    if explicit_title:
+        final_title = explicit_title if explicit_title.startswith(version_tag) else f"{version_tag} {explicit_title}".strip()
     else:
-        final_title = f"{version_tag} {title_suffix}".strip()
+        final_title = version_tag
 
     final_changelog = explicit_changelog or doc_changelog or (
         "1. 【版本升级】应用架构优化与数据体验升级；\n"

@@ -103,11 +103,11 @@ npx agent-feedback update-status --id <id> --status completed --reply "修复说
 3. **结构化元数据块（自动化同步源头）**：每个版本文档顶部必须包含结构化元数据块，标明本次发版的真实主题与要点：
    ```markdown
    <!-- RELEASE_METADATA_START
-   title: "本次发版核心主题名称"
+   title: "v0.3.0"
    changelog:
      - "【模块/分类】更新要点 1 说明"
      - "【模块/分类】更新要点 2 说明"
    RELEASE_METADATA_END -->
    ```
 4. **自动化与防重复机制**：`scripts/sync_version.py` 会自动解析 `docs/releases/` 下的最新版本元数据并注入 `public/version.json`，供 GitHub Actions CI/CD 流水线直接生成 GitHub Release 正文。**严禁在构建脚本中硬编码任何固定的 Release 标题或更新日志**，任何新发版必须先在对应文档中更新记录后再触发构建。
-5. **Release 标题简短精炼原则**：发版标题必须简短、凝练（**严格控制在 15 个字以内**，如 `服务端门禁与动态配对升级`），严禁长句堆砌或罗列冗长特性名词。
+5. **Release 标题纯净版本号原则**：发版 Release 标题（Title）统一**仅保留纯净版本号**（如 `v0.3.0.202611051117` 或 `v0.3.0`），严禁在标题后拼接长描述或特性后缀；所有分类特性与更新要点全部通过更新日志（Changelog）展现，确保 GitHub Releases 侧边栏列表清晰整洁。

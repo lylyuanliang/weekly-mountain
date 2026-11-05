@@ -1,10 +1,11 @@
 <!-- RELEASE_METADATA_START
-title: "服务端门禁与动态配对升级"
+title: "v0.3.0"
 changelog:
+  - "【底栏三段式】底栏抽屉升级为收起(66px)、半屏(364px)、全屏三段式高度体系，全屏展开呈现方案B高密度紧凑列表；"
+  - "【零撕裂动效】采用视觉稳定锚点与交叉淡入(Crossfade)动效，配合手势滚动接力锁彻底消除布局切换撕裂感；"
   - "【安全门禁】集成 @lylyuanliang/agent-feedback 1.4.0，服务端数据接口全面实施 HTTP 401 鉴权拦截；"
   - "【动态配对】解决独立编译 Debug APK 本地无密钥导致的配对失败，支持端侧向开发机 (/auth/verify) 动态校验并持久化；"
   - "【历史保护】端侧历史面板未授权状态下展示受限遮罩，阻断轮询，严防历史工单与排查日志外泄；"
-  - "【开发机直连】本地 scratch/.agent-feedback-secret 零明文下发与防泄露机制，完善 README 开发者联调配对指南；"
   - "【签名固化】固化 Android 原生 debug.keystore 签名配置，消除跨机器覆盖安装签名不一致 (INSTALL_FAILED_UPDATE_INCOMPATIBLE)；"
   - "【流水线硬门禁】隔离 Release (Zero-DCE) 与 Debug (集成哨兵) 双包变体，锁定 20MB 产物体积硬门禁。"
 RELEASE_METADATA_END -->
