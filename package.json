@@ -1,6 +1,6 @@
 {
   "name": "weekly-mountain",
-  "version": "0.3.0.202611050945",
+  "version": "0.3.0.202611051055",
   "private": true,
   "type": "module",
   "scripts": {
@@ -23,10 +23,10 @@
     "@capacitor/android": "^8.5.3",
     "@capacitor/cli": "^8.5.3",
     "@capacitor/core": "^8.5.3",
-    "@lylyuanliang/agent-feedback-client": "^1.3.0",
-    "@lylyuanliang/agent-feedback-core": "^1.3.0",
-    "@lylyuanliang/agent-feedback-sentinel": "^1.3.0",
-    "@lylyuanliang/agent-feedback-vite-plugin": "^1.3.0",
+    "@lylyuanliang/agent-feedback-client": "^1.4.0",
+    "@lylyuanliang/agent-feedback-core": "^1.4.0",
+    "@lylyuanliang/agent-feedback-sentinel": "^1.4.0",
+    "@lylyuanliang/agent-feedback-vite-plugin": "^1.4.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "autoprefixer": "^10.6.1",
     "postcss": "^8.5.30",
