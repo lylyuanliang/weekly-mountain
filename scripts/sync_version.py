@@ -99,7 +99,7 @@ def extract_release_doc_meta(base_version):
 
     return None, None
 
-def sync_all(explicit_version=None, explicit_title=None, explicit_changelog=None):
+def sync_all(explicit_version=None, explicit_title=None, explicit_changelog=None, release_sha256=None, debug_sha256=None):
     if explicit_version:
         parts = explicit_version.replace("v", "").split(".")
         if len(parts) >= 4:
@@ -175,6 +175,22 @@ def sync_all(explicit_version=None, explicit_title=None, explicit_changelog=None
     release_download_url = f"https://github.com/lylyuanliang/weekly-mountain/releases/download/{version_tag}/{release_apk_name}"
     debug_download_url = f"https://github.com/lylyuanliang/weekly-mountain/releases/download/{version_tag}/{debug_apk_name}"
 
+    # 读取并保留现有哈希散列值（若同一版本已计算哈希，避免覆盖丢失）
+    existing_release_sha256 = ""
+    existing_debug_sha256 = ""
+    if os.path.exists(version_json_path):
+        try:
+            with open(version_json_path, "r", encoding="utf-8") as f:
+                old_vj = json.load(f)
+                if old_vj.get("version") == app_version:
+                    existing_release_sha256 = old_vj.get("releaseSha256", "")
+                    existing_debug_sha256 = old_vj.get("debugSha256", "")
+        except Exception:
+            pass
+
+    final_release_sha256 = release_sha256 if release_sha256 is not None else existing_release_sha256
+    final_debug_sha256 = debug_sha256 if debug_sha256 is not None else existing_debug_sha256
+
     version_json_data = {
         "version": app_version,
         "versionTag": version_tag,
@@ -186,7 +202,9 @@ def sync_all(explicit_version=None, explicit_title=None, explicit_changelog=None
         "assetSizeText": "约 29 MB",
         "downloadUrl": release_download_url,
         "debugDownloadUrl": debug_download_url,
-        "releaseDownloadUrl": release_download_url
+        "releaseDownloadUrl": release_download_url,
+        "releaseSha256": final_release_sha256,
+        "debugSha256": final_debug_sha256
     }
     with open(version_json_path, "w", encoding="utf-8") as f:
         json.dump(version_json_data, f, ensure_ascii=False, indent=2)
@@ -226,6 +244,8 @@ if __name__ == "__main__":
     parser.add_argument("version", nargs="?", default=None, help="目标版本号或基线版本 (如 0.3.0 或 0.3.0.202611051055)")
     parser.add_argument("--title", default=None, help="自定义 Release 标题")
     parser.add_argument("--changelog", default=None, help="自定义 Release 更新日志")
+    parser.add_argument("--release-sha256", default=None, help="正式发布版 APK SHA-256 哈希散列值")
+    parser.add_argument("--debug-sha256", default=None, help="内测调试版 APK SHA-256 哈希散列值")
     args = parser.parse_args()
 
-    sync_all(args.version, explicit_title=args.title, explicit_changelog=args.changelog)
+    sync_all(args.version, explicit_title=args.title, explicit_changelog=args.changelog, release_sha256=args.release_sha256, debug_sha256=args.debug_sha256)

@@ -235,7 +235,26 @@ jobs:
           ls -lh "weekly-mountain-${{ env.TAG }}-debug.apk"
 
       # =========================================================================
-      # 阶段 3：生成 Release 日志并发布
+      # 阶段 3：计算安装包 SHA-256 完整性散列值与防篡改指纹
+      # =========================================================================
+      - name: Compute APK SHA-256 Checksums
+        id: compute_checksums
+        run: |
+          echo "=== Computing SHA-256 Checksums for Generated APKs ==="
+          RELEASE_APK="weekly-mountain-${{ env.TAG }}-release.apk"
+          DEBUG_APK="weekly-mountain-${{ env.TAG }}-debug.apk"
+          sha256sum "$RELEASE_APK" "$DEBUG_APK" > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+          RELEASE_SHA256=$(sha256sum "$RELEASE_APK" | awk '{print $1}')
+          DEBUG_SHA256=$(sha256sum "$DEBUG_APK" | awk '{print $1}')
+          echo "RELEASE_SHA256=$RELEASE_SHA256" >> $GITHUB_ENV
+          echo "DEBUG_SHA256=$DEBUG_SHA256" >> $GITHUB_ENV
+          echo "release_sha256=$RELEASE_SHA256" >> $GITHUB_OUTPUT
+          echo "debug_sha256=$DEBUG_SHA256" >> $GITHUB_OUTPUT
+
+      # =========================================================================
+      # 阶段 4：生成 Release 日志并发布
       # =========================================================================
       - name: Generate Release Notes
         id: release_notes
@@ -264,6 +283,8 @@ jobs:
           const debugApk = `weekly-mountain-${tag}-debug.apk`;
           const releaseSize = getFileSize(releaseApk);
           const debugSize = getFileSize(debugApk);
+          const releaseSha256 = process.env.RELEASE_SHA256 || '';
+          const debugSha256 = process.env.DEBUG_SHA256 || '';
 
           const notes = [
             `## 🏔️ ${title}`,
@@ -283,6 +304,16 @@ jobs:
             '| :--- | :--- | :--- | :--- |',
             `| 🚀 **正式发布版 (Release)** | \`${releaseApk}\` | \`${releaseSize}\` | **推荐日常使用**：采用 Zero-DCE 纯净精简构建，已剔除调试悬浮球与哨兵诊断模块，启动飞快、性能最优。 |`,
             `| 🛠️ **内测调试版 (Debug)** | \`${debugApk}\` | \`${debugSize}\` | **公测与体验排障**：集成移动端真机反馈悬浮球、端侧切片录屏与实时诊断功能，供开发者与先锋测试员使用。 |`,
+            '',
+            '---',
+            '',
+            '### 🛡️ 安装包 SHA-256 完整性与安全指纹',
+            '> 💡 *客户端已集成 SHA-256 原生双向校验，下载后自动比对，杜绝第三方镜像篡改或网络劫持：*',
+            '',
+            '| 安装包构建版本 | APK 文件名 | SHA-256 安全散列值 (小写 64 位) |',
+            '| :--- | :--- | :--- |',
+            `| 🚀 **正式发布版 (Release)** | \`${releaseApk}\` | \`${releaseSha256}\` |`,
+            `| 🛠️ **内测调试版 (Debug)** | \`${debugApk}\` | \`${debugSha256}\` |`,
             '',
             '---',
             '',
@@ -313,6 +344,7 @@ jobs:
           files: |
             weekly-mountain-${{ env.TAG }}-release.apk
             weekly-mountain-${{ env.TAG }}-debug.apk
+            SHA256SUMS.txt
           generate_release_notes: true
           draft: false
           prerelease: false

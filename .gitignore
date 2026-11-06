@@ -28,6 +28,7 @@ android/.idea/
 android/*.iml
 android/app/*.iml
 *.apk
+/SHA256SUMS.txt
 /releases/
 !docs/releases/
 # Agent Feedback Bridge local storage
