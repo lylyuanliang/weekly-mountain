@@ -10,13 +10,13 @@
 
 **专为成都及川西户外登山、徒步探索爱好者打造的个人高山拓扑记录与开源离线数据看板**
 
-[![Vue 3](https://img.shields.io/badge/Vue-3.4.21-42b883?style=flat-square&logo=vuedotjs)](https://vuejs.org/)
-[![Vite](https://img.shields.io/badge/Vite-5.4.21-646cff?style=flat-square&logo=vite)](https://vitejs.dev/)
-[![Capacitor](https://img.shields.io/badge/Capacitor-8.0-119EFF?style=flat-square&logo=capacitor)](https://capacitorjs.com/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-4edea3?style=flat-square)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Android_|_PWA_|_Web-34d399?style=flat-square)](releases/)
-[![Version](https://img.shields.io/badge/version-v0.2.0-2563eb?style=flat-square)](https://github.com/lylyuanliang/weekly-mountain/releases)
+[![Vue 3](assets/badges/badge-vue.svg)](https://vuejs.org/)
+[![Vite](assets/badges/badge-vite.svg)](https://vitejs.dev/)
+[![Capacitor](assets/badges/badge-capacitor.svg)](https://capacitorjs.com/)
+[![Tailwind CSS](assets/badges/badge-tailwind.svg)](https://tailwindcss.com/)
+[![License: MIT](assets/badges/badge-license.svg)](LICENSE)
+[![Platform](assets/badges/badge-platform.svg)](releases/)
+[![Version](assets/badges/badge-version.svg)](https://github.com/lylyuanliang/weekly-mountain/releases)
 
 <p align="center">
   <a href="#-核心特性">核心特性</a> •

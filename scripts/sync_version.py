@@ -206,6 +206,18 @@ def sync_all(explicit_version=None, explicit_title=None, explicit_changelog=None
             f.write(gradle_content)
         print(f"  [✓] android/app/build.gradle -> versionCode {unix_seconds}, versionName {app_version}")
 
+    # 5. 更新 assets/badges/badge-version.svg
+    badge_ver_path = os.path.join(PROJECT_ROOT, "assets", "badges", "badge-version.svg")
+    if os.path.exists(badge_ver_path):
+        with open(badge_ver_path, "r", encoding="utf-8") as f:
+            b_content = f.read()
+        b_content = re.sub(r'aria-label="version: [^"]+"', f'aria-label="version: v{base_version}"', b_content)
+        b_content = re.sub(r'<title>version: [^<]+</title>', f'<title>version: v{base_version}</title>', b_content)
+        b_content = re.sub(r'>v\d+\.\d+\.\d+<', f'>v{base_version}<', b_content)
+        with open(badge_ver_path, "w", encoding="utf-8") as f:
+            f.write(b_content)
+        print(f"  [✓] assets/badges/badge-version.svg -> v{base_version}")
+
     print(f"\n[SUCCESS] 全部工程版本元数据已统一升版至: {app_version}\n")
     return app_version
 
