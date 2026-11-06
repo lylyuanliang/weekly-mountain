@@ -17,6 +17,7 @@
               <h3 class="text-headline-md font-bold text-white text-[15px] truncate">
                 户外安全须知与法律免责声明
               </h3>
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-gray-400 shrink-0">v{{ LEGAL_DISCLAIMER_VERSION }}</span>
             </div>
             <button
               v-if="!mandatory"
@@ -34,6 +35,17 @@
               <span class="material-symbols-outlined text-[16px] text-amber-400 shrink-0 mt-0.5">warning</span>
               <span>
                 <strong>敬告户外同行者：</strong>山野壮丽，敬畏同行。在开启户外探索前，请务必充分评估自身体能与天气装备，仔细阅读本法律公约与安全免责条款。
+              </span>
+            </div>
+
+            <!-- 协议内容变更重新确认特别提示 -->
+            <div
+              v-if="isProtocolUpgrade"
+              class="p-2.5 rounded-2xl bg-teal-500/10 border border-teal-400/25 text-teal-300 text-[11px] flex items-start gap-2"
+            >
+              <span class="material-symbols-outlined text-[16px] text-teal-400 shrink-0 mt-0.5">update</span>
+              <span class="leading-relaxed">
+                <strong>公约内容合规升级：</strong>本公约已全面强化客观性质声明（明确非专业安全指南、不承担组织者安全保障义务、自甘风险与历史版本技术存档免责），请重新审阅并勾选确认。
               </span>
             </div>
 
@@ -136,6 +148,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useScrollLock } from '@/composables/useScrollLock.js';
+import { LEGAL_DISCLAIMER_VERSION } from '@/config/version.js';
 
 const props = defineProps({
   modelValue: {
@@ -151,6 +164,17 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'agree']);
 
 const hasAgreedCheckbox = ref(false);
+
+// 检测是否为旧协议升级场景（本地曾签署过旧标记，但版本号不匹配当前合规版本）
+const isProtocolUpgrade = computed(() => {
+  try {
+    const agreedVer = localStorage.getItem('alpine_disclaimer_agreed_version');
+    const legacyAgreed = localStorage.getItem('alpine_disclaimer_agreed');
+    return (legacyAgreed === 'true' || !!agreedVer) && agreedVer !== LEGAL_DISCLAIMER_VERSION;
+  } catch (e) {
+    return false;
+  }
+});
 
 const visible = computed({
   get: () => props.modelValue,
@@ -174,6 +198,7 @@ function handleConfirmAgree() {
   if (!hasAgreedCheckbox.value) return;
   try {
     localStorage.setItem('alpine_disclaimer_agreed', 'true');
+    localStorage.setItem('alpine_disclaimer_agreed_version', LEGAL_DISCLAIMER_VERSION);
     localStorage.setItem('alpine_disclaimer_agreed_time', new Date().toISOString());
   } catch (e) {
     console.warn('Storage warning:', e);

@@ -31,7 +31,7 @@ import BottomNav from '@/components/common/BottomNav.vue';
 import LegalDisclaimerModal from '@/components/common/LegalDisclaimerModal.vue';
 import AppUpdateModal from '@/components/common/AppUpdateModal.vue';
 import { useUpdateStore } from '@/stores/updateStore.js';
-import { IS_DEBUG_BUILD } from '@/config/version.js';
+import { IS_DEBUG_BUILD, LEGAL_DISCLAIMER_VERSION } from '@/config/version.js';
 import { isNativeApp } from '@/utils/platform.js';
 
 // 首次启动强制法律免责协议弹窗检测
@@ -41,8 +41,9 @@ const isNativeAppEnv = isNativeApp();
 
 onMounted(async () => {
   try {
-    const agreed = localStorage.getItem('alpine_disclaimer_agreed');
-    if (agreed !== 'true') {
+    const agreedVersion = localStorage.getItem('alpine_disclaimer_agreed_version');
+    // 若未签署或签署的协议版本低于当前最新合规版本，强制再次弹出重签
+    if (agreedVersion !== LEGAL_DISCLAIMER_VERSION) {
       isDisclaimerOpen.value = true;
     }
   } catch (e) {

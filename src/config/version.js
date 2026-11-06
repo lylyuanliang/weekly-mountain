@@ -13,6 +13,12 @@ export const BUILD_TIMESTAMP = '2026-11-05 17:25';
 export const BUILD_CODE = 1793870751;
 
 /**
+ * 法律免责公约与安全须知版本号 (Format: YYYY.MM.DD)
+ * 法律合规硬门禁：当免责条款发生重大变更时递增该版本号，系统将自动触发全员重新弹出与独立勾选确认，确保民事意思表示真实有效
+ */
+export const LEGAL_DISCLAIMER_VERSION = '2026.11.06';
+
+/**
  * 开发者调试与 AI 移动端反馈入口开关
  * 默认模式为调试内测开启 (true)；纯净发布/外部内测变体 (VITE_ENABLE_DEBUG=false) 自动剥离
  */
