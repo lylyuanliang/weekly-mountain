@@ -38,7 +38,7 @@
         <div class="flex items-center gap-2 text-[11px] font-caption text-on-surface-variant">
           <span class="flex items-center gap-1">
             <span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
-            已核准
+            实测基准
           </span>
           <span class="flex items-center gap-1">
             <span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim inline-block"></span>
@@ -225,7 +225,7 @@
           <span>全线 GPS 打卡地标序列 ({{ mountainWaypoints.length }} 处)</span>
         </h4>
         <span class="text-caption text-on-surface-variant font-mono">
-          {{ verifiedCount }} 已核准 / {{ unverifiedCount }} 估算
+          {{ verifiedCount }} 实测点 / {{ unverifiedCount }} 估算点
         </span>
       </div>
 
@@ -272,7 +272,7 @@
                   ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
                   : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'"
               >
-                {{ wp.unc ? '⚠ 区间估算' : '✓ 已核准 GPS' }}
+                {{ wp.unc ? '⚠ 区间估算' : '✓ 实测航迹 GPS' }}
               </span>
             </div>
           </div>
