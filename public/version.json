@@ -1,15 +1,15 @@
 {
-  "version": "0.3.0.202611061625",
-  "versionTag": "v0.3.0.202611061625",
-  "title": "v0.3.0.202611061625",
+  "version": "0.3.1.202611061751",
+  "versionTag": "v0.3.1.202611061751",
+  "title": "v0.3.1.202611061751",
   "publishedAt": "2026-11-06",
-  "changelog": "1. 【防篡改校验】引入 APK 安装包 SHA-256 原生双向防篡改校验，彻底杜绝第三方加速镜像篡改与传输损坏；\n2. 【客观实测基准】全线高程走势图与打卡序列措辞去行政化，全面替换核准字样为客观实测航迹基准；\n3. 【真机配对自愈】修复真机反馈在重启或更新后需手动点击测试连通性才能唤醒已配对状态的时序问题；\n4. 【动效体验升级】底栏抽屉升级为收起(66px)、半屏(364px)、全屏三段式平滑动效，消除布局撕裂感；\n5. 【手势触控优化】优化地图平移手势滚动接力锁与多端触控体验，高山拓扑浏览更平顺；\n6. 【安全访问门禁】集成 agent-feedback 1.4.0 核心套件与服务端 HTTP 401 动态鉴权防护。",
+  "changelog": "1. 【渲染修复】修复高山详情页民俗环保、备选撤退与装备建议直接显示原始 JSON 数组的排版缺陷；\n2. 【防篡改校验】引入 APK 安装包 SHA-256 原生双向防篡改校验，彻底杜绝第三方加速镜像篡改与传输损坏；\n3. 【真机配对自愈】修复真机反馈在重启或更新后需手动点击测试连通性才能唤醒已配对状态的时序问题；\n4. 【客观实测基准】全线高程走势图与打卡序列措辞去行政化，全面替换核准字样为客观实测航迹基准；\n5. 【规范固化】固化向 GitHub 自动化构建发版必须递增第3位(Patch)的项目智能体规约。",
   "disclaimer": "历史版本仅为技术研发存档记录，不反映当前自然地理与风险认知，严禁作为出行依据；请始终以包含最新风险警示的当前版本为准。",
-  "assetName": "weekly-mountain-v0.3.0.202611061625-release.apk",
+  "assetName": "weekly-mountain-v0.3.1.202611061751-release.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611061625/weekly-mountain-v0.3.0.202611061625-release.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611061625/weekly-mountain-v0.3.0.202611061625-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611061625/weekly-mountain-v0.3.0.202611061625-release.apk",
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.1.202611061751/weekly-mountain-v0.3.1.202611061751-release.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.1.202611061751/weekly-mountain-v0.3.1.202611061751-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.1.202611061751/weekly-mountain-v0.3.1.202611061751-release.apk",
   "releaseSha256": "",
   "debugSha256": ""
 }
