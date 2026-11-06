@@ -1009,7 +1009,7 @@
           "lat": 30.9238,
           "alt_m": 860,
           "type": "end",
-          "desc": "老少咸宜休闲下撤"
+          "desc": "缓坡和缓步道下撤"
         }
       ]
     },
@@ -1625,7 +1625,7 @@
       "elevation_loss_m": 600,
       "estimated_hours": "3-4h",
       "highest_alt_m": 3250,
-      "difficulty": "低，适合亲子轻徒步",
+      "difficulty": "低，地势平缓轻徒步",
       "coordinates": [
         [
           103.21953,
@@ -4383,7 +4383,7 @@
           "lat": 31.1713,
           "alt_m": 700,
           "type": "start",
-          "desc": "亲子休闲步道起点"
+          "desc": "休闲和缓步道起点"
         },
         {
           "name": "葛仙观",
@@ -4610,7 +4610,7 @@
   "yudingshan": [
     {
       "route_index": 0,
-      "route_name": "云顶小环线（亲子休闲）",
+      "route_name": "云顶小环线（休闲平缓段）",
       "color": "#4edea3",
       "distance_km": 4.2,
       "elevation_gain_m": 180,
@@ -4735,7 +4735,7 @@
           "lat": 30.743,
           "alt_m": 850,
           "type": "start",
-          "desc": "南城门外停车场，亲子步道起点"
+          "desc": "南城门外停车场，休闲步道起点"
         },
         {
           "name": "慈云寺",
@@ -9043,7 +9043,7 @@
     },
     {
       "route_index": 1,
-      "route_name": "红塔山—灵岩古街—灵岩寺亲子徒步线",
+      "route_name": "红塔山—灵岩古街—灵岩寺休闲漫步线",
       "color": "#38bdf8",
       "distance_km": 7.5,
       "elevation_gain_m": 350,
@@ -9196,7 +9196,7 @@
           "lat": 31.0105,
           "alt_m": 720,
           "type": "start",
-          "desc": "树荫木栈道起点，适合老人小孩"
+          "desc": "树荫木栈道起点，坡度平缓"
         },
         {
           "name": "红塔山林间步道",
@@ -16140,7 +16140,7 @@
     },
     {
       "route_index": 2,
-      "route_name": "车+索道轻松精华线（适合带娃/老人）",
+      "route_name": "车+索道轻松精华线（地势和缓段）",
       "color": "#facc15",
       "distance_km": 20,
       "elevation_gain_m": 600,
@@ -17102,7 +17102,7 @@
       "elevation_loss_m": 200,
       "estimated_hours": "约1-2小时",
       "highest_alt_m": 1638,
-      "difficulty": "L1-L2，适合亲子",
+      "difficulty": "L1-L2，步道和缓",
       "coordinates": [
         [
           103.375,

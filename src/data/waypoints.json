@@ -1025,7 +1025,7 @@
       "km": 0,
       "unc": false,
       "route_index": 1,
-      "route_name": "琉璃坝亲子浅线（原路折返）"
+      "route_name": "琉璃坝短途和缓线（原路折返）"
     },
     {
       "seq": 2,
@@ -1036,7 +1036,7 @@
       "km": 0.9,
       "unc": false,
       "route_index": 1,
-      "route_name": "琉璃坝亲子浅线（原路折返）"
+      "route_name": "琉璃坝短途和缓线（原路折返）"
     },
     {
       "seq": 3,
@@ -1047,7 +1047,7 @@
       "km": 1.8,
       "unc": false,
       "route_index": 1,
-      "route_name": "琉璃坝亲子浅线（原路折返）"
+      "route_name": "琉璃坝短途和缓线（原路折返）"
     },
     {
       "seq": 4,
@@ -1058,7 +1058,7 @@
       "km": 3,
       "unc": true,
       "route_index": 1,
-      "route_name": "琉璃坝亲子浅线（原路折返）"
+      "route_name": "琉璃坝短途和缓线（原路折返）"
     }
   ],
   "longcanggou": [
