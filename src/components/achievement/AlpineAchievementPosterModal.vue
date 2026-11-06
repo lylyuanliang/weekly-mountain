@@ -141,7 +141,7 @@
 
           <!-- ================= 海报内容主体 ================= -->
           <div class="relative z-10 p-5 space-y-4 text-white">
-            <!-- 1. 品牌徽标与官方认证标识 -->
+            <!-- 1. 品牌徽标与个人足迹标识 -->
             <div class="flex items-center justify-between border-b border-white/10 pb-3">
               <div class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-400/30 to-cyan-400/20 border border-emerald-400/40 flex items-center justify-center shadow-[0_0_12px_rgba(78,222,163,0.3)]">
@@ -368,12 +368,12 @@
               </div>
             </div>
 
-            <!-- 5. 底部防伪水印、时间戳与官方数字编号 -->
+            <!-- 5. 底部足迹水印、时间戳与个人打卡编号 -->
             <div class="pt-3 border-t border-white/10 space-y-2">
               <div class="flex items-center justify-between text-[9px] font-mono text-gray-400">
                 <div class="flex items-center gap-1.5">
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                  <span class="text-gray-300">防伪序列码: {{ securitySerial }}</span>
+                  <span class="text-gray-300">个人打卡编码: {{ securitySerial }}</span>
                 </div>
                 <span>{{ currentDateStr }}</span>
               </div>
@@ -381,15 +381,15 @@
               <div class="flex items-center justify-between pt-1">
                 <div class="flex flex-col">
                   <span class="text-[10px] font-bold text-white tracking-wider">CHENGDU ALPINE EXPLORER</span>
-                  <span class="text-[8px] text-gray-400 tracking-wider">暗黑高山拓扑架构 · 官方认证数字档案</span>
+                  <span class="text-[8px] text-gray-400 tracking-wider">暗黑高山拓扑架构 · 个人高山足迹记录</span>
                 </div>
 
-                <!-- 认证印章微缩 SVG -->
+                <!-- 个人打卡印章微缩 SVG -->
                 <div class="w-10 h-10 rounded-full border border-emerald-400/40 p-1 flex items-center justify-center text-emerald-300/80 rotate-12">
                   <svg class="w-full h-full" viewBox="0 0 40 40">
                     <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3,2" />
                     <text x="20" y="16" font-size="5" fill="currentColor" text-anchor="middle" font-family="monospace">ALPINE</text>
-                    <text x="20" y="24" font-size="5" fill="currentColor" text-anchor="middle" font-family="monospace">VERIFIED</text>
+                    <text x="20" y="24" font-size="5" fill="currentColor" text-anchor="middle" font-family="monospace">LOG</text>
                   </svg>
                 </div>
               </div>
@@ -416,7 +416,7 @@
 
           <!-- 提示文本 -->
           <p class="text-center text-[11px] text-gray-400">
-            支持一键直接存入系统相册 · 包含防伪认证编码 · 自动适配所选峰线
+            支持一键直接存入系统相册 · 包含个人打卡编码 · 自动适配所选峰线
           </p>
         </div>
 

@@ -511,7 +511,7 @@
           <div class="p-2.5 rounded-xl bg-surface-container-low/70 border border-outline-variant/20 flex items-start gap-2 text-[11px] text-on-surface-variant leading-relaxed">
             <span class="material-symbols-outlined text-[15px] text-amber-400 shrink-0 mt-0.5">warning</span>
             <span>
-              <strong>安全提示：</strong>高山气候与路况多变，本应用里程、爬升与耗时均为理论参考值，请根据个人体能与路况预留安全冗余；严禁违规穿越自然保护区未开放核心区。
+              <strong>安全与性质提示：</strong>本记录非专业安全指南，不构成对路线安全性或通行性的保证与推荐；高山气候与路况多变，请根据个人体能与路况独立研判并预留冗余时间；严禁违规穿越自然保护区未开放核心区。
             </span>
           </div>
 
@@ -889,7 +889,7 @@
           <div class="flex items-center justify-between">
             <h4 class="text-body-lg font-bold text-on-surface flex items-center gap-2">
               <span class="material-symbols-outlined text-secondary text-[20px]">directions_car</span>
-              <span>5. 路况交通与驾驶指南</span>
+              <span>5. 路况交通与自驾参考</span>
             </h4>
             <span class="text-caption text-secondary font-mono font-semibold">NAVIGATION</span>
           </div>
@@ -1420,7 +1420,7 @@
           </div>
 
           <p class="text-[11px] text-on-surface-variant leading-relaxed p-2.5 rounded-xl bg-surface-container-low/40 border border-outline-variant/15">
-            <strong>免责与更新说明:</strong> 本档案由四川户外志愿者与公开资讯整理，高山气候与景区运营政策变动频繁，出行前请务必向当地文旅与景区管理渠道复核最新路况与开放情况。
+            <strong>免责与性质说明:</strong> 本档案由户外爱好者与公开资讯整理，非专业安全指南，不构成任何路线安全性或可行性保证。高山气候与管治政策变动频繁，出行前请务必向当地文旅与属地管理部门复核最新路况与开放情况，并自主决策评估风险。
           </p>
         </section>
       </div>

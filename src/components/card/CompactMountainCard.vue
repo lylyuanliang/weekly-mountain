@@ -93,7 +93,7 @@
           <span class="truncate max-w-[64px]">{{ weatherText }}</span>
         </button>
 
-        <!-- Feature Tag (e.g. 亲子友好 / 云海日出) -->
+        <!-- Feature Tag (e.g. 和缓步道 / 云海日出) -->
         <span
           v-if="featureTag"
           class="px-1.5 py-0.5 rounded bg-surface-container-high/60 text-on-surface-variant border border-outline-variant/20 truncate max-w-[65px] hidden xs:inline"
@@ -194,7 +194,7 @@ const locationDistText = computed(() => {
 const featureTag = computed(() => {
   const tags = props.mountain?.tags;
   if (Array.isArray(tags) && tags.length > 0) {
-    const priority = ['亲子友好', '云海日出', '雪山远眺', '森林瀑布', '红叶彩林', '免费徒步', '近郊一日', '日出日落'];
+    const priority = ['和缓步道', '云海日出', '雪山远眺', '森林瀑布', '红叶彩林', '免费徒步', '近郊一日', '日出日落'];
     for (const p of priority) {
       if (tags.includes(p)) return p;
     }

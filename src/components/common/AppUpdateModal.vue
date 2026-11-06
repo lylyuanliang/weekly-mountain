@@ -30,7 +30,7 @@
                   </h3>
                   <div class="flex items-center gap-2 mt-0.5 text-[11px] text-on-surface-variant">
                     <template v-if="!isNativeAppEnv">
-                      <span>{{ updateStore.latestRelease ? `最新发布: v${updateStore.latestRelease.version}` : '官方 Android 客户端' }}</span>
+                      <span>{{ updateStore.latestRelease ? `最新发布: v${updateStore.latestRelease.version}` : 'Android 客户端' }}</span>
                     </template>
                     <template v-else>
                       <span>当前: v{{ currentVersion }}</span>
@@ -38,7 +38,7 @@
                         ➔ v{{ updateStore.latestRelease.version }}
                       </span>
                       <span v-else-if="!updateStore.errorMessage && updateStore.versionDiffStatus === 'ahead_of_release' && updateStore.latestRelease" class="text-cyan-400 font-semibold">
-                        (领先官方 v{{ updateStore.latestRelease.version }})
+                        (领先云端发布版 v{{ updateStore.latestRelease.version }})
                       </span>
                     </template>
                   </div>
@@ -224,7 +224,7 @@
                 </div>
                 <h4 class="text-sm font-bold text-on-surface">您正在体验先行内测版本</h4>
                 <p class="text-xs text-on-surface-variant leading-relaxed">
-                  当前安装版本 <span class="font-mono text-cyan-400 font-semibold">v{{ currentVersion }}</span> 领先于官方稳定发布版 <span class="font-mono text-on-surface font-semibold">v{{ updateStore.latestRelease?.version }}</span>。
+                  当前安装版本 <span class="font-mono text-cyan-400 font-semibold">v{{ currentVersion }}</span> 领先于云端稳定发布版 <span class="font-mono text-on-surface font-semibold">v{{ updateStore.latestRelease?.version }}</span>。
                 </p>
               </div>
 
