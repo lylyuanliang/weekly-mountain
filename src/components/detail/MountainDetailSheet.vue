@@ -792,11 +792,21 @@
 
           <!-- Plan B Withdrawal Route -->
           <div v-if="mountain.plan_b" class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-body-sm text-amber-200 leading-relaxed">
-            <div class="flex items-center gap-1 font-bold text-amber-300 text-caption mb-0.5">
+            <div class="flex items-center gap-1 font-bold text-amber-300 text-caption mb-1">
               <span class="material-symbols-outlined text-[16px]">alt_route</span>
               <span>恶劣天气备选撤退方案 (Plan B)</span>
             </div>
-            <p class="text-[12px] text-amber-100/90">{{ mountain.plan_b }}</p>
+            <div v-if="Array.isArray(mountain.plan_b)" class="space-y-1">
+              <p
+                v-for="(pb, pbi) in mountain.plan_b"
+                :key="`pb-${pbi}`"
+                class="text-[12px] text-amber-100/90 leading-relaxed flex items-start gap-1.5"
+              >
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 flex-shrink-0"></span>
+                <span>{{ pb }}</span>
+              </p>
+            </div>
+            <p v-else class="text-[12px] text-amber-100/90 leading-relaxed">{{ mountain.plan_b }}</p>
           </div>
         </section>
 
@@ -1113,8 +1123,19 @@
             </div>
           </div>
 
-          <div v-if="mountain.gear_detail" class="text-caption text-on-surface-variant p-2 rounded-lg bg-surface-container-low/50">
-            <strong>专业装备建议:</strong> {{ mountain.gear_detail }}
+          <div v-if="mountain.gear_detail" class="text-caption text-on-surface-variant p-2.5 rounded-xl bg-surface-container-low/50 border border-outline-variant/15 space-y-1">
+            <strong class="text-on-surface font-semibold">专业装备建议:</strong>
+            <div v-if="Array.isArray(mountain.gear_detail)" class="space-y-1 pt-0.5">
+              <p
+                v-for="(gd, gdi) in mountain.gear_detail"
+                :key="`gd-${gdi}`"
+                class="text-[12px] leading-relaxed flex items-start gap-1.5 text-on-surface-variant"
+              >
+                <span class="w-1.5 h-1.5 rounded-full bg-primary/70 mt-1.5 flex-shrink-0"></span>
+                <span>{{ gd }}</span>
+              </p>
+            </div>
+            <p v-else class="text-[12px] leading-relaxed text-on-surface-variant">{{ mountain.gear_detail }}</p>
           </div>
         </section>
 
@@ -1275,9 +1296,22 @@
           </div>
 
           <!-- Local Community Tips -->
-          <div v-if="mountain.local_tips" class="p-2.5 rounded-xl bg-surface-container-low/70 border border-outline-variant/20 text-body-sm text-on-surface-variant">
-            <strong class="text-on-surface">属地民俗与环保要求:</strong>
-            <p class="mt-0.5 leading-relaxed">{{ mountain.local_tips }}</p>
+          <div v-if="mountain.local_tips" class="p-3 rounded-2xl bg-surface-container-low/70 border border-outline-variant/20 text-body-sm text-on-surface-variant space-y-2">
+            <div class="flex items-center gap-1.5 font-bold text-on-surface text-caption">
+              <span class="material-symbols-outlined text-[16px] text-primary">eco</span>
+              <span>属地民俗与环保要求:</span>
+            </div>
+            <div v-if="Array.isArray(mountain.local_tips)" class="space-y-1.5">
+              <p
+                v-for="(tip, idx) in mountain.local_tips"
+                :key="`lt-${idx}`"
+                class="text-[12px] leading-relaxed flex items-start gap-1.5 text-on-surface-variant"
+              >
+                <span class="w-1.5 h-1.5 rounded-full bg-primary/70 mt-1.5 flex-shrink-0"></span>
+                <span>{{ tip }}</span>
+              </p>
+            </div>
+            <p v-else class="text-[12px] leading-relaxed text-on-surface-variant">{{ mountain.local_tips }}</p>
           </div>
 
           <div v-if="mountain.map_note" class="text-caption text-on-surface-variant p-2 rounded-lg bg-surface-container-low/50">
