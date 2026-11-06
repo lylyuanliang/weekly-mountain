@@ -64,6 +64,11 @@
       - 针对其内部 94 处残留的“资深领队梯队调优”、“攻略手册”、“有腿就行”、“亲子友好”等词汇全量清洗对齐；
     - **构建脚本静态资源同步清理 (`scripts/sync_android_assets.js`)**：在将 `dist` 同步至 Android 资产目录前增加对过往旧哈希产物的自动清理，确保不再残留旧版本构建碎片。
 
+11. **概括性合意推定与自甘风险兜底条款全量嵌入 (`LegalDisclaimerModal.vue`, `README.md`, `MountainDetailSheet.vue`, `index.monolith.html`)**：
+    - 结合《民法典》第 1176 条自甘风险原则与格式条款效力裁判规则，增设醒目的合意推定与兜底免责条款，并补充“如不同意请立即停止使用并退出”的充分退出权表述，粉碎“强制缔约/霸王条款”抗辩；
+    - 弹窗 `LegalDisclaimerModal.vue` 正文末尾新增【确认与自甘风险兜底声明】高亮卡片，强制勾选框与此自担风险合意深度绑定；
+    - `README.md` 顶栏第 3 条与文末第 3 条、`MountainDetailSheet.vue` 详情抽屉顶部/底部、`index.monolith.html` 历史存档横幅全渠道完成文本闭环。
+
 ## 3. 修改文件清单
 - `src/views/PlanView.vue`: 彻底剥离“资深领队”称谓与 official-presets ID
 - `src/stores/planStore.js`: 预设计划客观体能描述

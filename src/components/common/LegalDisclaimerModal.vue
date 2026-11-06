@@ -95,7 +95,18 @@
                 <span>开源许可与责任限制</span>
               </h4>
               <p class="text-gray-300">
-                本软件遵循 MIT License 协议依“原样（AS-IS）”免费提供，在法律允许的最大范围内，开发者不对因使用本软件信息、离线数据或第三方地图导航引发的任何直接、间接、意外人身伤亡或财产损失承担损害赔偿或连带连带民事责任。
+                本软件遵循 MIT License 协议依“原样（AS-IS）”免费提供，在法律允许的最大范围内，开发者不对因使用本软件信息、离线数据或第三方地图导航引发的任何直接、间接、意外人身伤亡或财产损失承担损害赔偿或连带民事责任。
+              </p>
+            </div>
+
+            <!-- 确认与自甘风险兜底声明 -->
+            <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] leading-relaxed text-amber-200">
+              <div class="font-bold flex items-center gap-1.5 text-amber-300 mb-1">
+                <span class="material-symbols-outlined text-[14px]">gavel</span>
+                <span>确认与自甘风险兜底声明</span>
+              </div>
+              <p>
+                凡访问、浏览、下载、克隆或使用本软件及本数据库内容，即表示您已充分阅读、完全理解并自愿接受上述全部声明，自愿依据《民法典》第一千一百七十六条自甘风险原则自行承担线下出行与户外活动的一切潜在风险与法律责任。如您不同意上述任何条款，请立即退出并停止使用本软件。
               </p>
             </div>
           </div>
@@ -113,7 +124,7 @@
                 class="mt-0.5 w-4 h-4 rounded border-white/20 bg-surface-container-high text-primary focus:ring-primary/40 focus:ring-offset-0"
               />
               <span class="leading-snug">
-                我已年满 18 周岁，具有完全民事行为能力，已完整阅读并充分知晓上述《户外安全须知与法律免责声明》中的全部风险与法律条款。
+                我已年满 18 周岁，具有完全民事行为能力，已完整阅读、完全理解并自愿同意上述全部免责声明，自愿独立承担线下活动及地理数据使用的一切潜在风险与法律后果。
               </span>
             </label>
 
