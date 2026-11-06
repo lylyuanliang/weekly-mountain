@@ -64,7 +64,7 @@ def run_full_e2e_suite():
                 user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15"
             )
             page = context.new_page()
-            page.add_init_script("localStorage.setItem('alpine_disclaimer_agreed', 'true');")
+            page.add_init_script("localStorage.setItem('alpine_disclaimer_agreed_version', '2026.11.06'); localStorage.setItem('alpine_disclaimer_agreed', 'true');")
 
             def handle_console(msg):
                 if msg.type in ("error", "warning"):
@@ -295,8 +295,8 @@ def run_full_e2e_suite():
 
             assert "#/plan" in page.url, f"Assertion Failed: URL not #/plan, got {page.url}"
             assert page.locator(".plan-view").is_visible(), "Assertion Failed: .plan-view not visible!"
-            assert page.locator(".official-presets").is_visible(), "Assertion Failed: .official-presets not visible!"
-            print("  [PASS] 4.1 Switched to #/plan, official presets visible")
+            assert page.locator(".curated-presets").is_visible(), "Assertion Failed: .curated-presets not visible!"
+            print("  [PASS] 4.1 Switched to #/plan, curated presets visible")
 
             # 4.2 套用「川西日出云海线」
             seacloud_btn = page.locator(".preset-card:has-text('川西日出云海线'), .preset-card:has-text('云海观景台')").locator(".btn-apply-preset, button:has-text('套用')").first

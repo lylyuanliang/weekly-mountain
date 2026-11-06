@@ -36,7 +36,18 @@ function copyDirRecursive(src, dest) {
   }
 }
 
-// 3. Copy dist to android/app/src/main/assets/public
+// 3. Clean stale js/css chunks from android/app/src/main/assets/public/assets before copying
+const androidAssetsSubdir = path.resolve(androidPublicDir, 'assets');
+if (fs.existsSync(androidAssetsSubdir)) {
+  const staleEntries = fs.readdirSync(androidAssetsSubdir);
+  for (const f of staleEntries) {
+    if (f.endsWith('.js') || f.endsWith('.css') || f.endsWith('.map')) {
+      fs.unlinkSync(path.join(androidAssetsSubdir, f));
+    }
+  }
+}
+
+// 4. Copy dist to android/app/src/main/assets/public
 console.log(`[sync_android_assets] Copying ${distDir} -> ${androidPublicDir}`);
 copyDirRecursive(distDir, androidPublicDir);
 
