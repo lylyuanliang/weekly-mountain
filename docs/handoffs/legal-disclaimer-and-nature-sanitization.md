@@ -1,8 +1,9 @@
 # 主题：法律免责合规、项目性质消歧与历史版本存档声明落地
 
-- 当前状态：已完成 (completed)
-- 最后更新时间：2026-11-06 11:18
-- 恢复入口：`README.md`, `src/views/PlanView.vue`, `src/stores/planStore.js`, `src/config/version.js`, `src/App.vue`, `src/components/common/LegalDisclaimerModal.vue`, `src/components/detail/MountainDetailSheet.vue`, `src/data/mountains.json`, `src/data/mountain_tracks.json`, `src/data/waypoints.json`, `index.monolith.html`, `scripts/sync_android_assets.js`, `.github/workflows/build-apk.yml`
+- 当前状态：已完成并正式打 Tag 发布 (completed & tagged)
+- 最后更新时间：2026-11-06 11:41
+- 发布 Tag：`v0.3.0.202611061139` (构建版本: `0.3.0.202611061139`)
+- 恢复入口：`README.md`, `src/views/PlanView.vue`, `src/stores/planStore.js`, `src/config/version.js`, `src/App.vue`, `src/components/common/LegalDisclaimerModal.vue`, `src/components/detail/MountainDetailSheet.vue`, `src/data/mountains.json`, `src/data/mountain_tracks.json`, `src/data/waypoints.json`, `index.monolith.html`, `scripts/sync_android_assets.js`, `docs/releases/RELEASE-v0.3.0.md`
 
 ## 1. 目标与背景
 防范户外路线信息传播中被“合理信赖为专业安全指南”或“安全保证承诺”的民事法律风险，结合核心法律与合规指导原则全面排查与修正：
