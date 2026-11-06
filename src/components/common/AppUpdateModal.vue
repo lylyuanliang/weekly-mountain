@@ -135,6 +135,24 @@
                     <strong>受限提示</strong>：调试版内含 AI 哨兵直连入口，需持有开发者专属授权码解锁使用；普通用户无法使用反馈，建议下载<strong>正式发布版</strong>。
                   </span>
                 </div>
+
+                <!-- SHA-256 安全指纹校验徽章 -->
+                <div v-if="activeSha256" class="px-3 py-2 rounded-xl bg-surface-container-lowest/80 border border-outline-variant/20 flex items-center justify-between text-xs">
+                  <div class="flex items-center gap-1.5 overflow-hidden">
+                    <span class="material-symbols-outlined text-[15px] text-emerald-400 shrink-0">verified_user</span>
+                    <span class="text-on-surface-variant shrink-0 text-[11px] font-medium">防篡改指纹:</span>
+                    <span class="font-mono text-on-surface truncate text-[11px]" :title="activeSha256">{{ activeSha256.slice(0, 8) }}...{{ activeSha256.slice(-8) }}</span>
+                  </div>
+                  <button
+                    type="button"
+                    @click="copySha256(activeSha256)"
+                    class="ml-2 text-primary hover:text-primary-hover flex items-center gap-1 shrink-0 text-[11px] py-0.5 px-2 rounded-lg bg-surface-container hover:bg-surface-bright transition-colors"
+                    :title="copiedHash ? '已复制' : '复制完整 SHA-256 哈希值'"
+                  >
+                    <span class="material-symbols-outlined text-[13px]">{{ copiedHash ? 'check' : 'content_copy' }}</span>
+                    <span>{{ copiedHash ? '已复制' : '复制哈希' }}</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -210,9 +228,22 @@
 
             <!-- 状态 E: 下载或网络异常 -->
             <div v-else-if="updateStore.downloadStatus === 'error' || updateStore.errorMessage" class="py-3 space-y-3">
-              <div class="p-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-xs text-red-200 flex items-start gap-2">
-                <span class="material-symbols-outlined text-[16px] text-red-400 shrink-0 mt-0.5">error</span>
-                <span>{{ updateStore.errorMessage || '下载过程出现异常，请稍后重试' }}</span>
+              <div
+                class="p-3.5 rounded-2xl border text-xs flex items-start gap-2.5 leading-relaxed"
+                :class="isTamperedOrHashMismatch ? 'bg-red-500/15 border-red-500/40 text-red-200' : 'bg-red-500/10 border-red-500/20 text-red-200'"
+              >
+                <span class="material-symbols-outlined text-[18px] text-red-400 shrink-0 mt-0.5">
+                  {{ isTamperedOrHashMismatch ? 'gpp_bad' : 'error' }}
+                </span>
+                <div>
+                  <div v-if="isTamperedOrHashMismatch" class="font-bold text-red-300 mb-1 flex items-center gap-1">
+                    <span>安全拦截：安装包哈希校验未通过</span>
+                  </div>
+                  <span>{{ updateStore.errorMessage || '下载过程出现异常，请稍后重试' }}</span>
+                  <p v-if="isTamperedOrHashMismatch" class="text-[11px] text-red-300/80 mt-1">
+                    为保障您的设备安全，已自动阻断安装并销毁可疑临时文件。请尝试切换网络或在下方使用外部官方渠道下载。
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -399,6 +430,32 @@ const isNativeAppEnv = isNativeApp();
 // 彻底杜绝底层页面背景滚动穿透
 useScrollLock(() => updateStore.isModalOpen);
 const currentVersion = computed(() => APP_VERSION);
+
+// 计算当前选中变体的 SHA-256 安全指纹
+const activeSha256 = computed(() => {
+  if (!updateStore.latestRelease) return '';
+  if (selectedVariant.value === 'debug') {
+    return updateStore.latestRelease.debugSha256 || updateStore.latestRelease.sha256 || '';
+  }
+  return updateStore.latestRelease.releaseSha256 || updateStore.latestRelease.sha256 || '';
+});
+
+// 是否处于哈希篡改或完整性校验失败错误
+const isTamperedOrHashMismatch = computed(() => {
+  const msg = updateStore.errorMessage || updateStore.downloadProgress?.message || '';
+  return msg.includes('SHA-256') || msg.includes('篡改') || msg.includes('损坏');
+});
+
+const copiedHash = ref(false);
+function copySha256(hash) {
+  if (!hash) return;
+  if (navigator?.clipboard?.writeText) {
+    navigator.clipboard.writeText(hash).then(() => {
+      copiedHash.value = true;
+      setTimeout(() => { copiedHash.value = false; }, 2000);
+    }).catch(() => {});
+  }
+}
 
 function onBackdropClick() {
   if (updateStore.downloadStatus !== 'downloading') {

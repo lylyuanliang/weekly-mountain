@@ -161,18 +161,31 @@ export const useUpdateStore = defineStore('update', () => {
     errorMessage.value = '';
 
     let downloadUrl = latestRelease.value.downloadUrl || latestRelease.value.rawDownloadUrl;
-    if (variant === 'release' && latestRelease.value.releaseDownloadUrl) {
-      downloadUrl = latestRelease.value.releaseDownloadUrl;
-    } else if (variant === 'debug' && latestRelease.value.debugDownloadUrl) {
-      downloadUrl = latestRelease.value.debugDownloadUrl;
+    let expectedSha256 = latestRelease.value.sha256 || '';
+
+    if (variant === 'release') {
+      if (latestRelease.value.releaseDownloadUrl) {
+        downloadUrl = latestRelease.value.releaseDownloadUrl;
+      }
+      expectedSha256 = latestRelease.value.releaseSha256 || expectedSha256;
+    } else if (variant === 'debug') {
+      if (latestRelease.value.debugDownloadUrl) {
+        downloadUrl = latestRelease.value.debugDownloadUrl;
+      }
+      expectedSha256 = latestRelease.value.debugSha256 || expectedSha256;
     }
 
     const targetVersion = latestRelease.value.version;
 
-    // 1. Android 原生容器环境：直接调用 Java 原生流式下载与安装
-    if (typeof window !== 'undefined' && window.AlpineNative?.downloadAndInstallApk) {
-      window.AlpineNative.downloadAndInstallApk(downloadUrl, targetVersion);
-      return;
+    // 1. Android 原生容器环境：直接调用 Java 原生流式下载与安装 (支持 SHA-256 完整性防篡改安全校验)
+    if (typeof window !== 'undefined' && window.AlpineNative) {
+      if (typeof window.AlpineNative.downloadAndInstallApkWithSha256 === 'function') {
+        window.AlpineNative.downloadAndInstallApkWithSha256(downloadUrl, targetVersion, expectedSha256);
+        return;
+      } else if (typeof window.AlpineNative.downloadAndInstallApk === 'function') {
+        window.AlpineNative.downloadAndInstallApk(downloadUrl, targetVersion, expectedSha256);
+        return;
+      }
     }
 
     // 2. Web 浏览器/预览环境回退：调起浏览器下载

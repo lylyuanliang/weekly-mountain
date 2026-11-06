@@ -37,6 +37,51 @@ export function compareVersions(current, latest) {
 }
 
 /**
+ * 尝试从远端下载并解析 SHA256SUMS.txt (校验降级兜底通道)
+ * @param {string} verTag 版本 Tag，如 v0.3.0.202611061139
+ * @returns {Promise<Record<string, string> | null>}
+ */
+export async function fetchSha256Sums(verTag) {
+  if (!verTag) return null;
+  const urls = [
+    `${ACCELERATOR_PREFIX}https://github.com/${GITHUB_REPO}/releases/download/${verTag}/SHA256SUMS.txt`,
+    `https://github.com/${GITHUB_REPO}/releases/download/${verTag}/SHA256SUMS.txt`
+  ];
+
+  for (const url of urls) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+      if (res.ok) {
+        const text = await res.text();
+        const map = {};
+        for (const line of text.split(/\r?\n/)) {
+          const trimmed = line.trim();
+          if (!trimmed || trimmed.startsWith('#')) continue;
+          const parts = trimmed.split(/\s+/);
+          if (parts.length >= 2) {
+            const hash = parts[0].toLowerCase();
+            const filename = parts[1].replace(/^\*/, '');
+            map[filename] = hash;
+            if (filename.includes('release')) {
+              map.release = hash;
+            } else if (filename.includes('debug')) {
+              map.debug = hash;
+            }
+          }
+        }
+        return map;
+      }
+    } catch (_) {
+      // 容错降级
+    }
+  }
+  return null;
+}
+
+/**
  * 字节数转可读文本 (如 27.72 MB)
  */
 export function formatBytes(bytes) {
@@ -115,6 +160,25 @@ export async function fetchLatestRelease() {
   let acceleratedUrl = IS_DEBUG_BUILD ? acceleratedDebugUrl : acceleratedReleaseUrl;
   let assetName = IS_DEBUG_BUILD ? `weekly-mountain-${verTag}-debug.apk` : `weekly-mountain-${verTag}-release.apk`;
 
+  // 解析并对齐 SHA-256 安全散列值 (小写 64 位十六进制)
+  let releaseSha256 = (releaseData.releaseSha256 || '').trim().toLowerCase();
+  let debugSha256 = (releaseData.debugSha256 || '').trim().toLowerCase();
+
+  // 若 version.json 尚未内嵌 SHA-256，尝试拉取 Release 附件 SHA256SUMS.txt 进行自动补齐
+  if (!releaseSha256 && !debugSha256) {
+    try {
+      const shaMap = await fetchSha256Sums(verTag);
+      if (shaMap) {
+        releaseSha256 = shaMap.release || shaMap[`weekly-mountain-${verTag}-release.apk`] || '';
+        debugSha256 = shaMap.debug || shaMap[`weekly-mountain-${verTag}-debug.apk`] || '';
+      }
+    } catch (_) {
+      // 容错降级
+    }
+  }
+
+  const activeSha256 = IS_DEBUG_BUILD ? debugSha256 : releaseSha256;
+
   return {
     version: ver,
     versionTag: verTag,
@@ -129,6 +193,9 @@ export async function fetchLatestRelease() {
     debugDownloadUrl: acceleratedDebugUrl,
     rawReleaseDownloadUrl: rawReleaseUrl,
     rawDebugDownloadUrl: rawDebugUrl,
+    releaseSha256: releaseSha256,
+    debugSha256: debugSha256,
+    sha256: activeSha256,
     htmlUrl: `https://github.com/${GITHUB_REPO}/releases/tag/${verTag}`
   };
 }

@@ -21,12 +21,15 @@ import android.provider.Settings;
 import com.getcapacitor.BridgeActivity;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.util.concurrent.atomic.AtomicBoolean;
+import android.util.Log;
 
 public class MainActivity extends BridgeActivity {
 
@@ -211,6 +214,16 @@ public class MainActivity extends BridgeActivity {
          */
         @JavascriptInterface
         public void downloadAndInstallApk(final String downloadUrl, final String targetVersion) {
+            downloadAndInstallApkWithSha256(downloadUrl, targetVersion, null);
+        }
+
+        @JavascriptInterface
+        public void downloadAndInstallApk(final String downloadUrl, final String targetVersion, final String expectedSha256) {
+            downloadAndInstallApkWithSha256(downloadUrl, targetVersion, expectedSha256);
+        }
+
+        @JavascriptInterface
+        public void downloadAndInstallApkWithSha256(final String downloadUrl, final String targetVersion, final String expectedSha256) {
             if (downloadUrl == null || downloadUrl.trim().isEmpty()) {
                 notifyJsUpdateStatus("error", 0, 0, 0, "下载地址为空");
                 return;
@@ -226,17 +239,28 @@ public class MainActivity extends BridgeActivity {
                     : "latest";
             File targetFile = new File(updatesDir, "weekly-mountain-v" + verStr + ".apk");
 
-            // 关键优化 1：若已存在完整且大小合规的安装包（>1MB），直接进入安装流程，杜绝重复下载！
+            // 关键优化 1：若已存在完整且大小合规的安装包（>1MB），进行 SHA-256 完整性检验后直接调起安装
             if (targetFile.exists() && targetFile.length() > 1024 * 1024 && !isDownloading.get()) {
-                pendingInstallApk = targetFile;
-                lastStatus = "installing";
-                lastPercent = 100;
-                lastReceived = targetFile.length();
-                lastTotal = targetFile.length();
-                lastMessage = "已检测到完整安装包，正在调起安装...";
-                notifyJsUpdateStatus("installing", 100, targetFile.length(), targetFile.length(), "已检测到完整安装包，正在调起安装...");
-                runOnUiThread(() -> triggerApkInstall(targetFile));
-                return;
+                boolean isValid = true;
+                if (expectedSha256 != null && !expectedSha256.trim().isEmpty()) {
+                    String cachedSha256 = calculateFileSha256(targetFile);
+                    if (!cachedSha256.equalsIgnoreCase(expectedSha256.trim())) {
+                        Log.w("WeeklyMountain", "缓存 APK 哈希不匹配，已废弃重新下载. Expected: " + expectedSha256 + ", Cached: " + cachedSha256);
+                        targetFile.delete();
+                        isValid = false;
+                    }
+                }
+                if (isValid) {
+                    pendingInstallApk = targetFile;
+                    lastStatus = "installing";
+                    lastPercent = 100;
+                    lastReceived = targetFile.length();
+                    lastTotal = targetFile.length();
+                    lastMessage = "已检测到完整安装包（SHA-256 校验通过），正在调起安装...";
+                    notifyJsUpdateStatus("installing", 100, targetFile.length(), targetFile.length(), lastMessage);
+                    runOnUiThread(() -> triggerApkInstall(targetFile));
+                    return;
+                }
             }
 
             // 关键优化 2：若当前任务正在下载中，不重复开启线程，而是立即回传最新进度
@@ -365,6 +389,18 @@ public class MainActivity extends BridgeActivity {
 
                     output.flush();
 
+                    // SHA-256 完整性与防篡改安全校验
+                    if (expectedSha256 != null && !expectedSha256.trim().isEmpty()) {
+                        notifyJsUpdateStatus("downloading", 100, total, total, "正在校验安装包 SHA-256 防篡改完整性...");
+                        String actualSha256 = calculateFileSha256(tempFile);
+                        if (!actualSha256.equalsIgnoreCase(expectedSha256.trim())) {
+                            tempFile.delete();
+                            Log.e("WeeklyMountain", "SHA-256 Checksum Mismatch! Expected: " + expectedSha256 + ", Actual: " + actualSha256);
+                            throw new SecurityException("安装包完整性校验失败（SHA-256 不匹配，疑似传输损坏或被第三方篡改）");
+                        }
+                        Log.i("WeeklyMountain", "SHA-256 Checksum Verified Successfully: " + actualSha256);
+                    }
+
                     // 下载完成：将 .download 临时文件原子重命名为正式 .apk
                     if (targetFile.exists()) {
                         targetFile.delete();
@@ -377,8 +413,8 @@ public class MainActivity extends BridgeActivity {
                     lastPercent = 100;
                     lastReceived = total;
                     lastTotal = total;
-                    lastMessage = "下载完成，正在唤起安装...";
-                    notifyJsUpdateStatus("installing", 100, total, total, "下载完成，正在唤起安装...");
+                    lastMessage = "SHA-256 校验通过，正在唤起安装...";
+                    notifyJsUpdateStatus("installing", 100, total, total, "SHA-256 校验通过，正在唤起安装...");
 
                     // 唤起系统安装界面
                     runOnUiThread(() -> triggerApkInstall(finalApk));
@@ -478,6 +514,32 @@ public class MainActivity extends BridgeActivity {
                 bridge.getWebView().evaluateJavascript(js, null);
             }
         });
+    }
+
+    /**
+     * 计算本地文件的 SHA-256 哈希散列值 (小写 64 位十六进制)
+     */
+    public static String calculateFileSha256(File file) {
+        if (file == null || !file.exists() || !file.isFile()) {
+            return "";
+        }
+        try (InputStream is = new FileInputStream(file)) {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = is.read(buffer)) > 0) {
+                digest.update(buffer, 0, read);
+            }
+            byte[] hash = digest.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            Log.e("WeeklyMountain", "Error calculating SHA-256 for " + file.getAbsolutePath(), e);
+            return "";
+        }
     }
 
     /**
