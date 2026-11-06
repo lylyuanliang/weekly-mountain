@@ -181,6 +181,7 @@ def sync_all(explicit_version=None, explicit_title=None, explicit_changelog=None
         "title": final_title,
         "publishedAt": date_str,
         "changelog": final_changelog,
+        "disclaimer": "历史版本仅为技术研发存档记录，不反映当前自然地理与风险认知，严禁作为出行依据；请始终以包含最新风险警示的当前版本为准。",
         "assetName": release_apk_name,
         "assetSizeText": "约 29 MB",
         "downloadUrl": release_download_url,
