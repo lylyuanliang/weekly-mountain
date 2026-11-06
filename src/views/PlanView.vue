@@ -145,7 +145,7 @@
         <span class="material-symbols-outlined text-[44px] text-outline">calendar_month</span>
         <h4 class="font-headline-md text-[15px] font-bold text-on-surface">当前暂无周计划排期</h4>
         <p class="font-body-sm text-[12px] text-on-surface-variant max-w-xs mx-auto">
-          可直接套用下方资深领队精选路线，或在「探索」地图中将心仪山峰加入周计划。
+          可直接套用下方经典预设路线，或在「探索」地图中将心仪山峰加入周计划。
         </p>
         <button
           @click="scrollToPresets"
@@ -315,14 +315,14 @@
     </section>
 
     <!-- ================= SECTION 3: 精选推荐路线 (Recommended Presets) ================= -->
-    <section id="official-presets" class="space-y-space-md official-presets">
+    <section id="curated-presets" class="space-y-space-md curated-presets">
       <div class="flex items-center justify-between">
         <div>
           <div class="flex items-center gap-2">
             <span class="w-1.5 h-4 rounded-full bg-secondary"></span>
             <h3 class="font-headline-md text-[18px] font-bold text-on-surface">精选推荐周计划</h3>
           </div>
-          <p class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">资深领队调优难度梯度，循序渐进</p>
+          <p class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">按公开爬升与海拔梯次归类，循序渐进</p>
         </div>
         <span class="font-label-data-sm text-[11px] text-primary flex items-center gap-0.5">
           共 4 套方案
@@ -526,7 +526,7 @@ function applyPreset(presetId, mode = 'replace') {
 }
 
 function scrollToPresets() {
-  const el = document.getElementById('official-presets');
+  const el = document.getElementById('curated-presets');
   if (el) {
     el.scrollIntoView({ behavior: 'smooth' });
   }

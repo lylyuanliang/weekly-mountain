@@ -22,7 +22,7 @@ export const REC_PRESETS = [
   {
     id: "starter6",
     name: "入门阶梯 · 6 周",
-    desc: "从城市绿心到名山古道，难度 L1→L2 缓慢爬坡，适合和女朋友从零起步。",
+    desc: "从城市绿心到名山古道，爬升梯度递增，供初级体能拉练参考。",
     weeks: [
       "longquanshan",
       "yulei-songmao",
