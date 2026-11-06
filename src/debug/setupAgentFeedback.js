@@ -57,6 +57,19 @@ export function initAgentFeedbackExtensions(piniaInstance) {
         client.setHostChannel(hostChannelConfig);
       }
 
+      // 【核心自愈】启动时若已配置穿透基地址且本地存在缓存秘钥，自动静默同步开发机最新门禁配置
+      // 彻底根治本地秘钥已缓存但在重启或更新后显示未配对、必须手动点击“测试连通性”才能唤醒的体验 Bug
+      if (typeof client.syncAccessControlFromServer === 'function') {
+        try {
+          const savedBase = (typeof localStorage !== 'undefined')
+            ? (localStorage.getItem('af_api_base') || localStorage.getItem('wm_debug_tunnel_url') || '').trim()
+            : '';
+          if (savedBase) {
+            client.syncAccessControlFromServer(savedBase).catch(() => {});
+          }
+        } catch (_) {}
+      }
+
       // 4. 注册业务定制插件：开发机本地构建 APK 直连下载与联调面板
       client.registerExtensionTab(alpineDevApkTab);
 
