@@ -1,13 +1,13 @@
 {
-  "version": "0.3.0.202611051725",
-  "versionTag": "v0.3.0.202611051725",
-  "title": "v0.3.0.202611051725",
-  "publishedAt": "2026-11-05",
-  "changelog": "1. 【底栏三段式】底栏抽屉升级为收起(66px)、半屏(364px)、全屏三段式高度体系，全屏展开呈现方案B高密度紧凑列表；\n2. 【零撕裂动效】采用视觉稳定锚点与交叉淡入(Crossfade)动效，配合手势滚动接力锁彻底消除布局切换撕裂感；\n3. 【安全门禁】集成 @lylyuanliang/agent-feedback 1.4.0，服务端数据接口全面实施 HTTP 401 鉴权拦截；\n4. 【动态配对】解决独立编译 Debug APK 本地无密钥导致的配对失败，支持端侧向开发机 (/auth/verify) 动态校验并持久化；\n5. 【历史保护】端侧历史面板未授权状态下展示受限遮罩，阻断轮询，严防历史工单与排查日志外泄；\n6. 【签名固化】固化 Android 原生 debug.keystore 签名配置，消除跨机器覆盖安装签名不一致 (INSTALL_FAILED_UPDATE_INCOMPATIBLE)；\n7. 【流水线硬门禁】隔离 Release (Zero-DCE) 与 Debug (集成哨兵) 双包变体，锁定 20MB 产物体积硬门禁。",
-  "assetName": "weekly-mountain-v0.3.0.202611051725-release.apk",
+  "version": "0.3.0.202611061139",
+  "versionTag": "v0.3.0.202611061139",
+  "title": "v0.3.0.202611061139",
+  "publishedAt": "2026-11-06",
+  "changelog": "1. 【动效升级】底栏抽屉升级为收起(66px)、半屏(364px)、全屏三段式平滑动效，彻底消除布局切换撕裂感；\n2. 【手势交互】优化地图平移手势滚动接力锁与多端触控体验，高山拓扑浏览更平顺；\n3. 【矢量徽章】README 核心技术徽标本地高精矢量化，离线与弱网加载更稳定；\n4. 【安全门禁】集成 agent-feedback 1.4.0 核心套件，全面强化服务端接口安全防护；\n5. 【协议声明】安全须知与免责声明更新。",
+  "disclaimer": "历史版本仅为技术研发存档记录，不反映当前自然地理与风险认知，严禁作为出行依据；请始终以包含最新风险警示的当前版本为准。",
+  "assetName": "weekly-mountain-v0.3.0.202611061139-release.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611051725/weekly-mountain-v0.3.0.202611051725-release.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611051725/weekly-mountain-v0.3.0.202611051725-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611051725/weekly-mountain-v0.3.0.202611051725-release.apk",
-  "disclaimer": "历史版本仅为技术研发存档记录，不反映当前自然地理与风险认知，严禁作为出行依据；请始终以包含最新风险警示的当前版本为准。"
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611061139/weekly-mountain-v0.3.0.202611061139-release.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611061139/weekly-mountain-v0.3.0.202611061139-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.0.202611061139/weekly-mountain-v0.3.0.202611061139-release.apk"
 }
