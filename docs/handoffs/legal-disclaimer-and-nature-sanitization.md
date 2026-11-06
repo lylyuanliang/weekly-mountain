@@ -1,8 +1,8 @@
 # 主题：法律免责合规、项目性质消歧与历史版本存档声明落地
 
 - 当前状态：已完成 (completed)
-- 最后更新时间：2026-11-06
-- 恢复入口：`README.md`, `src/views/PlanView.vue`, `src/stores/planStore.js`, `src/config/version.js`, `src/App.vue`, `src/components/common/LegalDisclaimerModal.vue`, `src/components/detail/MountainDetailSheet.vue`, `.github/workflows/build-apk.yml`
+- 最后更新时间：2026-11-06 11:18
+- 恢复入口：`README.md`, `src/views/PlanView.vue`, `src/stores/planStore.js`, `src/config/version.js`, `src/App.vue`, `src/components/common/LegalDisclaimerModal.vue`, `src/components/detail/MountainDetailSheet.vue`, `src/data/mountains.json`, `src/data/mountain_tracks.json`, `src/data/waypoints.json`, `index.monolith.html`, `scripts/sync_android_assets.js`, `.github/workflows/build-apk.yml`
 
 ## 1. 目标与背景
 防范户外路线信息传播中被“合理信赖为专业安全指南”或“安全保证承诺”的民事法律风险，结合核心法律与合规指导原则全面排查与修正：
@@ -54,34 +54,47 @@
    - 将标签 `亲子友好` 升级为客观的 `和缓步道` / `成熟步道`；
    - 移除 `叠溪松坪沟` 等点位中的“官方推荐路线/顺序”。
 
+10. **全库逐字清查与地毯式法律风险字样深度改造 (`mountains.json`, `mountain_tracks.json`, `waypoints.json`, `index.monolith.html`)**：
+    - **彻底清除“有腿就行”等极端轻率主观评价**：涉及天台山等 2 处网络黑话已彻底改为客观描述“台阶步道为主，爬升起伏适中”、“网络公开分享多提及步道规整和缓”；
+    - **全面剔除“难度几乎为0”、“适合带娃”、“适合老人小孩”、“适合全家老少”、“老少咸宜”等保证式诱导表述**：共计改造 40 余处点位，统一按客观物理指标（累计爬升量、坡度起伏、铺装路面性质、体能要求）重写；
+    - **消解“须由正规户外机构带队”、“向导带队”等潜在商业/组织者联想**：转换为属地高海拔管制、报备要求及客观专业人员随行建议；
+    - **旧版单文件原型彻底归档与消歧 (`index.monolith.html`)**：
+      - 标题修正为 `<title>[历史技术存档] 成都周边每周一山 · 早期单文件原型归档（非最新版，严禁作为出行依据）</title>`；
+      - 页面顶部注入显著持久的黄色警示横幅，明确声明为早期原型代码研究存档，绝非安全指南，不反映当前风险认知，严禁作为出行依据；
+      - 针对其内部 94 处残留的“资深领队梯队调优”、“攻略手册”、“有腿就行”、“亲子友好”等词汇全量清洗对齐；
+    - **构建脚本静态资源同步清理 (`scripts/sync_android_assets.js`)**：在将 `dist` 同步至 Android 资产目录前增加对过往旧哈希产物的自动清理，确保不再残留旧版本构建碎片。
+
 ## 3. 修改文件清单
 - `src/views/PlanView.vue`: 彻底剥离“资深领队”称谓与 official-presets ID
 - `src/stores/planStore.js`: 预设计划客观体能描述
 - `assets/badges/`: 固化 7 款核心技术栈矢量 SVG 徽标
 - `README.md`: 徽标切换为本地资源，彻底解决 Camo 504 裂图；顶栏重要性质与旧版存档声明
 - `scripts/sync_version.py`: 增加 badge-version.svg 同步与 disclaimer 元数据
+- `scripts/sync_android_assets.js`: 增加 Android 资产同步前陈旧构建碎片清理
 - `src/config/version.js`: 新增 `LEGAL_DISCLAIMER_VERSION = '2026.11.06'`
 - `src/App.vue`: 支持协议版本变更动态重弹检测
 - `src/components/common/LegalDisclaimerModal.vue`: 注入版本号对比、协议更新提示横幅与新版签署落盘
 - `index.html`: 网页标题去手册化
+- `index.monolith.html`: 页面标题去手册化、顶部注入历史技术归档声明横幅、全量清洗历史数据字眼
 - `src/components/detail/MountainDetailSheet.vue`: 免责强化与自驾参考命名
 - `src/components/achievement/AlpineAchievementPosterModal.vue`: 海报个人打卡中性化
 - `src/components/common/AppUpdateModal.vue`: 移除“官方”前缀
 - `src/components/card/CompactMountainCard.vue`: 标签体系同步
-- `src/data/mountains.json`: 主观安全词汇客观化清洗与商业领队词汇剔除
-- `src/data/mountain_tracks.json`: 移除官方推荐用语
-- `src/data/waypoints.json`: 移除官方推荐顺序
+- `src/data/mountains.json`: 主观安全词汇客观化清洗与商业领队词汇剔除（35+处）
+- `src/data/mountain_tracks.json`: 移除官方推荐用语、老少咸宜与适合带娃老人等诱导词
+- `src/data/waypoints.json`: 移除官方推荐顺序与亲子浅线
 - `.github/workflows/build-apk.yml`: Release Notes 模版注入历史版本存档警示
 - `public/version.json`: 注入 disclaimer 元数据
 - `docs/releases/RELEASE-v0.3.0.md`: 顶部历史存档提示
 - `docs/handoffs/legal-disclaimer-and-nature-sanitization.md`: 本次交接文档
 
 ## 4. 验证与自测结果
-1. **“领队”字眼全库排查**：业务与展示代码存量清零，全库唯一的“领队”字眼仅保留于免责声明中声明“非领队、非组织者、不承担安全保障义务”；
-2. **GitHub Camo 504 裂图根治验证**：徽标已全部本地矢量化，彻底消除对 `img.shields.io` 的网络代理依赖；
-3. **自动化端到端协议版本重签测试 (`scratch/test_disclaimer_versioning.py`)**：100% 通过；
-4. **代码规范与格式检查**：`git diff --check` 结果 0 错误；
-5. **构建编译**：`npm run build` 成功完成，模块转换与打包零报错，Android 资产自动同步验证通过。
+1. **全库逐字深度审计**：经 `scratch/audit_all_risks.py` 全库递归扫描，包含“有腿就行”、“难度几乎为0”、“适合带娃”、“老人小孩”、“老少皆宜”、“老少咸宜”、“新手友好”、“资深领队”、“带队”等所有 40+ 项高风险词汇在 `src/`、`index.html`、`index.monolith.html`、`README.md`、`public/` 中**匹配结果全部归零**；全库唯一出现的“领队/组织者”仅保留于《免责声明》中声明“非活动组织者、非领队、不承担安全保障义务”的法定抗辩条款中；
+2. **“领队”字眼排查**：业务与展示代码存量清零；
+3. **GitHub Camo 504 裂图根治验证**：徽标已全部本地矢量化，彻底消除对 `img.shields.io` 的网络代理依赖；
+4. **自动化端到端协议版本重签测试 (`scratch/test_disclaimer_versioning.py`)**：100% 通过；
+5. **代码规范与格式检查**：`git diff --check` 结果 0 错误；
+6. **构建编译**：`npm run build` 成功完成，模块转换与打包零报错，Android 资产自动同步与旧哈希碎片清理验证通过。
 
 ## 5. 恢复与后续步骤
 所有修改均已就绪。
