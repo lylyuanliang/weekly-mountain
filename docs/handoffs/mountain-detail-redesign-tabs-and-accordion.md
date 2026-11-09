@@ -85,3 +85,8 @@
 - **局域网/开发机直链下载通道**：
   - Release 直链：`http://10.1.9.168:5173/releases/latest-release` (或 `http://localhost:5173/releases/latest-release`)
   - Debug 直链：`http://10.1.9.168:5173/releases/latest-debug` (或 `http://localhost:5173/releases/latest-debug`)
+
+### 3.5 GitHub Actions 正式发版 Tag
+- **正式发版版本号**：`v0.3.2.202611091816` (Patch 体验优化递增：`0.3.1` ➔ `0.3.2`)
+- **发布文档**：`docs/releases/RELEASE-v0.3.2.md`
+- **Git Tag**：`v0.3.2.202611091816`（已推送到 `origin`，触发 GitHub Actions 双 APK 构建与 Release 自动发布流程）
