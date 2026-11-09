@@ -217,35 +217,62 @@ def run_full_e2e_suite():
             assert detail_sheet.is_visible(), "Assertion Failed: MountainDetailSheet did not open!"
             print("  [PASS] 3.1 Detail sheet opened smoothly")
 
-            # 3.2 验证全部 12 个核心模块
-            modules_spec = [
+            # 3.2 验证三段式场景选项卡 (Tab 1: Overview, Tab 2: Trail, Tab 3: Guide)
+            tab_overview = page.locator(".mountain-detail-sheet .tab-btn-overview")
+            tab_trail = page.locator(".mountain-detail-sheet .tab-btn-trail")
+            tab_guide = page.locator(".mountain-detail-sheet .tab-btn-guide")
+            assert tab_overview.is_visible(), "Assertion Failed: Overview tab button missing!"
+            assert tab_trail.is_visible(), "Assertion Failed: Trail tab button missing!"
+            assert tab_guide.is_visible(), "Assertion Failed: Guide tab button missing!"
+            print("  [PASS] 3.2 Contextual tabs (Overview, Trail, Guide) visible")
+
+            # 3.2.1 验证 Tab 1 (Overview) 模块
+            overview_modules = [
                 ("1. 概况", ".detail-module-overview"),
+                ("4. 亮点", ".detail-module-highlights"),
+                ("11. 天气预报", ".detail-module-weather"),
+            ]
+            for mod_name, mod_sel in overview_modules:
+                mod_loc = page.locator(f".mountain-detail-sheet .tab-pane-overview {mod_sel}")
+                assert mod_loc.count() > 0, f"Assertion Failed: Module {mod_name} ({mod_sel}) missing in overview!"
+                assert mod_loc.is_visible(), f"Assertion Failed: Module {mod_name} ({mod_sel}) is not visible in overview!"
+            print("  [PASS] 3.2.1 Tab 1 Overview modules verified (Overview, Highlights, Weather)")
+
+            # 3.2.2 切换至 Tab 2 (Trail) 并验证
+            tab_trail.click()
+            page.wait_for_timeout(400)
+            trail_modules = [
                 ("2. 路线", ".detail-module-routes"),
                 ("3. 高程打卡点", ".detail-module-waypoints"),
-                ("4. 亮点", ".detail-module-highlights"),
+            ]
+            for mod_name, mod_sel in trail_modules:
+                mod_loc = page.locator(f".mountain-detail-sheet .tab-pane-trail {mod_sel}")
+                assert mod_loc.count() > 0, f"Assertion Failed: Module {mod_name} ({mod_sel}) missing in trail!"
+                assert mod_loc.is_visible(), f"Assertion Failed: Module {mod_name} ({mod_sel}) is not visible in trail!"
+
+            elev_chart = page.locator(".mountain-detail-sheet .route-elevation-chart")
+            assert elev_chart.is_visible(), "Assertion Failed: .route-elevation-chart not visible!"
+            waypoints = page.locator(".mountain-detail-sheet .waypoint-item")
+            assert waypoints.count() >= 2, f"Assertion Failed: Expected >= 2 waypoints, got {waypoints.count()}"
+            print(f"  [PASS] 3.2.2 Tab 2 Trail modules, elevation chart & {waypoints.count()} waypoints verified")
+
+            # 3.2.3 切换至 Tab 3 (Guide) 并验证
+            tab_guide.click()
+            page.wait_for_timeout(400)
+            guide_modules = [
                 ("5. 路况驾驶", ".detail-module-road"),
                 ("6. 安全高反", ".detail-module-safety"),
                 ("7. 装备清单", ".detail-module-gear"),
                 ("8. 餐饮住宿", ".detail-module-food-stay"),
                 ("9. 门票费用", ".detail-module-tickets"),
                 ("10. 环保倡议", ".detail-module-eco"),
-                ("11. 天气预报", ".detail-module-weather"),
                 ("12. 核验来源", ".detail-module-sources"),
             ]
-            for mod_name, mod_sel in modules_spec:
-                mod_loc = page.locator(f".mountain-detail-sheet {mod_sel}")
-                assert mod_loc.count() > 0, f"Assertion Failed: Module {mod_name} ({mod_sel}) missing!"
-                assert mod_loc.is_visible(), f"Assertion Failed: Module {mod_name} ({mod_sel}) is not visible!"
-                scroll_mt = page.evaluate(f"() => window.getComputedStyle(document.querySelector('.mountain-detail-sheet {mod_sel}')).scrollMarginTop")
-                assert scroll_mt and scroll_mt != "0px", f"Assertion Failed: Module {mod_name} missing scrollMarginTop!"
-            print("  [PASS] 3.2 All 12 modules verified with valid scrollMarginTop")
-
-            # 3.3 高程剖面可视化图表与打卡点列表
-            elev_chart = page.locator(".mountain-detail-sheet .route-elevation-chart")
-            assert elev_chart.is_visible(), "Assertion Failed: .route-elevation-chart not visible!"
-            waypoints = page.locator(".mountain-detail-sheet .waypoint-item")
-            assert waypoints.count() >= 2, f"Assertion Failed: Expected >= 2 waypoints, got {waypoints.count()}"
-            print(f"  [PASS] 3.3 Elevation chart & {waypoints.count()} waypoints verified")
+            for mod_name, mod_sel in guide_modules:
+                mod_loc = page.locator(f".mountain-detail-sheet .tab-pane-guide {mod_sel}")
+                assert mod_loc.count() > 0, f"Assertion Failed: Module {mod_name} ({mod_sel}) missing in guide!"
+                assert mod_loc.is_visible(), f"Assertion Failed: Module {mod_name} ({mod_sel}) is not visible in guide!"
+            print("  [PASS] 3.2.3 Tab 3 Guide modules verified (Road, Safety, Gear, Food, Tickets, Eco, Sources)")
 
             # 3.4 装备清单勾选测试（Stitch Alpine 定制复选框点击 label 测试）
             gear_label = page.locator(".mountain-detail-sheet .detail-module-gear label").first
