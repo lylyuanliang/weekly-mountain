@@ -21,7 +21,8 @@
 
 <p align="center">
   <a href="#-核心特性">核心特性</a> •
-  <a href="#-界面精选预览">界面预览</a> •
+  <a href="#-高山探索核心体验精选">界面预览</a> •
+  <a href="#-现代智能体协作真机反馈与-ai-哨兵自愈流水线">AI 哨兵</a> •
   <a href="#-山峰索引与覆盖范围">山峰索引</a> •
   <a href="#-本地运行与开发指南">本地开发</a> •
   <a href="#-线上部署与发布方案">部署指南</a> •
@@ -40,21 +41,57 @@
 
 ---
 
-## 📸 界面精选预览
+## 📸 高山探索核心体验精选
 
 <div align="center">
 
-| **01. 探索主页与拓扑地图** | **02. 12 大指标详情抽屉** |
+| **01. 探索主页与暗黑高山拓扑地图** | **02. 12 大指标详情抽屉与高程图** |
 | :---: | :---: |
 | <img src="assets/screenshots/01_explore_view.png" width="360" alt="探索主页与暗黑高山拓扑地图" /> | <img src="assets/screenshots/02_mountain_detail.png" width="360" alt="山峰详情抽屉与12大硬核指标" /> |
-| *交互式暗黑高山地图 · 多维度标签即时筛选* | *实景画廊 · 路况驾驶 · 两步路/导航一键调起* |
+| *交互式暗黑高山地图 · 多维度标签即时筛选* | *实景画廊 · 客观实测航迹高程剖面 · 避坑下撤指南* |
 
-| **03. 周末周计划规划器** | **04. Bento 遥测成就与设置** |
+| **03. 153+ 高清摄影实景画廊** | **04. 两步路与原生地图一键直达** |
 | :---: | :---: |
-| <img src="assets/screenshots/03_trip_planner.png" width="360" alt="周末周计划规划器" /> | <img src="assets/screenshots/04_profile_telemetry.png" width="360" alt="个人中心遥测成就仪表盘" /> |
-| *本周目标 · 装备清单核验 · 倒计时看板* | *峰线完成率 · 勋章体系 · 一键生成成就长图* |
+| <img src="assets/screenshots/03_lightbox_gallery.png" width="360" alt="实景摄影画廊 Lightbox" /> | <img src="assets/screenshots/04_navigation_picker.png" width="360" alt="导航与两步路 DeepLink 唤起选择器" /> |
+| *沉浸式 Lightbox · 双向滑动手势 · 灵动岛安全区垫高* | *高德/百度/腾讯/两步路/六只脚 Deep Link 唤起* |
+
+| **05. 周末周计划规划器** | **06. Bento 遥测与成就长图海报** |
+| :---: | :---: |
+| <img src="assets/screenshots/05_trip_planner.png" width="360" alt="周末周计划规划器" /> | <img src="assets/screenshots/06_poster_telemetry.png" width="360" alt="Bento 遥测成就仪表盘与长图海报" /> |
+| *日出云海预设套用 · 装备清单核验 · 倒计时看板* | *峰线完成率 · 勋章体系 · 一键导出高质感长图海报* |
 
 </div>
+
+---
+
+## 🤖 现代智能体协作：真机反馈与 AI 哨兵自愈流水线
+
+本项目在户外探索业务之外，深度落地了现代化 **AI 智能体驱动软件工程（Agentic Engineering）** 的前沿实践。通过集成官方协作套件 [`@lylyuanliang/agent-feedback`](https://github.com/lylyuanliang/agent-feedback)，在真机端侧联调与野外徒步实测中实现了 **“真机一键截图圈选 ➔ 哨兵防抖聚合 ➔ AI 智能体进驻排查修复 ➔ 状态回写与真机自愈”** 的端到端闭环自愈能力：
+
+```mermaid
+flowchart LR
+    A["📱 移动真机端侧<br/>(悬浮球一键呼出 / 圈选截图)"] --> B["⚡ 内测穿透与鉴权<br/>(cpolar / ngrok + SHA-256 密钥)"]
+    B --> C["🛡️ DevServer 伴生哨兵<br/>(10s 防抖聚合 / 0% Token 消耗)"]
+    C --> D["🤖 AI Agent 智能体进驻<br/>(全栈代码排查 / 修复 / E2E 回归)"]
+    D --> E["✅ 状态回写与真机自愈<br/>(状态机变迁 / 端侧进度实时回显)"]
+```
+
+### 📱 真机端侧 AI 反馈交互实景
+
+<div align="center">
+
+| **07. 端侧一键圈选与多模态工单提交** | **08. 📦 本地包直连与安全配对** | **09. 状态机闭环回显与历史追踪** |
+| :---: | :---: | :---: |
+| <img src="assets/screenshots/07_feedback_submit.png" width="240" alt="端侧一键圈选与多模态工单提交" /> | <img src="assets/screenshots/08_feedback_auth.png" width="240" alt="本地包穿透直连与安全配对" /> | <img src="assets/screenshots/09_feedback_history.png" width="240" alt="状态机闭环回写与历史工单面板" /> |
+| *悬浮球随时呼出 · 自动/手动截图涂鸦 · 分类标签* | *免布线远程联测 · 动态密钥鉴权防护 · 开发机直连* | *排查状态实时同步 · AI 诊断结果回写 · 异步追溯* |
+
+</div>
+
+### 🌟 核心技术优势与工程亮点
+1. **DevServer 伴生自动托管**：哨兵由 Vite 插件原生伴生管理，随 `npm run dev` 启动常驻守护，无反馈时保持 0% CPU 与 0 Token 消耗；
+2. **防抖聚合窗口 (Debounce Window)**：捕获首条反馈后启动 10 秒倒计时缓冲，自动归并真机连续追加的工单与多图为单一排查批次；
+3. **零明文泄露安全门禁**：通过 SHA-256 动态密钥签名校验服务端 HTTP 401 访问门禁，在保证内网穿透（cpolar/ngrok）安全直连的同时杜绝敏感信息外泄；
+4. **远程无人值守自愈**：用户在户外手机端提交问题后无需电脑前值守，AI 智能体基于最小改动原则自主完成代码修复、单元回归测试并通过 CLI 闭环更新工单状态。
 
 ---
 
