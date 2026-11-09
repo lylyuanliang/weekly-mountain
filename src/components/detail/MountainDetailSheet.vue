@@ -298,14 +298,58 @@
         </button>
       </header>
 
+      <!-- 3-Segment Context Tab Bar (Stitch Dark Alpine Architecture) -->
+      <nav class="sticky top-0 z-30 px-4 py-2 bg-[#1c1f29] border-b border-outline-variant/30 flex-shrink-0">
+        <div class="grid grid-cols-3 p-1 rounded-2xl bg-surface-container-high/90 border border-outline-variant/40 shadow-inner gap-1">
+          <button
+            type="button"
+            @click="setTab('overview')"
+            class="tab-btn-overview flex items-center justify-center gap-1.5 py-2 px-1 rounded-xl text-xs font-bold transition-all duration-200"
+            :class="activeTab === 'overview'
+              ? 'bg-primary/20 border border-primary/50 text-primary shadow-[0_2px_8px_rgba(78,222,163,0.2)]'
+              : 'text-on-surface-variant hover:text-on-surface border border-transparent'"
+          >
+            <span class="text-sm">🧭</span>
+            <span class="tracking-wide">核心概况</span>
+          </button>
+          <button
+            type="button"
+            @click="setTab('trail')"
+            class="tab-btn-trail flex items-center justify-center gap-1.5 py-2 px-1 rounded-xl text-xs font-bold transition-all duration-200"
+            :class="activeTab === 'trail'
+              ? 'bg-primary/20 border border-primary/50 text-primary shadow-[0_2px_8px_rgba(78,222,163,0.2)]'
+              : 'text-on-surface-variant hover:text-on-surface border border-transparent'"
+          >
+            <span class="text-sm">🗺️</span>
+            <span class="tracking-wide">路线轨迹</span>
+          </button>
+          <button
+            type="button"
+            @click="setTab('guide')"
+            class="tab-btn-guide flex items-center justify-center gap-1.5 py-2 px-1 rounded-xl text-xs font-bold transition-all duration-200"
+            :class="activeTab === 'guide'
+              ? 'bg-primary/20 border border-primary/50 text-primary shadow-[0_2px_8px_rgba(78,222,163,0.2)]'
+              : 'text-on-surface-variant hover:text-on-surface border border-transparent'"
+          >
+            <span class="text-sm">🎒</span>
+            <span class="tracking-wide">出行攻略</span>
+          </button>
+        </div>
+      </nav>
+
       <!-- Scrollable Main Content Container -->
       <div
         ref="scrollContainerRef"
         :class="{ 'invisible pointer-events-none': isNavModalOpen }"
         class="flex-1 overflow-y-auto no-scrollbar scroll-smooth px-4 pb-6 space-y-4 overscroll-contain"
         style="overscroll-behavior: contain; -webkit-overflow-scrolling: touch;"
+        @touchstart="onTabTouchStart"
+        @touchmove="onTabTouchMove"
+        @touchend="onTabTouchEnd"
       >
-        <!-- Hero Scenic Image Gallery Carousel Banner -->
+        <!-- ================= TAB 1: 核心概况 (Overview) ================= -->
+        <div v-show="activeTab === 'overview'" class="tab-pane-overview space-y-4">
+          <!-- Hero Scenic Image Gallery Carousel Banner -->
         <div
           class="hero-gallery-banner relative w-full h-52 rounded-2xl overflow-hidden bg-surface-container-lowest border border-outline-variant/30 shadow-lg group select-none cursor-pointer mt-3 touch-pan-y"
           style="touch-action: pan-y; overscroll-behavior-x: none;"
@@ -422,23 +466,7 @@
           </div>
         </div>
 
-        <!-- Quick Anchor Navigation Pills (Horizontal Scroller with Solid Obsidian Backing) -->
-        <nav class="sticky top-0 z-20 -mx-4 px-4 py-2 bg-[#161d2d] border-b border-outline-variant/30 shadow-md flex gap-1.5 overflow-x-auto no-scrollbar">
-          <button
-            v-for="tab in anchorTabs"
-            :key="tab.id"
-            type="button"
-            @click="scrollToAnchor(tab.id)"
-            class="flex-shrink-0 px-2.5 py-1 rounded-lg text-body-sm font-medium transition-all"
-            :class="activeAnchor === tab.id
-              ? 'bg-primary/20 text-primary border border-primary/40'
-              : 'bg-surface-container-high/60 text-on-surface-variant hover:text-on-surface border border-outline-variant/20'"
-          >
-            {{ tab.label }}
-          </button>
-        </nav>
-
-        <!-- ================= MODULE 1: 概况 (Overview) ================= -->
+          <!-- ================= MODULE 1: 概况 (Overview) ================= -->
         <section
           id="mod-overview"
           class="detail-module-card detail-module-overview p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
@@ -454,23 +482,71 @@
             </span>
           </div>
 
-          <!-- 4-Metrics Bento Grid -->
-          <div class="grid grid-cols-4 gap-1.5 p-2.5 rounded-xl bg-surface-container-low/70 border border-outline-variant/20 text-center">
-            <div class="flex flex-col">
-              <span class="text-[10px] font-caption text-on-surface-variant uppercase">峰顶海拔</span>
-              <span class="text-label-data-sm font-label-data-sm text-primary font-bold mt-0.5">{{ nums.alt }}m</span>
+          <!-- 5-Metric Bento 决策魔方 (Stitch Dark Alpine Architecture) -->
+          <div class="grid grid-cols-6 gap-2">
+            <!-- Bento 1: 最高标高 (3 cols) -->
+            <div class="col-span-3 rounded-2xl p-3 bg-gradient-to-br from-surface-container-low to-surface-container border border-outline-variant/30 relative overflow-hidden group">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[11px] font-medium text-on-surface-variant">最高海拔</span>
+                <span class="w-6 h-6 rounded-lg bg-primary/15 flex items-center justify-center text-primary">
+                  <span class="material-symbols-outlined text-[14px]">arrow_upward_alt</span>
+                </span>
+              </div>
+              <div class="flex items-baseline gap-1">
+                <span class="text-2xl font-black tracking-tight text-primary font-mono glow-primary">{{ nums.alt }}</span>
+                <span class="text-[11px] font-bold text-on-surface-variant tracking-wider">M</span>
+              </div>
+              <div class="mt-1 flex items-center gap-1 text-[10px] text-primary/80 font-medium truncate">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0"></span>
+                <span class="truncate">{{ nums.alt >= 4000 ? '高海拔雪山秘境' : nums.alt >= 3000 ? '川西高山亚高山' : '近郊森林富氧带' }}</span>
+              </div>
             </div>
-            <div class="flex flex-col border-l border-outline-variant/20">
-              <span class="text-[10px] font-caption text-on-surface-variant uppercase">累计爬升</span>
-              <span class="text-label-data-sm font-label-data-sm text-primary font-bold mt-0.5">+{{ nums.asc }}m</span>
+
+            <!-- Bento 2: 累计爬升 (3 cols) -->
+            <div class="col-span-3 rounded-2xl p-3 bg-gradient-to-br from-surface-container-low to-surface-container border border-outline-variant/30 relative overflow-hidden group">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[11px] font-medium text-on-surface-variant">累计爬升</span>
+                <span class="w-6 h-6 rounded-lg bg-secondary/15 flex items-center justify-center text-secondary">
+                  <span class="material-symbols-outlined text-[14px]">trending_up</span>
+                </span>
+              </div>
+              <div class="flex items-baseline gap-1">
+                <span class="text-2xl font-black tracking-tight text-white font-mono">+{{ nums.asc }}</span>
+                <span class="text-[11px] font-bold text-on-surface-variant tracking-wider">M</span>
+              </div>
+              <div class="mt-1 flex items-center gap-1 text-[10px] text-secondary/80 font-medium truncate">
+                <span class="w-1.5 h-1.5 rounded-full bg-secondary flex-shrink-0"></span>
+                <span class="truncate">{{ nums.asc >= 1000 ? '大落差耐力挑战' : nums.asc >= 500 ? '适中坡度缓步爬升' : '轻量休闲徒步' }}</span>
+              </div>
             </div>
-            <div class="flex flex-col border-l border-outline-variant/20">
-              <span class="text-[10px] font-caption text-on-surface-variant uppercase">往返里程</span>
-              <span class="text-label-data-sm font-label-data-sm text-on-surface font-bold mt-0.5">{{ nums.dist }}km</span>
+
+            <!-- Bento 3: 往返里程 (2 cols) -->
+            <div class="col-span-2 rounded-2xl p-2.5 bg-surface-container-low/80 border border-outline-variant/25 flex flex-col justify-between">
+              <span class="text-[11px] font-medium text-on-surface-variant">徒步里程</span>
+              <div class="my-1">
+                <span class="text-lg font-black text-white font-mono">{{ nums.dist }}</span>
+                <span class="text-[10px] font-bold text-on-surface-variant ml-0.5">km</span>
+              </div>
+              <span class="text-[10px] text-on-surface-variant/70 font-mono">往返全程</span>
             </div>
-            <div class="flex flex-col border-l border-outline-variant/20">
-              <span class="text-[10px] font-caption text-on-surface-variant uppercase">预计用时</span>
-              <span class="text-label-data-sm font-label-data-sm text-secondary font-bold mt-0.5">{{ durationText }}</span>
+
+            <!-- Bento 4: 预计用时 (2 cols) -->
+            <div class="col-span-2 rounded-2xl p-2.5 bg-surface-container-low/80 border border-outline-variant/25 flex flex-col justify-between">
+              <span class="text-[11px] font-medium text-on-surface-variant">预计耗时</span>
+              <div class="my-1">
+                <span class="text-lg font-black text-secondary font-mono">{{ durationText }}</span>
+              </div>
+              <span class="text-[10px] text-on-surface-variant/70 font-mono">配速参考</span>
+            </div>
+
+            <!-- Bento 5: 成都驱车 (2 cols) -->
+            <div class="col-span-2 rounded-2xl p-2.5 bg-surface-container-low/80 border border-outline-variant/25 border-l-2 border-l-secondary flex flex-col justify-between">
+              <span class="text-[11px] font-medium text-on-surface-variant">{{ regionStore.currentRegion.driveCenter }}车程</span>
+              <div class="my-1">
+                <span class="text-lg font-black text-secondary font-mono">{{ mountain.drive_hours || '--' }}</span>
+                <span class="text-[10px] font-bold text-on-surface-variant ml-0.5">h</span>
+              </div>
+              <span class="text-[10px] text-secondary/70 font-mono">自驾直达</span>
             </div>
           </div>
 
@@ -581,7 +657,218 @@
           </div>
         </section>
 
-        <!-- ================= MODULE 2: 路线 (Routes) ================= -->
+          <!-- ================= MODULE 4: 亮点与机位 (Highlights & Spots) ================= -->
+        <section
+          id="mod-highlights"
+          class="detail-module-card detail-module-highlights p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
+          data-module="highlights"
+        >
+          <div class="flex items-center justify-between">
+            <h4 class="text-body-lg font-bold text-on-surface flex items-center gap-2">
+              <span class="material-symbols-outlined text-tertiary-fixed-dim text-[20px]">auto_awesome</span>
+              <span>4. 核心亮点与机位</span>
+            </h4>
+            <span class="text-caption text-tertiary-fixed-dim font-mono font-semibold">HIGHLIGHTS</span>
+          </div>
+
+          <!-- Feature Tags -->
+          <div v-if="mountain.tags && mountain.tags.length" class="flex flex-wrap gap-1.5">
+            <span
+              v-for="(tag, ti) in mountain.tags"
+              :key="`tag-${ti}`"
+              class="px-2.5 py-1 rounded-full bg-surface-container-low text-body-sm font-medium text-tertiary-fixed-dim border border-tertiary/30 flex items-center gap-1"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span>
+              {{ tag }}
+            </span>
+          </div>
+
+          <!-- Photo Spots List -->
+          <div v-if="mountain.photo_spots && mountain.photo_spots.length" class="space-y-2">
+            <h5 class="text-caption font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+              <span class="material-symbols-outlined text-[15px] text-primary">photo_camera</span>
+              <span>经典摄影机位清单</span>
+            </h5>
+            <div class="space-y-1.5">
+              <div
+                v-for="(spot, si) in mountain.photo_spots"
+                :key="`spot-${si}`"
+                class="p-2.5 rounded-xl bg-surface-container-low/70 border border-outline-variant/20 flex items-start gap-2 text-body-sm"
+              >
+                <span class="text-primary font-mono font-bold text-[12px] mt-0.5">0{{ si + 1 }}</span>
+                <span class="text-on-surface leading-snug">{{ spot }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sunrise Sunset Reference -->
+          <div v-if="mountain.sunrise_sunset_ref || mountain.sun_times" class="p-2.5 rounded-xl bg-surface-container-low/60 border border-outline-variant/20 text-body-sm space-y-1">
+            <div class="flex items-center gap-1 text-tertiary-fixed-dim font-bold text-caption">
+              <span class="material-symbols-outlined text-[16px]">wb_twilight</span>
+              <span>日出日落与晨昏黄金时刻参考</span>
+            </div>
+            <p class="text-on-surface-variant text-[12px] leading-relaxed">
+              {{ mountain.sunrise_sunset_ref || JSON.stringify(mountain.sun_times) }}
+            </p>
+          </div>
+        </section>
+
+          <!-- ================= MODULE 11: 天气预报 (Weather Forecast) ================= -->
+        <section
+          id="mod-weather"
+          class="detail-module-card detail-module-weather p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
+          data-module="weather"
+        >
+          <div class="flex items-center justify-between">
+            <h4 class="text-body-lg font-bold text-on-surface flex items-center gap-2">
+              <span class="material-symbols-outlined text-secondary text-[20px]">cloud_sync</span>
+              <span>11. 实时天气与气象观景窗口</span>
+            </h4>
+            <span class="text-caption text-secondary font-mono font-semibold">METEOROLOGY</span>
+          </div>
+
+          <!-- Live 7-Day Weather Forecast Component -->
+          <MountainWeatherCard :mountain="mountain" :auto-load="true" />
+
+          <!-- Weather Search Keywords (Default Collapsed Advanced Guide) -->
+          <details
+            v-if="mountain.weather_keywords && mountain.weather_keywords.length"
+            class="group rounded-xl border border-outline-variant/30 bg-surface-container-low/60 overflow-hidden transition-all duration-200"
+          >
+            <summary class="px-3 py-2 cursor-pointer list-none flex items-center justify-between text-caption font-semibold text-on-surface-variant hover:text-on-surface select-none">
+              <span class="flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px] text-secondary">travel_explore</span>
+                <span>进阶：第三方专业气象检索别名 (Windy / 墨迹)</span>
+              </span>
+              <span class="material-symbols-outlined text-[16px] text-on-surface-variant group-open:rotate-180 transition-transform duration-200">
+                expand_more
+              </span>
+            </summary>
+            <div class="px-3 pb-2.5 pt-1 space-y-1 border-t border-outline-variant/20">
+              <p
+                v-for="(wk, wki) in mountain.weather_keywords"
+                :key="`wk-${wki}`"
+                class="p-2 rounded-lg bg-surface-container/70 border border-outline-variant/20 text-body-sm text-on-surface-variant font-mono text-[11.5px]"
+              >
+                {{ wk }}
+              </p>
+            </div>
+          </details>
+
+          <!-- Four Seasons Breakdown -->
+          <div v-if="mountain.season_best && mountain.season_best.length" class="space-y-1.5 pt-2 border-t border-outline-variant/20">
+            <h5 class="text-caption font-bold text-on-surface-variant uppercase tracking-wider">四季观景特征解析</h5>
+            <div class="space-y-1">
+              <p
+                v-for="(sb, sbi) in mountain.season_best"
+                :key="`sb-${sbi}`"
+                class="p-2 rounded-xl bg-surface-container-low/50 border border-outline-variant/15 text-body-sm text-on-surface-variant text-[12px] leading-relaxed"
+              >
+                {{ sb }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Cloud Sea Window Rule -->
+          <div class="p-2.5 rounded-xl bg-surface-container-low/70 border border-secondary/30 text-body-sm text-secondary space-y-1">
+            <strong class="text-on-surface flex items-center gap-1 text-caption font-bold">
+              <span class="material-symbols-outlined text-[16px] text-secondary">insights</span>
+              云海与日照金山窗口定律
+            </strong>
+            <p class="text-[12px] leading-relaxed text-on-surface-variant">
+              雨后初晴第 1-2 天清晨出现云海概率最高；风速需低于 3 级（低于 12km/h）；逆温层位于 2500-3200m 区间时呈现磅礴云海盛景。
+            </p>
+          </div>
+        </section>
+        </div>
+
+        <!-- ================= TAB 2: 路线轨迹 (Trail & GPS) ================= -->
+        <div v-show="activeTab === 'trail'" class="tab-pane-trail space-y-4 pt-3">
+          <!-- 两步路 / 六只脚 GPX 深度唤起卡片 (提至路线页顶端) -->
+          <div v-if="mountain.track_keywords && mountain.track_keywords.length" class="p-3.5 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="text-caption font-semibold text-on-surface flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[17px] text-primary">download</span>
+                <span class="font-bold">两步路 / 六只脚 GPX 户外航迹</span>
+              </div>
+              <span class="text-[11px] font-mono text-primary/80">点击自动调起 App</span>
+            </div>
+
+            <!-- Quick Action: Launch 2bulu / Foottouch -->
+            <div class="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                @click="handleLaunchTwoBulu(mountain.name)"
+                class="btn-launch-twobulu flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 text-emerald-300 text-[12px] font-bold active:scale-95 transition-all shadow-sm"
+              >
+                <span class="material-symbols-outlined text-[17px]">hiking</span>
+                <span>打开两步路 App</span>
+              </button>
+              <button
+                type="button"
+                @click="handleLaunchFootTouch(mountain.name)"
+                class="btn-launch-foottouch flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/35 text-blue-300 text-[12px] font-bold active:scale-95 transition-all shadow-sm"
+              >
+                <span class="material-symbols-outlined text-[17px]">map</span>
+                <span>打开六只脚 App</span>
+              </button>
+            </div>
+
+            <!-- Track Keywords List with App Trigger -->
+            <div class="space-y-1.5">
+              <div
+                v-for="(kw, kwi) in mountain.track_keywords"
+                :key="`kw-${kwi}`"
+                @click="handleLaunchTwoBulu(kw)"
+                class="track-keyword-card group flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low/90 hover:bg-surface-container border border-primary/20 hover:border-primary/45 cursor-pointer active:scale-[0.99] transition-all"
+              >
+                <div class="flex items-center gap-2 min-w-0 pr-2">
+                  <span class="material-symbols-outlined text-primary text-[16px] flex-shrink-0 group-hover:scale-110 transition-transform">route</span>
+                  <span class="text-[12px] font-mono text-on-surface truncate">{{ kw }}</span>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0">
+                  <span class="px-2 py-0.5 rounded-md bg-primary/15 group-hover:bg-primary/25 text-primary text-[10px] font-bold font-mono border border-primary/30 flex items-center gap-0.5">
+                    <span>搜两步路</span>
+                    <span class="material-symbols-outlined text-[11px]">open_in_new</span>
+                  </span>
+                  <button
+                    type="button"
+                    @click.stop="copyKeywordOnly(kw)"
+                    class="p-1 rounded-md bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border border-outline-variant/30 transition-colors"
+                    title="仅复制关键词"
+                  >
+                    <span class="material-symbols-outlined text-[13px]">content_copy</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= MODULE 3: 高程打卡点 (Waypoints & Elevation) ================= -->
+        <section
+          id="mod-waypoints"
+          class="detail-module-card detail-module-waypoints p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
+          data-module="waypoints"
+        >
+          <div class="flex items-center justify-between">
+            <h4 class="text-body-lg font-bold text-on-surface flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[20px]">altitude</span>
+              <span>3. 高程剖面与打卡点</span>
+            </h4>
+            <span class="text-caption text-primary font-mono font-semibold">
+              GPS TOPOGRAPHY
+            </span>
+          </div>
+
+          <!-- Embedded Route Elevation & Waypoints Component -->
+          <RouteElevationChart
+            :mountain="mountain"
+            @probe-waypoint="(wp) => emit('probe-waypoint', wp)"
+            @clear-probe="() => emit('clear-probe')"
+          />
+        </section>
+
+          <!-- ================= MODULE 2: 路线 (Routes) ================= -->
         <section
           id="mod-routes"
           class="detail-module-card detail-module-routes p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
@@ -729,74 +1016,15 @@
               </div>
             </div>
           </div>
+        </section>
 
-          <!-- Track Keywords (GPX search & App Deep Link) -->
-          <div v-if="mountain.track_keywords && mountain.track_keywords.length" class="pt-3 border-t border-outline-variant/20 space-y-2.5">
-            <div class="flex items-center justify-between">
-              <div class="text-caption font-semibold text-on-surface flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[17px] text-primary">download</span>
-                <span class="font-bold">两步路 / 六只脚 GPX 户外轨迹</span>
-              </div>
-              <span class="text-[11px] font-mono text-primary/80">点击自动调起 App</span>
+          <!-- Plan B Withdrawal Route (独立清晰卡片) -->
+          <div v-if="mountain.plan_b" class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-body-sm text-amber-200 leading-relaxed shadow-sm">
+            <div class="flex items-center gap-1.5 font-bold text-amber-300 text-caption mb-1.5">
+              <span class="material-symbols-outlined text-[18px]">alt_route</span>
+              <span>恶劣天气备选撤退逃生方案 (Plan B)</span>
             </div>
-
-            <!-- Quick Action: Launch 2bulu / Foottouch -->
-            <div class="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                @click="handleLaunchTwoBulu(mountain.name)"
-                class="btn-launch-twobulu flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 text-emerald-300 text-[12px] font-bold active:scale-95 transition-all shadow-sm"
-              >
-                <span class="material-symbols-outlined text-[17px]">hiking</span>
-                <span>打开两步路 App</span>
-              </button>
-              <button
-                type="button"
-                @click="handleLaunchFootTouch(mountain.name)"
-                class="btn-launch-foottouch flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/35 text-blue-300 text-[12px] font-bold active:scale-95 transition-all shadow-sm"
-              >
-                <span class="material-symbols-outlined text-[17px]">map</span>
-                <span>打开六只脚 App</span>
-              </button>
-            </div>
-
-            <!-- Track Keywords List with App Trigger -->
-            <div class="space-y-1.5">
-              <div
-                v-for="(kw, kwi) in mountain.track_keywords"
-                :key="`kw-${kwi}`"
-                @click="handleLaunchTwoBulu(kw)"
-                class="track-keyword-card group flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low/90 hover:bg-surface-container border border-primary/20 hover:border-primary/45 cursor-pointer active:scale-[0.99] transition-all"
-              >
-                <div class="flex items-center gap-2 min-w-0 pr-2">
-                  <span class="material-symbols-outlined text-primary text-[16px] flex-shrink-0 group-hover:scale-110 transition-transform">route</span>
-                  <span class="text-[12px] font-mono text-on-surface truncate">{{ kw }}</span>
-                </div>
-                <div class="flex items-center gap-1.5 flex-shrink-0">
-                  <span class="px-2 py-0.5 rounded-md bg-primary/15 group-hover:bg-primary/25 text-primary text-[10px] font-bold font-mono border border-primary/30 flex items-center gap-0.5">
-                    <span>搜两步路</span>
-                    <span class="material-symbols-outlined text-[11px]">open_in_new</span>
-                  </span>
-                  <button
-                    type="button"
-                    @click.stop="copyKeywordOnly(kw)"
-                    class="p-1 rounded-md bg-surface-container hover:bg-surface-bright text-on-surface-variant hover:text-on-surface border border-outline-variant/30 transition-colors"
-                    title="仅复制关键词"
-                  >
-                    <span class="material-symbols-outlined text-[13px]">content_copy</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Plan B Withdrawal Route -->
-          <div v-if="mountain.plan_b" class="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-body-sm text-amber-200 leading-relaxed">
-            <div class="flex items-center gap-1 font-bold text-amber-300 text-caption mb-1">
-              <span class="material-symbols-outlined text-[16px]">alt_route</span>
-              <span>恶劣天气备选撤退方案 (Plan B)</span>
-            </div>
-            <div v-if="Array.isArray(mountain.plan_b)" class="space-y-1">
+            <div v-if="Array.isArray(mountain.plan_b)" class="space-y-1.5">
               <p
                 v-for="(pb, pbi) in mountain.plan_b"
                 :key="`pb-${pbi}`"
@@ -808,89 +1036,11 @@
             </div>
             <p v-else class="text-[12px] text-amber-100/90 leading-relaxed">{{ mountain.plan_b }}</p>
           </div>
-        </section>
+        </div>
 
-        <!-- ================= MODULE 3: 高程打卡点 (Waypoints & Elevation) ================= -->
-        <section
-          id="mod-waypoints"
-          class="detail-module-card detail-module-waypoints p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
-          data-module="waypoints"
-        >
-          <div class="flex items-center justify-between">
-            <h4 class="text-body-lg font-bold text-on-surface flex items-center gap-2">
-              <span class="material-symbols-outlined text-primary text-[20px]">altitude</span>
-              <span>3. 高程剖面与打卡点</span>
-            </h4>
-            <span class="text-caption text-primary font-mono font-semibold">
-              GPS TOPOGRAPHY
-            </span>
-          </div>
-
-          <!-- Embedded Route Elevation & Waypoints Component -->
-          <RouteElevationChart
-            :mountain="mountain"
-            @probe-waypoint="(wp) => emit('probe-waypoint', wp)"
-            @clear-probe="() => emit('clear-probe')"
-          />
-        </section>
-
-        <!-- ================= MODULE 4: 亮点与机位 (Highlights & Spots) ================= -->
-        <section
-          id="mod-highlights"
-          class="detail-module-card detail-module-highlights p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
-          data-module="highlights"
-        >
-          <div class="flex items-center justify-between">
-            <h4 class="text-body-lg font-bold text-on-surface flex items-center gap-2">
-              <span class="material-symbols-outlined text-tertiary-fixed-dim text-[20px]">auto_awesome</span>
-              <span>4. 核心亮点与机位</span>
-            </h4>
-            <span class="text-caption text-tertiary-fixed-dim font-mono font-semibold">HIGHLIGHTS</span>
-          </div>
-
-          <!-- Feature Tags -->
-          <div v-if="mountain.tags && mountain.tags.length" class="flex flex-wrap gap-1.5">
-            <span
-              v-for="(tag, ti) in mountain.tags"
-              :key="`tag-${ti}`"
-              class="px-2.5 py-1 rounded-full bg-surface-container-low text-body-sm font-medium text-tertiary-fixed-dim border border-tertiary/30 flex items-center gap-1"
-            >
-              <span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span>
-              {{ tag }}
-            </span>
-          </div>
-
-          <!-- Photo Spots List -->
-          <div v-if="mountain.photo_spots && mountain.photo_spots.length" class="space-y-2">
-            <h5 class="text-caption font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
-              <span class="material-symbols-outlined text-[15px] text-primary">photo_camera</span>
-              <span>经典摄影机位清单</span>
-            </h5>
-            <div class="space-y-1.5">
-              <div
-                v-for="(spot, si) in mountain.photo_spots"
-                :key="`spot-${si}`"
-                class="p-2.5 rounded-xl bg-surface-container-low/70 border border-outline-variant/20 flex items-start gap-2 text-body-sm"
-              >
-                <span class="text-primary font-mono font-bold text-[12px] mt-0.5">0{{ si + 1 }}</span>
-                <span class="text-on-surface leading-snug">{{ spot }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Sunrise Sunset Reference -->
-          <div v-if="mountain.sunrise_sunset_ref || mountain.sun_times" class="p-2.5 rounded-xl bg-surface-container-low/60 border border-outline-variant/20 text-body-sm space-y-1">
-            <div class="flex items-center gap-1 text-tertiary-fixed-dim font-bold text-caption">
-              <span class="material-symbols-outlined text-[16px]">wb_twilight</span>
-              <span>日出日落与晨昏黄金时刻参考</span>
-            </div>
-            <p class="text-on-surface-variant text-[12px] leading-relaxed">
-              {{ mountain.sunrise_sunset_ref || JSON.stringify(mountain.sun_times) }}
-            </p>
-          </div>
-        </section>
-
-        <!-- ================= MODULE 5: 路况驾驶 (Road & Navigation) ================= -->
+        <!-- ================= TAB 3: 出行攻略 (Guide & Logistics) ================= -->
+        <div v-show="activeTab === 'guide'" class="tab-pane-guide space-y-4 pt-3">
+          <!-- ================= MODULE 5: 路况驾驶 (Road & Navigation) ================= -->
         <section
           id="mod-road"
           class="detail-module-card detail-module-road p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
@@ -975,7 +1125,7 @@
           </div>
         </section>
 
-        <!-- ================= MODULE 6: 安全高反 (Safety & Altitude) ================= -->
+          <!-- ================= MODULE 6: 安全高反 (Safety & Altitude) ================= -->
         <section
           id="mod-safety"
           class="detail-module-card detail-module-safety p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
@@ -1035,7 +1185,7 @@
           </div>
         </section>
 
-        <!-- ================= MODULE 7: 装备清单 (Gear Checklist) ================= -->
+          <!-- ================= MODULE 7: 装备清单 (Gear Checklist) ================= -->
         <section
           id="mod-gear"
           class="detail-module-card detail-module-gear p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
@@ -1051,16 +1201,22 @@
             </span>
           </div>
 
-          <!-- Day Hiking Gear Checklist -->
+          <!-- Day Hiking Gear Checklist (核心必备露白 + 进阶建议手风琴折叠展开) -->
           <div v-if="mountain.gear_day && mountain.gear_day.length" class="space-y-1.5">
-            <h5 class="text-caption font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
-              <span class="material-symbols-outlined text-[15px] text-primary">hiking</span>
-              <span>单日冲顶必带装备</span>
-            </h5>
+            <div class="flex items-center justify-between">
+              <h5 class="text-caption font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                <span class="material-symbols-outlined text-[15px] text-primary">hiking</span>
+                <span>单日冲顶必带装备 ({{ mountain.gear_day.length }})</span>
+              </h5>
+              <span v-if="mountain.gear_day.length > 3" class="text-[11px] font-mono text-primary/80">
+                前3项核心必备
+              </span>
+            </div>
             <div class="grid grid-cols-1 gap-1.5">
               <label
                 v-for="(g, gi) in mountain.gear_day"
                 :key="`g-day-${gi}`"
+                v-show="isDayGearExpanded || gi < 3"
                 class="flex items-center gap-2.5 p-2 rounded-xl bg-surface-container-low/70 border border-outline-variant/20 cursor-pointer hover:bg-surface-container-low transition-colors group select-none"
               >
                 <!-- Custom Stitch Alpine Checkbox -->
@@ -1085,15 +1241,34 @@
                 </span>
               </label>
             </div>
+
+            <!-- Accordion toggle button if more than 3 items -->
+            <button
+              v-if="mountain.gear_day.length > 3"
+              type="button"
+              @click="isDayGearExpanded = !isDayGearExpanded"
+              class="w-full py-1.5 px-3 rounded-xl bg-surface-container/60 hover:bg-surface-container border border-outline-variant/20 text-xs text-primary font-medium flex items-center justify-center gap-1 transition-all mt-1 active:scale-[0.99]"
+            >
+              <span>{{ isDayGearExpanded ? '收起进阶装备' : `展开其余 ${mountain.gear_day.length - 3} 项建议装备` }}</span>
+              <span class="material-symbols-outlined text-[16px] transition-transform duration-200" :class="{ 'rotate-180': isDayGearExpanded }">expand_more</span>
+            </button>
           </div>
 
-          <!-- Overnight Gear Checklist -->
+          <!-- Overnight Gear Checklist (带手风琴开合) -->
           <div v-if="mountain.gear_night && mountain.gear_night.length" class="space-y-1.5 pt-2 border-t border-outline-variant/20">
-            <h5 class="text-caption font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
-              <span class="material-symbols-outlined text-[15px] text-secondary">bed</span>
-              <span>过夜 / 露营高山进阶装备</span>
-            </h5>
-            <div class="grid grid-cols-1 gap-1.5">
+            <div class="flex items-center justify-between cursor-pointer py-1" @click="isNightGearExpanded = !isNightGearExpanded">
+              <h5 class="text-caption font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1">
+                <span class="material-symbols-outlined text-[15px] text-secondary">bed</span>
+                <span>过夜 / 露营高山进阶装备 ({{ mountain.gear_night.length }})</span>
+              </h5>
+              <div class="flex items-center gap-1 text-[11px] text-on-surface-variant">
+                <span>{{ isNightGearExpanded ? '收起' : '展开' }}</span>
+                <span class="material-symbols-outlined text-[16px] transition-transform duration-200" :class="{ 'rotate-180': isNightGearExpanded }">
+                  expand_more
+                </span>
+              </div>
+            </div>
+            <div v-show="isNightGearExpanded" class="grid grid-cols-1 gap-1.5 pt-0.5">
               <label
                 v-for="(g, gi) in mountain.gear_night"
                 :key="`g-night-${gi}`"
@@ -1139,7 +1314,7 @@
           </div>
         </section>
 
-        <!-- ================= MODULE 8: 餐饮住宿 (Food & Stay) ================= -->
+          <!-- ================= MODULE 8: 餐饮住宿 (Food & Stay) ================= -->
         <section
           id="mod-food-stay"
           class="detail-module-card detail-module-food-stay p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
@@ -1199,7 +1374,7 @@
           </div>
         </section>
 
-        <!-- ================= MODULE 9: 门票费用 (Tickets & Budget) ================= -->
+          <!-- ================= MODULE 9: 门票费用 (Tickets & Budget) ================= -->
         <section
           id="mod-tickets"
           class="detail-module-card detail-module-tickets p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
@@ -1248,7 +1423,7 @@
           </div>
         </section>
 
-        <!-- ================= MODULE 10: 环保倡议 (Leave No Trace) ================= -->
+          <!-- ================= MODULE 10: 环保倡议 (Leave No Trace) ================= -->
         <section
           id="mod-eco"
           class="detail-module-card detail-module-eco p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
@@ -1297,11 +1472,20 @@
 
           <!-- Local Community Tips -->
           <div v-if="mountain.local_tips" class="p-3 rounded-2xl bg-surface-container-low/70 border border-outline-variant/20 text-body-sm text-on-surface-variant space-y-2">
-            <div class="flex items-center gap-1.5 font-bold text-on-surface text-caption">
-              <span class="material-symbols-outlined text-[16px] text-primary">eco</span>
-              <span>属地民俗与环保要求:</span>
+            <div class="flex items-center justify-between cursor-pointer py-0.5" @click="isLocalTipsExpanded = !isLocalTipsExpanded">
+              <div class="flex items-center gap-1.5 font-bold text-on-surface text-caption">
+                <span class="material-symbols-outlined text-[16px] text-primary">eco</span>
+                <span>属地民俗与环保要求</span>
+              </div>
+              <div class="flex items-center gap-1 text-[11px] text-on-surface-variant">
+                <span>{{ isLocalTipsExpanded ? '收起' : '展开' }}</span>
+                <span class="material-symbols-outlined text-[16px] transition-transform duration-200" :class="{ 'rotate-180': isLocalTipsExpanded }">
+                  expand_more
+                </span>
+              </div>
             </div>
-            <div v-if="Array.isArray(mountain.local_tips)" class="space-y-1.5">
+            <div v-show="isLocalTipsExpanded" class="space-y-1.5 pt-1">
+              <div v-if="Array.isArray(mountain.local_tips)" class="space-y-1.5">
               <p
                 v-for="(tip, idx) in mountain.local_tips"
                 :key="`lt-${idx}`"
@@ -1312,6 +1496,7 @@
               </p>
             </div>
             <p v-else class="text-[12px] leading-relaxed text-on-surface-variant">{{ mountain.local_tips }}</p>
+            </div>
           </div>
 
           <div v-if="mountain.map_note" class="text-caption text-on-surface-variant p-2 rounded-lg bg-surface-container-low/50">
@@ -1319,75 +1504,7 @@
           </div>
         </section>
 
-        <!-- ================= MODULE 11: 天气预报 (Weather Forecast) ================= -->
-        <section
-          id="mod-weather"
-          class="detail-module-card detail-module-weather p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
-          data-module="weather"
-        >
-          <div class="flex items-center justify-between">
-            <h4 class="text-body-lg font-bold text-on-surface flex items-center gap-2">
-              <span class="material-symbols-outlined text-secondary text-[20px]">cloud_sync</span>
-              <span>11. 实时天气与气象观景窗口</span>
-            </h4>
-            <span class="text-caption text-secondary font-mono font-semibold">METEOROLOGY</span>
-          </div>
-
-          <!-- Live 7-Day Weather Forecast Component -->
-          <MountainWeatherCard :mountain="mountain" :auto-load="true" />
-
-          <!-- Weather Search Keywords (Default Collapsed Advanced Guide) -->
-          <details
-            v-if="mountain.weather_keywords && mountain.weather_keywords.length"
-            class="group rounded-xl border border-outline-variant/30 bg-surface-container-low/60 overflow-hidden transition-all duration-200"
-          >
-            <summary class="px-3 py-2 cursor-pointer list-none flex items-center justify-between text-caption font-semibold text-on-surface-variant hover:text-on-surface select-none">
-              <span class="flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[16px] text-secondary">travel_explore</span>
-                <span>进阶：第三方专业气象检索别名 (Windy / 墨迹)</span>
-              </span>
-              <span class="material-symbols-outlined text-[16px] text-on-surface-variant group-open:rotate-180 transition-transform duration-200">
-                expand_more
-              </span>
-            </summary>
-            <div class="px-3 pb-2.5 pt-1 space-y-1 border-t border-outline-variant/20">
-              <p
-                v-for="(wk, wki) in mountain.weather_keywords"
-                :key="`wk-${wki}`"
-                class="p-2 rounded-lg bg-surface-container/70 border border-outline-variant/20 text-body-sm text-on-surface-variant font-mono text-[11.5px]"
-              >
-                {{ wk }}
-              </p>
-            </div>
-          </details>
-
-          <!-- Four Seasons Breakdown -->
-          <div v-if="mountain.season_best && mountain.season_best.length" class="space-y-1.5 pt-2 border-t border-outline-variant/20">
-            <h5 class="text-caption font-bold text-on-surface-variant uppercase tracking-wider">四季观景特征解析</h5>
-            <div class="space-y-1">
-              <p
-                v-for="(sb, sbi) in mountain.season_best"
-                :key="`sb-${sbi}`"
-                class="p-2 rounded-xl bg-surface-container-low/50 border border-outline-variant/15 text-body-sm text-on-surface-variant text-[12px] leading-relaxed"
-              >
-                {{ sb }}
-              </p>
-            </div>
-          </div>
-
-          <!-- Cloud Sea Window Rule -->
-          <div class="p-2.5 rounded-xl bg-surface-container-low/70 border border-secondary/30 text-body-sm text-secondary space-y-1">
-            <strong class="text-on-surface flex items-center gap-1 text-caption font-bold">
-              <span class="material-symbols-outlined text-[16px] text-secondary">insights</span>
-              云海与日照金山窗口定律
-            </strong>
-            <p class="text-[12px] leading-relaxed text-on-surface-variant">
-              雨后初晴第 1-2 天清晨出现云海概率最高；风速需低于 3 级（低于 12km/h）；逆温层位于 2500-3200m 区间时呈现磅礴云海盛景。
-            </p>
-          </div>
-        </section>
-
-        <!-- ================= MODULE 12: 核验来源 (Sources & Audit) ================= -->
+          <!-- ================= MODULE 12: 核验来源 (Sources & Audit) ================= -->
         <section
           id="mod-sources"
           class="detail-module-card detail-module-sources p-4 rounded-2xl bg-surface-container-high/80 border border-outline-variant/30 space-y-3"
@@ -1457,6 +1574,7 @@
             <strong>免责与性质说明:</strong> 本档案由户外爱好者与公开资讯整理，非专业安全指南，不构成任何路线安全性或可行性保证。高山气候与管治政策变动频繁，出行前请务必向当地文旅与属地管理部门复核最新路况与开放情况，并自主决策评估风险。使用本软件即表示您已阅读、理解并同意以上声明，自愿承担一切潜在风险；如不同意请立即停止使用。
           </p>
         </section>
+        </div>
       </div>
 
       <!-- Sticky Bottom Action Bar -->
@@ -1509,7 +1627,6 @@
       @toast="showSheetToast"
     />
 </template>
-
 <script setup>
 import { ref, computed, watch, reactive, nextTick, onMounted, onUnmounted } from 'vue';
 import { APP_VERSION } from '@/config/version.js';
@@ -1569,6 +1686,77 @@ function preventAsideScroll(e) {
   }
 }
 const activeAnchor = ref('overview');
+
+// ================= 三段式场景选项卡状态 (Segmented Context Tabs) =================
+const activeTab = ref('overview'); // 'overview' | 'trail' | 'guide'
+
+// 各 Tab 独立滚动位置持久化
+const tabScrollPositions = reactive({
+  overview: 0,
+  trail: 0,
+  guide: 0
+});
+
+function setTab(tab) {
+  if (activeTab.value === tab) return;
+  if (scrollContainerRef.value) {
+    tabScrollPositions[activeTab.value] = scrollContainerRef.value.scrollTop;
+  }
+  activeTab.value = tab;
+  nextTick(() => {
+    if (scrollContainerRef.value) {
+      scrollContainerRef.value.scrollTop = tabScrollPositions[tab] || 0;
+    }
+  });
+}
+
+// 渐进式折叠状态 (Progressive Disclosure)
+const isDayGearExpanded = ref(false);
+const isNightGearExpanded = ref(true);
+const isLocalTipsExpanded = ref(true);
+
+// 内容区域轻扫左右切换 Tab 手势 (Touch Pan X)
+let tabTouchStartX = 0;
+let tabTouchStartY = 0;
+let tabTouchCurrentX = 0;
+let tabTouchCurrentY = 0;
+let isTabSwiping = false;
+
+function onTabTouchStart(e) {
+  if (e.touches && e.touches[0]) {
+    tabTouchStartX = e.touches[0].clientX;
+    tabTouchStartY = e.touches[0].clientY;
+    tabTouchCurrentX = tabTouchStartX;
+    tabTouchCurrentY = tabTouchStartY;
+    isTabSwiping = true;
+  }
+}
+
+function onTabTouchMove(e) {
+  if (!isTabSwiping || !e.touches || !e.touches[0]) return;
+  tabTouchCurrentX = e.touches[0].clientX;
+  tabTouchCurrentY = e.touches[0].clientY;
+}
+
+function onTabTouchEnd(e) {
+  if (!isTabSwiping) return;
+  isTabSwiping = false;
+  const dx = tabTouchCurrentX - tabTouchStartX;
+  const dy = tabTouchCurrentY - tabTouchStartY;
+
+  // 水平滑动判定阈值：水平位移超 45px 且水平分量显著大于垂直分量 (1.6x)
+  if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.6) {
+    if (dx < 0) {
+      // 向左滑：切至下一个 Tab
+      if (activeTab.value === 'overview') setTab('trail');
+      else if (activeTab.value === 'trail') setTab('guide');
+    } else {
+      // 向右滑：切至上一个 Tab
+      if (activeTab.value === 'guide') setTab('trail');
+      else if (activeTab.value === 'trail') setTab('overview');
+    }
+  }
+}
 const activeRouteMapIndex = ref(null);
 const gearCheckedMap = reactive({});
 
@@ -1979,13 +2167,18 @@ const lightboxTrackStyle = computed(() => {
 
 // ================= 全局键盘事件监听 (ESC/左右方向键) =================
 function handleKeyDown(e) {
-  if (!isLightboxOpen.value) return;
   if (e.key === 'Escape') {
-    closeLightbox();
-  } else if (e.key === 'ArrowRight') {
-    nextLightboxImage();
-  } else if (e.key === 'ArrowLeft') {
-    prevLightboxImage();
+    if (isLightboxOpen.value) {
+      closeLightbox();
+    } else if (isNavModalOpen.value) {
+      closeNavigationPicker();
+    }
+  } else if (isLightboxOpen.value) {
+    if (e.key === 'ArrowRight') {
+      nextLightboxImage();
+    } else if (e.key === 'ArrowLeft') {
+      prevLightboxImage();
+    }
   }
 }
 
@@ -2003,6 +2196,13 @@ watch(
   () => {
     currentImageIndex.value = 0;
     lightboxIndex.value = 0;
+    activeTab.value = 'overview';
+    tabScrollPositions.overview = 0;
+    tabScrollPositions.trail = 0;
+    tabScrollPositions.guide = 0;
+    isDayGearExpanded.value = false;
+    isNightGearExpanded.value = true;
+    isLocalTipsExpanded.value = true;
     Object.keys(imageErrorMap).forEach((k) => delete imageErrorMap[k]);
     Object.keys(gearCheckedMap).forEach((k) => delete gearCheckedMap[k]);
   }
@@ -2016,9 +2216,19 @@ watch(
       emit('clear-probe');
       Object.keys(gearCheckedMap).forEach((k) => delete gearCheckedMap[k]);
     } else {
+      activeTab.value = 'overview';
+      tabScrollPositions.overview = 0;
+      tabScrollPositions.trail = 0;
+      tabScrollPositions.guide = 0;
+      isDayGearExpanded.value = false;
+      isNightGearExpanded.value = true;
+      isLocalTipsExpanded.value = true;
       nextTick(() => {
         if (sheetAsideRef.value) {
           sheetAsideRef.value.scrollTop = 0;
+        }
+        if (scrollContainerRef.value) {
+          scrollContainerRef.value.scrollTop = 0;
         }
       });
     }
@@ -2032,27 +2242,20 @@ function closeSheet() {
 }
 
 function scrollToAnchor(id) {
+  if (['overview', 'highlights', 'weather'].includes(id)) {
+    setTab('overview');
+  } else if (['routes', 'waypoints'].includes(id)) {
+    setTab('trail');
+  } else {
+    setTab('guide');
+  }
   activeAnchor.value = id;
-  const container = scrollContainerRef.value;
-  if (!container) return;
-
-  if (id === 'overview') {
-    container.scrollTo({ top: 0, behavior: 'smooth' });
-    return;
-  }
-
-  const target = document.getElementById(`mod-${id}`);
-  if (target) {
-    const containerRect = container.getBoundingClientRect();
-    const targetRect = target.getBoundingClientRect();
-    // 导航栏高度约 46px，加上顶部微距共保留 52px 吸顶缓冲
-    const navStickyOffset = 52;
-    const targetScrollTop = container.scrollTop + (targetRect.top - containerRect.top) - navStickyOffset;
-    container.scrollTo({
-      top: Math.max(0, targetScrollTop),
-      behavior: 'smooth'
-    });
-  }
+  nextTick(() => {
+    const target = document.getElementById(`mod-${id}`);
+    if (target && scrollContainerRef.value) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
 }
 
 const isCheckinModalOpen = ref(false);
