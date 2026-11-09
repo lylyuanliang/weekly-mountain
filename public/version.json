@@ -1,15 +1,15 @@
 {
-  "version": "0.3.1.202611091702",
-  "versionTag": "v0.3.1.202611091702",
-  "title": "v0.3.1.202611091702",
+  "version": "0.3.2.202611091816",
+  "versionTag": "v0.3.2.202611091816",
+  "title": "v0.3.2.202611091816",
   "publishedAt": "2026-11-09",
-  "changelog": "1. 【渲染修复】修复高山详情页民俗环保、备选撤退与装备建议直接显示原始 JSON 数组的排版缺陷；\n2. 【防篡改校验】引入 APK 安装包 SHA-256 原生双向防篡改校验，彻底杜绝第三方加速镜像篡改与传输损坏；\n3. 【真机配对自愈】修复真机反馈在重启或更新后需手动点击测试连通性才能唤醒已配对状态的时序问题；\n4. 【客观实测基准】全线高程走势图与打卡序列措辞去行政化，全面替换核准字样为客观实测航迹基准；\n5. 【规范固化】固化向 GitHub 自动化构建发版必须递增第3位(Patch)的项目智能体规约。",
+  "changelog": "1. 【详情排版】山峰详情抽屉重构为三段式场景分段选项卡（概况/轨迹/攻略），信息架构降噪 65%+；\n2. 【Bento 魔方】首屏聚合 5 大核心决策指标（标高/爬升/里程/耗时/车程）与实时微气象，快速决策；\n3. 【零功能丢失】完整保留 12 大核心业务模块、高程剖面图、两步路/六只脚唤起与手势横滑切换；\n4. 【装备手风琴】装备清单支持高频必备露白、次要装备折叠展开，且定制复选框实时联动持久化；\n5. 【画廊与自愈】README 界面画廊与 AI 哨兵真机端到端自愈流水线全景展示升级。",
   "disclaimer": "历史版本仅为技术研发存档记录，不反映当前自然地理与风险认知，严禁作为出行依据；请始终以包含最新风险警示的当前版本为准。",
-  "assetName": "weekly-mountain-v0.3.1.202611091702-release.apk",
+  "assetName": "weekly-mountain-v0.3.2.202611091816-release.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.1.202611091702/weekly-mountain-v0.3.1.202611091702-release.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.1.202611091702/weekly-mountain-v0.3.1.202611091702-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.1.202611091702/weekly-mountain-v0.3.1.202611091702-release.apk",
-  "releaseSha256": "22ff4a3efafce0aa350bd4672934573488c0ec0113682efc7b3b244e986a1c0d",
-  "debugSha256": "961fbb541c27e208968b72a4b37074550be318f4579dbabffb824c3ddcded935"
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.2.202611091816/weekly-mountain-v0.3.2.202611091816-release.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.2.202611091816/weekly-mountain-v0.3.2.202611091816-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.3.2.202611091816/weekly-mountain-v0.3.2.202611091816-release.apk",
+  "releaseSha256": "",
+  "debugSha256": ""
 }
