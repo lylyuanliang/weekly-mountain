@@ -126,7 +126,8 @@ node scripts/copy_assets.js
 
 | 站点与服务 | 在线预览地址 | 运维管理平台 |
 | :--- | :--- | :--- |
-| **主站 (Cloudflare Workers)** | [https://broken-surf-e858.lylyuanliang.workers.dev/](https://broken-surf-e858.lylyuanliang.workers.dev/) | [Cloudflare Dashboard](https://dash.cloudflare.com) |
+| **官方生产主站 (Cloudflare Pages)** | [https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/) | [Cloudflare Dashboard](https://dash.cloudflare.com) |
+| **备用站点 (Cloudflare Workers)** | [https://broken-surf-e858.lylyuanliang.workers.dev/](https://broken-surf-e858.lylyuanliang.workers.dev/) | [Cloudflare Dashboard](https://dash.cloudflare.com) |
 | **镜像站 (html2.link)** | [https://a3puoei5.html2.link/](https://a3puoei5.html2.link/) | [html2.link Console](https://html2.link) |
 | **GitHub 官方源码仓库** | [https://github.com/lylyuanliang/weekly-mountain](https://github.com/lylyuanliang/weekly-mountain) | [GitHub Repository](https://github.com) |
 

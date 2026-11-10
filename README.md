@@ -11,6 +11,12 @@
 
 **专为成都及川西户外登山、徒步探索爱好者打造的个人高山拓扑记录与开源离线数据看板**
 
+<p align="center">
+  <a href="https://weekly-mountain.pages.dev/" target="_blank" rel="noopener noreferrer">
+    <img src="https://img.shields.io/badge/🌐_Cloudflare_Pages_在线免安装预览-weekly--mountain.pages.dev-059669?style=for-the-badge&logo=cloudflarepages&logoColor=white" alt="Cloudflare Pages 在线免安装预览" />
+  </a>
+</p>
+
 [![Vue 3](assets/badges/badge-vue.svg)](https://vuejs.org/)
 [![Vite](assets/badges/badge-vite.svg)](https://vitejs.dev/)
 [![Capacitor](assets/badges/badge-capacitor.svg)](https://capacitorjs.com/)
@@ -20,6 +26,7 @@
 [![Version](assets/badges/badge-version.svg)](https://github.com/lylyuanliang/weekly-mountain/releases)
 
 <p align="center">
+  <a href="https://weekly-mountain.pages.dev/"><strong>🚀 立即在线体验</strong></a> •
   <a href="#-核心特性">核心特性</a> •
   <a href="#-高山探索核心体验精选">界面预览</a> •
   <a href="#-现代智能体协作真机反馈与-ai-哨兵自愈流水线">AI 哨兵</a> •
@@ -30,6 +37,11 @@
 </p>
 
 </div>
+
+> [!TIP]
+> 🌐 **【官方在线免安装直达】**：**[https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/)**
+>
+> 无需下载安装包，手机或电脑浏览器直接点击即可畅享 51 座成都周边及川西名山拓扑、3D 等高线与实测航迹！在手机 Safari / Chrome 中选择「添加到主屏幕」，即可获得近乎原生的 Web App 探索体验。
 
 ---
 
@@ -61,6 +73,8 @@
 | *日出云海预设套用 · 装备清单核验 · 倒计时看板* | *峰线完成率 · 勋章体系 · 一键导出高质感长图海报* |
 
 </div>
+
+> 💡 **在线即刻体验**：欢迎通过现代移动端浏览器直接访问 **[https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/)**，也可前往 [Releases](https://github.com/lylyuanliang/weekly-mountain/releases) 下载专属 Android 原生 APK 安装包。
 
 ---
 
@@ -219,7 +233,7 @@ pwsh -File scripts/build_app.ps1 -Variant debug -NoPause
 ## 🌐 线上部署与发布方案
 
 本项目支持全静态化无服务器（Serverless）云端免费托管，涵盖：
-- **Cloudflare Pages**（全球 Anycast CDN，国内访问极佳，推荐）
+- 🌐 **Cloudflare Pages（官方生产站 · 极速直达）**：👉 **[https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/)**（全球 Anycast CDN，国内直连极速免安装体验，首选推荐）
 - **GitHub Pages**（Git 提交自动工作流）
 - **Gitee Pages**（国内节点托管）
 - **Vercel / Netlify**（拖拽秒级发布）

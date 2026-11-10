@@ -1,6 +1,7 @@
 {
   "name": "weekly-mountain",
   "version": "0.3.2.202611091816",
+  "homepage": "https://weekly-mountain.pages.dev",
   "private": true,
   "type": "module",
   "scripts": {
