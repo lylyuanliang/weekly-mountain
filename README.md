@@ -27,6 +27,7 @@
 
 <p align="center">
   <a href="https://weekly-mountain.pages.dev/"><strong>🚀 立即在线体验</strong></a> •
+  <a href="https://github.com/lylyuanliang/weekly-mountain/releases"><strong>📦 APK 下载</strong></a> •
   <a href="#-核心特性">核心特性</a> •
   <a href="#-高山探索核心体验精选">界面预览</a> •
   <a href="#-现代智能体协作真机反馈与-ai-哨兵自愈流水线">AI 哨兵</a> •
@@ -39,9 +40,10 @@
 </div>
 
 > [!TIP]
-> 🌐 **【官方在线免安装直达】**：**[https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/)**
+> 🌐 **【在线免安装直达】**：**[https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/)**
+> 📱 **【Android 原生安装包下载】**：**[GitHub Releases 发行版](https://github.com/lylyuanliang/weekly-mountain/releases)**
 >
-> 无需下载安装包，手机或电脑浏览器直接点击即可畅享 51 座成都周边及川西名山拓扑、3D 等高线与实测航迹！在手机 Safari / Chrome 中选择「添加到主屏幕」，即可获得近乎原生的 Web App 探索体验。
+> 手机或电脑浏览器直接点击链接即可免安装畅享 51 座成都周边及川西名山拓扑、3D 等高线与实测航迹！在手机 Safari / Chrome 中选择「添加到主屏幕」，即可获得近乎原生的 Web App 探索体验；亦可直接前往 Releases 页面下载安装 Android 原生 APK。
 
 ---
 
@@ -74,13 +76,11 @@
 
 </div>
 
-> 💡 **在线即刻体验**：欢迎通过现代移动端浏览器直接访问 **[https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/)**，也可前往 [Releases](https://github.com/lylyuanliang/weekly-mountain/releases) 下载专属 Android 原生 APK 安装包。
-
 ---
 
 ## 🤖 现代智能体协作：真机反馈与 AI 哨兵自愈流水线
 
-本项目在户外探索业务之外，深度落地了现代化 **AI 智能体驱动软件工程（Agentic Engineering）** 的前沿实践。通过集成官方协作套件 [`@lylyuanliang/agent-feedback`](https://github.com/lylyuanliang/agent-feedback)，在真机端侧联调与野外徒步实测中实现了 **“真机一键截图圈选 ➔ 哨兵防抖聚合 ➔ AI 智能体进驻排查修复 ➔ 状态回写与真机自愈”** 的端到端闭环自愈能力：
+本项目在户外探索业务之外，深度落地了现代化 **AI 智能体驱动软件工程（Agentic Engineering）** 的前沿实践。通过集成开源协作套件 [`@lylyuanliang/agent-feedback`](https://github.com/lylyuanliang/agent-feedback)，在真机端侧联调与野外徒步实测中实现了 **“真机一键截图圈选 ➔ 哨兵防抖聚合 ➔ AI 智能体进驻排查修复 ➔ 状态回写与真机自愈”** 的端到端闭环自愈能力：
 
 ```mermaid
 flowchart LR
@@ -233,7 +233,7 @@ pwsh -File scripts/build_app.ps1 -Variant debug -NoPause
 ## 🌐 线上部署与发布方案
 
 本项目支持全静态化无服务器（Serverless）云端免费托管，涵盖：
-- 🌐 **Cloudflare Pages（官方生产站 · 极速直达）**：👉 **[https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/)**（全球 Anycast CDN，国内直连极速免安装体验，首选推荐）
+- 🌐 **Cloudflare Pages（生产托管站 · 极速直达）**：👉 **[https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/)**（全球 Anycast CDN，国内直连极速免安装体验，首选推荐）
 - **GitHub Pages**（Git 提交自动工作流）
 - **Gitee Pages**（国内节点托管）
 - **Vercel / Netlify**（拖拽秒级发布）
@@ -251,7 +251,7 @@ pwsh -File scripts/build_app.ps1 -Variant debug -NoPause
 ### 攻略数据与内容授权声明
 1. **数据版权**：攻略内的山峰基础地理事实信息、实景照片归原整理者所有，仅供户外运动爱好者个人学习、交流与出行参考，严禁未经授权用于商业营销或付费牟利；
 2. **底图版权**：地图数据源自 [OpenStreetMap](https://www.openstreetmap.org/)（遵循 ODbL 协议），气象遥测对接 [Open-Meteo](https://open-meteo.com/)（CC-BY 4.0 免费非商业许可）；
-3. **安全免责、性质与旧版声明**：本仓库与应用纯属个人业余路线记录及公开地理数据整理，**绝非专业安全指南，亦不构成对任何户外路线安全性、可行性的保证或推荐**。高山徒步与户外穿越具有客观不可控的自然环境风险（包括但不限于高原反应、天气突变、滑坠、落石、涉水、野生动物与失温迷路等）。本项目提供之里程、耗时、爬升、路况、航迹与危险点仅供个人信息检索与经验参考，不可作为生命安全与通行可行性的依据。**历史版本仅为技术开发存档记录，不反映当前风险认知，严禁作为出行参考。**使用者应具备完全民事行为能力，出行前请务必向属地官方部门核实最新管制通告、评估个人健康状况与携带完备应急装备，自主决策并自行承担户外活动的一切安全与民事责任。**凡访问、浏览、下载、克隆或使用本软件及本仓库内容，即表示您已阅读、理解并同意以上全部声明，自愿自行承担一切潜在风险与法律责任；如您不同意上述任何条款，请立即停止使用并退出。**
+3. **安全免责、性质与旧版声明**：本仓库与应用纯属个人业余路线记录及公开地理数据整理，**绝非专业安全指南，亦不构成对任何户外路线安全性、可行性的保证或推荐**。高山徒步与户外穿越具有客观不可控的自然环境风险（包括但不限于高原反应、天气突变、滑坠、落石、涉水、野生动物与失温迷路等）。本项目提供之里程、耗时、爬升、路况、航迹与危险点仅供个人信息检索与经验参考，不可作为生命安全与通行可行性的依据。**历史版本仅为技术开发存档记录，不反映当前风险认知，严禁作为出行参考。**使用者应具备完全民事行为能力，出行前请务必向属地主管部门及景区机构核实最新管制通告、评估个人健康状况与携带完备应急装备，自主决策并自行承担户外活动的一切安全与民事责任。**凡访问、浏览、下载、克隆或使用本软件及本仓库内容，即表示您已阅读、理解并同意以上全部声明，自愿自行承担一切潜在风险与法律责任；如您不同意上述任何条款，请立即停止使用并退出。**
 
 ---
 
