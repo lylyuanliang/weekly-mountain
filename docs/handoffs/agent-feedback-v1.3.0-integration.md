@@ -15,7 +15,7 @@
 2. **沉淀通用受限访问控制与穿透配置至 agent-feedback v1.3.0**：
    - `@lylyuanliang/agent-feedback-core`：新增 `AccessControlConfig`、`HostChannelConfig` 等协议与类型定义；
    - `@lylyuanliang/agent-feedback-client`：
-     - 原生支持受限安全门禁（未授权时阻断 AI 反馈提交并展示受限提示与宿主官方 Issues 引导）；
+     - 原生支持受限安全门禁（未授权时阻断 AI 反馈提交并展示受限提示与宿主GitHub Issues 引导）；
      - 原生提供「⚙️ 联调设置」(Settings) 内置扩展 Tab（自动持久化穿透地址 `apiBase` 与配对秘钥至 `localStorage`，支持一键连通性测试与配对密钥解绑）；
      - 开放宿主渠道配置（`hostChannel.url` / `name` / `description`）；
    - `@lylyuanliang/agent-feedback-vite-plugin`：透传相关配置，安全下发 SHA-256 哈希值；

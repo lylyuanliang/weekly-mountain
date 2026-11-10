@@ -9,7 +9,7 @@
 
 ## 1. 目标与背景
 实现双版本发布、安全访问控制、正式渠道沉淀与网络流向解耦：
-1. **GitHub Issues 官方常设反馈入口**：在个人中心（ProfileView）增加官方反馈入口，引导普通用户至 GitHub Issues；
+1. **GitHub Issues 景区常设反馈入口**：在个人中心（ProfileView）增加反馈入口，引导普通用户至 GitHub Issues；
 2. **应用内更新弹窗双包选择**：`AppUpdateModal.vue` 提供「正式发布版」与「内测调试版」选择，选择调试版时弹出受限警告提示；
 3. **网络流向彻底解耦**：APK 检测与下载统一走 GitHub Releases / 镜像 CDN；调试面板内彻底废除冗余的 APK 本地下载；
 4. **调试面板访问控制与自动保存**：穿透地址与授权密钥输入实时自动持久化至 `localStorage`，无有效授权前拦截并引导至 GitHub Issues；
@@ -17,7 +17,7 @@
 6. **工单闭环与通知**：处理历史遗留工单，并在全部任务完成后插入一条工单消息通知用户。
 
 ## 2. 核心架构与落地实现
-1. **GitHub Issues 官方反馈矩阵** [`src/views/ProfileView.vue`](file:///d:/file_save/workspace/github/weekly-mountain/src/views/ProfileView.vue)：
+1. **GitHub Issues 反馈矩阵** [`src/views/ProfileView.vue`](file:///d:/file_save/workspace/github/weekly-mountain/src/views/ProfileView.vue)：
    - Section 5 底部与免责声明并列增加「问题反馈 & GitHub」常设胶囊入口，通过 `openExternalUrl` 调起浏览器直达仓库 Issues。
 2. **更新弹窗双版本通道与受限警示** [`src/components/common/AppUpdateModal.vue`](file:///d:/file_save/workspace/github/weekly-mountain/src/components/common/AppUpdateModal.vue)：
    - 增加「正式发布版 (推荐)」与「内测调试版」双卡片选择器；

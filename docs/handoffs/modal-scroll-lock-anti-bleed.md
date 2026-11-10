@@ -71,7 +71,7 @@
 - **专项防穿透验证 (`scratch/verify_modal_scroll_lock.py`)**：
   - [PASS] 初始页面滚动正常，无滚动锁定
   - [PASS] Alpine 开发者联调弹窗打开 -> body 锁定 -> 内部滚动正常 -> 关闭 -> 恢复正常滚动
-  - [PASS] 官方在线更新弹窗打开 -> body 锁定 -> 关闭 -> 恢复
+  - [PASS] 在线更新弹窗打开 -> body 锁定 -> 关闭 -> 恢复
   - [PASS] 法律免责声明弹窗打开 -> body 锁定 -> 关闭 -> 恢复
   - [PASS] 移动端真机反馈弹窗打开 -> body 锁定 -> 关闭 -> 恢复
 - **全量 E2E 回归测试 (`scratch/test_app_e2e_full.py`)**：

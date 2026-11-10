@@ -11,7 +11,7 @@
 2. **具体提示已知风险 (Specific Known Risks)**：保留并强化具体客观危险点，杜绝笼统的“注意安全”；
 3. **避免安全承诺式表述 (Eliminate Safety Commitment Words)**：全面清理“新手友好”、“老少皆宜”、“亲子友好”、“安全替代路线”、“路况安全”、“毫无难度”、“小白慎徒”等主观适宜性保证词汇，替换为客观物理特征描述；
 4. **剔除身份背书风险（如“资深领队调优”）**：彻底消除 UI 与数据层中任何自称或暗示“资深领队”、“领队调优”的背书字眼，避免反向击穿《民法典》第 1198 条“非组织者、非领队、不承担安全保障义务”的免责抗辩；
-5. **朋友圈分享与海报去背书化 (Neutral Sharing & De-officialization)**：将海报与导出中的“官方认证数字档案”、“ALPINE VERIFIED”、“防伪认证编码”替换为“个人高山足迹记录”、“ALPINE LOG”、“个人打卡编码”；
+5. **朋友圈分享与海报去背书化 (Neutral Sharing & De-officialization)**：将海报与导出中的“专业核验数字档案”、“ALPINE VERIFIED”、“防伪认证编码”替换为“个人高山足迹记录”、“ALPINE LOG”、“个人打卡编码”；
 6. **历史版本与旧版性质明确隔离 (Historical Versions as Archive Only)**：在 `README.md` 首屏、`docs/releases/` 以及 `.github/workflows/build-apk.yml` 的 Release Notes 自动化生成模版中统一定位旧版为“技术研发历史存档”，明确声明“不反映当前的地理与风险认知，严禁作为出行依据，请始终以最新版本为准”；
 7. **免责公约协议版本化与内容变更重弹确认门禁 (Disclaimer Versioning & Re-confirmation Gate)**：根据民法典格式条款显著提示与意思表示原则，若免责声明内容发生实质性合规修改，系统必须对所有用户（包括此前同意过旧版本的用户）自动重新弹出弹窗并展示升级横幅，用户重新独立勾选确认后方可写入最新版本标记；
 8. **README 徽标本地矢量化固化 (Local Vector Badges)**：根治第三方 shields.io 因网络延迟导致 GitHub Camo 代理报 `HTTP 504 Gateway Timeout` 裂图的问题，将徽章全量本地静态化保存在 `assets/badges/` 中，实现 0 外链依赖、100% 极速加载。
@@ -43,7 +43,7 @@
    - 顶部及底部免责卡片强化非安全指南与自主决策警示；
    - 路况章节由“驾驶指南”修正为“自驾参考”。
 7. **成就海报去背书化 (`AlpineAchievementPosterModal.vue`)**：
-   - 移除“官方认证数字档案”，变更为“个人高山足迹记录”；
+   - 移除“专业核验数字档案”，变更为“个人高山足迹记录”；
    - 印章微缩 SVG `VERIFIED` 替换为 `LOG`；
    - “防伪认证编码”替换为“个人打卡编码”。
 8. **版本管理与 CI/CD Release 模版 (`build-apk.yml`, `sync_version.py`, `public/version.json`)**：
@@ -53,7 +53,7 @@
 9. **数据层深度清洗 (`mountains.json`, `mountain_tracks.json`, `waypoints.json`)**：
    - 彻底清除 49+ 处主观适宜性与安全承诺（包括“新手友好”、“老少皆宜”、“亲子友好”、“安全替代路线”、“安全性高”、“路况安全”等）；
    - 将标签 `亲子友好` 升级为客观的 `和缓步道` / `成熟步道`；
-   - 移除 `叠溪松坪沟` 等点位中的“官方推荐路线/顺序”。
+   - 移除 `叠溪松坪沟` 等点位中的“推荐路线/顺序”。
 
 10. **全库逐字清查与地毯式法律风险字样深度改造 (`mountains.json`, `mountain_tracks.json`, `waypoints.json`, `index.monolith.html`)**：
     - **彻底清除“有腿就行”等极端轻率主观评价**：涉及天台山等 2 处网络黑话已彻底改为客观描述“台阶步道为主，爬升起伏适中”、“网络公开分享多提及步道规整和缓”；
@@ -84,11 +84,11 @@
 - `index.monolith.html`: 页面标题去手册化、顶部注入历史技术归档声明横幅、全量清洗历史数据字眼
 - `src/components/detail/MountainDetailSheet.vue`: 免责强化与自驾参考命名
 - `src/components/achievement/AlpineAchievementPosterModal.vue`: 海报个人打卡中性化
-- `src/components/common/AppUpdateModal.vue`: 移除“官方”前缀
+- `src/components/common/AppUpdateModal.vue`: 移除“景区”前缀
 - `src/components/card/CompactMountainCard.vue`: 标签体系同步
 - `src/data/mountains.json`: 主观安全词汇客观化清洗与商业领队词汇剔除（35+处）
-- `src/data/mountain_tracks.json`: 移除官方推荐用语、老少咸宜与适合带娃老人等诱导词
-- `src/data/waypoints.json`: 移除官方推荐顺序与亲子浅线
+- `src/data/mountain_tracks.json`: 移除精选推荐用语、老少咸宜与适合带娃老人等诱导词
+- `src/data/waypoints.json`: 移除推荐打卡顺序与亲子浅线
 - `.github/workflows/build-apk.yml`: Release Notes 模版注入历史版本存档警示
 - `public/version.json`: 注入 disclaimer 元数据
 - `docs/releases/RELEASE-v0.3.0.md`: 顶部历史存档提示

@@ -128,7 +128,7 @@
 1. **手机原生地图导航与两步路/六只脚户外轨迹 App 自动调起架构落地（真机反馈 ID: 1792653701734）**：
    - **核心需求分析**：公测用户在移动端提出“定位和两步路能否自动打开手机上对应的 App”；
    - **技术方案实施 (`src/utils/appLauncher.js` & `MountainDetailSheet.vue`)**：
-     - **两步路户外助手 (2bulu)**：调用 `twostep://search?keyword={encoded}` 与 `lbt://` 官方 scheme，点击时自动剔除冗余前缀并将纯净关键词写入手机系统剪贴板，随后调起 App；未安装时 2 秒后可平滑回退至两步路网页端搜索；
+     - **两步路户外助手 (2bulu)**：调用 `twostep://search?keyword={encoded}` 与 `lbt://` 标准 scheme，点击时自动剔除冗余前缀并将纯净关键词写入手机系统剪贴板，随后调起 App；未安装时 2 秒后可平滑回退至两步路网页端搜索；
      - **六只脚户外 (Foottouch)**：调用 `foottouch://` scheme，一键复制当前山峰名并唤起应用；
      - **地图自车与徒步导航**：
        - 高德地图：`amapuri://route/plan/?dlat={lat}&dlon={lng}&dname={name}&dev=0&t=0`
@@ -177,7 +177,7 @@
    - **查明漂移根因**：原 `RouteElevationChart.vue` 在高亮航点上使用了 `<circle class="animate-ping" ...>`。Tailwind CSS 的 `animate-ping` 是 `animation: ping 1s infinite`，关键帧定义为 `transform: scale(2)`。而在 SVG 规范中，SVG 元素的 `transform-origin` 默认是 SVG 画布坐标 `(0, 0)`（左上角），且各移动端浏览器对 SVG 的 `transform-box` 默认支持不一致。当以 `(0, 0)` 放大 2 倍时，圆心从物理坐标 `(cx, cy)` 位移至 `(2*cx, 2*cy)`，导致圆环以 1s 周期不断向**右下角**漂移扩散！
    - **原生 SVG SMIL 矢量半径扩散动画重塑**：
      - 彻底摒弃依赖 CSS transform 的 `animate-ping`；
-     - 采用 SVG 官方原生 SMIL `<animate>`，直接在 `<circle>` 内对半径 `r`（从 6 动画到 16）和 `opacity`（从 0.85 动画到 0）做连续平滑过渡；
+     - 采用 SVG 标准原生 SMIL `<animate>`，直接在 `<circle>` 内对半径 `r`（从 6 动画到 16）和 `opacity`（从 0.85 动画到 0）做连续平滑过渡；
      - 航点光环物理圆心永远锁定在 `:cx="pt.x"` 和 `:cy="pt.y"`，绝对位移量 $\Delta x = 0, \Delta y = 0$，在 Android 微信 XWEB 及所有移动端视口下 100% 顺滑居中。
 2. **详情抽屉 Header 卷走消失与导航栏上部空隙断层缺陷彻底根治（真机反馈 ID: 1792648489022）**：
    - **查明断层根因**：
@@ -304,8 +304,8 @@
    - 查明根因：`.mountain-marker` 根元素曾挂载 CSS `transition-all duration-200`，导致拖拽时坐标被强行执行 200ms 补间动画；
    - 修复：从根节点剥离 `transition-all`，限制为 `transition: transform 0.18s`（仅保留放大缩放弹性），坐标更新 `will-change: left, top` 实现 0ms 瞬间响应；
    - 拖拽过程中禁用世界平面的容器平滑过渡。
-5. **全站文案去「官方」化净化**：
-   - `PlanView.vue`、`ProfileView.vue`、`MountainDetailSheet.vue` 及 HTML 注释全量替换「官方」为「精选」、「认证核验」或「渠道」。
+5. **全站文案中立合规化净化**：
+   - `PlanView.vue`、`ProfileView.vue`、`MountainDetailSheet.vue` 及 HTML 注释全量替换「景区」为「精选」、「认证核验」或「渠道」。
 6. **三大 Tab 与 12 模块山峰详情抽屉**：
    - Tab 1 探索地图 (`ExploreView.vue`) + 三段式底栏抽屉 (`BottomSheet.vue`)；
    - 12 模块山峰详情抽屉 (`MountainDetailSheet.vue`) + 路线高程图 (`RouteElevationChart.vue`)；
@@ -808,7 +808,7 @@ pm run dev -- --host（已绑定 5173 端口）；
 - **卡片默认排序由近到远**：下方轮播卡片默认严格按距市中心直线距离升序排列（龙泉山 37.8km 居首，云顶山 41.0km 次之，川西大山及光雾山等长线名山依次排在靠后位置）；在输入搜索关键词时优先匹配搜索词，次优按距离升序排列。
 - **拖拽零延迟原则**：使用绝对定位 `left/top` 进行高频拖拽跟随的元素，严禁设置包含 `left`、`top` 或 `all` 的 CSS `transition` 属性。
 - **城市扩展无侵入**：默认定位并激活 `chengdu`（成都周边 51 座），多城市架构对现有数据无破坏性变更。
-- **去官方化**：杜绝可能产生误导的“官方推荐”、“官方认证”措辞，采用更严谨专业的户外社区中立措辞。
+- **中立合规化**：杜绝可能产生误导的“精选推荐”、“专业核验”措辞，采用更严谨专业的户外社区中立措辞。
 - **法律自甘风险与零泄露发布**：正式对外发布的 release 变体强制剔除所有私有域名与内测反馈组件，并通过全屏不可跳过的《户外安全须知与法律免责声明》构筑坚固的法律抗辩防线。
 
 ## 4. 验证结果

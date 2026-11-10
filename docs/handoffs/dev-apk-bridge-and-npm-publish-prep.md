@@ -13,12 +13,12 @@
 
 根据用户指示，梳理并落地以下核心需求：
 1. **正式更新 vs 调试入口本地包的双层架构分离**：
-   - **正式更新下载 (App 内部 & Web 页面)**：统一指向 GitHub Releases 官方发布页及国内 CDN 镜像加速，分发已正式发布的正式版与内测调试版；
+   - **正式更新下载 (App 内部 & Web 页面)**：统一指向 GitHub Releases 正式发布页及国内 CDN 镜像加速，分发已正式发布的正式版与内测调试版；
    - **调试入口更新下载 (Dev APK Bridge)**：指向开发机内网穿透地址（`apiBase`），直接拉取本机刚构建好的 APK（如 `android/app/build/outputs/apk/debug/app-debug.apk`），供开发者免去 Commit/Push/Tag 与等待 15 分钟 GitHub Actions 的烦琐流程，实现秒级真机验证。
 2. **插件归属决策**：
    - **坚定落地于《每周一山》业务项目，不强塞进 `agent-feedback` 核心**；
    - 保证了 `agent-feedback` 跨 Web、跨生态通用反馈框架的纯粹性；
-   - 充分利用 `agent-feedback` 的 `registerExtensionTab` 扩展机制，为生态提供了第一方官方的业务自定义插件实战范例（Dogfooding Plugin API）。
+   - 充分利用 `agent-feedback` 的 `registerExtensionTab` 扩展机制，为生态提供了第一方的业务自定义插件实战范例（Dogfooding Plugin API）。
 
 ## 2. 核心改动清单
 

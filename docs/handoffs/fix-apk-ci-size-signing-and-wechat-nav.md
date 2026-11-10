@@ -142,5 +142,5 @@
     - 方案：创建 `docs/releases/` 规范子目录及 `RELEASE-v0.3.0.md`，改造 `scripts/sync_version.py` 支持动态解析与 CLI 传参；并在 `AGENTS.md` / `GEMINI.md` 中固化「6.3 版本升级内容文档维护规约」；
   - **手机端检测不到新版本根因与修复**：
     - 根因：`updateService.js` 候选通道将 `cdn.jsdelivr.net` 置于首位，而 jsDelivr 针对 `@main` 分支存在 12-24 小时强边缘缓存且忽略查询参数，直接返回旧版本 0.3.0.202611050851 导致版本比对判定已是最新；
-    - 修复：调整通道优先级，将无缓存实时镜像 `ghfast.top` 与官方 GitHub Raw 置于首位，并在 CI/CD 中增加 jsDelivr CDN 自动 Purge 步骤；
+    - 修复：调整通道优先级，将无缓存实时镜像 `ghfast.top` 与GitHub Raw 置于首位，并在 CI/CD 中增加 jsDelivr CDN 自动 Purge 步骤；
     - 标题规范：按用户要求在 `RELEASE_METADATA` 与项目规约中确立 Title 简短精炼原则（15 字以内）。

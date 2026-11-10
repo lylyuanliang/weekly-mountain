@@ -62,16 +62,16 @@
    - **Task 1（数据层解耦）**：提取 `src/data/mountains.json`（50座山完整字段）与 `src/data/waypoints.json`（387个GPS点），UTF-8无BOM，测试通过。
    - **Task 2（工程骨架）**：引入 Vite 5 + Vue 3 + Hash路由，配置 `base: './'` 纯静态自包含构建，原单页备份至 `index.monolith.html`。
    - **Task 3（Pinia状态管理）**：实现 `mountainStore`、`checkinStore`、`planStore`、`themeStore`，完整继承 `derivedNums` 算法（达瓦更扎爬升 866m / 里程 13.9km 零失真）与兼容老版本 JSON 备份导入。
-   - **Task 4（Stitch设计交互）**：派发干净设计子代理调用 Stitch MCP 生成官方 Screen（ID: `31e67653cc804dd9a4d4f84e0df47a53`），提炼 `stitch-tokens.css`。
+   - **Task 4（Stitch设计交互）**：派发干净设计子代理调用 Stitch MCP 生成Stitch 原生 Screen（ID: `31e67653cc804dd9a4d4f84e0df47a53`），提炼 `stitch-tokens.css`。
    - **Task 5（首屏ExploreView）**：派发无污染还原子代理 99% 复刻全屏等高线暗黑地图（`AppMap.vue`）、三段式可拖拽卡片抽屉（`BottomSheet.vue`）、Hero 风光卡片（`HeroMountainCard.vue`）与毛玻璃搜索条（`TopSearchBar.vue`），实现点位与卡片双向平滑联动。
    - **Task 6（12模块详情抽屉）**：派发还原子代理 99% 复刻 `MountainDetailSheet.vue`（12大模块零裁剪展示）与 SVG 动态高程剖面图（`RouteElevationChart.vue`），修复装备清单跨山峰重置与锚点吸顶偏移。
-   - **Task 7（周计划与我的成就）**：99% 复刻 `PlanView.vue`（时间线排期、增删周、官方精选路线套用）、`ProfileView.vue`（Telemetry 仪表盘、Bento 勋章网格、JSON 备份恢复、三主题切换）与全局固定 `BottomNav.vue`。
+   - **Task 7（周计划与我的成就）**：99% 复刻 `PlanView.vue`（时间线排期、增删周、社区精选路线套用）、`ProfileView.vue`（Telemetry 仪表盘、Bento 勋章网格、JSON 备份恢复、三主题切换）与全局固定 `BottomNav.vue`。
     - **Task 8（全量E2E与构建打包）**：编写 `scratch/test_app_e2e_full.py` 串联回归通过（0 控制台运行时错误）；打包生成 `weekly-mountain-deploy.zip`（解压 5.78 MB，文件数 53 个，完全命中 html2.link M 档）。
     - **全分支代码审查**：Senior Code Reviewer 审查通过（APPROVED）。
 17. **真实瓦片底图引擎上线与多省市全国化扩展架构落地（响应用户反馈）**
     - **底图未能加载归因与修复**：此前 Stitch 还原版本仅使用了纯装饰性 SVG 等高线背景，未挂载实时瓦片网络服务。现已在 `AppMap.vue` 中重构接入 Web Mercator 原生瓦片底图引擎，支持极光黑曜石暗夜矢量（高德 `style=8` + 滤镜反色）、高分辨率遥感卫星影像（高德 `style=6` + 路网叠层）及极简拓扑底图，提供 3D 视角、手势缩放拖拽与全图层切换。
     - **多省市/多城市全国化扩展架构**：创建 `src/data/regions.json` 与 `src/stores/regionStore.js`，实现城市区域配置中心与响应式切换；顶栏升级为 Stitch 风格毛玻璃城市切换胶囊 `[ 📍 成都周边 ▾ ]`，支持打开 `RegionPickerSheet.vue`（已收录成都周边 50 座，并提供重庆周边、西安·秦岭、昆明·滇中、北京·京郊等筹备中城市无缝接入机制）；全站解耦硬编码车程文案为动态 `{{ regionStore.currentRegion.driveCenter }}车程`。
-    - **全站文案去「官方」化严谨改造**：根据用户反馈全面排查并彻底清除全站「官方」字样，将「套用官方精选」改为「套用精选路线」，「官方推荐周计划」改为「精选推荐周计划」，「2025 官方认证」改为「2025 深度核验」，免责声明改为「当地文旅与景区管理渠道」，避免对用户造成行政背书误导。
+    - **全站文案中立合规化严谨改造**：根据用户反馈全面排查并彻底清除全站「景区」字样，将「套用社区精选」改为「套用精选路线」，「精选推荐周计划」改为「精选推荐周计划」，「2025 专业核验」改为「2025 深度核验」，免责声明改为「当地文旅与景区管理渠道」，避免对用户造成行政背书误导。
     - **自动化回归与实机截图验证**：编写 `scratch/test_live_map_and_regions.py` 端到端自动化测试 100% 绿灯（0 控制台错误），实测瓦片网络请求加载正常；重新打包生成最新 `weekly-mountain-deploy.zip`（解压 5.795 MB，53 个文件，完美符合 M 档）。
 
 ## 关键决策

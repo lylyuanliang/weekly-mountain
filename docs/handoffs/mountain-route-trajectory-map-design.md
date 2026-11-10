@@ -55,13 +55,13 @@
     - `840d820` fix(plan): 修复周计划时间轴点线错位与打卡按钮对应关系，优化轻量打卡交互
     - `8f554ad` docs(agents): 同步继承全局敏感信息零泄露与安全红线规约
     - `1faf3c5` chore(release): 升级时间戳版本至 v0.2.0.202611031641 并同步版本元数据
-    - `1e56fb6` build(deps): 升级 @lylyuanliang/agent-feedback 全套依赖至 npm 官方最新 v1.2.0
+    - `1e56fb6` build(deps): 升级 @lylyuanliang/agent-feedback 全套依赖至 npm 公共源最新 v1.2.0
   - `agent-feedback`：
     - `d000b0b` feat(core): 支持独立多媒体附件类型契约与视频检测能力
     - `5e890ab` feat(vite-plugin): 支持分块流式上传接口、自动合并清理与 HTTP 206 视频点播
     - `aff1b17` feat(client): 支持端侧 1MB 分块流式切片上传、原生内嵌播放器与全屏视频预览
     - `e2064e9` chore(release): 升级全套包版本至 v1.2.0 支持二进制多媒体分块流式上传与视频反馈
-- **npm 官方源全流程闭环验证**：
+- **npm 公共源全流程闭环验证**：
   - 独立沙箱安装与 ESM 导入验证：100% 成功；
   - 每周一山真实业务接入与全量 E2E 自动化回归（Explore, 12模块抽屉, Plan, Profile, Checkin）：100% 全部通过，控制台 0 运行时错误。
 

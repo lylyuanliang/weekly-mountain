@@ -9,7 +9,7 @@
 1. **CI/CD 自动化计算与资产发布**：GitHub Actions 构建出 Release 与 Debug APK 后，自动计算双方的真实 SHA-256 散列值，生成 `SHA256SUMS.txt` 作为 Release 独立资产发布，并在发行日志中生成防篡改指纹公开对照表；
 2. **版本元数据对齐与多源降级**：`version.json` 结构扩展 `releaseSha256` 与 `debugSha256` 字段；`updateService.js` 支持从 `version.json` 或自动兜底拉取 `SHA256SUMS.txt` 补齐；
 3. **Android 原生端流式完整性校验**：`MainActivity.java` 扩展 `downloadAndInstallApkWithSha256` 接口，在下载完成重命名及复用本地缓存包前，流式计算 SHA-256。哈希不匹配时立即阻断并销毁非法文件，抛出 `SecurityException` 警告；哈希匹配时放行系统安装；
-4. **前端交互与安全呈现**：`AppUpdateModal.vue` 增设官方 SHA-256 安全指纹徽章与一键复制；遇到哈希不匹配时显示高优先级安全拦截盾牌告警与处置引导；
+4. **前端交互与安全呈现**：`AppUpdateModal.vue` 增设发布版 SHA-256 安全指纹徽章与一键复制；遇到哈希不匹配时显示高优先级安全拦截盾牌告警与处置引导；
 5. **缺陷修复与体验升级**：彻底解决详情页原始 JSON 数组字符泄露、真机配对重启丢失假象与行政化措辞合规风险；
 6. **规约固化与精简**：确立“向 GitHub 推送 Tag 自动化构建为正式对外发版，常规 Bugfix/Patch 必须递增第 3 位 (0.3.1)”的铁律，并对 `AGENTS.md` 进行高密度精简，释放大量会话 Context。
 
@@ -55,7 +55,7 @@
 11. `src/debug/setupAgentFeedback.js`
     - 新增启动时自动静默调用 `syncAccessControlFromServer(savedBase)`，彻底根治本地已缓存秘钥但在 App 启动后需手动点击“测试连通性”才能激活配对的体验 Bug；
 12. `src/components/detail/RouteElevationChart.vue`
-    - 将带有官方行政核准暗示的「已核准」彻底替换为「实测基准」「实测点」与「✓ 实测航迹 GPS」，规避任何合规与资质风险；
+    - 将带有行政核准暗示的「已核准」彻底替换为「实测基准」「实测点」与「✓ 实测航迹 GPS」，规避任何合规与资质风险；
 13. `src/components/detail/MountainDetailSheet.vue`
     - 修复「属地民俗与环保要求 (local_tips)」、「备选撤退方案 (plan_b)」与「专业装备建议 (gear_detail)」底层为数组时被原生插值直接输出原始 JSON 格式带中括号文本的显示缺陷，全面升级为 Alpine 项目列表式排版；
 14. `AGENTS.md`、`GEMINI.md`

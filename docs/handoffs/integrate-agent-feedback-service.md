@@ -235,16 +235,16 @@
   4. 升版至 `0.0.1.202610291102` 并重新编译 Native Debug APK 归档分发；
   5. 通过 CLI 回写工单状态为 `completed` 并向时间轴推送升级公告；重新拉起静默哨兵。
 
-### 3.17 npm 官方源发布与宿主工程真实依赖切替闭环
+### 3.17 npm 公共源发布与宿主工程真实依赖切替闭环
 - **完成时间**：`2026-10-29 13:52`
 - **成果概述**：
-  1. 经 2FA / Security Key 验证，4 个子包成功发布到 npm 官方 Registry：
+  1. 经 2FA / Security Key 验证，4 个子包成功发布到 npm 公共 Registry：
      - `@lylyuanliang/agent-feedback-core@1.0.0`
      - `@lylyuanliang/agent-feedback-client@1.0.0`
      - `@lylyuanliang/agent-feedback-sentinel@1.0.0`
      - `@lylyuanliang/agent-feedback-vite-plugin@1.0.0`
   2. 《每周一山》工程彻底移除了本地相对路径 `.tgz` 依赖，切换为标准语义化版本依赖（`^1.0.0`）；
-  3. `package-lock.json` 与 `node_modules` 均已更新为纯净 npm 官方源托管；
+  3. `package-lock.json` 与 `node_modules` 均已更新为纯净 npm 公共源托管；
   4. 全量自动化 E2E 回归测试（`python scratch/test_app_e2e_full.py`）100% 绿灯全通，Console 0 报错；
   5. 后台静默哨兵与开发服务器常驻运行中。
 
@@ -261,4 +261,4 @@
 ## 6. 客户端重启服务恢复记录 (2026-10-29 09:02)
 - **Vite 开发服务器**：已在后台拉起（`task-8677`），监听本地及局域网端口 `5173`，cpolar 穿透隧道（映射 `5173`）正常通畅；
 - **通用响应式哨兵**：已拉起后台静默监听（`task-8709`），持续守候 `scratch/feedback/` 分片与队列；
-- **最新交付产物**：全新升版至 `0.0.1.202610291356`（`versionCode: 1793253417`），基于 npm 官方源 `@lylyuanliang/agent-feedback` 生产依赖重新编译 Native APK，镜像位于 `releases/weekly-mountain-latest-debug.apk`，通过内网穿透与在线更新分发。
+- **最新交付产物**：全新升版至 `0.0.1.202610291356`（`versionCode: 1793253417`），基于 npm 公共源 `@lylyuanliang/agent-feedback` 生产依赖重新编译 Native APK，镜像位于 `releases/weekly-mountain-latest-debug.apk`，通过内网穿透与在线更新分发。

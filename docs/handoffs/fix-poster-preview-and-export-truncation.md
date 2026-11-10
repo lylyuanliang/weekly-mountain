@@ -59,7 +59,7 @@
 ---
 
 ## 4. 修改文件清单
-- `package.json` / `package-lock.json` (全面移除本地 `file:../` 路径，规范安装 npm 官方源 `@lylyuanliang/agent-feedback-*@^1.1.0`)
+- `package.json` / `package-lock.json` (全面移除本地 `file:../` 路径，规范安装 npm 公共源 `@lylyuanliang/agent-feedback-*@^1.1.0`)
 - `src/styles/stitch-tokens.css` (放行平滑滚动手势，优化 touch-action)
 - `src/components/achievement/AlpineAchievementPosterModal.vue` (海报全高展开、防 Flex 挤压、浮顶与全高视网膜捕获算法)
 - `src/config/version.js` / `public/version.json` / `android/app/build.gradle` (升版至 0.2.0.202610301322)
@@ -83,4 +83,4 @@
 - **生成产物**：
   - `releases/weekly-mountain-v0.2.0.202610301337-debug.apk` (28.08 MB, 构建完成时间: 2026-10-30 13:41:05)
   - `releases/weekly-mountain-latest-debug.apk` (28.08 MB)
-- **编译状态**：已执行 Gradle Clean 全量重新编译，确保 100% 纳入 npm 官方源 `@lylyuanliang/agent-feedback@1.1.0` 与海报截断全套修复代码。
+- **编译状态**：已执行 Gradle Clean 全量重新编译，确保 100% 纳入 npm 公共源 `@lylyuanliang/agent-feedback@1.1.0` 与海报截断全套修复代码。

@@ -12,7 +12,7 @@
 将《每周一山 · 成都周边50座山》正式发布为 `v0.2.0` 里程碑版本。
 代码已由用户合并至 `main` 分支。
 版本核心包括：
-- 接入 npm 官方源 `@lylyuanliang/agent-feedback` 闭环体系；
+- 接入 npm 公共源 `@lylyuanliang/agent-feedback` 闭环体系；
 - 彻底根除真机切换 Tab 闪烁与上下跳动缺陷（DOM 多面板 KeepAlive 架构，耗时降至 3~5ms）；
 - 移动真机手势防抖与 450ms 穿透门禁；
 - Android 原生断点续传流式 OTA 更新与自动安装包清理；
