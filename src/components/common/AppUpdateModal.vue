@@ -241,7 +241,7 @@
                   </div>
                   <span>{{ updateStore.errorMessage || '下载过程出现异常，请稍后重试' }}</span>
                   <p v-if="isTamperedOrHashMismatch" class="text-[11px] text-red-300/80 mt-1">
-                    为保障您的设备安全，已自动阻断安装并销毁可疑临时文件。请尝试切换网络或在下方使用外部官方渠道下载。
+                    为保障您的设备安全，已自动阻断安装并销毁可疑临时文件。请尝试切换网络或在下方使用备用发布渠道下载。
                   </p>
                 </div>
               </div>

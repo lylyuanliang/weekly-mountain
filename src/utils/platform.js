@@ -8,7 +8,7 @@ import { Capacitor } from '@capacitor/core';
  * 判断当前运行环境是否为原生 App (Capacitor Android / iOS)
  * 采用多层防御检测：
  * 1. URL 调试开关或 localStorage 模拟标记 (?native=1 / wm_force_native=true)
- * 2. Capacitor.isNativePlatform() 官方 API 检测
+ * 2. Capacitor.isNativePlatform() 原生 API 检测
  * 3. 协议判断 (capacitor: / ionic:)
  * 4. Android 原生宿主 WebView 注入对象 (window.AlpineNative)
  * @returns {boolean}

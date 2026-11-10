@@ -104,7 +104,7 @@ export async function fetchLatestRelease() {
     tunnelVersionUrl,
     // 1. 国内代理镜像 (实时直连 GitHub Raw，无 CDN 边缘缓存延迟)
     `${PROXY_RAW_ENDPOINT}?t=${timestamp}`,
-    // 2. 官方 GitHub Raw 直连 (无边缘强缓存)
+    // 2. GitHub Raw 直连 (无边缘强缓存)
     `https://raw.githubusercontent.com/${GITHUB_REPO}/main/public/version.json?t=${timestamp}`,
     // 3. jsDelivr 全球加速 CDN (若有缓存则兜底)
     `${JSDELIVR_ENDPOINT}?t=${timestamp}`,

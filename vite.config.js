@@ -344,7 +344,7 @@ function resolveAccessControlConfig() {
     keyHash,
     storageKey: 'wm_debug_access_key',
     promptTitle: '受限访问保护',
-    promptMessage: '当前调试版内含开发机 AI 哨兵直连通道，仅对授权协作者开放。请在下方输入开发机生成的配对密钥解锁；普通用户如遇山峰数据或应用问题，请前往官方 GitHub Issues 提交。'
+    promptMessage: '当前调试版内含开发机 AI 哨兵直连通道，仅对授权协作者开放。请在下方输入开发机生成的配对密钥解锁；普通用户如遇山峰数据或应用问题，请前往 GitHub Issues 提交。'
   };
 }
 
@@ -368,7 +368,7 @@ export default defineConfig({
       hostChannel: {
         name: 'GitHub Issues',
         url: 'https://github.com/lylyuanliang/weekly-mountain/issues',
-        description: '未持有内测密钥时，请前往官方 GitHub 提交建议与问题反馈'
+        description: '未持有内测密钥时，请前往 GitHub 提交建议与问题反馈'
       },
       accessControl: accessControlConfig,
       sentinel: {

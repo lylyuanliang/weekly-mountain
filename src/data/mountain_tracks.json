@@ -816,7 +816,7 @@
     },
     {
       "route_index": 1,
-      "route_name": "官方小环线（索道上下，体力减半）",
+      "route_name": "经典小环线（索道上下，体力减半）",
       "color": "#38bdf8",
       "distance_km": 6.8,
       "elevation_gain_m": 350,
@@ -1236,14 +1236,14 @@
   "xiling-xueshan": [
     {
       "route_index": 0,
-      "route_name": "后山森林徒步线（A+B+C段，官方‘钻石+黄金+青铜’组合）",
+      "route_name": "后山森林徒步线（A+B+C段，景区推荐‘钻石+黄金+青铜’组合）",
       "color": "#4edea3",
       "distance_km": 3.4,
       "elevation_gain_m": 600,
       "elevation_loss_m": 600,
       "estimated_hours": "3-4h",
       "highest_alt_m": 3300,
-      "difficulty": "低-中（官方难度⭐至",
+      "difficulty": "低-中（参考难度⭐至",
       "coordinates": [
         [
           103.23153,
@@ -1434,7 +1434,7 @@
       "elevation_loss_m": 600,
       "estimated_hours": "3-4h",
       "highest_alt_m": 3250,
-      "difficulty": "低（官方难度⭐⭐⭐，",
+      "difficulty": "低（参考难度⭐⭐⭐，",
       "coordinates": [
         [
           103.23753,
@@ -11904,7 +11904,7 @@
   "niubeishan": [
     {
       "route_index": 0,
-      "route_name": "青云道（景区官方步道·杜鹃赏花段）",
+      "route_name": "青云道（景区铺装步道·杜鹃赏花段）",
       "color": "#4edea3",
       "distance_km": 1.5,
       "elevation_gain_m": 600,

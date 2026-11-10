@@ -1150,7 +1150,7 @@
 
       <!-- 社区开源反馈与安全法律免责常设入口矩阵 -->
       <div class="pt-2 flex items-center justify-center gap-2 flex-wrap px-4">
-        <!-- 官方 Cloudflare Pages 在线预览站 -->
+        <!-- Cloudflare Pages 在线预览站 -->
         <a
           href="https://weekly-mountain.pages.dev/"
           target="_blank"
@@ -1158,7 +1158,7 @@
           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container/60 hover:bg-surface-container border border-white/10 text-[11px] text-gray-300 hover:text-white transition-all active:scale-95 shadow-sm"
         >
           <span class="material-symbols-outlined text-[15px] text-cyan-400">language</span>
-          <span>官方在线体验 (Cloudflare)</span>
+          <span>在线体验版 (Cloudflare)</span>
         </a>
 
         <!-- Web 网页端专属 Android 客户端下载入口 -->

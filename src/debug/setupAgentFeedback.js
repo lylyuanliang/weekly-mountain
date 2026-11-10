@@ -14,7 +14,7 @@ export function initAgentFeedbackExtensions(piniaInstance) {
   const hostChannelConfig = {
     name: 'GitHub Issues',
     url: 'https://github.com/lylyuanliang/weekly-mountain/issues',
-    description: '未持有内测密钥时，请前往官方 GitHub 提交建议与问题反馈'
+    description: '未持有内测密钥时，请前往 GitHub 提交建议与问题反馈'
   };
 
   // 2. 注入 window.__AGENT_FEEDBACK_OPTIONS__，确保离线 Debug APK 无论在 Web 还是原生容器下

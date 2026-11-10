@@ -91,7 +91,7 @@ def test_tab_navigation():
             plan_view = page.locator(".plan-view")
             assert plan_view.is_visible(), "Assertion Failed: .plan-view is not visible!"
 
-            # 验证周计划时间线与官方精选路线区域存在
+            # 验证周计划时间线与景区精选路线区域存在
             presets_section = page.locator(".official-presets")
             assert presets_section.is_visible(), "Assertion Failed: Official presets section is not visible!"
             print("[PASS] Assertion 1: Switched to #/plan, .plan-view and .official-presets rendered")
