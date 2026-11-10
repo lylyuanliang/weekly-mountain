@@ -521,32 +521,40 @@
             </div>
 
             <!-- Bento 3: 往返里程 (2 cols) -->
-            <div class="col-span-2 rounded-2xl p-2.5 bg-surface-container-low/80 border border-outline-variant/25 flex flex-col justify-between">
-              <span class="text-[11px] font-medium text-on-surface-variant">徒步里程</span>
-              <div class="my-1">
-                <span class="text-lg font-black text-white font-mono">{{ nums.dist }}</span>
-                <span class="text-[10px] font-bold text-on-surface-variant ml-0.5">km</span>
+            <div class="col-span-2 rounded-2xl p-2.5 bg-surface-container-low/80 border border-outline-variant/25 flex flex-col justify-between overflow-hidden">
+              <span class="text-[11px] font-medium text-on-surface-variant truncate">徒步里程</span>
+              <div class="my-1 flex items-baseline whitespace-nowrap overflow-hidden">
+                <span class="text-lg font-black text-white font-mono leading-none truncate">{{ nums.dist }}</span>
+                <span class="text-[10px] font-bold text-on-surface-variant ml-0.5 tracking-wider flex-shrink-0">km</span>
               </div>
-              <span class="text-[10px] text-on-surface-variant/70 font-mono">往返全程</span>
+              <span class="text-[10px] text-on-surface-variant/70 font-mono truncate">往返全程</span>
             </div>
 
-            <!-- Bento 4: 预计用时 (2 cols) -->
-            <div class="col-span-2 rounded-2xl p-2.5 bg-surface-container-low/80 border border-outline-variant/25 flex flex-col justify-between">
-              <span class="text-[11px] font-medium text-on-surface-variant">预计耗时</span>
-              <div class="my-1">
-                <span class="text-lg font-black text-secondary font-mono">{{ durationText }}</span>
+            <!-- Bento 4: 预计用时 (2 cols) - 强化窄屏防换行与多方案单位适配 -->
+            <div class="col-span-2 rounded-2xl p-2.5 bg-surface-container-low/80 border border-outline-variant/25 flex flex-col justify-between overflow-hidden">
+              <span class="text-[11px] font-medium text-on-surface-variant truncate">预计耗时</span>
+              <div class="my-1 flex items-baseline whitespace-nowrap overflow-hidden">
+                <span
+                  class="font-black text-secondary font-mono tracking-tight leading-none truncate"
+                  :class="durationInfo.value.length > 5 ? 'text-base' : 'text-lg'"
+                >
+                  {{ durationInfo.value }}
+                </span>
+                <span v-if="durationInfo.unit" class="text-[10px] font-bold text-on-surface-variant ml-0.5 tracking-wider flex-shrink-0">
+                  {{ durationInfo.unit }}
+                </span>
               </div>
-              <span class="text-[10px] text-on-surface-variant/70 font-mono">配速参考</span>
+              <span class="text-[10px] text-on-surface-variant/70 font-mono truncate">{{ durationInfo.sublabel || '配速参考' }}</span>
             </div>
 
             <!-- Bento 5: 成都驱车 (2 cols) -->
-            <div class="col-span-2 rounded-2xl p-2.5 bg-surface-container-low/80 border border-outline-variant/25 border-l-2 border-l-secondary flex flex-col justify-between">
-              <span class="text-[11px] font-medium text-on-surface-variant">{{ regionStore.currentRegion.driveCenter }}车程</span>
-              <div class="my-1">
-                <span class="text-lg font-black text-secondary font-mono">{{ mountain.drive_hours || '--' }}</span>
-                <span class="text-[10px] font-bold text-on-surface-variant ml-0.5">h</span>
+            <div class="col-span-2 rounded-2xl p-2.5 bg-surface-container-low/80 border border-outline-variant/25 border-l-2 border-l-secondary flex flex-col justify-between overflow-hidden">
+              <span class="text-[11px] font-medium text-on-surface-variant truncate">{{ regionStore.currentRegion.driveCenter }}车程</span>
+              <div class="my-1 flex items-baseline whitespace-nowrap overflow-hidden">
+                <span class="text-lg font-black text-secondary font-mono leading-none truncate">{{ mountain.drive_hours || '--' }}</span>
+                <span class="text-[10px] font-bold text-on-surface-variant ml-0.5 tracking-wider flex-shrink-0">h</span>
               </div>
-              <span class="text-[10px] text-secondary/70 font-mono">自驾直达</span>
+              <span class="text-[10px] text-secondary/70 font-mono truncate">自驾直达</span>
             </div>
           </div>
 
@@ -1814,18 +1822,113 @@ const diffBadgeClass = computed(() => {
   return 'bg-primary/20 text-primary border-primary/40';
 });
 
-const durationText = computed(() => {
-  if (nums.value.dur) return `${nums.value.dur}h`;
-  const r0 = props.mountain?.routes?.[0];
-  if (r0?.hours) {
-    const str = String(r0.hours);
-    const m = str.match(/(\d+(?:-\d+)?\s*(?:小时|h))/);
-    if (m) return m[1];
-    if (str.includes('半日')) return '半日';
-    if (str.length <= 8) return str;
-    return '单日/半日';
+const durationInfo = computed(() => {
+  const m = props.mountain;
+  if (!m) return { value: '--', unit: 'h', sublabel: '配速参考' };
+
+  // 1. 优先使用顶层显式 duration_h（若为数值或包含小时）
+  const durH = m.duration_h;
+  if (durH !== null && durH !== undefined && durH !== '') {
+    if (typeof durH === 'number' && durH > 0) {
+      return { value: String(durH), unit: 'h', sublabel: '配速参考' };
+    }
+    const s = String(durH).trim();
+    const mat = s.match(/(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?)\s*(?:小时|h)?/);
+    if (mat && mat[1]) {
+      return { value: mat[1], unit: 'h', sublabel: '配速参考' };
+    }
   }
-  return '半日/单日';
+
+  // 2. 检查首选路线 routes[0]
+  const routes = Array.isArray(m.routes) ? m.routes : [];
+  const r0 = routes[0] || {};
+
+  // 2.1 r0.time_h (明确的数字小时)
+  if (r0.time_h && Number(r0.time_h) > 0) {
+    return { value: String(r0.time_h), unit: 'h', sublabel: '配速参考' };
+  }
+
+  // 2.2 汇集 routes[0] 的文本候选字段
+  const candidates = [
+    r0.duration_h,
+    r0.hours,
+    r0.time,
+    r0.duration
+  ].filter(Boolean).map(String);
+  const raw = candidates.join(' ').trim();
+
+  // 2.3 分钟匹配 (如“约10-15分钟”)
+  const minMatch = raw.match(/(\d+(?:-\d+)?)\s*(?:分钟|min)/);
+  if (minMatch && !raw.includes('小时')) {
+    return { value: minMatch[1], unit: 'min', sublabel: '单程登顶' };
+  }
+
+  // 2.4 半天 / 半日匹配
+  if (raw.includes('半天') || raw.includes('半日')) {
+    if (raw.includes('单日') || raw.includes('1天') || raw.includes('一日') || raw.includes('全天')) {
+      return { value: '0.5-1', unit: 'd', sublabel: '单日/半日' };
+    }
+    return { value: '0.5', unit: 'd', sublabel: '半日往返' };
+  }
+
+  // 2.5 多日天数匹配 (如“两日”、“2-3天”)
+  const dayMatch = raw.match(/([一二两三四\d]+(?:\.\d+)?(?:-[一二两三四\d]+(?:\.\d+)?)?)\s*(?:天|日)/);
+  if (dayMatch) {
+    const dStr = dayMatch[1]
+      .replace(/一/g, '1')
+      .replace(/[二两]/g, '2')
+      .replace(/三/g, '3')
+      .replace(/四/g, '4');
+    return { value: dStr, unit: 'd', sublabel: '多日行程' };
+  }
+
+  // 2.6 小时区间匹配 (如“3-4小时”、“4-5h”、“约1-1.5小时”)
+  const hourMatch = raw.match(/(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?)\s*(?:小时|h)/);
+  if (hourMatch) {
+    return { value: hourMatch[1], unit: 'h', sublabel: '配速参考' };
+  }
+
+  // 2.7 纯数字区间 (如“3-4”)
+  const pureRange = raw.match(/(\d+(?:\.\d+)?-\d+(?:\.\d+)?)/);
+  if (pureRange) {
+    return { value: pureRange[1], unit: 'h', sublabel: '配速参考' };
+  }
+
+  // 2.8 整日 / 单日
+  if (raw.includes('整日') || raw.includes('全天') || raw.includes('单日')) {
+    return { value: '1', unit: 'd', sublabel: '单日全天' };
+  }
+
+  // 3. 扫描后续 routes[1..n] 是否包含有效耗时
+  for (let i = 1; i < routes.length; i++) {
+    const rRaw = [routes[i].duration_h, routes[i].hours, routes[i].time, routes[i].duration]
+      .filter(Boolean)
+      .join(' ');
+    const hMatch = rRaw.match(/(\d+(?:\.\d+)?(?:-\d+(?:\.\d+)?)?)\s*(?:小时|h)/);
+    if (hMatch) {
+      return { value: hMatch[1], unit: 'h', sublabel: '配速参考' };
+    }
+    if (rRaw.includes('半天') || rRaw.includes('半日')) {
+      return { value: '0.5', unit: 'd', sublabel: '半日往返' };
+    }
+  }
+
+  // 4. 根据山峰难度与性质做智能推断 (杜绝未知与换行)
+  const diff = m.difficulty || 'L1';
+  if (diff === 'L4' || diff === 'L5') {
+    return { value: '1-2', unit: 'd', sublabel: '重装/进阶' };
+  }
+  if (diff === 'L3') {
+    return { value: '6-8', unit: 'h', sublabel: '单日高山' };
+  }
+  if (diff === 'L2') {
+    return { value: '3-5', unit: 'h', sublabel: '进阶徒步' };
+  }
+  return { value: '0.5-1', unit: 'd', sublabel: '休闲往返' };
+});
+
+const durationText = computed(() => {
+  return `${durationInfo.value.value}${durationInfo.value.unit || ''}`;
 });
 
 const locationShort = computed(() => {
