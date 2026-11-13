@@ -5,12 +5,12 @@
  */
 import { isNativeApp } from '@/utils/platform.js';
 
-export const APP_VERSION = '0.3.2.202611091816';
-export const RELEASE_VERSION = '0.3.2';
-export const BUILD_DATE = '2026-11-09';
-export const BUILD_TIME = '18:16';
-export const BUILD_TIMESTAMP = '2026-11-09 18:16';
-export const BUILD_CODE = 1794219366;
+export const APP_VERSION = '0.4.0.202611131814';
+export const RELEASE_VERSION = '0.4.0';
+export const BUILD_DATE = '2026-11-13';
+export const BUILD_TIME = '18:14';
+export const BUILD_TIMESTAMP = '2026-11-13 18:14';
+export const BUILD_CODE = 1794564857;
 
 /**
  * 法律免责公约与安全须知版本号 (Format: YYYY.MM.DD)
