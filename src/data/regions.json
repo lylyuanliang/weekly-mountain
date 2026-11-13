@@ -16,14 +16,21 @@
     "mountainsCount": 51,
     "status": "active",
     "badge": "已收录 51 座",
-    "description": "川西前山与龙门山脉、龙泉山脉徒步精选，涵盖四姑娘山、西岭雪山、九顶山、赵公山等名峰。"
+    "description": "川西前山与龙门山脉、龙泉山脉徒步精选，涵盖四姑娘山、西岭雪山、九顶山、赵公山等名峰。",
+    "packInfo": {
+      "filename": "pack-chengdu-v1.0.0.zip",
+      "version": "1.0.0",
+      "sizeBytes": 453590,
+      "sha256": "21a8114c6225288ba41232825a4b688b24d657c397eb0ca65aaac8be9d384416",
+      "isDefaultInstalled": true
+    }
   },
   {
     "id": "chongqing",
     "name": "重庆周边",
     "shortName": "重庆",
     "province": "重庆",
-    "title": "重庆周边精选山峰",
+    "title": "重庆周边 36 座山",
     "center": {
       "lng": 106.55,
       "lat": 29.56
@@ -32,10 +39,17 @@
     "minZoom": 7,
     "maxZoom": 14,
     "driveCenter": "重庆",
-    "mountainsCount": 0,
-    "status": "planned",
-    "badge": "路线勘测中",
-    "description": "巴渝奇秀山地，涵盖金佛山、缙云山、铁山坪、南山等经典徒步胜地。"
+    "mountainsCount": 36,
+    "status": "active",
+    "badge": "已收录 36 座",
+    "description": "巴渝平行岭谷与三峡、大娄山名山精选，涵盖金佛山、三峡之巅、缙云山、仙女山等奇秀胜地。",
+    "packInfo": {
+      "filename": "pack-chongqing-v1.0.0.zip",
+      "version": "1.0.0",
+      "sizeBytes": 87364,
+      "sha256": "aff164c13337a9990b050f1dddaf5a67873bd268b71b96beb24973fbf19f3fac",
+      "isDefaultInstalled": false
+    }
   },
   {
     "id": "xian",
@@ -45,7 +59,7 @@
     "title": "秦岭终南名峰精选",
     "center": {
       "lng": 108.93,
-      "lat": 34.00
+      "lat": 34.0
     },
     "defaultZoom": 9,
     "minZoom": 7,
@@ -82,8 +96,8 @@
     "province": "北京",
     "title": "京郊名山野趣精选",
     "center": {
-      "lng": 116.40,
-      "lat": 40.20
+      "lng": 116.4,
+      "lat": 40.2
     },
     "defaultZoom": 9,
     "minZoom": 7,

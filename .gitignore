@@ -33,3 +33,6 @@ android/app/*.iml
 !docs/releases/
 # Agent Feedback Bridge local storage
 .agent/
+artifacts/
+__pycache__/
+*.pyc

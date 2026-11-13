@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import mountainsData from '../data/mountains.json' with { type: 'json' };
 import waypointsData from '../data/waypoints.json' with { type: 'json' };
+import regionsData from '../data/regions.json' with { type: 'json' };
+import { resourcePackService } from '../services/resourcePackService.js';
 import { useRegionStore } from './regionStore.js';
 
 export const GROUP_META = {
@@ -62,6 +64,8 @@ export function getDistanceKm(lat1, lon1, lat2, lon2) {
 // 提取山峰代表性地理坐标（优先最高海拔打卡点）
 export function getMountainCoordinate(mountain, waypointsMap = waypointsData) {
   if (!mountain) return { lat: 30.65, lng: 103.35 };
+
+  // 1. 优先从全局打卡点字典匹配
   const wps = (waypointsMap && waypointsMap[mountain.id]) || [];
   let bestWp = null;
   let maxAlt = -1;
@@ -80,9 +84,49 @@ export function getMountainCoordinate(mountain, waypointsMap = waypointsData) {
     bestWp = wps[0];
   }
 
+  // 2. 尝试从山峰自身所包含的航迹点路由 (wp_routes) 提取
+  if (!bestWp && Array.isArray(mountain.wp_routes)) {
+    for (const r of mountain.wp_routes) {
+      if (Array.isArray(r.waypoints)) {
+        for (const w of r.waypoints) {
+          if (typeof w.lat === 'number' && typeof w.lng === 'number') {
+            const alt = w.alt_m || 0;
+            if (alt > maxAlt) {
+              maxAlt = alt;
+              bestWp = w;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if (bestWp) {
+    return {
+      lat: bestWp.lat,
+      lng: bestWp.lng
+    };
+  }
+
+  // 3. 尝试直接坐标字段
+  if (typeof mountain.lat === 'number' && typeof mountain.lng === 'number') {
+    return { lat: mountain.lat, lng: mountain.lng };
+  }
+  if (mountain.coord && typeof mountain.coord.lat === 'number' && typeof mountain.coord.lng === 'number') {
+    return { lat: mountain.coord.lat, lng: mountain.coord.lng };
+  }
+
+  // 4. 根据山峰所属地域配置获取中心坐标基准
+  if (mountain.region_id) {
+    const reg = regionsData.find((r) => r.id === mountain.region_id);
+    if (reg?.center) {
+      return { lat: reg.center.lat, lng: reg.center.lng };
+    }
+  }
+
   return {
-    lat: bestWp ? bestWp.lat : 30.65,
-    lng: bestWp ? bestWp.lng : 103.35
+    lat: 30.65,
+    lng: 103.35
   };
 }
 
@@ -96,6 +140,7 @@ const defaultFilters = () => ({
 export const useMountainStore = defineStore('mountain', () => {
   const mountains = ref(mountainsData);
   const waypoints = ref(waypointsData);
+  const isLoading = ref(false);
   const searchQuery = ref('');
   const activeFilters = ref(defaultFilters());
   const selectedMountainId = ref(mountainsData[0]?.id || null);
@@ -111,7 +156,7 @@ export const useMountainStore = defineStore('mountain', () => {
     }
 
     const rawSel = mountains.value.find((m) => m.id === selectedMountainId.value);
-    if (rawSel && (!rawSel.region_id || rawSel.region_id === regionStore.currentRegionId)) {
+    if (rawSel) {
       const coord = getMountainCoordinate(rawSel, waypoints.value);
       return {
         ...rawSel,
@@ -125,10 +170,12 @@ export const useMountainStore = defineStore('mountain', () => {
     const map = {};
     const regionStore = useRegionStore();
     const curRegionId = regionStore.currentRegionId;
-    const curCenter = regionStore.currentRegion?.center || { lng: 104.066, lat: 30.657 };
 
     mountains.value.forEach((m) => {
-      if (m.region_id && m.region_id !== curRegionId) return;
+      if (m.region_id && curRegionId && m.region_id !== curRegionId) {
+        const allSameRegion = mountains.value.every((item) => item.region_id === m.region_id);
+        if (!allSameRegion) return;
+      }
       const r = m.region || '其他';
       map[r] = (map[r] || 0) + 1;
     });
@@ -146,10 +193,15 @@ export const useMountainStore = defineStore('mountain', () => {
     const curCenter = regionStore.currentRegion?.center || { lng: 104.066, lat: 30.657 };
 
     const results = mountains.value.filter((m) => {
-      // 0. City / Region match (e.g. chengdu)
-      if (m.region_id && m.region_id !== curRegionId) {
-        return false;
+      // 0. City / Region match (e.g. chengdu / chongqing)
+      if (m.region_id && curRegionId && m.region_id !== curRegionId) {
+        // 若当前数据集全部属于降级默认地域，仍确保展示
+        const allSameRegion = mountains.value.every((item) => item.region_id === m.region_id);
+        if (!allSameRegion) {
+          return false;
+        }
       }
+
       // 1. Keyword search (name, region, county, tags, group)
       if (q) {
         const hay = (
@@ -227,6 +279,43 @@ export const useMountainStore = defineStore('mountain', () => {
     return withDistance.sort((a, b) => (a.distToCenterKm || 0) - (b.distToCenterKm || 0));
   });
 
+  // 异步载入并响应式热挂载指定地域山峰数据集
+  async function loadActiveRegion(regionId) {
+    isLoading.value = true;
+    try {
+      const data = await resourcePackService.loadRegionMountains(regionId);
+      const safeData = Array.isArray(data) && data.length > 0 ? data : mountainsData;
+      mountains.value = safeData;
+
+      // 自动定位首座标杆名山
+      if (safeData.length > 0) {
+        selectedMountainId.value = safeData[0].id;
+      }
+
+      // 同步保持 regionStore 选中状态一致
+      const regionStore = useRegionStore();
+      if (regionStore.currentRegionId !== regionId && regionStore.regions.some((r) => r.id === regionId)) {
+        regionStore.currentRegionId = regionId;
+        if (typeof window !== 'undefined' && window.localStorage) {
+          window.localStorage.setItem('weekly_mountain_region', regionId);
+        } else if (typeof globalThis !== 'undefined' && globalThis.localStorage) {
+          globalThis.localStorage.setItem('weekly_mountain_region', regionId);
+        }
+      }
+
+      return safeData;
+    } catch (err) {
+      console.warn(`[mountainStore] 加载地域 [${regionId}] 山峰异常，安全降级至默认数据集:`, err);
+      mountains.value = mountainsData;
+      if (mountainsData.length > 0) {
+        selectedMountainId.value = mountainsData[0].id;
+      }
+      return mountainsData;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   function setSearch(q) {
     searchQuery.value = q || '';
   }
@@ -263,6 +352,7 @@ export const useMountainStore = defineStore('mountain', () => {
   return {
     mountains,
     waypoints,
+    isLoading,
     searchQuery,
     activeFilters,
     selectedMountainId,
@@ -273,6 +363,7 @@ export const useMountainStore = defineStore('mountain', () => {
     setFilter,
     resetFilters,
     selectMountain,
-    getMountainById
+    getMountainById,
+    loadActiveRegion
   };
 });

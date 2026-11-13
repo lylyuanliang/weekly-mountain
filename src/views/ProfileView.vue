@@ -990,8 +990,157 @@
 
         <span class="w-1.5 h-4 rounded-full bg-tertiary"></span>
 
-        <h3 class="font-headline-md text-[18px] font-bold text-on-surface">数据持久化与主题设置</h3>
+        <h3 class="font-headline-md text-[18px] font-bold text-on-surface">离线资源与系统设置</h3>
 
+      </div>
+
+      <!-- 离线地域资源管理 Bento Card -->
+      <div class="p-3.5 rounded-2xl bg-surface-container/70 border border-white/10 backdrop-blur-xl space-y-3">
+        <!-- 头部标题与总空间统计 -->
+        <div class="flex items-center justify-between pb-2 border-b border-white/5">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[18px]">folder_zip</span>
+            <div>
+              <h4 class="font-headline-sm text-[14px] font-bold text-on-surface">离线地域资源管理</h4>
+              <p class="font-label-data-sm text-[10px] text-on-surface-variant">
+                {{ isNativeAppEnv ? '移动端离线数据包与存储占用管理' : 'Web 端全量在线即用 · 原生端支持离线存储' }}
+              </p>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="font-label-data-sm text-[10px] text-on-surface-variant">离线总占用</div>
+            <div class="font-label-data-md text-[12px] font-bold text-primary">
+              {{ isNativeAppEnv ? formatTotalStorage(storageUsage.totalBytes) : '0 B (在线流式)' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- 地域资源包列表 -->
+        <div class="space-y-2">
+          <div
+            v-for="reg in regionStore.activeRegions"
+            :key="reg.id"
+            class="p-2.5 rounded-xl bg-surface-container-lowest/60 border border-white/5 flex items-center justify-between gap-2"
+          >
+            <!-- 左侧信息 -->
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-surface-container flex items-center justify-center text-[16px] shrink-0">
+                🏔️
+              </div>
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="font-body-md text-[13px] font-bold text-on-surface truncate">{{ reg.name }}</span>
+                  <span
+                    v-if="reg.packInfo?.isDefaultInstalled"
+                    class="px-1.5 py-0.2 text-[9px] font-label-data-sm rounded bg-primary/15 text-primary border border-primary/25 font-semibold"
+                  >
+                    默认基线
+                  </span>
+                  <span
+                    v-else-if="!isNativeAppEnv"
+                    class="px-1.5 py-0.2 text-[9px] font-label-data-sm rounded bg-primary/10 text-primary border border-primary/20 font-semibold"
+                  >
+                    在线即用
+                  </span>
+                  <span
+                    v-else-if="regionStore.isPackInstalled(reg.id)"
+                    class="px-1.5 py-0.2 text-[9px] font-label-data-sm rounded bg-secondary/15 text-secondary border border-secondary/25 font-semibold"
+                  >
+                    已就绪
+                  </span>
+                  <span
+                    v-else
+                    class="px-1.5 py-0.2 text-[9px] font-label-data-sm rounded bg-white/10 text-on-surface-variant font-semibold"
+                  >
+                    未安装
+                  </span>
+                </div>
+                <div class="font-label-data-sm text-[11px] text-on-surface-variant flex items-center gap-1.5 mt-0.5">
+                  <span>{{ reg.mountainsCount }} 座名峰</span>
+                  <span class="text-white/20">|</span>
+                  <span>{{ getRegionSizeText(reg) }}</span>
+                </div>
+
+                <!-- 原生移动端下载进度条 -->
+                <div v-if="isNativeAppEnv && isPackDownloading(reg.id)" class="w-full mt-1.5">
+                  <div class="flex items-center justify-between text-[10px] font-label-data-sm text-primary mb-0.5">
+                    <span>下载中...</span>
+                    <span>{{ getPackProgress(reg.id) }}%</span>
+                  </div>
+                  <div class="w-full bg-surface-container rounded-full h-1 overflow-hidden">
+                    <div
+                      class="bg-primary h-full transition-all duration-200"
+                      :style="{ width: `${getPackProgress(reg.id)}%` }"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 右侧操作栏 -->
+            <div class="shrink-0 flex items-center gap-1.5">
+              <!-- 默认基线地域（成都周边）：保护，不可卸载 -->
+              <template v-if="reg.packInfo?.isDefaultInstalled">
+                <button
+                  disabled
+                  class="px-2 py-1 rounded-lg bg-white/5 border border-white/5 text-on-surface-variant/40 font-label-data-sm text-[11px] flex items-center gap-1 cursor-not-allowed"
+                  title="内置基线数据集，保障离线基础底座稳定，不可卸载"
+                >
+                  <span class="material-symbols-outlined text-[13px]">lock</span>
+                  <span>基线保护</span>
+                </button>
+              </template>
+
+              <!-- Web 模式动态地域：在线即用免下载 -->
+              <template v-else-if="!isNativeAppEnv">
+                <span class="px-2 py-1 rounded-lg bg-primary/10 text-primary font-label-data-sm text-[11px] flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[13px]">cloud_done</span>
+                  <span>在线就绪</span>
+                </span>
+              </template>
+
+              <!-- 原生移动模式动态地域 -->
+              <template v-else>
+                <!-- 下载中状态 -->
+                <span
+                  v-if="isPackDownloading(reg.id)"
+                  class="px-2 py-1 rounded-lg bg-secondary/15 text-secondary border border-secondary/25 font-label-data-sm text-[11px] flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[13px] animate-spin">sync</span>
+                  <span>{{ getPackProgress(reg.id) }}%</span>
+                </span>
+
+                <!-- 已安装状态：支持安全卸载 -->
+                <button
+                  v-else-if="regionStore.isPackInstalled(reg.id)"
+                  @click="handleUninstallPack(reg)"
+                  class="btn-uninstall-pack px-2.5 py-1 rounded-lg bg-error/10 hover:bg-error/20 border border-error/30 text-error font-label-data-sm text-[11px] font-semibold flex items-center gap-1 active:scale-95 transition-all"
+                  title="卸载离线资源包并释放本地磁盘空间"
+                >
+                  <span class="material-symbols-outlined text-[13px]">delete_sweep</span>
+                  <span>卸载</span>
+                </button>
+
+                <!-- 未安装状态：支持一键下载 -->
+                <button
+                  v-else
+                  @click="handleDownloadPack(reg)"
+                  class="btn-download-pack px-2.5 py-1 rounded-lg bg-primary text-on-primary font-label-data-sm text-[11px] font-semibold flex items-center gap-1 active:scale-95 transition-all shadow-sm"
+                  title="下载离线资源包"
+                >
+                  <span class="material-symbols-outlined text-[13px]">cloud_download</span>
+                  <span>下载</span>
+                </button>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <!-- 底部说明 -->
+        <div class="pt-1 text-[10px] text-on-surface-variant/70 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[12px] text-primary">info</span>
+          <span>离线包包含山峰概况、等高线海拔剖面与脱机 GPS 路线，下载后无需网络亦可完整浏览。</span>
+        </div>
       </div>
 
 
@@ -1416,7 +1565,7 @@
 
 <script setup>
 
-import { ref, computed, reactive, watch } from 'vue';
+import { ref, computed, reactive, watch, onMounted } from 'vue';
 
 import { useCheckinStore, compressImageToBase64 } from '@/stores/checkinStore.js';
 
@@ -1425,6 +1574,8 @@ import { useThemeStore } from '@/stores/themeStore.js';
 import { useMountainStore } from '@/stores/mountainStore.js';
 
 import { useRegionStore } from '@/stores/regionStore.js';
+
+import { resourcePackService } from '@/services/resourcePackService.js';
 
 import AlpineAchievementPosterModal from '@/components/achievement/AlpineAchievementPosterModal.vue';
 
@@ -1462,7 +1613,7 @@ const regionStore = useRegionStore();
 
 const updateStore = useUpdateStore();
 
-const isNativeAppEnv = isNativeApp();
+const isNativeAppEnv = computed(() => isNativeApp());
 
 const displayVersionLabel = computed(() => getVersionLabel());
 
@@ -2075,6 +2226,79 @@ function handleFileChange(event) {
   event.target.value = '';
 
 }
+
+// ================= 离线地域资源管理 =================
+
+const storageUsage = ref({ totalBytes: 0 });
+
+async function loadStorageUsage() {
+  try {
+    storageUsage.value = await resourcePackService.getStorageUsage();
+  } catch (err) {
+    console.warn('[ProfileView] 获取离线包存储占用失败:', err);
+  }
+}
+
+function formatTotalStorage(bytes) {
+  if (!bytes || bytes <= 0) return '0 B';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+}
+
+function getRegionSizeText(reg) {
+  if (reg.packInfo?.isDefaultInstalled) {
+    return '约 443 KB (App内置)';
+  }
+  if (isNativeAppEnv.value && regionStore.isPackInstalled(reg.id)) {
+    const size = storageUsage.value[reg.id] || reg.packInfo?.sizeBytes || 0;
+    return `占用 ${formatTotalStorage(size)}`;
+  }
+  if (reg.packInfo?.sizeBytes) {
+    return `分包约 ${Math.round(reg.packInfo.sizeBytes / 1000)} KB`;
+  }
+  return '在线按需加载';
+}
+
+function isPackDownloading(regionId) {
+  const pct = regionStore.downloadProgress[regionId];
+  return typeof pct === 'number' && pct >= 0 && pct < 100;
+}
+
+function getPackProgress(regionId) {
+  return regionStore.downloadProgress[regionId] ?? 0;
+}
+
+async function handleDownloadPack(reg) {
+  if (isPackDownloading(reg.id)) return;
+  try {
+    showToast(`开始下载【${reg.name}】离线资源包...`);
+    await regionStore.downloadRegionPack(reg.id);
+    await loadStorageUsage();
+    showToast(`【${reg.name}】离线资源包已下载就绪！`);
+  } catch (err) {
+    showToast(`下载失败: ${err.message || '网络连接超时'}`);
+  }
+}
+
+async function handleUninstallPack(reg) {
+  if (reg.packInfo?.isDefaultInstalled) return;
+  const confirmed = window.confirm(`确定要卸载【${reg.name}】离线资源包吗？\n卸载后将释放磁盘空间，随时可重新下载。`);
+  if (!confirmed) return;
+
+  try {
+    await regionStore.uninstallRegionPack(reg.id);
+    await loadStorageUsage();
+    showToast(`已安全卸载【${reg.name}】离线包，释放空间。`);
+  } catch (err) {
+    showToast(`卸载失败: ${err.message || '操作异常'}`);
+  }
+}
+
+onMounted(async () => {
+  await regionStore.refreshInstalledPacks();
+  await loadStorageUsage();
+});
 
 </script>
 
