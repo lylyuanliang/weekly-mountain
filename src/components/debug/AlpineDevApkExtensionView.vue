@@ -7,7 +7,7 @@
         gap: 12px;
         font-family: inherit;
         color: var(--af-text-main, #f3f4f6);
-        padding: 4px 0;
+        padding: 4px 0 24px 0;
         box-sizing: border-box;
       }
       .dev-apk-root * {
@@ -207,9 +207,11 @@
         border-radius: 50%;
         animation: af-spin 0.8s linear infinite;
         display: inline-block;
+        will-change: transform;
+        transform: translateZ(0);
       }
       @keyframes af-spin {
-        to { transform: rotate(360deg); }
+        to { transform: rotate(360deg) translateZ(0); }
       }
       .error-banner {
         background: rgba(239, 68, 68, 0.1);
@@ -230,16 +232,19 @@
       }
       .artifact-meta-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        background: rgba(0, 0, 0, 0.2);
-        padding: 10px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 12px;
+        background: rgba(0, 0, 0, 0.25);
+        padding: 12px;
         border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
       }
       .meta-item {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 4px;
+        min-width: 0;
+        overflow: hidden;
       }
       .meta-item.full-width {
         grid-column: span 2;
@@ -247,11 +252,16 @@
       .meta-label {
         font-size: 10px;
         color: var(--af-text-muted, #9ca3af);
+        white-space: nowrap;
       }
       .meta-value {
         font-size: 12px;
         font-weight: 600;
         color: var(--af-text-main, #f3f4f6);
+        min-width: 0;
+      }
+      .meta-value.highlight-size {
+        color: var(--af-primary, #4edea3);
       }
       .action-buttons {
         display: flex;
@@ -400,6 +410,134 @@
         text-decoration: underline;
         padding: 0;
       }
+      .badge-tag {
+        font-size: 9px;
+        background: rgba(0, 0, 0, 0.4);
+        color: var(--af-primary, #4edea3);
+        padding: 1px 6px;
+        border-radius: 9999px;
+        font-weight: 600;
+        margin-left: 4px;
+        border: 1px solid rgba(78, 222, 163, 0.3);
+      }
+      .download-progress-box {
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid var(--af-border, rgba(255, 255, 255, 0.12));
+        border-radius: 8px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .progress-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--af-text-main, #f3f4f6);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--af-primary, #4edea3);
+        box-shadow: 0 0 8px var(--af-primary, #4edea3);
+        animation: pulse-ring 1.4s infinite;
+      }
+      .progress-percent {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--af-primary, #4edea3);
+      }
+      .progress-track {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 9999px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #10b981, var(--af-primary, #4edea3));
+        border-radius: 9999px;
+        transition: width 0.15s ease-out;
+      }
+      .progress-fill.pulse-animated {
+        background: linear-gradient(90deg, #10b981, var(--af-primary, #4edea3), #38bdf8);
+        background-size: 200% 100%;
+        animation: progress-shimmer 2s linear infinite;
+      }
+      @keyframes progress-shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+      .progress-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 10px;
+        color: var(--af-text-muted, #9ca3af);
+      }
+      .progress-msg {
+        text-align: right;
+        max-width: 60%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .progress-action-row {
+        margin-top: 4px;
+      }
+      .btn-progress-action {
+        width: 100%;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        border: none;
+      }
+      .btn-permission {
+        background: #f59e0b;
+        color: #0d1117;
+      }
+      .btn-install {
+        background: var(--af-primary, #4edea3);
+        color: #0d1117;
+      }
+      .btn-retry {
+        background: #ef4444;
+        color: #fff;
+      }
+      .progress-footer-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2px;
+        padding-top: 6px;
+        border-top: 1px dashed rgba(255, 255, 255, 0.08);
+      }
+      .btn-sub-action {
+        background: none;
+        border: none;
+        font-size: 10px;
+        color: var(--af-text-muted, #9ca3af);
+        cursor: pointer;
+        padding: 2px 4px;
+      }
+      .btn-sub-action:hover {
+        color: #fff;
+      }
     </component>
 
     <!-- 1. 未授权状态防护卡片 (支持就地输入秘钥配对或跳转设置) -->
@@ -525,27 +663,31 @@
         </div>
 
         <div class="artifact-meta-grid">
-          <div class="meta-item">
-            <span class="meta-label">产物名称</span>
-            <span class="meta-value text-mono text-truncate">{{ artifactInfo.apkName || 'app-debug.apk' }}</span>
+          <div class="meta-item full-width">
+            <span class="meta-label">产物包名</span>
+            <span class="meta-value text-mono text-truncate" :title="artifactInfo.apkName">
+              {{ artifactInfo.apkName || 'app-debug.apk' }}
+            </span>
           </div>
           <div class="meta-item">
             <span class="meta-label">文件体积</span>
-            <span class="meta-value">{{ artifactInfo.fileSize || '未知' }}</span>
+            <span class="meta-value text-mono highlight-size">{{ artifactInfo.fileSize || '未知' }}</span>
           </div>
-          <div class="meta-item full-width">
+          <div class="meta-item">
             <span class="meta-label">最后编译时间</span>
             <span class="meta-value text-mono">{{ artifactInfo.updateTime || '刚刚' }}</span>
           </div>
         </div>
 
-        <div class="action-buttons">
+        <!-- 下载操作区：未在下载中时展示下载按钮 -->
+        <div v-if="downloadState.status === 'idle'" class="action-buttons">
           <button
             type="button"
             @click="downloadApk('debug')"
             class="btn-download primary"
           >
             <span>⬇️ 下载本地 Debug APK</span>
+            <span v-if="isNativeApp" class="badge-tag">应用内续传</span>
           </button>
           <button
             type="button"
@@ -554,6 +696,77 @@
           >
             <span>⬇️ 下载本地 Release APK</span>
           </button>
+        </div>
+
+        <!-- 应用内实时下载进度与状态控制卡片 -->
+        <div v-else class="download-progress-box">
+          <div class="progress-header">
+            <div class="progress-title">
+              <span class="pulse-dot"></span>
+              <span v-if="downloadState.status === 'downloading'">
+                应用内下载中 ({{ downloadState.variant === 'release' ? 'Release' : 'Debug' }})
+              </span>
+              <span v-else-if="downloadState.status === 'installing'">
+                正在调起系统安装器...
+              </span>
+              <span v-else-if="downloadState.status === 'permission_required'">
+                待授予未知应用安装权限
+              </span>
+              <span v-else-if="downloadState.status === 'completed'">
+                安装包下载完成
+              </span>
+              <span v-else-if="downloadState.status === 'error'">
+                下载中断
+              </span>
+            </div>
+            <span class="progress-percent text-mono">{{ downloadState.percent }}%</span>
+          </div>
+
+          <!-- 进度条轨道 -->
+          <div class="progress-track">
+            <div
+              class="progress-fill"
+              :style="{ width: `${Math.max(2, Math.min(100, downloadState.percent))}%` }"
+              :class="{ 'pulse-animated': downloadState.status === 'downloading' }"
+            ></div>
+          </div>
+
+          <!-- 统计信息与状态消息 -->
+          <div class="progress-meta">
+            <span class="progress-bytes text-mono">
+              {{ formatBytes(downloadState.receivedBytes) }} / {{ formatBytes(downloadState.totalBytes) }}
+            </span>
+            <span class="progress-msg">{{ downloadState.message || '支持断点续传与切屏后台保持' }}</span>
+          </div>
+
+          <!-- 异常与权限引导操作 -->
+          <div v-if="downloadState.status === 'permission_required'" class="progress-action-row">
+            <button type="button" @click="openPermissionSettings" class="btn-progress-action btn-permission">
+              👉 前往设置开启未知应用安装权限
+            </button>
+          </div>
+
+          <div v-else-if="downloadState.status === 'installing'" class="progress-action-row">
+            <button type="button" @click="triggerManualInstall" class="btn-progress-action btn-install">
+              📲 重新调起系统安装器
+            </button>
+          </div>
+
+          <div v-else-if="downloadState.status === 'error'" class="progress-action-row">
+            <button type="button" @click="downloadApk(downloadState.variant)" class="btn-progress-action btn-retry">
+              🔄 恢复/重试下载
+            </button>
+          </div>
+
+          <!-- 辅助控制：取消与浏览器降级 -->
+          <div class="progress-footer-actions">
+            <button type="button" @click="cancelDownload" class="btn-sub-action">
+              ✕ 取消下载
+            </button>
+            <button type="button" @click="fallbackToExternalBrowser" class="btn-sub-action text-primary">
+              🌐 切换为外部浏览器下载 ↗
+            </button>
+          </div>
         </div>
 
         <button type="button" @click="copyDownloadLink" class="btn-copy-link">
@@ -574,7 +787,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import {
   getApiBase,
   setApiBase,
@@ -584,6 +797,7 @@ import {
   openFeedbackModal
 } from '@lylyuanliang/agent-feedback-client';
 import { openExternalUrl } from '@/utils/appLauncher.js';
+import { formatBytes } from '@/services/updateService.js';
 
 const authorized = ref(false);
 const isConnected = ref(false);
@@ -600,10 +814,56 @@ const authError = ref('');
 
 const artifactInfo = ref(null);
 const copied = ref(false);
-const isNativeApp = ref(typeof window !== 'undefined' && !!(window.Capacitor?.isNativePlatform?.()));
+const isNativeApp = ref(typeof window !== 'undefined' && !!(window.Capacitor?.isNativePlatform?.() || window.AlpineNative));
+
+const downloadState = ref({
+  status: 'idle', // 'idle' | 'downloading' | 'installing' | 'permission_required' | 'completed' | 'error'
+  percent: 0,
+  receivedBytes: 0,
+  totalBytes: 0,
+  message: '',
+  variant: 'debug'
+});
+
+function onDownloadProgress(event) {
+  const data = event?.detail || event;
+  if (!data) return;
+
+  if (data.status) {
+    downloadState.value.status = data.status;
+  }
+  if (data.percent !== undefined) {
+    downloadState.value.percent = Number(data.percent) || 0;
+  }
+  if (data.receivedBytes !== undefined) {
+    downloadState.value.receivedBytes = Number(data.receivedBytes) || 0;
+  }
+  if (data.totalBytes !== undefined) {
+    downloadState.value.totalBytes = Number(data.totalBytes) || 0;
+  }
+  if (data.message !== undefined) {
+    downloadState.value.message = data.message;
+  }
+}
 
 onMounted(() => {
   checkAuthAndLoad();
+  if (typeof window !== 'undefined') {
+    const prevProgress = window.onAlpineDownloadProgress;
+    window.onAlpineDownloadProgress = (data) => {
+      if (typeof prevProgress === 'function') {
+        try { prevProgress(data); } catch (_) {}
+      }
+      window.dispatchEvent(new CustomEvent('alpine-download-progress', { detail: data }));
+    };
+    window.addEventListener('alpine-download-progress', onDownloadProgress);
+  }
+});
+
+onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('alpine-download-progress', onDownloadProgress);
+  }
 });
 
 function checkAuthAndLoad() {
@@ -749,17 +1009,68 @@ function downloadApk(variant = 'debug') {
   const apkPath = variant === 'release' ? '/releases/weekly-mountain-latest-release.apk' : '/releases/weekly-mountain-latest-debug.apk';
   const downloadUrl = `${targetBase}${apkPath}`;
 
-  if (isNativeApp.value) {
-    openExternalUrl(downloadUrl);
-  } else {
-    const a = document.createElement('a');
-    a.href = downloadUrl;
-    a.download = `weekly-mountain-dev-${variant}.apk`;
-    a.target = '_blank';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+  // 1. 若处于原生 Android 环境且支持 AlpineNative 原生下载桥，执行应用内断点续传下载
+  if (isNativeApp.value && typeof window !== 'undefined' && window.AlpineNative) {
+    downloadState.value = {
+      status: 'downloading',
+      percent: 0,
+      receivedBytes: 0,
+      totalBytes: artifactInfo.value?.fileSizeBytes || 0,
+      message: '正在连接开发机高速下载 (支持断点续传)...',
+      variant: variant
+    };
+
+    const targetVersion = `dev-${variant}-${artifactInfo.value?.buildCode || Date.now()}`;
+    if (typeof window.AlpineNative.downloadAndInstallApkWithSha256 === 'function') {
+      window.AlpineNative.downloadAndInstallApkWithSha256(downloadUrl, targetVersion, null);
+    } else if (typeof window.AlpineNative.downloadAndInstallApk === 'function') {
+      window.AlpineNative.downloadAndInstallApk(downloadUrl, targetVersion, null);
+    } else {
+      openExternalUrl(downloadUrl);
+    }
+    return;
   }
+
+  // 2. 网页端环境：标准浏览器文件直接下载
+  const a = document.createElement('a');
+  a.href = downloadUrl;
+  a.download = `weekly-mountain-dev-${variant}.apk`;
+  a.target = '_blank';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function cancelDownload() {
+  if (typeof window !== 'undefined' && window.AlpineNative?.cancelDownload) {
+    window.AlpineNative.cancelDownload();
+  }
+  downloadState.value.status = 'idle';
+  downloadState.value.percent = 0;
+  downloadState.value.receivedBytes = 0;
+  downloadState.value.totalBytes = 0;
+  downloadState.value.message = '';
+}
+
+function triggerManualInstall() {
+  if (typeof window !== 'undefined' && window.AlpineNative?.installDownloadedApk) {
+    window.AlpineNative.installDownloadedApk();
+  }
+}
+
+function openPermissionSettings() {
+  if (typeof window !== 'undefined' && window.AlpineNative?.openInstallPermissionSettings) {
+    window.AlpineNative.openInstallPermissionSettings();
+  }
+}
+
+function fallbackToExternalBrowser() {
+  const targetBase = (devServerUrl.value || window.location.origin).replace(/\/+$/, '');
+  const variant = downloadState.value.variant || 'debug';
+  const apkPath = variant === 'release' ? '/releases/weekly-mountain-latest-release.apk' : '/releases/weekly-mountain-latest-debug.apk';
+  const downloadUrl = `${targetBase}${apkPath}`;
+  cancelDownload();
+  openExternalUrl(downloadUrl);
 }
 
 async function copyDownloadLink() {
