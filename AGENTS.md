@@ -34,7 +34,8 @@
   - **向 GitHub 推送 Tag 触发自动化构建（Push Tag）**：**属于正式对外发版流程，必须递增前 3 位版本号！**
     - 日常 Bugfix、补丁、体验调优发布：**必须递增第 3 位 (Patch，例如 `0.3.0` ➔ `0.3.1`)**；
     - 全新大特性发布：递增第 2 位 (Minor，例如 `0.3.0` ➔ `0.4.0`)。
-- **发版文档与元数据维护**：
+- **发版文档与 CHANGELOG 智能体自主维护（硬门禁）**：
+  - **CHANGELOG.md 与发版说明完全由 Agent 根据实际代码变更自行维护，严禁要求用户手动编写**。Agent 在准备发版或完成交付时，必须主动根据 Conventional Commits 与实际改动汇总生成；
   - 发版文档统一存放在 `docs/releases/RELEASE-vX.Y.Z.md`，顶部必须包含结构化元数据块（`<!-- RELEASE_METADATA_START` ... `RELEASE_METADATA_END -->`）；
   - Release 标题统一**仅保留纯净版本号**（如 `v0.3.1`），严禁拼接长描述；
   - 运行 `python scripts/sync_version.py <X.Y.Z>` 原子同步版本到 `package.json`、`version.js`、`version.json`、`build.gradle` 及徽标。
