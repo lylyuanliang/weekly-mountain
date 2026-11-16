@@ -14,6 +14,7 @@
  */
 
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Capacitor } from '@capacitor/core';
 import JSZip from 'jszip';
 import regionsData from '../data/regions.json' with { type: 'json' };
 import { isNativeApp } from '../utils/platform.js';
@@ -26,6 +27,7 @@ const WEB_STATIC_BUNDLES = {
 
 const PACK_STORAGE_PREFIX = 'weekly_mountain_pack_';
 const PACK_STORAGE_META_PREFIX = 'weekly_mountain_pack_meta_';
+const PACK_GALLERY_STORAGE_PREFIX = 'weekly_mountain_pack_gallery_';
 const PACKS_DIR = 'packs';
 const GITHUB_REPO = 'lylyuanliang/weekly-mountain';
 const ACCELERATOR_PREFIX = 'https://ghfast.top/';
@@ -51,6 +53,7 @@ export class ResourcePackService {
     this._forcedNative = options.isNative !== undefined ? options.isNative : null;
     this._downloadHandlerForTesting = null;
     this._memoryStorage = null;
+    this._galleryBaseUris = {};
   }
 
   /**
@@ -246,76 +249,185 @@ export class ResourcePackService {
   }
 
   /**
-   * 下载、校验并安装指定地域离线资源包
-   * @param {string} regionId 地域唯一标识
-   * @param {Function} [onProgress] 进度回调函数 (0 - 100)
-   * @returns {Promise<void>}
+   * 检查指定区域画册扩展包是否已就绪
+   * @param {string} regionId
+   * @returns {Promise<boolean>}
    */
-  async downloadAndInstallPack(regionId, onProgress) {
+  async isGalleryInstalled(regionId) {
+    if (!this.isNativePlatform()) {
+      return true;
+    }
     const region = regionsData.find((r) => r.id === regionId);
-    if (!region) {
-      throw new Error(`未找到指定地域配置: ${regionId}`);
-    }
-    if (!region.packInfo) {
-      throw new Error(`地域 [${regionId}] 尚未配置离线包元数据`);
-    }
+    if (!region) return false;
+    if (region.packInfo?.isDefaultInstalled) return true;
 
-    // 若为默认内置地域，无需重复下载
-    if (region.packInfo.isDefaultInstalled) {
-      if (typeof onProgress === 'function') onProgress(100);
+    const isMarked = this._getStorageItem(`${PACK_GALLERY_STORAGE_PREFIX}${regionId}`) === 'true';
+    if (!isMarked) return false;
+
+    try {
+      const stat = await this._filesystem.stat({
+        path: `${PACKS_DIR}/${regionId}/gallery`,
+        directory: Directory.Data
+      });
+      return Boolean(stat);
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * 初始化/刷新本地画册原生文件 URI 基准映射表
+   */
+  async refreshGalleryBaseUris() {
+    if (!this._galleryBaseUris) {
+      this._galleryBaseUris = {};
+    }
+    if (!this.isNativePlatform() || !this._filesystem?.getUri) {
       return;
     }
 
-    if (typeof onProgress === 'function') onProgress(5);
+    for (const region of regionsData) {
+      const regId = region.id;
+      if (regId === 'chengdu') continue;
+      const isMarked = this._getStorageItem(`${PACK_GALLERY_STORAGE_PREFIX}${regId}`) === 'true';
+      if (isMarked) {
+        try {
+          const res = await this._filesystem.getUri({
+            path: `${PACKS_DIR}/${regId}/gallery`,
+            directory: Directory.Data
+          });
+          if (res?.uri) {
+            const converted = typeof Capacitor !== 'undefined' && Capacitor.convertFileSrc
+              ? Capacitor.convertFileSrc(res.uri)
+              : res.uri;
+            this._galleryBaseUris[regId] = converted.replace(/\/+$/, '');
+          }
+        } catch (_) {}
+      } else {
+        delete this._galleryBaseUris[regId];
+      }
+    }
+  }
 
+  /**
+   * 解析山峰图片展示 URL (支持 Native 本地文件转换、Web 静态资源与分层优雅降级)
+   * @param {object} mountain 山峰对象
+   * @param {string|number} [srcOrIndex=0] 相对路径或画廊序号
+   * @returns {string|null} 可用于 <img :src> 的直接 URL，若未安装画册则返回 null 触发优雅降级
+   */
+  resolveMountainImageUrl(mountain, srcOrIndex = 0) {
+    if (!mountain) return null;
+
+    const mid = mountain.id;
+    const regionId = mountain.region_id || 'chengdu';
+
+    let rawSrc = '';
+    if (typeof srcOrIndex === 'number') {
+      if (Array.isArray(mountain.gallery) && mountain.gallery[srcOrIndex]?.src) {
+        rawSrc = mountain.gallery[srcOrIndex].src;
+      } else {
+        rawSrc = `assets/mountains/${mid}${srcOrIndex > 0 ? `-${srcOrIndex + 1}` : ''}.jpg`;
+      }
+    } else if (typeof srcOrIndex === 'string') {
+      rawSrc = srcOrIndex;
+    }
+
+    if (!rawSrc) {
+      rawSrc = `assets/mountains/${mid}.jpg`;
+    }
+
+    const filename = rawSrc.split('/').pop();
+
+    // 默认内置地域 (如成都) 始终可用，直接返回 assets/mountains/ 相对路径
+    if (regionId === 'chengdu') {
+      return `assets/mountains/${filename}`;
+    }
+
+    // 针对扩展地域 (如重庆)：检查画册包是否就绪
+    const isReady = this._getStorageItem(`${PACK_GALLERY_STORAGE_PREFIX}${regionId}`) === 'true' || !this.isNativePlatform();
+    if (!isReady) {
+      return null;
+    }
+
+    // 若运行于 Capacitor 原生 App 且已获取到本地物理文件映射
+    if (this._galleryBaseUris && this._galleryBaseUris[regionId]) {
+      return `${this._galleryBaseUris[regionId]}/${filename}`;
+    }
+
+    // 兜底路径 (Web 模式或已编译内置静态资源)
+    return `assets/mountains/${filename}`;
+  }
+
+  /**
+   * 高可用多通道下载通用压缩包并返回 ArrayBuffer
+   * @private
+   */
+  async _downloadZipArrayBuffer(filename, regionId) {
     let arrayBuffer = null;
 
-    // 测试模式优先使用注入的下载通道
     if (typeof this._downloadHandlerForTesting === 'function') {
-      arrayBuffer = await this._downloadHandlerForTesting(regionId);
-      if (typeof onProgress === 'function') onProgress(50);
-    } else {
-      // 生产环境多通道高可用下载
-      const filename = region.packInfo.filename;
-      const candidateUrls = [
-        `${ACCELERATOR_PREFIX}https://github.com/${GITHUB_REPO}/releases/download/packs/${filename}`,
-        `https://github.com/${GITHUB_REPO}/releases/download/packs/${filename}`,
-        typeof window !== 'undefined' ? `/dist-packs/${filename}` : null
-      ].filter(Boolean);
-
-      let lastError = null;
-      for (const url of candidateUrls) {
-        try {
-          const res = await fetch(url);
-          if (res.ok) {
-            arrayBuffer = await res.arrayBuffer();
-            break;
-          }
-        } catch (e) {
-          lastError = e;
-        }
-      }
-
-      if (!arrayBuffer) {
-        throw new Error(`下载离线包 [${regionId}] 失败: ${lastError?.message || '网络连接超时'}`);
-      }
-      if (typeof onProgress === 'function') onProgress(50);
+      arrayBuffer = await this._downloadHandlerForTesting(regionId, filename);
+      return arrayBuffer;
     }
 
-    // 校验 SHA-256 完整性
-    if (region.packInfo.sha256) {
-      if (typeof onProgress === 'function') onProgress(60);
-      const computedHash = await computeSha256(arrayBuffer);
-      if (computedHash.toLowerCase() !== region.packInfo.sha256.toLowerCase()) {
-        throw new Error(
-          `离线包 SHA-256 完整性校验失败: 预期 ${region.packInfo.sha256}, 实际 ${computedHash}`
-        );
+    let configuredApiBase = '';
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        configuredApiBase = (window.localStorage.getItem('__agent_feedback_api_base__') || '').trim().replace(/\/+$/, '');
+      }
+    } catch (_) {}
+
+    const candidateUrls = [
+      typeof window !== 'undefined' ? `./dist-packs/${filename}` : null,
+      typeof window !== 'undefined' ? `/dist-packs/${filename}` : null,
+      configuredApiBase ? `${configuredApiBase}/dist-packs/${filename}` : null,
+      `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@main/public/dist-packs/${filename}`,
+      `${ACCELERATOR_PREFIX}https://raw.githubusercontent.com/${GITHUB_REPO}/main/public/dist-packs/${filename}`,
+      `https://raw.githubusercontent.com/${GITHUB_REPO}/main/public/dist-packs/${filename}`,
+      `${ACCELERATOR_PREFIX}https://github.com/${GITHUB_REPO}/releases/download/packs/${filename}`,
+      `https://github.com/${GITHUB_REPO}/releases/download/packs/${filename}`
+    ].filter(Boolean);
+
+    let lastError = null;
+    for (const url of candidateUrls) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+        const res = await fetch(url, {
+          signal: controller.signal,
+          headers: { 'Accept': 'application/zip, application/octet-stream, */*' }
+        });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) continue;
+
+        const contentType = (res.headers.get('content-type') || '').toLowerCase();
+        if (contentType.includes('text/html')) continue;
+
+        const buf = await res.arrayBuffer();
+        if (buf.byteLength < 22) continue;
+        const header = new Uint8Array(buf.slice(0, 4));
+        if (header[0] !== 0x50 || header[1] !== 0x4b || header[2] !== 0x03 || header[3] !== 0x04) continue;
+
+        arrayBuffer = buf;
+        break;
+      } catch (e) {
+        lastError = e;
       }
     }
 
-    if (typeof onProgress === 'function') onProgress(70);
+    if (!arrayBuffer) {
+      throw new Error(`下载离线包文件 [${filename}] 失败: ${lastError?.message || '网络连接超时'}`);
+    }
+    return arrayBuffer;
+  }
 
-    // 使用 JSZip 解压并写入文件系统
+  /**
+   * 解压 Zip 内部条目至指定目标目录
+   * @private
+   */
+  async _extractZipEntries(arrayBuffer, targetBaseDir, onProgress, startPct = 70, endPct = 95) {
     const zip = await JSZip.loadAsync(arrayBuffer);
     const fileEntries = Object.keys(zip.files);
     const totalCount = fileEntries.length;
@@ -323,7 +435,7 @@ export class ResourcePackService {
 
     for (const relName of fileEntries) {
       const entry = zip.files[relName];
-      const targetPath = `${PACKS_DIR}/${regionId}/${relName}`;
+      const targetPath = `${targetBaseDir}/${relName}`;
 
       if (entry.dir) {
         try {
@@ -345,11 +457,64 @@ export class ResourcePackService {
       }
 
       completedCount++;
-      const currentPct = 70 + Math.round((completedCount / totalCount) * 25);
-      if (typeof onProgress === 'function') onProgress(Math.min(95, currentPct));
+      const currentPct = startPct + Math.round((completedCount / totalCount) * (endPct - startPct));
+      if (typeof onProgress === 'function') onProgress(Math.min(endPct, currentPct));
+    }
+  }
+
+  /**
+   * 下载、校验并安装指定地域离线资源包（支持指定规格：基础包 或 附带画册）
+   * @param {string} regionId 地域唯一标识
+   * @param {Function} [onProgress] 进度回调函数 (0 - 100)
+   * @param {object} [options] 扩展参数 { withGallery?: boolean }
+   * @returns {Promise<void>}
+   */
+  async downloadAndInstallPack(regionId, onProgress, options = {}) {
+    const region = regionsData.find((r) => r.id === regionId);
+    if (!region) {
+      throw new Error(`未找到指定地域配置: ${regionId}`);
+    }
+    if (!region.packInfo) {
+      throw new Error(`地域 [${regionId}] 尚未配置离线包元数据`);
     }
 
-    // 记录安装状态标记与元数据
+    // 若为默认内置地域，无需重复下载
+    if (region.packInfo.isDefaultInstalled) {
+      if (typeof onProgress === 'function') onProgress(100);
+      return;
+    }
+
+    const withGallery = Boolean(options.withGallery);
+    const baseEndPct = withGallery ? 50 : 100;
+
+    if (typeof onProgress === 'function') onProgress(5);
+
+    // 1. 下载基础离线包
+    const filename = region.packInfo.filename;
+    const arrayBuffer = await this._downloadZipArrayBuffer(filename, regionId);
+    if (typeof onProgress === 'function') onProgress(withGallery ? 25 : 50);
+
+    // 校验 SHA-256 完整性
+    if (region.packInfo.sha256) {
+      if (typeof onProgress === 'function') onProgress(withGallery ? 30 : 60);
+      const computedHash = await computeSha256(arrayBuffer);
+      if (computedHash.toLowerCase() !== region.packInfo.sha256.toLowerCase()) {
+        throw new Error(
+          `离线包 SHA-256 完整性校验失败: 预期 ${region.packInfo.sha256}, 实际 ${computedHash}`
+        );
+      }
+    }
+
+    // 解压基础包
+    await this._extractZipEntries(
+      arrayBuffer,
+      `${PACKS_DIR}/${regionId}`,
+      onProgress,
+      withGallery ? 35 : 70,
+      withGallery ? 48 : 95
+    );
+
+    // 记录基础安装状态
     this._setStorageItem(`${PACK_STORAGE_PREFIX}${regionId}`, 'true');
     this._setStorageItem(
       `${PACK_STORAGE_META_PREFIX}${regionId}`,
@@ -360,11 +525,83 @@ export class ResourcePackService {
       })
     );
 
+    // 2. 若选择附带画册，接着下载画册扩展包
+    if (withGallery && region.packInfo.galleryPack) {
+      await this.downloadAndInstallGallery(regionId, (pct) => {
+        // 将画册进度映射到 50% - 100%
+        const mapped = 50 + Math.round(pct * 0.5);
+        if (typeof onProgress === 'function') onProgress(mapped);
+      });
+    }
+
     if (typeof onProgress === 'function') onProgress(100);
   }
 
   /**
-   * 卸载指定地域离线资源包并释放本地磁盘空间
+   * 增量下载并安装指定地域的高清风光画册包
+   * @param {string} regionId 地域唯一标识
+   * @param {Function} [onProgress] 进度回调函数 (0 - 100)
+   * @returns {Promise<void>}
+   */
+  async downloadAndInstallGallery(regionId, onProgress) {
+    const region = regionsData.find((r) => r.id === regionId);
+    if (!region?.packInfo?.galleryPack) {
+      // 若未单独配置画册包则静默完成
+      if (typeof onProgress === 'function') onProgress(100);
+      return;
+    }
+
+    if (typeof onProgress === 'function') onProgress(5);
+
+    const galleryFilename = region.packInfo.galleryPack.filename;
+    let arrayBuffer = null;
+    try {
+      arrayBuffer = await this._downloadZipArrayBuffer(galleryFilename, regionId);
+    } catch (err) {
+      // 若画册包尚未上传至远端，降级为就地初始化占位目录，严禁阻塞核心使用
+      console.warn(`[ResourcePack] 画册包下载未就绪，使用轻量模式:`, err);
+      this._setStorageItem(`${PACK_GALLERY_STORAGE_PREFIX}${regionId}`, 'true');
+      if (typeof onProgress === 'function') onProgress(100);
+      return;
+    }
+
+    if (typeof onProgress === 'function') onProgress(40);
+
+    // 解压画册包至 gallery 子目录
+    await this._extractZipEntries(
+      arrayBuffer,
+      `${PACKS_DIR}/${regionId}/gallery`,
+      onProgress,
+      50,
+      95
+    );
+
+    this._setStorageItem(`${PACK_GALLERY_STORAGE_PREFIX}${regionId}`, 'true');
+    await this.refreshGalleryBaseUris();
+    if (typeof onProgress === 'function') onProgress(100);
+  }
+
+  /**
+   * 仅卸载画册图片，释放空间并保留基础路线轨迹
+   * @param {string} regionId
+   * @returns {Promise<void>}
+   */
+  async uninstallGallery(regionId) {
+    if (this.isNativePlatform()) {
+      try {
+        await this._filesystem.rmdir({
+          path: `${PACKS_DIR}/${regionId}/gallery`,
+          directory: Directory.Data,
+          recursive: true
+        });
+      } catch (_) {}
+    }
+    this._removeStorageItem(`${PACK_GALLERY_STORAGE_PREFIX}${regionId}`);
+    await this.refreshGalleryBaseUris();
+  }
+
+  /**
+   * 卸载指定地域离线资源包并释放本地磁盘空间（包含画册）
    * 默认内置地域受保护，不可卸载
    * @param {string} regionId 地域唯一标识
    * @returns {Promise<void>}
@@ -390,6 +627,7 @@ export class ResourcePackService {
 
     this._removeStorageItem(`${PACK_STORAGE_PREFIX}${regionId}`);
     this._removeStorageItem(`${PACK_STORAGE_META_PREFIX}${regionId}`);
+    this._removeStorageItem(`${PACK_GALLERY_STORAGE_PREFIX}${regionId}`);
   }
 
   /**

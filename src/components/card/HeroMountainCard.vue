@@ -137,12 +137,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { DIFF_LABEL, useMountainStore } from '@/stores/mountainStore.js';
 import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { usePlanStore } from '@/stores/planStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
 import { getWeatherCache } from '@/services/weatherService.js';
+import { resourcePackService } from '@/services/resourcePackService.js';
 
 const props = defineProps({
   mountain: {
@@ -248,13 +249,24 @@ function handleWeatherClick() {
 
 // Image fallback handling
 const fallbackSvg = computed(() => {
-  const title = encodeURIComponent(props.mountain.name || 'Alpine Peak');
+  const title = encodeURIComponent(props.mountain?.name || 'Alpine Peak');
   return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="220" viewBox="0 0 400 220"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23181b25"/><stop offset="50%" stop-color="%23262a34"/><stop offset="100%" stop-color="%230f131c"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/><path d="M-20 220 L120 70 L220 180 L310 90 L420 220 Z" fill="%234edea3" opacity="0.15"/><path d="M60 220 L210 110 L340 220 Z" fill="%234cd7f6" opacity="0.2"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="%2386948a" font-family="Plus Jakarta Sans, sans-serif" font-size="16" font-weight="bold">${title}</text><text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="%234edea3" font-family="JetBrains Mono, monospace" font-size="12">ALPINE TOPO · ${nums.value.alt}M</text></svg>`;
 });
 
-const currentImgSrc = ref(
-  props.mountain.photo_spots?.[0]?.url ||
-  `assets/mountains/${props.mountain.id}.jpg`
+function getCardImageSrc() {
+  if (!props.mountain) return fallbackSvg.value;
+  const resolved = resourcePackService.resolveMountainImageUrl(props.mountain, 0);
+  return resolved || fallbackSvg.value;
+}
+
+const currentImgSrc = ref(getCardImageSrc());
+
+watch(
+  () => [props.mountain?.id, regionStore.installedGalleries],
+  () => {
+    currentImgSrc.value = getCardImageSrc();
+  },
+  { deep: true, immediate: true }
 );
 
 function handleImgError() {

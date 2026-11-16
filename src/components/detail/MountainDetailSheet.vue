@@ -1641,6 +1641,7 @@ import { APP_VERSION } from '@/config/version.js';
 import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { usePlanStore } from '@/stores/planStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
+import { resourcePackService } from '@/services/resourcePackService.js';
 import RouteElevationChart from '@/components/detail/RouteElevationChart.vue';
 import RouteTrajectoryMap from '@/components/detail/RouteTrajectoryMap.vue';
 import CheckinDetailModal from '@/components/checkin/CheckinDetailModal.vue';
@@ -1973,7 +1974,8 @@ const checkedGearCount = computed(() => {
 // ================= 高山暗黑黑曜石与极光绿图片加载兜底 =================
 function heroFallbackSvg(name) {
   const title = encodeURIComponent(name || 'Alpine Peak');
-  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23181b25"/><stop offset="50%" stop-color="%23262a34"/><stop offset="100%" stop-color="%230f131c"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="%2386948a" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="bold">${title}</text><text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="%234edea3" font-family="JetBrains Mono, monospace" font-size="14">ALPINE TOPO · 成都周边50座山</text></svg>`;
+  const regionLabel = props.mountain?.region || '周边名山';
+  return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23181b25"/><stop offset="50%" stop-color="%23262a34"/><stop offset="100%" stop-color="%230f131c"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="%2386948a" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="bold">${title}</text><text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="%234edea3" font-family="JetBrains Mono, monospace" font-size="14">ALPINE TOPO · ${regionLabel}</text></svg>`;
 }
 
 // ================= 画廊列表计算（严格仅限真实实拍风景照，绝不塞入折线示意图） =================
@@ -1981,24 +1983,41 @@ const galleryList = computed(() => {
   const m = props.mountain;
   if (!m) return [];
 
-  // 若数据中配置了多张真实实拍风景照
-  if (Array.isArray(m.gallery) && m.gallery.length > 0) {
+  const regionId = m.region_id || 'chengdu';
+  const hasGallery = regionStore.isGalleryInstalled(regionId);
+
+  // 若画册已就绪且数据中配置了画廊实拍照片
+  if (hasGallery && Array.isArray(m.gallery) && m.gallery.length > 0) {
     return m.gallery.map((item, i) => {
       const isObj = typeof item === 'object' && item !== null;
+      const rawSrc = isObj ? item.src : item;
+      const resolved = resourcePackService.resolveMountainImageUrl(m, rawSrc);
       return {
-        src: isObj ? item.src : item,
+        src: resolved || rawSrc,
         title: isObj ? item.title : `实景风光 0${i + 1}`,
         desc: isObj ? item.desc : `${m.name} · 真实高山全景实拍`
       };
     });
   }
 
-  // 默认仅呈现 1 张真实的高清实拍风光照片，后续收录更多实景照后再动态扩展
+  // 若画册已就绪但未配置多图，呈现默认第 1 张实景照
+  if (hasGallery) {
+    const defaultResolved = resourcePackService.resolveMountainImageUrl(m, 0);
+    return [
+      {
+        src: defaultResolved || `assets/mountains/${m.id}.jpg`,
+        title: '主峰全貌实景',
+        desc: `${m.name} · 标高 ${nums.value.alt}m 高山全貌实拍`
+      }
+    ];
+  }
+
+  // 基础包模式（未下载画册）：展示优雅矢量占位
   return [
     {
-      src: `assets/mountains/${m.id}.jpg`,
-      title: '主峰全貌实景',
-      desc: `${m.name} · 标高 ${nums.value.alt}m 四川川西高山全貌实拍`
+      src: heroFallbackSvg(m.name),
+      title: '基础离线数据模式',
+      desc: `${m.name} · 标高 ${nums.value.alt}m (风光画册未下载，可于「我的」中补全实景照)`
     }
   ];
 });

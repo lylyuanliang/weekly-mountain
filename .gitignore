@@ -11,6 +11,8 @@ docs/*
 .vite/
 .superpowers/
 *.zip
+!public/dist-packs/*.zip
+!dist-packs/*.zip
 scratch/*
 !scratch/mobile_feedback.json
 !scratch/latest_feedback.json

@@ -9,183 +9,183 @@
     >
       <!-- Sheet Modal Container -->
       <div
-        class="w-full max-w-md bg-surface-container-low border border-outline-variant/40 rounded-t-3xl sm:rounded-2xl shadow-2xl p-5 flex flex-col gap-4 max-h-[85vh] overflow-y-auto no-scrollbar overscroll-contain"
+        class="w-full max-w-md bg-surface-container-low border border-outline-variant/40 rounded-t-3xl sm:rounded-2xl shadow-2xl p-4 sm:p-5 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto no-scrollbar overscroll-contain"
         style="overscroll-behavior: contain; -webkit-overflow-scrolling: touch;"
         @click.stop
       >
         <!-- Header -->
-        <div class="flex items-center justify-between border-b border-outline-variant/20 pb-3">
+        <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2.5">
           <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-[22px]">location_on</span>
-            <h3 class="text-title-md font-bold text-on-surface">选择徒步省市与区域</h3>
+            <span class="material-symbols-outlined text-primary text-[20px]">explore</span>
+            <h3 class="text-base font-bold text-on-surface">切换徒步区域</h3>
           </div>
           <button
             @click="close"
-            class="w-8 h-8 rounded-full frost-glass flex items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-95"
+            class="w-7 h-7 rounded-full frost-glass flex items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-95 transition-all"
             aria-label="关闭"
           >
-            <span class="material-symbols-outlined text-[18px]">close</span>
+            <span class="material-symbols-outlined text-[16px]">close</span>
           </button>
         </div>
 
-        <!-- Section: Active Regions (已上线城市) -->
+        <!-- Section: Active Regions (已上线开放城市) -->
         <div class="flex flex-col gap-2">
-          <div class="flex items-center justify-between text-label-data-sm text-on-surface-variant px-1 font-semibold">
+          <div class="flex items-center justify-between text-[11px] text-on-surface-variant px-1 font-medium">
             <span>已收录开放区域</span>
-            <span class="text-primary font-bold">{{ isNative ? '离线可用' : '100% 在线即用' }}</span>
+            <span class="text-primary font-semibold">{{ isNative ? '离线可用' : '100% 在线即用' }}</span>
           </div>
 
           <div
             v-for="reg in regionStore.activeRegions"
             :key="reg.id"
             @click="handleRegionClick(reg)"
-            class="p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-2"
+            class="p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3"
             :class="reg.id === regionStore.currentRegionId
-              ? 'bg-surface-container-high border-primary glow-primary shadow-lg'
-              : 'frost-glass border-outline-variant/30 hover:border-outline-variant/60'"
+              ? 'bg-primary/10 border-primary glow-primary shadow-sm ring-1 ring-primary/30'
+              : 'frost-glass border-outline-variant/25 hover:border-outline-variant/50'"
           >
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-3 min-w-0">
-                <div
-                  class="w-10 h-10 rounded-xl flex items-center justify-center text-[18px] shrink-0"
-                  :class="reg.id === regionStore.currentRegionId ? 'bg-primary/20 text-primary' : 'bg-surface-container text-on-surface-variant'"
-                >
-                  🏔️
-                </div>
-                <div class="flex flex-col min-w-0">
-                  <div class="flex items-center gap-2">
-                    <span class="text-body-md font-bold text-on-surface truncate">{{ reg.name }}</span>
-                    <span class="px-1.5 py-0.5 text-[10px] font-label-data-sm bg-primary/20 text-primary rounded font-semibold shrink-0">
-                      {{ reg.badge }}
-                    </span>
-                  </div>
-                  <span class="text-[12px] text-on-surface-variant line-clamp-1 mt-0.5">
-                    {{ reg.description }}
-                  </span>
-                </div>
+            <!-- Left: Info -->
+            <div class="flex items-center gap-2.5 min-w-0 flex-1">
+              <div
+                class="w-9 h-9 rounded-xl flex items-center justify-center text-[18px] shrink-0"
+                :class="reg.id === regionStore.currentRegionId ? 'bg-primary/20 text-primary' : 'bg-surface-container text-on-surface-variant'"
+              >
+                🏔️
               </div>
-
-              <!-- Status Badge / Action Right Column -->
-              <div class="flex items-center gap-1.5 shrink-0 ml-2">
-                <!-- Web Mode: 在线即用 -->
-                <template v-if="!isNative">
-                  <span class="px-2 py-0.5 text-[10px] font-label-data-sm bg-primary/10 text-primary border border-primary/20 rounded font-semibold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                    在线即用
+              <div class="flex flex-col min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-sm font-bold text-on-surface truncate">{{ reg.name }}</span>
+                  <span class="px-1.5 py-0.2 text-[9px] bg-white/10 text-on-surface-variant rounded font-semibold shrink-0">
+                    {{ reg.mountainsCount }} 座名山
                   </span>
-                  <span
-                    v-if="reg.id === regionStore.currentRegionId"
-                    class="material-symbols-outlined text-primary text-[20px] flex-shrink-0"
-                  >
-                    check_circle
-                  </span>
-                </template>
-
-                <!-- Native Mode -->
-                <template v-else>
-                  <!-- Downloading State -->
-                  <span
-                    v-if="isDownloading(reg.id)"
-                    class="px-2 py-0.5 text-[10px] font-label-data-sm bg-secondary/15 text-secondary border border-secondary/25 rounded font-semibold flex items-center gap-1"
-                  >
-                    <span class="material-symbols-outlined text-[13px] animate-spin">sync</span>
-                    下载中 {{ getProgress(reg.id) }}%
-                  </span>
-
-                  <!-- Installed / Baseline Ready -->
-                  <template v-else-if="isRegionReady(reg.id)">
-                    <span class="px-2 py-0.5 text-[10px] font-label-data-sm bg-primary/10 text-primary border border-primary/20 rounded font-semibold flex items-center gap-1">
-                      <span class="material-symbols-outlined text-[13px]">cloud_done</span>
-                      已就绪
-                    </span>
-                    <span
-                      v-if="reg.id === regionStore.currentRegionId"
-                      class="material-symbols-outlined text-primary text-[20px] flex-shrink-0"
-                    >
-                      check_circle
-                    </span>
-                  </template>
-
-                  <!-- Not Installed: Download Button -->
-                  <template v-else>
-                    <button
-                      @click.stop="handleDownloadClick(reg)"
-                      class="btn-download-pack px-2.5 py-1 text-[11px] font-label-data-sm bg-primary text-on-primary rounded-lg font-semibold flex items-center gap-1 shadow-sm active:scale-95 transition-all"
-                    >
-                      <span class="material-symbols-outlined text-[14px]">cloud_download</span>
-                      <span>下载离线包 ({{ formatPackSize(reg.packInfo?.sizeBytes) }})</span>
-                    </button>
-                  </template>
-                </template>
+                </div>
+                <span class="text-[11px] text-on-surface-variant/80 truncate mt-0.5">
+                  {{ reg.province }} · {{ reg.driveCenter }}中心辐射
+                </span>
               </div>
             </div>
 
-            <!-- Native Downloading Progress Bar -->
-            <div v-if="isNative && isDownloading(reg.id)" class="w-full pt-1">
-              <div class="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-                <div
-                  class="bg-primary h-full transition-all duration-200"
-                  :style="{ width: `${getProgress(reg.id)}%` }"
-                ></div>
-              </div>
+            <!-- Right: Action / Status -->
+            <div class="flex items-center gap-2 shrink-0">
+              <!-- Web Mode -->
+              <template v-if="!isNative">
+                <span
+                  v-if="reg.id === regionStore.currentRegionId"
+                  class="px-2 py-0.5 text-[11px] font-semibold text-primary bg-primary/15 border border-primary/30 rounded-lg flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[14px]">check</span>
+                  当前所在
+                </span>
+                <span v-else class="text-[11px] text-on-surface-variant font-medium">点击切换</span>
+              </template>
+
+              <!-- Native Mode -->
+              <template v-else>
+                <!-- Downloading State -->
+                <span
+                  v-if="isDownloading(reg.id)"
+                  class="px-2 py-0.5 text-[10px] font-semibold bg-secondary/15 text-secondary border border-secondary/25 rounded-lg flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[13px] animate-spin">sync</span>
+                  {{ getProgress(reg.id) }}%
+                </span>
+
+                <!-- Already Ready -->
+                <template v-else-if="isRegionReady(reg.id)">
+                  <div class="flex items-center gap-1.5">
+                    <!-- + 补全画册快捷入口 (仅基础版且未下载画册时显示) -->
+                    <button
+                      v-if="!isGalleryReady(reg.id) && reg.packInfo?.galleryPack"
+                      @click.stop="handleDownloadGallery(reg)"
+                      class="px-1.5 py-0.5 text-[10px] bg-secondary/15 hover:bg-secondary/25 text-secondary border border-secondary/30 rounded-md font-semibold flex items-center gap-0.5 active:scale-95 transition-all"
+                      title="增量补全高清实拍图集 (约 15.8MB)"
+                    >
+                      <span class="material-symbols-outlined text-[11px]">add_photo_alternate</span>
+                      <span>+ 画册</span>
+                    </button>
+
+                    <!-- 当前选中状态 -->
+                    <span
+                      v-if="reg.id === regionStore.currentRegionId"
+                      class="px-2 py-0.5 text-[11px] font-semibold text-primary bg-primary/15 border border-primary/30 rounded-lg flex items-center gap-1"
+                    >
+                      <span class="material-symbols-outlined text-[14px]">check</span>
+                      当前所在
+                    </span>
+                    <!-- 未选中：显示切换提示 -->
+                    <span
+                      v-else
+                      class="px-2 py-0.5 text-[11px] font-semibold text-on-surface-variant bg-surface-container rounded-lg"
+                    >
+                      点击切换
+                    </span>
+                  </div>
+                </template>
+
+                <!-- Not Installed: Download Button -->
+                <template v-else>
+                  <button
+                    @click.stop="handleDownloadClick(reg)"
+                    class="px-2.5 py-1 text-[11px] font-bold bg-primary text-on-primary rounded-xl flex items-center gap-1 shadow-sm active:scale-95 transition-all"
+                  >
+                    <span class="material-symbols-outlined text-[13px]">cloud_download</span>
+                    <span>下载离线包</span>
+                  </button>
+                </template>
+              </template>
             </div>
           </div>
         </div>
 
-        <!-- Section: Planned Regions (筹备与勘测中) -->
-        <div class="flex flex-col gap-2 pt-2">
-          <div class="flex items-center justify-between text-label-data-sm text-on-surface-variant px-1 font-semibold">
-            <span>筹备规划中的省市周边</span>
-            <span class="text-secondary text-[11px]">敬请期待</span>
+        <!-- Section: Planned Regions (轻量紧凑网格，杜绝大卡片堆叠造成的视觉疲劳) -->
+        <div class="flex flex-col gap-2 pt-1 border-t border-outline-variant/15">
+          <div class="flex items-center justify-between text-[11px] text-on-surface-variant px-1 font-medium">
+            <span>路线勘测规划中</span>
+            <span class="text-secondary text-[10px]">陆续上线</span>
           </div>
 
-          <div class="grid grid-cols-1 gap-2">
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
             <div
               v-for="reg in regionStore.plannedRegions"
               :key="reg.id"
               @click="handlePlannedClick(reg)"
-              class="p-3 rounded-xl frost-glass border border-outline-variant/20 hover:border-outline-variant/40 transition-all cursor-pointer flex items-center justify-between group"
+              class="px-2.5 py-2 rounded-xl frost-glass border border-outline-variant/20 hover:border-outline-variant/40 transition-all cursor-pointer flex items-center gap-2 group active:scale-95"
             >
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-[14px] opacity-75">
-                  🧭
-                </div>
-                <div class="flex flex-col">
-                  <div class="flex items-center gap-2">
-                    <span class="text-body-sm font-semibold text-on-surface group-hover:text-secondary transition-colors">
-                      {{ reg.name }}
-                    </span>
-                    <span class="px-1.5 py-0.2 text-[9px] font-label-data-sm bg-secondary/15 text-secondary rounded">
-                      {{ reg.badge }}
-                    </span>
-                  </div>
-                  <span class="text-[11px] text-on-surface-variant/80 line-clamp-1">
-                    {{ reg.description }}
-                  </span>
-                </div>
+              <span class="text-[14px] opacity-70 group-hover:scale-110 transition-transform">🧭</span>
+              <div class="flex flex-col min-w-0">
+                <span class="text-xs font-semibold text-on-surface truncate group-hover:text-secondary transition-colors">
+                  {{ reg.name }}
+                </span>
+                <span class="text-[9px] text-on-surface-variant/70">
+                  {{ reg.badge }}
+                </span>
               </div>
-
-              <span class="material-symbols-outlined text-outline text-[18px] group-hover:text-secondary transition-colors">
-                chevron_right
-              </span>
             </div>
           </div>
         </div>
 
-        <!-- Footer Tip -->
-        <div class="text-[11px] text-outline text-center py-1 border-t border-outline-variant/20 mt-1">
-          💡 后续将陆续上线秦岭、滇中、京郊等周边山峰与 GPS 路线
+        <!-- Footer Hint -->
+        <div class="text-[10px] text-on-surface-variant/50 text-center py-0.5">
+          💡 存储空间与画册管理可在「我的 ➔ 离线地域资源管理」中随时调配
         </div>
       </div>
     </div>
+
+    <!-- 离线包多规格（基础包 vs 完整画册包）选择弹窗 -->
+    <PackSpecSelectModal
+      v-model="showSpecModal"
+      :region="pendingDownloadRegion"
+      @confirm="handleConfirmSpec"
+    />
   </Teleport>
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useRegionStore } from '@/stores/regionStore.js';
 import { useScrollLock } from '@/composables/useScrollLock.js';
 import { isNativeApp } from '@/utils/platform.js';
+import PackSpecSelectModal from './PackSpecSelectModal.vue';
 
 const props = defineProps({
   modelValue: {
@@ -199,6 +199,10 @@ const emit = defineEmits(['update:modelValue', 'region-change', 'toast']);
 const regionStore = useRegionStore();
 const isNative = computed(() => isNativeApp());
 
+// 规格选择弹窗控制
+const showSpecModal = ref(false);
+const pendingDownloadRegion = ref(null);
+
 // 彻底杜绝底层页面背景滚动穿透
 useScrollLock(() => props.modelValue);
 
@@ -206,17 +210,16 @@ function close() {
   emit('update:modelValue', false);
 }
 
-function formatPackSize(bytes) {
-  if (!bytes) return '';
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `约 ${Math.round(bytes / 1000)}KB`;
-  return `约 ${(bytes / (1024 * 1024)).toFixed(1)}MB`;
-}
-
 function isRegionReady(regionId) {
   const reg = regionStore.regions.find((r) => r.id === regionId);
   if (reg?.packInfo?.isDefaultInstalled) return true;
   return regionStore.isPackInstalled(regionId);
+}
+
+function isGalleryReady(regionId) {
+  const reg = regionStore.regions.find((r) => r.id === regionId);
+  if (reg?.packInfo?.isDefaultInstalled) return true;
+  return regionStore.isGalleryInstalled(regionId);
 }
 
 function isDownloading(regionId) {
@@ -252,18 +255,40 @@ async function handleRegionClick(reg) {
     return;
   }
 
-  // 未安装：触发下载
-  await handleDownloadClick(reg);
+  // 未安装：弹出规格选择弹窗
+  handleDownloadClick(reg);
 }
 
-async function handleDownloadClick(reg) {
+// 唤起离线包规格选择弹窗
+function handleDownloadClick(reg) {
   if (isDownloading(reg.id)) return;
+  pendingDownloadRegion.value = reg;
+  showSpecModal.value = true;
+}
+
+// 确认规格并开始下载
+async function handleConfirmSpec({ withGallery }) {
+  const reg = pendingDownloadRegion.value;
+  if (!reg) return;
   try {
-    emit('toast', `开始下载【${reg.name}】离线资源包...`);
-    await regionStore.downloadRegionPack(reg.id);
-    emit('toast', `【${reg.name}】离线资源包已下载就绪！`);
+    const specName = withGallery ? '完整风光包 (含实拍画册)' : '极速基础包';
+    emit('toast', `开始下载【${reg.name}】${specName}...`);
+    await regionStore.downloadRegionPack(reg.id, { withGallery });
+    emit('toast', `【${reg.name}】${specName}已下载就绪！`);
   } catch (err) {
     emit('toast', `下载失败: ${err.message || '网络连接超时'}`);
+  }
+}
+
+// 增量补全画册
+async function handleDownloadGallery(reg) {
+  if (isDownloading(reg.id)) return;
+  try {
+    emit('toast', `正在增量补全【${reg.name}】高清风光画册包...`);
+    await regionStore.downloadRegionGallery(reg.id);
+    emit('toast', `【${reg.name}】高清风光画册已补全就绪！`);
+  } catch (err) {
+    emit('toast', `画册补全失败: ${err.message || '网络连接超时'}`);
   }
 }
 

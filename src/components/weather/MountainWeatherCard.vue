@@ -16,8 +16,14 @@
               {{ weatherData.point.alt }}m
             </span>
           </div>
-          <p class="text-[10px] text-on-surface-variant font-mono mt-0.5">
-            {{ weatherData ? `更新于 ${weatherData.updateTimeStr}` : '7 天数值气象预报' }}
+          <p class="text-[10px] text-on-surface-variant font-mono mt-0.5 flex items-center gap-1.5 flex-wrap">
+            <span>{{ weatherData ? `更新于 ${weatherData.updateTimeStr}` : '7 天数值气象预报' }}</span>
+            <span
+              v-if="weatherData?.isEstimated"
+              class="px-1.5 py-0.2 rounded bg-tertiary-container/40 text-tertiary-fixed text-[9px] font-sans border border-tertiary/25"
+            >
+              离线高山模型
+            </span>
           </p>
         </div>
       </div>

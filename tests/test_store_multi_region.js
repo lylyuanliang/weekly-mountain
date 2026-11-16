@@ -143,7 +143,14 @@ async function runTests() {
 
   // 执行内置区域下载（应立即触发完成且不报错）
   await regionStore.downloadRegionPack('chengdu');
-  console.log('  ✔ 离线包状态字典与管理动作运行符合预期');
+
+  // 测试：若当前正处于重庆，执行卸载后必须自动回退归位至成都
+  await regionStore.setRegion('chongqing');
+  assert.strictEqual(regionStore.currentRegionId, 'chongqing', '先切换至重庆');
+  await regionStore.uninstallRegionPack('chongqing');
+  assert.strictEqual(regionStore.currentRegionId, 'chengdu', '卸载重庆后当前地域必须自动回退至成都');
+  assert.strictEqual(mountainStore.mountains.length, 51, '回退成都后山峰列表必须重载为 51 座山');
+  console.log('  ✔ 离线包状态字典、管理动作与卸载归位联动符合预期');
 
   // ----------------------------------------------------
   // Test 6: 严禁出现受限中立词汇红线扫描 (0 处违规)

@@ -222,19 +222,47 @@ async function runTests() {
   }
   assert.strictEqual(hashErrorCaught, true, '数据包篡改时必须抛出校验异常拒绝安装');
   assert.strictEqual(await testService.isPackInstalled('chongqing'), false, '校验失败的包严禁标记为已安装');
-  console.log('✔ [8/9] 离线包 SHA-256 完整性防篡改核验通过');
+  console.log('✔ [8/11] 离线包 SHA-256 完整性防篡改核验通过');
 
-  // 9. 受限中立词汇红线扫描（0 处违规）
+  // 9. 分层风光画册包独立增量下载与就绪态测试
+  // 先把正确的基础包恢复
+  testService.setDownloadHandlerForTesting(async (regionId, filename) => {
+    if (filename && filename.includes('gallery')) {
+      const galleryZipPath = path.join(projectRoot, 'dist-packs', 'pack-chongqing-gallery-v1.0.0.zip');
+      const gBuf = fs.readFileSync(galleryZipPath);
+      return gBuf.buffer.slice(gBuf.byteOffset, gBuf.byteOffset + gBuf.byteLength);
+    }
+    return zipBuffer.buffer.slice(zipBuffer.byteOffset, zipBuffer.byteOffset + zipBuffer.byteLength);
+  });
+
+  await testService.downloadAndInstallPack('chongqing', null, { withGallery: false });
+  assert.strictEqual(await testService.isPackInstalled('chongqing'), true, '基础包已安装');
+  assert.strictEqual(await testService.isGalleryInstalled('chongqing'), false, '未下载画册前画册状态应为未就绪');
+
+  // 执行增量下载画册
+  await testService.downloadAndInstallGallery('chongqing');
+  assert.strictEqual(await testService.isGalleryInstalled('chongqing'), true, '增量下载后画册状态应判定为已就绪');
+  console.log('✔ [9/11] 分层风光画册增量下载与状态联动核验通过');
+
+  // 10. 释放画册图片 (保留路线轨迹并降级回基础版)
+  await testService.uninstallGallery('chongqing');
+  assert.strictEqual(await testService.isGalleryInstalled('chongqing'), false, '释放画册后画册状态恢复未就绪');
+  assert.strictEqual(await testService.isPackInstalled('chongqing'), true, '释放画册后核心离线包仍保持可用');
+  const retainMountains = await testService.loadRegionMountains('chongqing');
+  assert.strictEqual(retainMountains.length, 36, '释放画册后离线 36 座山峰数据完好无损');
+  console.log('✔ [10/11] 一键释放画册图片、空间释放与轨迹完整性核验通过');
+
+  // 11. 受限中立词汇红线扫描（0 处违规）
   const forbiddenWord = String.fromCharCode(0x5b98) + String.fromCharCode(0x65b9);
   const serviceFileContent = fs.readFileSync(path.join(projectRoot, 'src', 'services', 'resourcePackService.js'), 'utf8');
   const testFileContent = fs.readFileSync(__filename, 'utf8');
 
   assert.strictEqual(serviceFileContent.includes(forbiddenWord), false, `resourcePackService.js 包含受限词: ${forbiddenWord}`);
   assert.strictEqual(testFileContent.includes(forbiddenWord), false, `test_resource_pack_service.js 包含受限词: ${forbiddenWord}`);
-  console.log('✔ [9/9] 全文受限用语扫描通过 (0 处违规)');
+  console.log('✔ [11/11] 全文受限用语扫描通过 (0 处违规)');
 
   console.log('====================================================');
-  console.log(' 恭喜！ResourcePackService 所有 9 项测试全部 100% 通过！');
+  console.log(' 恭喜！ResourcePackService 所有 11 项测试全部 100% 通过！');
   console.log('====================================================');
 }
 

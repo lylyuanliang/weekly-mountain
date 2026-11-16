@@ -124,6 +124,7 @@ import { useCheckinStore, derivedNums } from '@/stores/checkinStore.js';
 import { usePlanStore } from '@/stores/planStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
 import { getWeatherCache } from '@/services/weatherService.js';
+import { resourcePackService } from '@/services/resourcePackService.js';
 
 const props = defineProps({
   mountain: {
@@ -266,18 +267,20 @@ const fallbackSvg = computed(() => {
   return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23181b25"/><stop offset="50%" stop-color="%23262a34"/><stop offset="100%" stop-color="%230f131c"/></linearGradient></defs><rect width="100%" height="100%" fill="url(%23g)"/><path d="M-10 140 L45 50 L85 110 L115 65 L150 140 Z" fill="%234edea3" opacity="0.2"/><path d="M20 140 L75 75 L125 140 Z" fill="%234cd7f6" opacity="0.25"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="%23dfe2ef" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="bold">${title}</text><text x="50%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="%234edea3" font-family="JetBrains Mono, monospace" font-size="10">${alt}M</text></svg>`;
 });
 
-const currentImgSrc = ref(
-  props.mountain?.photo_spots?.[0]?.url ||
-  `assets/mountains/${props.mountain?.id}.jpg`
-);
+function getCardImageSrc() {
+  if (!props.mountain) return fallbackSvg.value;
+  const resolved = resourcePackService.resolveMountainImageUrl(props.mountain, 0);
+  return resolved || fallbackSvg.value;
+}
+
+const currentImgSrc = ref(getCardImageSrc());
 
 watch(
-  () => props.mountain?.id,
+  () => [props.mountain?.id, regionStore.installedGalleries],
   () => {
-    currentImgSrc.value =
-      props.mountain?.photo_spots?.[0]?.url ||
-      `assets/mountains/${props.mountain?.id}.jpg`;
-  }
+    currentImgSrc.value = getCardImageSrc();
+  },
+  { deep: true, immediate: true }
 );
 
 function handleImgError() {

@@ -96,6 +96,9 @@ def build_region_pack(
     # 3. 收集并排序待打包文件，确保 zip 构建幂等
     files_to_pack = []
     for root, dirs, files in os.walk(region_src_dir):
+        # 排除独立分层的高清画册目录 (gallery)，画册包由 build_gallery_pack 单独打包
+        if "gallery" in dirs:
+            dirs.remove("gallery")
         dirs.sort()
         for file in sorted(files):
             full_path = os.path.join(root, file)
@@ -124,10 +127,49 @@ def build_region_pack(
     return filename, size_bytes, sha256_hex
 
 
+def build_gallery_pack(
+    project_root: str,
+    region: dict,
+    dist_packs_dir: str
+) -> tuple[str, int, str]:
+    """
+    为指定区域构建高清风光画册离线包并返回 (zip_filename, size_bytes, sha256_hex)
+    """
+    region_id = region["id"]
+    gallery_info = region.get("packInfo", {}).get("galleryPack", {})
+    version = gallery_info.get("version", "1.0.0")
+    filename = gallery_info.get("filename") or f"pack-{region_id}-gallery-v{version}.zip"
+
+    gallery_dir = os.path.join(project_root, "src", "data", "regions", region_id, "gallery")
+    if not os.path.exists(gallery_dir):
+        raise FileNotFoundError(f"地域画册目录不存在: {gallery_dir}")
+
+    os.makedirs(dist_packs_dir, exist_ok=True)
+    target_zip_path = os.path.join(dist_packs_dir, filename)
+    if os.path.exists(target_zip_path):
+        try:
+            os.remove(target_zip_path)
+        except OSError:
+            pass
+
+    with zipfile.ZipFile(target_zip_path, "w", compression=zipfile.ZIP_DEFLATED) as z:
+        for fname in sorted(os.listdir(gallery_dir)):
+            if fname.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
+                full_path = os.path.join(gallery_dir, fname)
+                z.write(full_path, fname)
+
+    size_bytes = os.path.getsize(target_zip_path)
+    sha256_hex = calculate_sha256(target_zip_path)
+    return filename, size_bytes, sha256_hex
+
+
 def main():
+    import shutil
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     regions_json_path = os.path.join(project_root, "src", "data", "regions.json")
     dist_packs_dir = os.path.join(project_root, "dist-packs")
+    public_packs_dir = os.path.join(project_root, "public", "dist-packs")
+    os.makedirs(public_packs_dir, exist_ok=True)
 
     if not os.path.exists(regions_json_path):
         print(f"[错误] 未找到 regions.json 配置文件: {regions_json_path}", file=sys.stderr)
@@ -154,7 +196,7 @@ def main():
     for region in active_regions:
         region_id = region["id"]
         region_name = region.get("name", region_id)
-        print(f"-> 正在打包地域 [{region_id}] ({region_name})...")
+        print(f"-> 正在打包地域 [{region_id}] ({region_name}) 基础数据包...")
 
         try:
             filename, size_bytes, sha256_hex = build_region_pack(
@@ -164,9 +206,28 @@ def main():
             print(f"[失败] 地域 [{region_id}] 打包中断: {err}", file=sys.stderr)
             sys.exit(1)
 
+        # 同步复制到 public/dist-packs 供 Web 端 / DevServer 本地直连测试
+        shutil.copy2(os.path.join(dist_packs_dir, filename), os.path.join(public_packs_dir, filename))
+
         # 更新 packInfo 元数据
         region["packInfo"]["sizeBytes"] = size_bytes
         region["packInfo"]["sha256"] = sha256_hex
+
+        # 检查是否包含风光画册包 (galleryPack)
+        if region.get("packInfo", {}).get("galleryPack"):
+            gallery_dir = os.path.join(project_root, "src", "data", "regions", region_id, "gallery")
+            if os.path.exists(gallery_dir) and any(os.listdir(gallery_dir)):
+                print(f"-> 正在打包地域 [{region_id}] 高清风光画册包...")
+                try:
+                    g_filename, g_size, g_sha256 = build_gallery_pack(
+                        project_root, region, dist_packs_dir
+                    )
+                    shutil.copy2(os.path.join(dist_packs_dir, g_filename), os.path.join(public_packs_dir, g_filename))
+                    region["packInfo"]["galleryPack"]["sizeBytes"] = g_size
+                    region["packInfo"]["galleryPack"]["sha256"] = g_sha256
+                    print(f"   画册包已就绪: {g_filename} ({round(g_size/1024/1024, 2)} MB)")
+                except Exception as g_err:
+                    print(f"[警告] 画册包打包中断: {g_err}", file=sys.stderr)
 
         build_results.append({
             "id": region_id,

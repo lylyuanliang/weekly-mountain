@@ -1044,9 +1044,9 @@
                   </span>
                   <span
                     v-else-if="regionStore.isPackInstalled(reg.id)"
-                    class="px-1.5 py-0.2 text-[9px] font-label-data-sm rounded bg-secondary/15 text-secondary border border-secondary/25 font-semibold"
+                    class="px-1.5 py-0.2 text-[9px] font-label-data-sm rounded bg-primary/15 text-primary border border-primary/25 font-semibold"
                   >
-                    已就绪
+                    {{ regionStore.isGalleryInstalled(reg.id) ? '已就绪 (完整版)' : '已就绪 (基础版)' }}
                   </span>
                   <span
                     v-else
@@ -1110,18 +1110,42 @@
                   <span>{{ getPackProgress(reg.id) }}%</span>
                 </span>
 
-                <!-- 已安装状态：支持安全卸载 -->
-                <button
-                  v-else-if="regionStore.isPackInstalled(reg.id)"
-                  @click="handleUninstallPack(reg)"
-                  class="btn-uninstall-pack px-2.5 py-1 rounded-lg bg-error/10 hover:bg-error/20 border border-error/30 text-error font-label-data-sm text-[11px] font-semibold flex items-center gap-1 active:scale-95 transition-all"
-                  title="卸载离线资源包并释放本地磁盘空间"
-                >
-                  <span class="material-symbols-outlined text-[13px]">delete_sweep</span>
-                  <span>卸载</span>
-                </button>
+                <!-- 已安装状态：支持补全画册 / 释放画册 / 安全卸载 -->
+                <template v-else-if="regionStore.isPackInstalled(reg.id)">
+                  <!-- 增量补全画册按钮 (若为基础版且配置了画册) -->
+                  <button
+                    v-if="!regionStore.isGalleryInstalled(reg.id) && reg.packInfo?.galleryPack"
+                    @click="handleDownloadGallery(reg)"
+                    class="px-2 py-1 rounded-lg bg-secondary/15 hover:bg-secondary/25 border border-secondary/30 text-secondary font-label-data-sm text-[11px] font-semibold flex items-center gap-1 active:scale-95 transition-all"
+                    title="增量补全 36 座名山高清风光画册 (约 15.8MB)"
+                  >
+                    <span class="material-symbols-outlined text-[12px]">add_photo_alternate</span>
+                    <span>+ 补全画册</span>
+                  </button>
 
-                <!-- 未安装状态：支持一键下载 -->
+                  <!-- 释放画册图片按钮 (若为完整版) -->
+                  <button
+                    v-else-if="regionStore.isGalleryInstalled(reg.id)"
+                    @click="handleUninstallGallery(reg)"
+                    class="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-on-surface-variant hover:text-amber-300 font-label-data-sm text-[11px] font-semibold flex items-center gap-1 active:scale-95 transition-all"
+                    title="释放实拍画册图片，保留所有离线路线与轨迹 (节省约 15.8MB 存储)"
+                  >
+                    <span class="material-symbols-outlined text-[12px]">cleaning_services</span>
+                    <span>释放画册</span>
+                  </button>
+
+                  <!-- 卸载离线包按钮 -->
+                  <button
+                    @click="handleUninstallPack(reg)"
+                    class="btn-uninstall-pack px-2 py-1 rounded-lg bg-error/10 hover:bg-error/20 border border-error/30 text-error font-label-data-sm text-[11px] font-semibold flex items-center gap-1 active:scale-95 transition-all"
+                    title="卸载离线资源包并释放本地磁盘空间"
+                  >
+                    <span class="material-symbols-outlined text-[13px]">delete_sweep</span>
+                    <span>卸载</span>
+                  </button>
+                </template>
+
+                <!-- 未安装状态：支持一键弹出多规格选择弹窗 -->
                 <button
                   v-else
                   @click="handleDownloadPack(reg)"
@@ -1555,7 +1579,12 @@
 
     <LegalDisclaimerModal v-model="isDisclaimerModalOpen" :mandatory="false" />
 
-
+    <!-- 离线资源包多规格选择弹窗 -->
+    <PackSpecSelectModal
+      v-model="showProfileSpecModal"
+      :region="pendingDownloadRegion"
+      @confirm="handleConfirmSpec"
+    />
 
   </div>
 
@@ -1580,6 +1609,7 @@ import { resourcePackService } from '@/services/resourcePackService.js';
 import AlpineAchievementPosterModal from '@/components/achievement/AlpineAchievementPosterModal.vue';
 
 import LegalDisclaimerModal from '@/components/common/LegalDisclaimerModal.vue';
+import PackSpecSelectModal from '@/components/common/PackSpecSelectModal.vue';
 
 import { useUpdateStore } from '@/stores/updateStore.js';
 
@@ -2269,15 +2299,49 @@ function getPackProgress(regionId) {
   return regionStore.downloadProgress[regionId] ?? 0;
 }
 
-async function handleDownloadPack(reg) {
+// 规格选择弹窗控制
+const showProfileSpecModal = ref(false);
+const pendingDownloadRegion = ref(null);
+
+function handleDownloadPack(reg) {
   if (isPackDownloading(reg.id)) return;
+  pendingDownloadRegion.value = reg;
+  showProfileSpecModal.value = true;
+}
+
+async function handleConfirmSpec({ withGallery }) {
+  const reg = pendingDownloadRegion.value;
+  if (!reg) return;
   try {
-    showToast(`开始下载【${reg.name}】离线资源包...`);
-    await regionStore.downloadRegionPack(reg.id);
+    const specName = withGallery ? '完整风光包 (含实拍画册)' : '极速基础包';
+    showToast(`开始下载【${reg.name}】${specName}...`);
+    await regionStore.downloadRegionPack(reg.id, { withGallery });
     await loadStorageUsage();
-    showToast(`【${reg.name}】离线资源包已下载就绪！`);
+    showToast(`【${reg.name}】${specName}已下载就绪！`);
   } catch (err) {
     showToast(`下载失败: ${err.message || '网络连接超时'}`);
+  }
+}
+
+async function handleDownloadGallery(reg) {
+  if (isPackDownloading(reg.id)) return;
+  try {
+    showToast(`正在补全【${reg.name}】高清风光画册包 (约 15.8MB)...`);
+    await regionStore.downloadRegionGallery(reg.id);
+    await loadStorageUsage();
+    showToast(`【${reg.name}】高清风光画册已补全就绪！`);
+  } catch (err) {
+    showToast(`画册补全失败: ${err.message || '网络连接超时'}`);
+  }
+}
+
+async function handleUninstallGallery(reg) {
+  try {
+    await regionStore.uninstallRegionGallery(reg.id);
+    await loadStorageUsage();
+    showToast(`已释放【${reg.name}】画册图片（节省存储空间），所有离线路线轨迹完好保留！`);
+  } catch (err) {
+    showToast(`释放画册失败: ${err.message || '操作异常'}`);
   }
 }
 

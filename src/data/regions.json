@@ -20,8 +20,8 @@
     "packInfo": {
       "filename": "pack-chengdu-v1.0.0.zip",
       "version": "1.0.0",
-      "sizeBytes": 453590,
-      "sha256": "21a8114c6225288ba41232825a4b688b24d657c397eb0ca65aaac8be9d384416",
+      "sizeBytes": 453682,
+      "sha256": "edf4ffb02ca30ad307a3fa155146b7bc73f89cdddd67e84c4685f44d0cee6056",
       "isDefaultInstalled": true
     }
   },
@@ -46,9 +46,16 @@
     "packInfo": {
       "filename": "pack-chongqing-v1.0.0.zip",
       "version": "1.0.0",
-      "sizeBytes": 87364,
-      "sha256": "aff164c13337a9990b050f1dddaf5a67873bd268b71b96beb24973fbf19f3fac",
-      "isDefaultInstalled": false
+      "sizeBytes": 89492,
+      "sha256": "75b3c4ac31602b4dd763f5b5302a164f9942572168ba38d9becf551d44b8a823",
+      "isDefaultInstalled": false,
+      "galleryPack": {
+        "filename": "pack-chongqing-gallery-v1.0.0.zip",
+        "version": "1.0.0",
+        "sizeBytes": 7144891,
+        "sha256": "65af43bd9e2e69da3ab2bc408c8d2f32d76076477d075426a288be6ad821c763",
+        "description": "36 座名山精选全景实拍风光画册"
+      }
     }
   },
   {
