@@ -9,7 +9,8 @@
 ### ⚡ 性能调优与架构瘦身 (Performance & Optimization)
 - **安装包物理瘦身**：彻底剥离 base APK 中的 108 张未压缩重庆风景大图与 7.14MB 离线 zip 压缩包，安装包净减负 14.2MB（Release 版 27.7MB / Debug 版 28.9MB），重回轻量化基线；
 - **资源包边界严格隔离**：规范资产目录职责，`assets/mountains/` 仅保留成都周边 51 座山核心底图，重庆等扩展地域画册严格通过独立画册包按需下载；
-- **构建同步脚本加固**：重构 `sync_android_assets.js` 与 `copy_assets.js`，增加路径过滤器与历史扩展文件物理清理，杜绝离线包打包进入 Android 原生工程。
+- **构建同步脚本加固**：重构 `sync_android_assets.js` 与 `copy_assets.js`，增加路径过滤器与历史扩展文件物理清理，杜绝离线包打包进入 Android 原生工程；
+- **Release 资产挂载与多通道下载**：升级 GitHub Actions 流水线，在 Release 附件中自动挂载 `dist-packs/*.zip` 与 SHA-256 清单，客户端注入版本元数据并打通镜像下载通道。
 
 ---
 

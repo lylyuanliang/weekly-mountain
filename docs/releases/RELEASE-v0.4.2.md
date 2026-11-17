@@ -3,8 +3,8 @@ title: "v0.4.2"
 changelog:
   - "【安装包极致瘦身】根除安装包冗余资源污染，APK 净减负 14.2MB（Release 27.7MB / Debug 28.9MB），重回极致轻量；"
   - "【架构边界隔离】严格遵循资源包正交设计，重庆 108 张精修画册彻底移出 base assets，仅由独立画册包按需下载；"
-  - "【构建流水线加固】升级 sync_android_assets 与 copy_assets 脚本，物理阻断 dist-packs 与扩展图片打入 Android 资产；"
-  - "【版本校验】同步更新 SHA-256 完整性清单与应用内版本元数据。"
+  - "【构建流水线加固】升级 CI 与 assets 同步脚本，在 Release 页面自动完整挂载多地域离线资源包（dist-packs/*.zip）并计算 SHA-256；"
+  - "【版本校验与下载链路】注入应用内版本全局元数据，打通高速镜像与多通道离线包下载链路。"
 RELEASE_METADATA_END -->
 
 > [!WARNING]
@@ -45,4 +45,6 @@ RELEASE_METADATA_END -->
 - **同步脚本重构**：更新 [scripts/sync_android_assets.js](file:///d:/file_save/workspace/github/weekly-mountain/scripts/sync_android_assets.js)，物理隔离 `dist-packs`；
 - **图片同步精简**：优化 [scripts/copy_assets.js](file:///d:/file_save/workspace/github/weekly-mountain/scripts/copy_assets.js)，增加目标目录陈旧图片清理；
 - **数据源生成脚本修正**：优化 [scripts/enrich_chongqing_mountains.py](file:///d:/file_save/workspace/github/weekly-mountain/scripts/enrich_chongqing_mountains.py)，仅写入离线画册目录；
-- **基线资产精简**：从 `assets/mountains/` 物理删除 108 张重庆未压缩 JPG。
+- **基线资产精简**：从 `assets/mountains/` 物理删除 108 张重庆未压缩 JPG；
+- **CI 流水线加固**：更新 [.github/workflows/build-apk.yml](file:///d:/file_save/workspace/github/weekly-mountain/.github/workflows/build-apk.yml)，在 Release 附件中自动挂载 `dist-packs/*.zip` 与 SHA-256 校验列表；
+- **客户端版本注入与下载链路**：在 [src/main.js](file:///d:/file_save/workspace/github/weekly-mountain/src/main.js) 与 [src/services/resourcePackService.js](file:///d:/file_save/workspace/github/weekly-mountain/src/services/resourcePackService.js) 注入全局版本元数据并完善多候选下载通道。

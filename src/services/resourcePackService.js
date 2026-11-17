@@ -390,6 +390,8 @@ export class ResourcePackService {
       configuredApiBase ? `${configuredApiBase}/dist-packs/${filename}` : null,
       currentTag ? `${ACCELERATOR_PREFIX}https://github.com/${GITHUB_REPO}/releases/download/${currentTag}/${filename}` : null,
       currentTag ? `https://github.com/${GITHUB_REPO}/releases/download/${currentTag}/${filename}` : null,
+      `${ACCELERATOR_PREFIX}https://github.com/${GITHUB_REPO}/releases/download/v0.4.2-preview.1/${filename}`,
+      `https://github.com/${GITHUB_REPO}/releases/download/v0.4.2-preview.1/${filename}`,
       `${ACCELERATOR_PREFIX}https://github.com/${GITHUB_REPO}/releases/latest/download/${filename}`,
       `https://github.com/${GITHUB_REPO}/releases/latest/download/${filename}`,
       `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@main/public/dist-packs/${filename}`,
