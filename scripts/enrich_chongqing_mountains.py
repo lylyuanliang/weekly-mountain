@@ -224,11 +224,10 @@ def main():
         ]
         m["gallery"] = gallery
 
-        # 3. 生成/落地对应 3 张图片文件
+        # 3. 生成/落地对应 3 张图片文件（仅存入离线画册目录，严禁写入基础 assets，确保 APK 体积轻量）
         for p_idx, suff in enumerate(["", "-2", "-3"]):
             fname = f"{mid}{suff}.jpg"
             dest_gallery = os.path.join(gallery_dir, fname)
-            dest_assets = os.path.join(assets_dir, fname)
 
             photo_source = None
             if cached_photos:
@@ -240,11 +239,8 @@ def main():
                     content = rf.read()
                 with open(dest_gallery, "wb") as wf:
                     wf.write(content)
-                with open(dest_assets, "wb") as wf:
-                    wf.write(content)
             else:
                 generate_fallback_image(dest_gallery, mname, p_idx, alt)
-                generate_fallback_image(dest_assets, mname, p_idx, alt)
 
             total_images += 1
 

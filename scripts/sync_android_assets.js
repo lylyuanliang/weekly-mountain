@@ -25,6 +25,11 @@ function copyDirRecursive(src, dest) {
   const entries = fs.readdirSync(src, { withFileTypes: true });
 
   for (const entry of entries) {
+    // 关键优化：离线资源包 (dist-packs) 属于用户按需下载内容，严禁直接打包进 Android 安装包
+    if (entry.isDirectory() && entry.name === 'dist-packs') {
+      continue;
+    }
+
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
 
@@ -36,7 +41,13 @@ function copyDirRecursive(src, dest) {
   }
 }
 
-// 3. Clean stale js/css chunks from android/app/src/main/assets/public/assets before copying
+// 3. Clean stale js/css chunks and redundant dist-packs from android/app/src/main/assets/public before copying
+const androidDistPacksDir = path.resolve(androidPublicDir, 'dist-packs');
+if (fs.existsSync(androidDistPacksDir)) {
+  fs.rmSync(androidDistPacksDir, { recursive: true, force: true });
+  console.log(`[sync_android_assets] Cleaned redundant dist-packs from android assets!`);
+}
+
 const androidAssetsSubdir = path.resolve(androidPublicDir, 'assets');
 if (fs.existsSync(androidAssetsSubdir)) {
   const staleEntries = fs.readdirSync(androidAssetsSubdir);

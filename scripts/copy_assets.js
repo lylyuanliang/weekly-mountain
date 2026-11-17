@@ -16,11 +16,19 @@ if (!fs.existsSync(sourceDir)) {
   process.exit(1);
 }
 
+const files = fs.readdirSync(sourceDir);
+const fileSet = new Set(files);
+
 for (const targetDir of targetDirs) {
   fs.mkdirSync(targetDir, { recursive: true });
+  // 清理目标目录中已不在源码目录中的陈旧图片（如外部扩展地域图片）
+  const existingFiles = fs.readdirSync(targetDir);
+  for (const ef of existingFiles) {
+    if (!fileSet.has(ef) && (ef.endsWith('.jpg') || ef.endsWith('.png') || ef.endsWith('.webp'))) {
+      fs.unlinkSync(path.join(targetDir, ef));
+    }
+  }
 }
-
-const files = fs.readdirSync(sourceDir);
 let copiedCount = 0;
 let totalBytes = 0;
 

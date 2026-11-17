@@ -1,15 +1,15 @@
 {
-  "version": "0.4.1.202611161927",
-  "versionTag": "v0.4.1.202611161927",
-  "title": "v0.4.1.202611161927",
-  "publishedAt": "2026-11-16",
-  "changelog": "1. 【分级资源包】新增基础包与高清画册包规格选择弹窗（PackSpecSelectModal），提供体积对比与按需下载指导；\n2. 【离线高清画册】补齐重庆 36 座高山全量坐标与 108 张精修实拍风景画册，支持离线解压与动态本地缓存映射；\n3. 【三级高可用气象】重构高山实时天气系统，支持 Open-Meteo、wttr.in 极速降级与垂直递减率科学离线气象推演模型；\n4. 【地域选择精简】优化 RegionPickerSheet 界面，规划中城市重构为紧凑网格排版，视觉降噪 70%；\n5. 【自愈闭环】彻底解决离线画册加载失败、卸载残留及天气 Fetch 报错，优化端侧哨兵换行排版与自愈体验。",
+  "version": "0.4.2.202611170944",
+  "versionTag": "v0.4.2.202611170944",
+  "title": "v0.4.2.202611170944",
+  "publishedAt": "2026-11-17",
+  "changelog": "1. 【安装包极致瘦身】根除安装包冗余资源污染，APK 净减负 14.2MB（Release 27.7MB / Debug 28.9MB），重回极致轻量；\n2. 【架构边界隔离】严格遵循资源包正交设计，重庆 108 张精修画册彻底移出 base assets，仅由独立画册包按需下载；\n3. 【构建流水线加固】升级 sync_android_assets 与 copy_assets 脚本，物理阻断 dist-packs 与扩展图片打入 Android 资产；\n4. 【版本校验】同步更新 SHA-256 完整性清单与应用内版本元数据。",
   "disclaimer": "历史版本仅为技术研发存档记录，不反映当前自然地理与风险认知，严禁作为出行依据；请始终以包含最新风险警示的当前版本为准。",
-  "assetName": "weekly-mountain-v0.4.1.202611161927-release.apk",
+  "assetName": "weekly-mountain-v0.4.2.202611170944-release.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.1.202611161927/weekly-mountain-v0.4.1.202611161927-release.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.1.202611161927/weekly-mountain-v0.4.1.202611161927-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.1.202611161927/weekly-mountain-v0.4.1.202611161927-release.apk",
-  "releaseSha256": "d8db11f0f80d1aac81b2e51b43172fbd98de122f99e633d80b06e7b905ce4cc5",
-  "debugSha256": "1416b546c857ffb597a13ccd55c029a6edeff09961ab951e8f661018304e7c63"
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.2.202611170944/weekly-mountain-v0.4.2.202611170944-release.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.2.202611170944/weekly-mountain-v0.4.2.202611170944-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.2.202611170944/weekly-mountain-v0.4.2.202611170944-release.apk",
+  "releaseSha256": "990f76a54c9b7c9479b62c715bf7f7d9c541a2b439a91bdaa7b5bbfaf8704a9f",
+  "debugSha256": "585137783916b5c5ad32374d645833b0bc57c43b85112d0dd17e9be5c76696a5"
 }

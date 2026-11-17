@@ -53,9 +53,10 @@
 3. **Python 合规与构建测试**:
    - `python tests/test_region_datasets.py`: 5/5 全部通过；
    - `python tests/test_region_pack_builder.py`: 5/5 全部通过；
-4. **前端构建与本地 APK 打包**:
-   - `npm run build`: 构建成功，261 个静态资源（27.09 MB）同步至 Android assets；
+4. **前端构建与本地 APK 打包 (v0.4.2 瘦身优化版)**:
+   - `npm run build`: 构建成功，153 个基线静态资源（20.22 MB）同步至 Android assets；
+   - `python scripts/sync_android_assets.js`: 成功拦截并过滤 `dist-packs`，杜绝离线包打包进入 APK；
    - `python scripts/build_local_apks.py`: 顺利完成 Release 版与 Debug 版编译归档：
-     - Release: `weekly-mountain-v0.4.1.202611161927-release.apk` (41.96 MB, SHA-256: `d8db11f0f80d1aac81b2e51b43172fbd98de122f99e633d80b06e7b905ce4cc5`)
-     - Debug: `weekly-mountain-v0.4.1.202611161927-debug.apk` (43.15 MB, SHA-256: `1416b546c857ffb597a13ccd55c029a6edeff09961ab951e8f661018304e7c63`)
+     - Release: `weekly-mountain-v0.4.2.202611170944-release.apk` (27.74 MB, SHA-256: `990f76a54c9b7c9479b62c715bf7f7d9c541a2b439a91bdaa7b5bbfaf8704a9f`)
+     - Debug: `weekly-mountain-v0.4.2.202611170944-debug.apk` (28.93 MB, SHA-256: `585137783916b5c5ad32374d645833b0bc57c43b85112d0dd17e9be5c76696a5`)
 5. **合规红线扫描**: 0 处违规受限词，0 处凭据泄露。
