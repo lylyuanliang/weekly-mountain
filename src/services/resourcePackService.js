@@ -377,15 +377,24 @@ export class ResourcePackService {
       }
     } catch (_) {}
 
+    let currentTag = '';
+    try {
+      if (typeof window !== 'undefined' && window.__ALPINE_VERSION__?.versionTag) {
+        currentTag = window.__ALPINE_VERSION__.versionTag;
+      }
+    } catch (_) {}
+
     const candidateUrls = [
       typeof window !== 'undefined' ? `./dist-packs/${filename}` : null,
       typeof window !== 'undefined' ? `/dist-packs/${filename}` : null,
       configuredApiBase ? `${configuredApiBase}/dist-packs/${filename}` : null,
+      currentTag ? `${ACCELERATOR_PREFIX}https://github.com/${GITHUB_REPO}/releases/download/${currentTag}/${filename}` : null,
+      currentTag ? `https://github.com/${GITHUB_REPO}/releases/download/${currentTag}/${filename}` : null,
+      `${ACCELERATOR_PREFIX}https://github.com/${GITHUB_REPO}/releases/latest/download/${filename}`,
+      `https://github.com/${GITHUB_REPO}/releases/latest/download/${filename}`,
       `https://cdn.jsdelivr.net/gh/${GITHUB_REPO}@main/public/dist-packs/${filename}`,
       `${ACCELERATOR_PREFIX}https://raw.githubusercontent.com/${GITHUB_REPO}/main/public/dist-packs/${filename}`,
-      `https://raw.githubusercontent.com/${GITHUB_REPO}/main/public/dist-packs/${filename}`,
-      `${ACCELERATOR_PREFIX}https://github.com/${GITHUB_REPO}/releases/download/packs/${filename}`,
-      `https://github.com/${GITHUB_REPO}/releases/download/packs/${filename}`
+      `https://raw.githubusercontent.com/${GITHUB_REPO}/main/public/dist-packs/${filename}`
     ].filter(Boolean);
 
     let lastError = null;

@@ -235,15 +235,15 @@ jobs:
           ls -lh "weekly-mountain-${{ env.TAG }}-debug.apk"
 
       # =========================================================================
-      # 阶段 3：计算安装包 SHA-256 完整性散列值与防篡改指纹
+      # 阶段 3：计算安装包与资源包 SHA-256 完整性散列值与防篡改指纹
       # =========================================================================
-      - name: Compute APK SHA-256 Checksums
+      - name: Compute APK & Pack SHA-256 Checksums
         id: compute_checksums
         run: |
-          echo "=== Computing SHA-256 Checksums for Generated APKs ==="
+          echo "=== Computing SHA-256 Checksums for Generated APKs & Packs ==="
           RELEASE_APK="weekly-mountain-${{ env.TAG }}-release.apk"
           DEBUG_APK="weekly-mountain-${{ env.TAG }}-debug.apk"
-          sha256sum "$RELEASE_APK" "$DEBUG_APK" > SHA256SUMS.txt
+          sha256sum "$RELEASE_APK" "$DEBUG_APK" dist-packs/*.zip > SHA256SUMS.txt
           cat SHA256SUMS.txt
 
           RELEASE_SHA256=$(sha256sum "$RELEASE_APK" | awk '{print $1}')
@@ -298,12 +298,15 @@ jobs:
             '',
             '---',
             '',
-            '### 📦 安装包下载指引',
+            '### 📦 安装包与离线资源包下载指引',
             '',
-            '| 构建版本 | APK 文件名 | 文件大小 | 适用场景说明 |',
+            '| 构建版本 / 资源包 | 文件名 | 文件大小 | 适用场景说明 |',
             '| :--- | :--- | :--- | :--- |',
             `| 🚀 **正式发布版 (Release)** | \`${releaseApk}\` | \`${releaseSize}\` | **推荐日常使用**：采用 Zero-DCE 纯净精简构建，已剔除调试悬浮球与哨兵诊断模块，启动飞快、性能最优。 |`,
             `| 🛠️ **内测调试版 (Debug)** | \`${debugApk}\` | \`${debugSize}\` | **公测与体验排障**：集成移动端真机反馈悬浮球、端侧切片录屏与实时诊断功能，供开发者与先锋测试员使用。 |`,
+            `| 🏔️ **成都基础资源包** | \`pack-chengdu-v1.0.0.zip\` | \`443 KB\` | 成都周边 51 座名山基础离线数据集（基线已内置，支持重新恢复）。 |`,
+            `| 🏔️ **重庆基础资源包** | \`pack-chongqing-v1.0.0.zip\` | \`87 KB\` | 重庆周边 36 座名山基础离线数据集（含坐标、海拔、路线及轨迹）。 |`,
+            `| 📸 **重庆高清风光画册包** | \`pack-chongqing-gallery-v1.0.0.zip\` | \`6.8 MB\` | 重庆周边 36 座名山 108 张精修实拍风景画册，支持离线实拍图集展示。 |`,
             '',
             '---',
             '',
@@ -319,6 +322,7 @@ jobs:
             '',
             '### 🌐 多端体验与访问',
             '- 📱 **Android 原生端**：请在下方 **Assets** 附件列表中选择适合的版本直接下载安装。',
+            '- 📸 **离线画册与数据包**：亦可在下方 **Assets** 中直接下载对应 zip 包，或在 App 内选择地域由系统按需下载。',
             '- 🌏 **Web 沉浸体验**：[https://weekly-mountain.pages.dev/](https://weekly-mountain.pages.dev/)',
             '',
             '> 💡 *小提示：若系统弹出“未知来源应用安装”，请在手机系统权限设置中选择“允许来自此来源的应用安装”即可畅享高山探索。*',
@@ -345,9 +349,10 @@ jobs:
             weekly-mountain-${{ env.TAG }}-release.apk
             weekly-mountain-${{ env.TAG }}-debug.apk
             SHA256SUMS.txt
+            dist-packs/*.zip
           generate_release_notes: true
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(env.TAG, '-') }}
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Purge jsDelivr CDN Cache

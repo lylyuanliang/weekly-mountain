@@ -117,12 +117,20 @@ def main():
     print(f"[✓] 已归档调试版至根目录: {canonical_debug_apk}")
 
     # =========================================================================
-    # 阶段 3：输出 SHA256SUMS.txt
+    # 阶段 3：输出 SHA256SUMS.txt (包含 APK 与多地域离线资源包)
     # =========================================================================
     sums_file = os.path.join(PROJECT_ROOT, "SHA256SUMS.txt")
     with open(sums_file, "w", encoding="utf-8") as f:
         f.write(f"{release_sha256}  weekly-mountain-{tag}-release.apk\n")
         f.write(f"{debug_sha256}  weekly-mountain-{tag}-debug.apk\n")
+        dist_packs_dir = os.path.join(PROJECT_ROOT, "dist-packs")
+        if os.path.exists(dist_packs_dir):
+            for zf in sorted(os.listdir(dist_packs_dir)):
+                if zf.endswith(".zip"):
+                    zpath = os.path.join(dist_packs_dir, zf)
+                    with open(zpath, "rb") as rf:
+                        z_sha = hashlib.sha256(rf.read()).hexdigest()
+                    f.write(f"{z_sha}  {zf}\n")
     print(f"\n[✓] 已生成哈希防篡改清单: {sums_file}")
 
     print("\n" + "=" * 65)
