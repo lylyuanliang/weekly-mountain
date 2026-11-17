@@ -56,17 +56,18 @@
    - `node tests/test_resource_pack_service.js`（11/11 通过）；
    - `node tests/test_store_multi_region.js`（6/6 通过）。
 
-2. **GitHub Actions 临时流水线核验 (Run ID 44000290228)**：
-   - 触发 Tag：`v0.4.2-preview.1`
-   - 流水线状态：`completed` / `conclusion: success`
-   - Release 资产列表（共 6 个附件全部挂载就绪）：
+2. **GitHub Actions 官方正式发版核验 (Run ID 44002920505)**：
+   - 触发 Tag：`v0.4.2.202611170944`
+   - 流水线状态：`completed` / `conclusion: success`（耗时约 4 分钟）
+   - Release 官方资产列表（共 6 个附件全量就绪，prerelease: false）：
      - `pack-chengdu-v1.0.0.zip` (0.43 MB)
      - `pack-chongqing-gallery-v1.0.0.zip` (6.81 MB)
      - `pack-chongqing-v1.0.0.zip` (0.09 MB)
      - `SHA256SUMS.txt` (0.00 MB)
-     - `weekly-mountain-v0.4.2-preview.1-debug.apk` (28.93 MB)
-     - `weekly-mountain-v0.4.2-preview.1-release.apk` (27.74 MB)
+     - `weekly-mountain-v0.4.2.202611170944-debug.apk` (28.93 MB, SHA-256: `0a8b81f7...`)
+     - `weekly-mountain-v0.4.2.202611170944-release.apk` (27.74 MB, SHA-256: `9501444d...`)
 
 3. **离线包下载直链实测校验**：
-   - `curl -I -L "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.2-preview.1/pack-chongqing-gallery-v1.0.0.zip"`
-   - 响应状态：`HTTP/1.1 302 Found` ➔ `HTTP/1.1 200 OK`，下载直链完全通畅。
+   - `curl -I -L "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.2.202611170944/pack-chongqing-gallery-v1.0.0.zip"`
+   - `curl -I -L "https://github.com/lylyuanliang/weekly-mountain/releases/latest/download/pack-chongqing-gallery-v1.0.0.zip"`
+   - 响应状态均返回 `HTTP/1.1 200 OK`，下载直链完全通畅。

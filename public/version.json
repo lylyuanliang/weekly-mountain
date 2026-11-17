@@ -10,6 +10,6 @@
   "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.2.202611170944/weekly-mountain-v0.4.2.202611170944-release.apk",
   "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.2.202611170944/weekly-mountain-v0.4.2.202611170944-debug.apk",
   "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.2.202611170944/weekly-mountain-v0.4.2.202611170944-release.apk",
-  "releaseSha256": "990f76a54c9b7c9479b62c715bf7f7d9c541a2b439a91bdaa7b5bbfaf8704a9f",
-  "debugSha256": "585137783916b5c5ad32374d645833b0bc57c43b85112d0dd17e9be5c76696a5"
+  "releaseSha256": "9501444d2f438172872250314187797322a969e06e5b64fe785340742e0948a2",
+  "debugSha256": "0a8b81f730d01f57a19686457cca74adb8b0457675da6fe158e8b51c060b5ff8"
 }
