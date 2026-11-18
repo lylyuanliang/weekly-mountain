@@ -62,6 +62,25 @@ if (fs.existsSync(androidAssetsSubdir)) {
 console.log(`[sync_android_assets] Copying ${distDir} -> ${androidPublicDir}`);
 copyDirRecursive(distDir, androidPublicDir);
 
+// 4.1 关键边界隔离：从 Android 原生资产中物理剥离非成都基线的扩展画册图片（安装包保持轻量，画册按需下载）
+const baselineDir = path.resolve(rootDir, 'assets/mountains');
+const baselineFiles = new Set(fs.existsSync(baselineDir) ? fs.readdirSync(baselineDir) : []);
+const targetMountainsDir = path.resolve(androidPublicDir, 'assets/mountains');
+
+if (fs.existsSync(targetMountainsDir) && baselineFiles.size > 0) {
+  const currentAndroidFiles = fs.readdirSync(targetMountainsDir);
+  let cleanedCount = 0;
+  for (const af of currentAndroidFiles) {
+    if (!baselineFiles.has(af) && /\.(jpg|jpeg|png|webp)$/i.test(af)) {
+      fs.unlinkSync(path.join(targetMountainsDir, af));
+      cleanedCount++;
+    }
+  }
+  if (cleanedCount > 0) {
+    console.log(`[sync_android_assets] 从 Android assets 中物理剥离 ${cleanedCount} 张扩展画册，安装包仅保留成都基线底图！`);
+  }
+}
+
 // 4. Ensure capacitor.config.json exists in android/app/src/main/assets
 const rootCapConfig = path.resolve(rootDir, 'capacitor.config.json');
 const androidCapConfig = path.resolve(androidAssetsDir, 'capacitor.config.json');
@@ -92,8 +111,7 @@ if (!fs.existsSync(targetIndexHtml) || fs.statSync(targetIndexHtml).size < 100) 
   process.exit(1);
 }
 
-const targetMountainsDir = path.resolve(androidPublicDir, 'assets/mountains');
-if (!fs.existsSync(targetMountainsDir)) {
+if (!fs.existsSync(targetMountainsDir) || fs.statSync(targetIndexHtml).size < 100) {
   console.error(`[sync_android_assets] FATAL: target assets/mountains missing!`);
   process.exit(1);
 }

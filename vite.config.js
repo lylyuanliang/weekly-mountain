@@ -23,6 +23,51 @@ function viteApkReleasePlugin() {
   return {
     name: 'vite-plugin-alpine-apk-release',
     configureServer(server) {
+      // 0. 山峰画册图片多地域自适应中间件 (GET /assets/mountains/*)
+      server.middlewares.use('/assets/mountains', (req, res, next) => {
+        setCorsHeaders(req, res)
+        if (req.method === 'OPTIONS') {
+          res.writeHead(204)
+          res.end()
+          return
+        }
+
+        const rawUrl = req.url || ''
+        const filename = path.basename(rawUrl.split('?')[0])
+        if (!filename) return next()
+
+        // 优先检查根目录基线 assets/mountains/
+        const rootPath = path.resolve(__dirname, 'assets/mountains', filename)
+        if (fs.existsSync(rootPath)) {
+          const ext = path.extname(filename).toLowerCase()
+          const mime = ext === '.png' ? 'image/png' : ext === '.webp' ? 'image/webp' : 'image/jpeg'
+          res.writeHead(200, {
+            'Content-Type': mime,
+            'Cache-Control': 'public, max-age=3600'
+          })
+          return fs.createReadStream(rootPath).pipe(res)
+        }
+
+        // 检查各扩展地域画册目录 src/data/regions/*/gallery/
+        const regionsDir = path.resolve(__dirname, 'src/data/regions')
+        if (fs.existsSync(regionsDir)) {
+          const regionEntries = fs.readdirSync(regionsDir)
+          for (const r of regionEntries) {
+            const galleryPath = path.join(regionsDir, r, 'gallery', filename)
+            if (fs.existsSync(galleryPath)) {
+              const ext = path.extname(filename).toLowerCase()
+              const mime = ext === '.png' ? 'image/png' : ext === '.webp' ? 'image/webp' : 'image/jpeg'
+              res.writeHead(200, {
+                'Content-Type': mime,
+                'Cache-Control': 'public, max-age=3600'
+              })
+              return fs.createReadStream(galleryPath).pipe(res)
+            }
+          }
+        }
+        next()
+      })
+
       // 1. APK 静态安装包流式下载与断点续传服务 (GET /releases/*)
       server.middlewares.use('/releases', (req, res, next) => {
         setCorsHeaders(req, res)

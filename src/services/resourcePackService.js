@@ -457,14 +457,25 @@ export class ResourcePackService {
           });
         } catch (_) {}
       } else {
-        const textContent = await entry.async('string');
-        await this._filesystem.writeFile({
-          path: targetPath,
-          data: textContent,
-          directory: Directory.Data,
-          encoding: Encoding.UTF8,
-          recursive: true
-        });
+        const isBinary = /\.(jpg|jpeg|png|webp|bin|zip)$/i.test(relName);
+        if (isBinary) {
+          const base64Data = await entry.async('base64');
+          await this._filesystem.writeFile({
+            path: targetPath,
+            data: base64Data,
+            directory: Directory.Data,
+            recursive: true
+          });
+        } else {
+          const textContent = await entry.async('string');
+          await this._filesystem.writeFile({
+            path: targetPath,
+            data: textContent,
+            directory: Directory.Data,
+            encoding: Encoding.UTF8,
+            recursive: true
+          });
+        }
       }
 
       completedCount++;
@@ -569,11 +580,8 @@ export class ResourcePackService {
     try {
       arrayBuffer = await this._downloadZipArrayBuffer(galleryFilename, regionId);
     } catch (err) {
-      // 若画册包尚未上传至远端，降级为就地初始化占位目录，严禁阻塞核心使用
-      console.warn(`[ResourcePack] 画册包下载未就绪，使用轻量模式:`, err);
-      this._setStorageItem(`${PACK_GALLERY_STORAGE_PREFIX}${regionId}`, 'true');
-      if (typeof onProgress === 'function') onProgress(100);
-      return;
+      console.warn(`[ResourcePack] 画册包下载失败:`, err);
+      throw new Error(`画册包下载失败: ${err?.message || '网络连接超时'}`);
     }
 
     if (typeof onProgress === 'function') onProgress(40);

@@ -482,8 +482,11 @@ const mountainPositions = computed(() => {
 
   const left = cx - containerWidth.value / 2;
   const top = cy - containerHeight.value / 2;
+  const curRegId = regionStore.currentRegionId;
 
-  return mountainStore.mountains.map((m) => {
+  return mountainStore.mountains
+    .filter((m) => !m.region_id || m.region_id === curRegId)
+    .map((m) => {
     const coord = mountainCoordinates.value[m.id] || {
       lat: 30.65,
       lng: 103.35,
@@ -879,6 +882,10 @@ watch(
   () => mountainStore.selectedMountainId,
   (newId) => {
     if (!newId) return;
+    const m = mountainStore.getMountainById(newId);
+    if (m && m.region_id && m.region_id !== regionStore.currentRegionId) {
+      return;
+    }
     panToMountain(newId);
   }
 );
@@ -943,14 +950,24 @@ onMounted(() => {
   updateDimensions();
   window.addEventListener('resize', updateDimensions);
 
-  // Initial center on the default selected mountain (Longquanshan)
+  // 只有当初始选中山峰归属于当前地域时，才优先聚焦该名山；否则保持居中当前地域默认中心
   const defaultId = mountainStore.selectedMountainId;
-  if (defaultId && mountainCoordinates.value[defaultId]) {
+  const m = defaultId ? mountainStore.getMountainById(defaultId) : null;
+  const isCurrentRegion = m && (!m.region_id || m.region_id === regionStore.currentRegionId);
+
+  if (isCurrentRegion && defaultId && mountainCoordinates.value[defaultId]) {
     const c = mountainCoordinates.value[defaultId];
     currentCenterLng.value = c.lng;
     const z = mapZoom.value;
     const offsetY = getVisibleSkyOffsetY();
     currentCenterLat.value = yToLat(latToY(c.lat, z) + offsetY, z);
+  } else {
+    const r = regionStore.currentRegion;
+    if (r?.center) {
+      currentCenterLng.value = r.center.lng;
+      currentCenterLat.value = r.center.lat;
+      mapZoom.value = r.defaultZoom || 9;
+    }
   }
 });
 

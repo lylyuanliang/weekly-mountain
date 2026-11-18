@@ -34,7 +34,7 @@
           <span class="w-2.5 h-2.5 rounded-full bg-primary glow-primary shadow-[0_0_6px_#4edea3] flex-shrink-0"></span>
           <div class="flex items-baseline gap-1.5 overflow-hidden">
             <span class="text-on-surface text-body-sm font-bold truncate">
-              {{ isSearchActive ? `搜索结果: 匹配 ${mountainStore.filteredMountains.length} 座` : (activeMountainName || `全景探索 ${mountainStore.filteredMountains.length} 座山峰`) }}
+              {{ isSearchActive ? `搜索结果: 匹配 ${mountainStore.filteredMountains.length} 座` : (activeMountainName || `全景探索 ${displayPeaksCount} 座山峰`) }}
             </span>
             <span class="text-[11px] text-on-surface-variant font-normal hidden xs:inline truncate">
               轻触或上滑查看卡片
@@ -69,7 +69,7 @@
           <div v-else class="flex items-baseline gap-2 min-w-0 flex-shrink-0 whitespace-nowrap">
             <h2 class="text-headline-md font-headline-md text-on-surface font-bold tracking-tight whitespace-nowrap">Active Peaks</h2>
             <span class="text-label-data-sm font-label-data-sm text-primary font-semibold px-2 py-0.5 rounded-md bg-primary/10 whitespace-nowrap">
-              {{ mountainStore.filteredMountains.length }} TRACKS
+              {{ displayPeaksCount }} TRACKS
             </span>
           </div>
 
@@ -145,7 +145,12 @@
             >
               <span class="material-symbols-outlined text-tertiary-fixed-dim text-[18px] flex-shrink-0">warning</span>
               <p class="text-caption font-caption text-on-surface-variant truncate">
-                <strong class="text-on-surface font-semibold">Balang Pass:</strong> 实时路况 · 巴朗山及 3800m+ 积雪路段需防滑链
+                <template v-if="regionStore.currentRegionId === 'chongqing'">
+                  <strong class="text-on-surface font-semibold">Jinfo Pass:</strong> 实时路况 · 金佛山及三峡之巅步道多台阶湿滑请备登山杖
+                </template>
+                <template v-else>
+                  <strong class="text-on-surface font-semibold">Balang Pass:</strong> 实时路况 · 巴朗山及 3800m+ 积雪路段需防滑链
+                </template>
               </p>
             </div>
 
@@ -228,16 +233,28 @@
 <script setup>
 import { ref, computed, watch, nextTick, onUnmounted } from 'vue';
 import { useMountainStore } from '@/stores/mountainStore.js';
+import { useRegionStore } from '@/stores/regionStore.js';
 import HeroMountainCard from '@/components/card/HeroMountainCard.vue';
 import CompactMountainCard from '@/components/card/CompactMountainCard.vue';
 
 const emit = defineEmits(['mountain-select', 'mountain-detail', 'mountain-weather', 'snap-change']);
 
 const mountainStore = useMountainStore();
+const regionStore = useRegionStore();
 const carouselRef = ref(null);
 const carouselContainerRef = ref(null);
 const compactListRef = ref(null);
 const sheetContainerRef = ref(null);
+
+const displayPeaksCount = computed(() => {
+  if (mountainStore.filteredMountains.length > 0) {
+    return mountainStore.filteredMountains.length;
+  }
+  if (mountainStore.isLoading) {
+    return regionStore.currentRegion?.mountainsCount || 0;
+  }
+  return 0;
+});
 
 // Snap states: 'collapsed' (66px) <-> 'half' (clamp 180px~364px) <-> 'expanded' (calc(100vh - 72px))
 const snapState = ref('half');

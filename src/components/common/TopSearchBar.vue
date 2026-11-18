@@ -243,7 +243,12 @@ const matchingSuggestions = computed(() => {
 
 const currentRegionMountainsCount = computed(() => {
   const regId = regionStore.currentRegionId;
-  return mountainStore.mountains.filter((m) => !m.region_id || m.region_id === regId).length;
+  const count = mountainStore.mountains.filter((m) => !m.region_id || m.region_id === regId).length;
+  // 若当前正在异步加载且计数暂为 0，优先回退展示 region 配置中的收录数量，防止瞬间闪烁 0
+  if (count === 0 && (mountainStore.isLoading || mountainStore.mountains.length === 0)) {
+    return regionStore.currentRegion?.mountainsCount || 0;
+  }
+  return count;
 });
 
 const isAllActive = computed(() => {

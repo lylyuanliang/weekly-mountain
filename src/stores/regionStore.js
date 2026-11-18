@@ -63,6 +63,14 @@ export const useRegionStore = defineStore('region', () => {
       if (resourcePackService.isNativePlatform() && currentRegionId.value !== 'chengdu' && !installedPacks.value.includes(currentRegionId.value)) {
         console.warn(`[regionStore] 当前地域 [${currentRegionId.value}] 离线包已被卸载/未就绪，自动重置回退至默认成都`);
         await setRegion('chengdu');
+      } else {
+        // 确保已挂载的山峰数据与当前生效的地域严格一致
+        try {
+          const mountainStore = useMountainStore();
+          if (mountainStore.mountains.length === 0 || (mountainStore.mountains[0]?.region_id && mountainStore.mountains[0].region_id !== currentRegionId.value)) {
+            await mountainStore.loadActiveRegion(currentRegionId.value);
+          }
+        } catch (_) {}
       }
 
       return installedPacks.value;

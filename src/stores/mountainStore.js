@@ -138,12 +138,21 @@ const defaultFilters = () => ({
 });
 
 export const useMountainStore = defineStore('mountain', () => {
-  const mountains = ref(mountainsData);
+  const initialRegionId =
+    typeof window !== 'undefined' && window.localStorage
+      ? window.localStorage.getItem('weekly_mountain_region') || 'chengdu'
+      : typeof globalThis !== 'undefined' && globalThis.localStorage
+        ? globalThis.localStorage.getItem('weekly_mountain_region') || 'chengdu'
+        : 'chengdu';
+
+  // 初始状态优化：若记录为默认成都，同步直接挂载成都名山；若为扩展地域，初始化为空集合并立即触发异步热挂载
+  const isDefaultChengdu = initialRegionId === 'chengdu';
+  const mountains = ref(isDefaultChengdu ? mountainsData : []);
   const waypoints = ref(waypointsData);
-  const isLoading = ref(false);
+  const isLoading = ref(!isDefaultChengdu);
   const searchQuery = ref('');
   const activeFilters = ref(defaultFilters());
-  const selectedMountainId = ref(mountainsData[0]?.id || null);
+  const selectedMountainId = ref(isDefaultChengdu ? (mountainsData[0]?.id || null) : null);
 
   const selectedMountain = computed(() => {
     const regionStore = useRegionStore();
@@ -173,8 +182,7 @@ export const useMountainStore = defineStore('mountain', () => {
 
     mountains.value.forEach((m) => {
       if (m.region_id && curRegionId && m.region_id !== curRegionId) {
-        const allSameRegion = mountains.value.every((item) => item.region_id === m.region_id);
-        if (!allSameRegion) return;
+        return;
       }
       const r = m.region || '其他';
       map[r] = (map[r] || 0) + 1;
@@ -195,11 +203,7 @@ export const useMountainStore = defineStore('mountain', () => {
     const results = mountains.value.filter((m) => {
       // 0. City / Region match (e.g. chengdu / chongqing)
       if (m.region_id && curRegionId && m.region_id !== curRegionId) {
-        // 若当前数据集全部属于降级默认地域，仍确保展示
-        const allSameRegion = mountains.value.every((item) => item.region_id === m.region_id);
-        if (!allSameRegion) {
-          return false;
-        }
+        return false;
       }
 
       // 1. Keyword search (name, region, county, tags, group)
@@ -284,12 +288,17 @@ export const useMountainStore = defineStore('mountain', () => {
     isLoading.value = true;
     try {
       const data = await resourcePackService.loadRegionMountains(regionId);
-      const safeData = Array.isArray(data) && data.length > 0 ? data : mountainsData;
+      const safeData = Array.isArray(data) && data.length > 0 ? data : (regionId === 'chengdu' ? mountainsData : []);
       mountains.value = safeData;
 
-      // 自动定位首座标杆名山
+      // 自动定位首座标杆名山（若当前选中山峰不在新数据集中，切换为首座名山）
       if (safeData.length > 0) {
-        selectedMountainId.value = safeData[0].id;
+        const exists = safeData.some((m) => m.id === selectedMountainId.value);
+        if (!exists) {
+          selectedMountainId.value = safeData[0].id;
+        }
+      } else {
+        selectedMountainId.value = null;
       }
 
       // 同步保持 regionStore 选中状态一致
@@ -310,10 +319,21 @@ export const useMountainStore = defineStore('mountain', () => {
       if (mountainsData.length > 0) {
         selectedMountainId.value = mountainsData[0].id;
       }
+      try {
+        const regionStore = useRegionStore();
+        regionStore.currentRegionId = 'chengdu';
+      } catch (_) {}
       return mountainsData;
     } finally {
       isLoading.value = false;
     }
+  }
+
+  // 启动期自愈联动：若记录的地域非默认成都，立即触发异步热挂载目标地域数据
+  if (!isDefaultChengdu) {
+    loadActiveRegion(initialRegionId).catch((err) => {
+      console.warn(`[mountainStore] 启动初始化地域 [${initialRegionId}] 失败:`, err);
+    });
   }
 
   function setSearch(q) {

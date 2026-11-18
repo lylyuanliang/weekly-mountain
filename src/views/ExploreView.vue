@@ -100,7 +100,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useMountainStore } from '@/stores/mountainStore.js';
 import { useRegionStore } from '@/stores/regionStore.js';
 import TopSearchBar from '@/components/common/TopSearchBar.vue';
@@ -123,6 +123,13 @@ const isDetailOpen = ref(false);
 const selectedDetailMountain = ref(null);
 const isWeatherModalOpen = ref(false);
 const selectedWeatherMountain = ref(null);
+
+onMounted(async () => {
+  const curReg = regionStore.currentRegionId;
+  if (mountainStore.mountains.length === 0 || (mountainStore.mountains[0]?.region_id && mountainStore.mountains[0].region_id !== curReg)) {
+    await mountainStore.loadActiveRegion(curReg);
+  }
+});
 
 function showVersionToast() {
   showToast(`当前运行版本：${VERSION_LABEL}`);

@@ -153,9 +153,31 @@ async function runTests() {
   console.log('  ✔ 离线包状态字典、管理动作与卸载归位联动符合预期');
 
   // ----------------------------------------------------
-  // Test 6: 严禁出现受限中立词汇红线扫描 (0 处违规)
+  // Test 6: 页面刷新/冷启动场景模拟 (LocalStorage 预置 chongqing)
   // ----------------------------------------------------
-  console.log('\n▶ [6/6] 验证受限词汇红线扫描 (0 处违规)');
+  console.log('\n▶ [6/7] 验证页面刷新/冷启动自愈：持久化为重庆时初始化自动挂载 36 座山与缙云山');
+  storageMock['weekly_mountain_region'] = 'chongqing';
+
+  // 创建全新独立 Pinia 实例模拟页面刷新
+  const freshPinia = createPinia();
+  setActivePinia(freshPinia);
+
+  const freshRegionStore = useRegionStore();
+  const freshMountainStore = useMountainStore();
+
+  // 等待异步自愈热挂载完成
+  await new Promise((resolve) => setTimeout(resolve, 60));
+
+  assert.strictEqual(freshRegionStore.currentRegionId, 'chongqing', '持久化地域应为 chongqing');
+  assert.strictEqual(freshMountainStore.mountains.length, 36, '刷新初始化后山峰列表应自动热挂载为重庆 36 座山');
+  assert.strictEqual(freshMountainStore.filteredMountains.length, 36, '刷新初始化后筛选列表应为 36 座山');
+  assert.strictEqual(freshMountainStore.selectedMountainId, 'jinyunshan', '刷新后默认选中山峰应为重庆缙云山而非成都龙泉山');
+  console.log('  ✔ 页面刷新持久化自愈验证通过：重庆 36 座山完整挂载，默认标杆名山为:', freshMountainStore.selectedMountain.name);
+
+  // ----------------------------------------------------
+  // Test 7: 严禁出现受限中立词汇红线扫描 (0 处违规)
+  // ----------------------------------------------------
+  console.log('\n▶ [7/7] 验证受限词汇红线扫描 (0 处违规)');
   const forbiddenWord = String.fromCharCode(0x5b98, 0x65b9);
   const filesToCheck = [
     path.join(projectRoot, 'src', 'stores', 'regionStore.js'),
