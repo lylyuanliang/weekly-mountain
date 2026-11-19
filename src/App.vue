@@ -56,13 +56,6 @@ onMounted(async () => {
       updateStore.checkForUpdate(true);
     }, 2000);
   }
-
-  // 在离线 Debug APK 或非 dev 模式下，按需加载 @agent-feedback/client 确保真机常驻悬浮胶囊
-  if (!import.meta.env.DEV && IS_DEBUG_BUILD) {
-    try {
-      await import('@lylyuanliang/agent-feedback-client');
-    } catch {}
-  }
 });
 
 const route = useRoute();

@@ -4,6 +4,17 @@
 
 ---
 
+## [0.4.3] - 2026-11-19
+
+### 🚀 核心架构与生态对接 (Architecture & Ecosystem)
+- **接入 `@lylyuanliang/agent-feedback` v1.5.0 最新生态版本**：升级客户端与 Vite 插件核心依赖，支持官方标准 `initAgentFeedback` 初始化契约；
+- **打补丁代码彻底归零**：重构 `setupAgentFeedback.js`，完全移除手动注入 `window.__AGENT_FEEDBACK_OPTIONS__`、手动调用底层 set 方法与手写 `DOMContentLoaded` 守候逻辑；
+- **构建插件原生能力替代手抄逻辑**：重构 `vite.config.js`，彻底删除 45 行手抄密钥解析代码与全局宏下发，直接采用插件原生 `enableInBuild: true` 离线测试变体放行；
+- **工程瘦身**：物理删除 61.5KB 早期遗留单文件组件 `MobileFeedbackWidget.vue`（2,647 行死代码）；
+- **地域状态持久化与降级加固**：优化多地域切换后刷新自愈机制，加固画册资源未就绪时的暗黑高山纯色与渐变降级。
+
+---
+
 ## [0.4.2] - 2026-11-17
 
 ### ⚡ 性能调优与架构瘦身 (Performance & Optimization)
