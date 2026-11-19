@@ -1,15 +1,15 @@
 {
-  "version": "0.4.3.202611191143",
-  "versionTag": "v0.4.3.202611191143",
-  "title": "v0.4.3.202611191143",
+  "version": "0.4.3.202611191152",
+  "versionTag": "v0.4.3.202611191152",
+  "title": "v0.4.3.202611191152",
   "publishedAt": "2026-11-19",
   "changelog": "1. 【依赖升级】升级 @lylyuanliang/agent-feedback 全家桶至 v1.5.0 最新规范版本；\n2. 【补丁彻底清理】全面移除宿主工程历史过渡补丁，彻底拥抱 agent-feedback 官方标准原生 API；\n3. 【工程极致瘦身】物理删除 61.5KB 早期孤儿组件 MobileFeedbackWidget.vue，精简 vite.config.js 45 行手抄密钥逻辑；\n4. 【地域状态韧性修复】修复多地域切换与页面刷新时的状态持久化自愈，优化画册资源未就绪时的平滑降级。",
   "disclaimer": "历史版本仅为技术研发存档记录，不反映当前自然地理与风险认知，严禁作为出行依据；请始终以包含最新风险警示的当前版本为准。",
-  "assetName": "weekly-mountain-v0.4.3.202611191143-release.apk",
+  "assetName": "weekly-mountain-v0.4.3.202611191152-release.apk",
   "assetSizeText": "约 29 MB",
-  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.3.202611191143/weekly-mountain-v0.4.3.202611191143-release.apk",
-  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.3.202611191143/weekly-mountain-v0.4.3.202611191143-debug.apk",
-  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.3.202611191143/weekly-mountain-v0.4.3.202611191143-release.apk",
+  "downloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.3.202611191152/weekly-mountain-v0.4.3.202611191152-release.apk",
+  "debugDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.3.202611191152/weekly-mountain-v0.4.3.202611191152-debug.apk",
+  "releaseDownloadUrl": "https://github.com/lylyuanliang/weekly-mountain/releases/download/v0.4.3.202611191152/weekly-mountain-v0.4.3.202611191152-release.apk",
   "releaseSha256": "",
   "debugSha256": ""
 }

@@ -7,8 +7,8 @@ android {
         applicationId "com.weeklymountain.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1795059839
-        versionName "0.4.3.202611191143"
+        versionCode 1795060353
+        versionName "0.4.3.202611191152"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
